@@ -4,6 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // **************  Reusable functions ********************
+    // test
     function isAuthenticated() {
       return request.auth.uid !=null;
     }

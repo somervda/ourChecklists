@@ -2,7 +2,12 @@
   margin: auto;
   margin-top: 10px;
   margin-bottom: 10px;
-  flex-basis: 500px;
+  flex-basis: 380px;
+  min-width: 380px;
+}
+
+ngb-carousel {
+  min-width: 400px;
 }
 
 .card-header {
@@ -13,8 +18,8 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .card-1-image {
@@ -24,5 +29,10 @@
 
 .card-2-image {
   background-image: url("../../assets/images/card-2.png");
+  background-size: cover;
+}
+
+.card-3-image {
+  background-image: url("../../assets/images/card-3.png");
   background-size: cover;
 }
