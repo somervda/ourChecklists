@@ -1,12 +1,13 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: "AIzaSyA_A9y_kFKKa6SS6M1Bdo1q1L-ciGXT0rA",
-    authDomain: "fbmstarter.firebaseapp.com",
-    databaseURL: "https://fbmstarter.firebaseio.com",
-    projectId: "fbmstarter",
-    storageBucket: "fbmstarter.appspot.com",
-    messagingSenderId: "290245947507",
-    appId: "1:290245947507:web:4fad90fd477134cf"
+    apiKey: "AIzaSyDmnveqIVBjd8ba9JQuhMK5QTC80MB1mfk",
+    authDomain: "ourchecklists.firebaseapp.com",
+    databaseURL: "https://ourchecklists.firebaseio.com",
+    projectId: "ourchecklists",
+    storageBucket: "ourchecklists.appspot.com",
+    messagingSenderId: "153514111017",
+    appId: "1:153514111017:web:f472005cd72d67ebb2ec38",
+    measurementId: "G-XBCZPJBBZS"
   }
 };

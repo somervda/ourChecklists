@@ -10,12 +10,8 @@
     ]
   },
   "hosting": {
-    "public": "dist/fbmStarter",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "dist/ourChecklists",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
