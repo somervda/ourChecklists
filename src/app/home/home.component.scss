@@ -1,38 +1,41 @@
-.home-card {
-  margin: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  flex-basis: 380px;
-  min-width: 380px;
-}
-
 ngb-carousel {
   min-width: 400px;
 }
 
 .card-header {
-  background-color: rgb(235, 235, 235);
+  padding-bottom: 5px;
 }
 
-.card-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-left: 5px;
-  margin-right: 5px;
+mat-card-subtitle {
+  margin-bottom: 8px;
 }
 
 .card-1-image {
   background-image: url("../../assets/images/card-1.png");
   background-size: cover;
+  border-style: inset;
+  border-width: 1px;
 }
 
 .card-2-image {
   background-image: url("../../assets/images/card-2.png");
   background-size: cover;
+  border-style: inset;
+  border-width: 1px;
 }
 
 .card-3-image {
   background-image: url("../../assets/images/card-3.png");
   background-size: cover;
+  border-style: inset;
+  border-width: 1px;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.home-card {
+  margin: 5px;
 }
