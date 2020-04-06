@@ -24,6 +24,18 @@
           <span id="mainMenuMyProfile">My Profile</span>
         </a>
 
+        <a
+          mat-list-item
+          routerLink="teams"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin ||
+            hasTeamRole((auth.user$ | async)?.managerOfTeams)
+          "
+        >
+          <mat-icon>supervisor_account</mat-icon>
+          <span id="mainMenuTeams">Teams</span>
+        </a>
+
         <!-- Administrator Functions -->
         <a
           mat-list-item

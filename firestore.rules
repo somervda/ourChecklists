@@ -45,5 +45,10 @@ service cloud.firestore {
                           !updatingField("isActivated")
                           );
     }
+
+    match /{path=**}/teams/{did} {
+      allow read:  if isActivated();
+      allow write:  if isAdmin();
+    }
   }
 }

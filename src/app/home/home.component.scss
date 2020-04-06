@@ -4,31 +4,27 @@ ngb-carousel {
 
 .card-header {
   padding-bottom: 5px;
+  background-color: white;
 }
 
 mat-card-subtitle {
   margin-bottom: 8px;
 }
 
+.card-image {
+  background-size: cover;
+}
+
 .card-1-image {
   background-image: url("../../assets/images/card-1.png");
-  background-size: cover;
-  border-style: inset;
-  border-width: 1px;
 }
 
 .card-2-image {
   background-image: url("../../assets/images/card-2.png");
-  background-size: cover;
-  border-style: inset;
-  border-width: 1px;
 }
 
 .card-3-image {
   background-image: url("../../assets/images/card-3.png");
-  background-size: cover;
-  border-style: inset;
-  border-width: 1px;
 }
 
 .card-container {

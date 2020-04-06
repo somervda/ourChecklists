@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirePerformanceModule } from "@angular/fire/performance";
@@ -17,13 +17,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatDividerModule
-// MatDatepickerModule,
-// MatDialogModule,
-// MatInputModule,
-// MatSelectModule,
-// MatGridListModule
- } from "@angular/material/divider";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
@@ -34,9 +30,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
-
 import { NgbCarouselModule } from "@ng-bootstrap/ng-bootstrap";
-
 import { HomeComponent } from "./home/home.component";
 import { NotfoundComponent } from "./notfound/notfound.component";
 import { AboutComponent } from "./about/about.component";
@@ -46,6 +40,10 @@ import { AdministrationComponent } from "./administration/administration.compone
 import { UsersComponent } from "./users/users.component";
 import { UserComponent } from "./user/user.component";
 import { NotauthorizedComponent } from "./notauthorized/notauthorized.component";
+import { TeamsComponent } from "./teams/teams.component";
+import { SubheadingComponent } from "./subheading/subheading.component";
+import { TeamComponent } from "./team/team.component";
+import { TeamuserlistComponent } from "./teamuserlist/teamuserlist.component";
 
 @NgModule({
   declarations: [
@@ -57,12 +55,17 @@ import { NotauthorizedComponent } from "./notauthorized/notauthorized.component"
     AdministrationComponent,
     UsersComponent,
     UserComponent,
-    NotauthorizedComponent
+    NotauthorizedComponent,
+    TeamsComponent,
+    SubheadingComponent,
+    TeamuserlistComponent,
+    TeamComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MatCheckboxModule,
     MatButtonModule,
@@ -79,15 +82,8 @@ import { NotauthorizedComponent } from "./notauthorized/notauthorized.component"
     MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,
-    // MatMenuModule,
-    // MatDividerModule,
-    // MatTabsModule,
-    // MatInputModule,
-    // MatTableModule,
-    // MatDialogModule,
-    // MatSelectModule,
-    // MatDatepickerModule,
-    // MatMomentDateModule,
+    MatFormFieldModule,
+    MatInputModule,
     AppRoutingModule,
     NgbCarouselModule,
     AngularFireModule.initializeApp(environment.firebase),
@@ -97,10 +93,10 @@ import { NotauthorizedComponent } from "./notauthorized/notauthorized.component"
     // AngularFirestoreModule,
     AngularFirestoreModule.enablePersistence(),
     ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production
-    })
+      enabled: environment.production,
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

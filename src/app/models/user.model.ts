@@ -13,4 +13,14 @@ export interface User {
   isActivated?: Boolean;
   // Indicates the user can use the application , by default
   // a user is inactive until an administrator activates them
+  dateLastLogon?: any;
+  managerOfTeams?: string[];
+  memberOfTeams?: string[];
+  reviewerOfTeams?: string[];
 }
+
+// export enum TeamRole {
+//   manager = 1,
+//   member = 2,
+//   reviewer = 3,
+// }

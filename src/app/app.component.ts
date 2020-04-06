@@ -3,11 +3,12 @@ import { AuthService } from "./services/auth.service";
 import { SwUpdate } from "@angular/service-worker";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Observable, fromEvent, Subscription } from "rxjs";
+// import { TeamRole, UserTeam } from "./models/user.model";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = "ourChecklists";
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   onlineEvent$: Observable<Event>;
   offlineEvent$: Observable<Event>;
   subscriptions$$: Subscription[] = [];
+  // TeamRole: TeamRole;
 
   constructor(
     public auth: AuthService,
@@ -29,13 +31,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.offlineEvent$ = fromEvent(window, "offline");
 
     this.subscriptions$$.push(
-      this.onlineEvent$.subscribe(e => {
+      this.onlineEvent$.subscribe((e) => {
         this.isConnected = true;
       })
     );
 
     this.subscriptions$$.push(
-      this.offlineEvent$.subscribe(e => {
+      this.offlineEvent$.subscribe((e) => {
         this.isConnected = false;
       })
     );
@@ -53,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
           "New version available.",
           "Load New Version?",
           {
-            duration: 20000
+            duration: 20000,
           }
         );
         newVersionSnackBarRef.onAction().subscribe(() => {
@@ -64,6 +66,22 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  // isTeamManager(teams: UserTeam[]) {
+  //   if (teams === undefined || teams === null) {
+  //     return false;
+  //   }
+  //   return (
+  //     teams.filter((team) => team.teamRole === TeamRole.manager).length > 0
+  //   );
+  // }
+
+  hasTeamRole(teams: string[]) {
+    if (teams === undefined || teams === null) {
+      return false;
+    }
+    return teams.length > 0;
+  }
+
   logout() {
     this.auth.signOut();
   }
@@ -72,6 +90,6 @@ export class AppComponent implements OnInit, OnDestroy {
     /**
      * Unsubscribe all subscriptions to avoid memory leak
      */
-    this.subscriptions$$.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions$$.forEach((subscription) => subscription.unsubscribe());
   }
 }

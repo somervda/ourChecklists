@@ -13,14 +13,15 @@ import { User } from "../models/user.model"; // optional
 import { AngularFireAuth } from "@angular/fire/auth";
 import {
   AngularFirestore,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
 } from "@angular/fire/firestore";
 
 import { Observable, of } from "rxjs";
 import { switchMap, map } from "rxjs/operators";
+import * as firebase from "firebase";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AuthService {
   user$: Observable<User>;
@@ -36,7 +37,7 @@ export class AuthService {
   ) {
     // Get the auth state, then fetch the Firestore user document or return null
     this.user$ = this.afAuth.authState.pipe(
-      switchMap(user => {
+      switchMap((user) => {
         // Logged in
         if (user) {
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
@@ -47,14 +48,14 @@ export class AuthService {
       })
     );
 
-    this.loggedIn$ = this.afAuth.authState.pipe(map(user => !!user));
+    this.loggedIn$ = this.afAuth.authState.pipe(map((user) => !!user));
 
     // Set  up a authentication watched to reload user info when user is authenticated
     // this covers initial signon and when the user refreshes the browser.
-    this.authStateChanges = this.afAuth.auth.onAuthStateChanged(authuser => {
+    this.authStateChanges = this.afAuth.auth.onAuthStateChanged((authuser) => {
       // console.log("onAuthStateChanges authuser", authuser);
       // Keep a subscription to the user$ observable alive so currentUser is maintained as a property
-      this.user$.subscribe(User => {
+      this.user$.subscribe((User) => {
         this.currentUser = User;
         // console.log("Update currentUser", User);
       });
@@ -71,7 +72,8 @@ export class AuthService {
       uid: result.user.uid,
       email: result.user.email,
       displayName: result.user.displayName,
-      photoURL: result.user.photoURL
+      photoURL: result.user.photoURL,
+      dateLastLogon: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
     // Create a generic photoURL if auth. photoURL is null
@@ -105,13 +107,13 @@ export class AuthService {
     // the firebase library . Property value is "session"
     this.afAuth.auth
       .setPersistence("session")
-      .then(function() {
+      .then(function () {
         // Existing and future Auth states are now persisted in the current
         // session only. Closing the window would clear any existing state even
         // if a user forgets to sign out.
         // console.log("persistSeason worked");
       })
-      .catch(function(error) {
+      .catch(function (error) {
         // Handle Errors here.
         console.log("persistSeason error ", error);
       });

@@ -13,8 +13,22 @@ exports.usersDateCreated = functions.firestore
   .onCreate((snap, context) => {
     return snap.ref.set(
       {
-        dateCreated: admin.firestore.FieldValue.serverTimestamp()
+        dateCreated: admin.firestore.FieldValue.serverTimestamp(),
+        dateLastLogon: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true }
     );
   });
+
+// Loops!!!!
+// exports.usersDateUpdated = functions.firestore
+//   .document("users/{uid}")
+//   .onUpdate((change, context) => {
+//     const date = admin.firestore.FieldValue.serverTimestamp();
+//     return change.after.ref.set(
+//       {
+//         dateLastLogon: admin.firestore.FieldValue.serverTimestamp(),
+//       },
+//       { merge: true }
+//     );
+//   });

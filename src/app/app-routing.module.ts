@@ -11,31 +11,54 @@ import { AdministrationComponent } from "./administration/administration.compone
 import { IsAdminGuard } from "./guards/isAdmin.guard";
 import { IsActivatedGuard } from "./guards/isActivated.guard";
 import { NotauthorizedComponent } from "./notauthorized/notauthorized.component";
+import { TeamsComponent } from "./teams/teams.component";
+import { TeamComponent } from "./team/team.component";
+import { TeamResolver } from "./services/team-resolver";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
+  { path: "teams", component: TeamsComponent },
+
   { path: "notAuthorized", component: NotauthorizedComponent },
   {
     path: "administration",
     component: AdministrationComponent,
-    canActivate: [IsAdminGuard]
+    canActivate: [IsAdminGuard],
   },
+  {
+    path: "team/create",
+    component: TeamComponent,
+    canActivate: [IsActivatedGuard],
+  },
+  {
+    path: "team/delete/:id",
+    component: TeamComponent,
+    resolve: { team: TeamResolver },
+    canActivate: [IsActivatedGuard],
+  },
+  {
+    path: "team/:id",
+    component: TeamComponent,
+    resolve: { team: TeamResolver },
+    canActivate: [IsActivatedGuard],
+  },
+
   { path: "users", component: UsersComponent, canActivate: [IsAdminGuard] },
   {
     path: "user/:uid",
     component: UserComponent,
     resolve: { user: UserResolver },
     canActivate: [IsActivatedGuard],
-    runGuardsAndResolvers: "always"
+    runGuardsAndResolvers: "always",
   },
   { path: "notfound", component: NotfoundComponent },
-  { path: "**", component: NotfoundComponent }
+  { path: "**", component: NotfoundComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: "reload" })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

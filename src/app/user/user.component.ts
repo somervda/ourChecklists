@@ -1,20 +1,20 @@
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
-import { KeyValuePair } from "../models/key-value-pair.model";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { User } from "../models/user.model";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { Subscription } from "rxjs";
+import { Kvp } from "../models/helper.model";
 
 @Component({
   selector: "app-user",
   templateUrl: "./user.component.html",
-  styleUrls: ["./user.component.scss"]
+  styleUrls: ["./user.component.scss"],
 })
 export class UserComponent implements OnInit, OnDestroy {
   user: User;
-  kvps: KeyValuePair[];
+  kvps: Kvp[];
   updatableProfile: boolean = false;
   userInitSub: Subscription;
   navigationSubscription: Subscription;
@@ -50,7 +50,7 @@ export class UserComponent implements OnInit, OnDestroy {
     const isAdmin = this.user.isAdmin ? "Yes" : "No";
     const isActivated = this.user.isActivated ? "Yes" : "No";
 
-    this.userInitSub = this.auth.user$.subscribe(currentUser => {
+    this.userInitSub = this.auth.user$.subscribe((currentUser) => {
       // The user page is read only for non-administrators
       // or where the uid = the logged on user UID)
       // if the user is and administrator and looking at other peoples profiles then updates
@@ -69,8 +69,8 @@ export class UserComponent implements OnInit, OnDestroy {
         { key: "eMail", value: this.user.email },
         {
           key: "Photo URL",
-          value: this.user.photoURL
-        }
+          value: this.user.photoURL,
+        },
       ];
 
       if (!this.updatableProfile) {
