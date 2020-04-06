@@ -2,6 +2,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 
 export function convertSnaps<T>(snaps) {
   return <T[]>snaps.map((snap) => {
+    // console.log("snaps", snaps);
     return {
       id: snap.payload.doc.id,
       ...snap.payload.doc.data(),

@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { Observable, merge } from "rxjs";
+import { Observable, merge, combineLatest, concat, forkJoin, zip } from "rxjs";
 import { User } from "../models/user.model";
 import { convertSnaps } from "./db-utils";
-import { first, map, take } from "rxjs/operators";
+import { first, map, take, concatAll, zipAll } from "rxjs/operators";
 import OrderByDirection = firebase.firestore.OrderByDirection;
 
 @Injectable({
@@ -47,28 +47,48 @@ export class UserService {
   }
 
   findByTeamId(id: string): Observable<User[]> {
-    // console.log( "user findByTeam",  id  );
-    const teamManagers$ = this.afs
-      .collection("users", (ref) =>
-        ref.where("managerOfTeams", "array-contains", id)
-      )
-      .snapshotChanges();
+    console.log("user findByTeam", id);
+
     const teamMembers$ = this.afs
       .collection("users", (ref) =>
         ref.where("memberOfTeams", "array-contains", id)
       )
-      .snapshotChanges();
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          console.log("teamMember snaps", snaps);
+          return convertSnaps<User>(snaps).map((x) => ({ ...x, role: "M2" }));
+        }),
+        first()
+      );
+
+    const teamManagers$ = this.afs
+      .collection("users", (ref) =>
+        ref.where("managerOfTeams", "array-contains", id)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          console.log("teamManager snaps", snaps);
+          return convertSnaps<User>(snaps).map((x) => ({ ...x, role: "x1" }));
+        }),
+        first()
+      );
+
     const teamReviewers$ = this.afs
       .collection("users", (ref) =>
         ref.where("reviewerOfTeams", "array-contains", id)
       )
-      .snapshotChanges();
-    return merge(teamManagers$, teamMembers$, teamReviewers$).pipe(
-      map((snaps) => {
-        // console.log("user findByTeam", convertSnaps<Device>(snaps));
-        return convertSnaps<User>(snaps);
-      })
-    );
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          console.log("teamReviewer snaps", snaps);
+          return convertSnaps<User>(snaps).map((x) => ({ ...x, role: "R3" }));
+        }),
+        first()
+      );
+
+    return concat(teamMembers$, teamManagers$, teamReviewers$);
   }
 
   dbFieldUpdate(docId: string, fieldName: string, newValue: any) {
