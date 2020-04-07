@@ -1,9 +1,25 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { Observable, merge, combineLatest, concat, forkJoin, zip } from "rxjs";
+import {
+  Observable,
+  merge,
+  combineLatest,
+  concat,
+  forkJoin,
+  zip,
+  from,
+} from "rxjs";
 import { User } from "../models/user.model";
 import { convertSnaps } from "./db-utils";
-import { first, map, take, concatAll, zipAll } from "rxjs/operators";
+import {
+  first,
+  map,
+  take,
+  concatAll,
+  zipAll,
+  concatMap,
+  mergeMap,
+} from "rxjs/operators";
 import OrderByDirection = firebase.firestore.OrderByDirection;
 
 @Injectable({
@@ -57,9 +73,11 @@ export class UserService {
       .pipe(
         map((snaps) => {
           console.log("teamMember snaps", snaps);
-          return convertSnaps<User>(snaps).map((x) => ({ ...x, role: "M2" }));
-        }),
-        first()
+          return convertSnaps<User>(snaps).map((x) => ({
+            ...x,
+            role: "Member",
+          }));
+        })
       );
 
     const teamManagers$ = this.afs
@@ -70,9 +88,11 @@ export class UserService {
       .pipe(
         map((snaps) => {
           console.log("teamManager snaps", snaps);
-          return convertSnaps<User>(snaps).map((x) => ({ ...x, role: "x1" }));
-        }),
-        first()
+          return convertSnaps<User>(snaps).map((x) => ({
+            ...x,
+            role: "Manager",
+          }));
+        })
       );
 
     const teamReviewers$ = this.afs
@@ -83,12 +103,26 @@ export class UserService {
       .pipe(
         map((snaps) => {
           console.log("teamReviewer snaps", snaps);
-          return convertSnaps<User>(snaps).map((x) => ({ ...x, role: "R3" }));
-        }),
-        first()
+          return convertSnaps<User>(snaps).map((x) => ({
+            ...x,
+            role: "Reviewer",
+          }));
+        })
       );
 
-    return concat(teamMembers$, teamManagers$, teamReviewers$);
+    // Return all three observables but as a single observable that combines
+    // the latest values from each observable, collapse the three emissions
+    // into one emission with the map(array.concat) functions
+    // Note: User roles are not flattened, I think that is better
+    // because normally users don't have multiple roles on a team
+    // and it can be handled by the caller of function if flattening is needed
+    // for the particular use case.
+    return combineLatest([teamMembers$, teamManagers$, teamReviewers$]).pipe(
+      map(([members, managers, reviewers]) => {
+        // console.log("members,managers,reviewers", members, managers, reviewers);
+        return members.concat(managers, reviewers);
+      })
+    );
   }
 
   dbFieldUpdate(docId: string, fieldName: string, newValue: any) {

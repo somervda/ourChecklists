@@ -11,7 +11,7 @@ import { User } from "../models/user.model";
 export class TeamuserlistComponent implements OnInit {
   @Input() teamId: string;
   users$: Observable<User[]>;
-  displayedColumns: string[] = ["displayName", "uid", "role"];
+  displayedColumns: string[] = ["displayName", "role", "uid"];
 
   constructor(private userservice: UserService) {}
   ngOnInit() {

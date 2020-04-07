@@ -31,7 +31,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // this.crudAction = Crud.Update;
+    this.crudAction = Crud.Update;
     if (this.route.routeConfig.path == "team/delete/:id")
       this.crudAction = Crud.Delete;
     if (this.route.routeConfig.path == "team/create")
