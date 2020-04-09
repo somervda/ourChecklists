@@ -24,3 +24,9 @@ export interface User {
 //   member = 2,
 //   reviewer = 3,
 // }
+
+export const TeamRoles = [
+  { name: "Member", arrayName: "memberOfTeams" },
+  { name: "Manager", arrayName: "managerOfTeams" },
+  { name: "Reviewer", arrayName: "reviewerOfTeams" },
+];

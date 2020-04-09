@@ -1,0 +1,26 @@
+<div class="dialog-heading">Select User & Role</div>
+<mat-form-field class="full-width"
+  ><mat-label>Select Role</mat-label>
+  <mat-select [(value)]="selectedRole">
+    <mat-option [value]=""></mat-option>
+    <mat-option *ngFor="let role of teamRoles" [value]="role.name">{{
+      role.name
+    }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<app-userfinder (userSelected)="onUserSelected($event)"></app-userfinder>
+<div class="add-error">{{ addError }}</div>
+<br /><br />
+<button
+  mat-button
+  matTooltip="OK"
+  (click)="addUser()"
+  [disabled]="!selectedUid || !selectedRole"
+>
+  <mat-icon>check</mat-icon>Add
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>

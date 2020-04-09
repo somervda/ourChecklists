@@ -9,7 +9,7 @@ import {
   zip,
   from,
 } from "rxjs";
-import { User } from "../models/user.model";
+import { User, TeamRoles } from "../models/user.model";
 import { convertSnaps } from "./db-utils";
 import {
   first,
@@ -59,6 +59,27 @@ export class UserService {
         }),
         // Not sure why this is needed but 2 sets of results are emitted with this query
         take(2)
+      );
+  }
+
+  findByPartialName(
+    displayName: string,
+    pageSize: number = 100
+  ): Observable<User[]> {
+    // console.log( "findByPartialName",  pageSize  );
+    return this.afs
+      .collection("users", (ref) =>
+        ref
+          .where("displayName", ">=", displayName)
+          .where("displayName", "<=", displayName + "~")
+          .orderBy("displayName", "asc")
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<User>(snaps);
+        })
       );
   }
 
@@ -123,6 +144,54 @@ export class UserService {
         return members.concat(managers, reviewers);
       })
     );
+  }
+
+  removeUserFromTeam(uid: string, teamId: string, role: string) {
+    // console.log("removeUserFromTeam", uid, teamId, role);
+    this.findUserByUid(uid)
+      .toPromise()
+      .then((user) => {
+        // console.log("removeUserFromTeam user", user);
+        let fieldName = TeamRoles.find((teamRole) => teamRole.name === role)
+          .arrayName;
+        // console.log("removeUserFromTeam fieldName", fieldName);
+        const newValue = user[fieldName].filter((team) => team !== teamId);
+        // console.log("removeUserFromTeam update", uid, fieldName, newValue);
+        this.dbFieldUpdate(uid, fieldName, newValue);
+      });
+  }
+
+  async addUserToTeam(uid: string, teamId: string, role: string) {
+    // Note: Use a few async awaits on promisees to bubble up results to calling code
+    //
+    // console.log("addUserToTeam", uid, teamId, role);
+    let addResult = await this.findUserByUid(uid)
+      .toPromise()
+      .then((user) => {
+        // console.log("addUserToTeam user", user);
+        let fieldName = TeamRoles.find((teamRole) => teamRole.name === role)
+          .arrayName;
+        // console.log("addUserToTeam fieldName", fieldName);
+        if (!user[fieldName]) {
+          // console.log("addUserToTeam save with new team field");
+          this.afs
+            .collection("users")
+            .doc(uid)
+            .set({ [fieldName]: [teamId] }, { merge: true });
+          return "OK";
+        }
+
+        if (user[fieldName].filter((team) => team === teamId).length > 0) {
+          // console.log("addUserToTeam already exists");
+          return "User already has this role on this team. Can not be added.";
+        } else {
+          user[fieldName].push(teamId);
+          // console.log("addUserToTeam update:", uid, fieldName, user[fieldName]);
+          this.dbFieldUpdate(uid, fieldName, user[fieldName]);
+          return "OK";
+        }
+      });
+    return addResult;
   }
 
   dbFieldUpdate(docId: string, fieldName: string, newValue: any) {

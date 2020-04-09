@@ -5,10 +5,25 @@ table {
 
 .mat-column-role {
   padding-right: 10px;
+}
+
+.mat-column-email {
+  padding-right: 10px;
   width: 100%;
 }
 
 .mat-column-displayName {
   white-space: nowrap;
   padding-right: 10px;
+}
+
+.stuff th {
+  border-bottom: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.stuffButton {
+  float: right;
+  margin-right: 5px;
 }

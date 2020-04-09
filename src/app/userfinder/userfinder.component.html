@@ -1,0 +1,19 @@
+<mat-form-field class="full-width">
+  <input
+    matInput
+    (keyup)="onKey($event)"
+    placeholder="Search for Name"
+    autocomplete="off"
+  />
+</mat-form-field>
+
+<mat-radio-group class="user-radio-group">
+  <mat-radio-button
+    *ngFor="let user of users$ | async"
+    [value]="user.uid"
+    #useritem
+    (click)="onUserSelected(useritem._value)"
+  >
+    {{ user.displayName }}
+  </mat-radio-button>
+</mat-radio-group>

@@ -17,6 +17,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -24,6 +25,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatSortModule } from "@angular/material/sort";
@@ -44,6 +47,9 @@ import { TeamsComponent } from "./teams/teams.component";
 import { SubheadingComponent } from "./subheading/subheading.component";
 import { TeamComponent } from "./team/team.component";
 import { TeamuserlistComponent } from "./teamuserlist/teamuserlist.component";
+import { TeamuserremoveComponent } from "./teamuserremove/teamuserremove.component";
+import { TeamuseraddComponent } from "./teamuseradd/teamuseradd.component";
+import { UserfinderComponent } from "./userfinder/userfinder.component";
 
 @NgModule({
   declarations: [
@@ -60,6 +66,9 @@ import { TeamuserlistComponent } from "./teamuserlist/teamuserlist.component";
     SubheadingComponent,
     TeamuserlistComponent,
     TeamComponent,
+    TeamuserremoveComponent,
+    TeamuseraddComponent,
+    UserfinderComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,10 +87,13 @@ import { TeamuserlistComponent } from "./teamuserlist/teamuserlist.component";
     MatTooltipModule,
     MatTableModule,
     MatSnackBarModule,
+    MatDialogModule,
     MatDividerModule,
     MatPaginatorModule,
+    MatSelectModule,
     MatSortModule,
     MatProgressSpinnerModule,
+    MatRadioModule,
     MatFormFieldModule,
     MatInputModule,
     AppRoutingModule,
