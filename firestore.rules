@@ -11,18 +11,40 @@ service cloud.firestore {
 
     function isAdmin() {
        return isAuthenticated() &&
+          ("isAdmin" in get( /databases/$(database)/documents/users/$(request.auth.uid)).data) &&
           get( /databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
      }
 
     function isActivated() {
        return isAuthenticated() &&
+          ("isActivated" in get( /databases/$(database)/documents/users/$(request.auth.uid)).data) &&
           get( /databases/$(database)/documents/users/$(request.auth.uid)).data.isActivated == true;
+     }
+
+    function isTeamManager() {
+       return isAuthenticated() &&
+          ("managerOfTeams" in get( /databases/$(database)/documents/users/$(request.auth.uid)).data) &&
+          get( /databases/$(database)/documents/users/$(request.auth.uid)).data.managerOfTeams.size() != 0;
      }
 
     function updatingField(field) {
       // Check to see if named field is being updated
       return (field in request.resource.data) && resource.data[field] != request.resource.data[field];
     }
+
+    function isUserTeamsUpdate() {
+       // Check that only voting  properties are being updated
+       return (!updatingField("uid") 
+        && !updatingField("email") 
+        && !updatingField("photoURL") 
+        && !updatingField("displayName") 
+        && !updatingField("dateCreated") 
+        && !updatingField("isAdmin") 
+        && !updatingField("isActivated") 
+        && !updatingField("dateLastLogon") 
+        && !updatingField("canCreateTeams") 
+       ) ;
+     }
 
 
     // ****** Document Access functionsnp
@@ -37,14 +59,23 @@ service cloud.firestore {
                           isAuthenticated()  ;
           allow  create:  if isAuthenticated() &&
                              user==request.auth.uid ;
-          allow update: if (isAdmin() &&
-                             user!=request.auth.uid )
+          allow update: if (
+                              isAdmin() &&
+                              user!=request.auth.uid 
+                            )
                           ||
-                          (isAuthenticated() &&
-                          user==request.auth.uid &&
-                          !updatingField("isAdmin") &&
-                          !updatingField("isActivated")
-                          );
+                            (
+                              isAuthenticated() &&
+                              user==request.auth.uid &&
+                              !updatingField("isAdmin") &&
+                              !updatingField("canCreateTeams") &&
+                              !updatingField("isActivated") 
+                            ) 
+                          ||
+                            (
+                              isTeamManager() &&
+                              isUserTeamsUpdate()
+                            );
     }
 
     match /{path=**}/teams/{did} {
