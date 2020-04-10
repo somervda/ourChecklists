@@ -3,6 +3,7 @@ import { AuthService } from "./services/auth.service";
 import { SwUpdate } from "@angular/service-worker";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Observable, fromEvent, Subscription } from "rxjs";
+import { User } from "./models/user.model";
 // import { TeamRole, UserTeam } from "./models/user.model";
 
 @Component({
@@ -75,11 +76,16 @@ export class AppComponent implements OnInit, OnDestroy {
   //   );
   // }
 
-  hasTeamRole(teams: string[]) {
-    if (teams === undefined || teams === null) {
+  hasTeamRole(user: User) {
+    if (user === undefined || user === null) {
       return false;
     }
-    return teams.length > 0;
+    if (
+      (user.memberOfTeams && user.memberOfTeams.length > 0) ||
+      (user.managerOfTeams && user.managerOfTeams.length > 0) ||
+      (user.reviewerOfTeams && user.reviewerOfTeams.length > 0)
+    )
+      return true;
   }
 
   logout() {

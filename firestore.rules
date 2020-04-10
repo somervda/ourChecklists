@@ -28,12 +28,13 @@ service cloud.firestore {
     // ****** Document Access functionsnp
 
     // user document rules (Delete not allowed)
+    // Changed to allow users to see other user documents
+    // so  listing of team members works
 
       match /users/{user} {
           allow read :  if isAdmin() 
                           ||
-                          (isAuthenticated() &&
-                             user==request.auth.uid)  ;
+                          isAuthenticated()  ;
           allow  create:  if isAuthenticated() &&
                              user==request.auth.uid ;
           allow update: if (isAdmin() &&

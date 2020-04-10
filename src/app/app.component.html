@@ -28,12 +28,11 @@
           mat-list-item
           routerLink="teams"
           *ngIf="
-            (auth.user$ | async)?.isAdmin ||
-            hasTeamRole((auth.user$ | async)?.managerOfTeams)
+            (auth.user$ | async)?.isAdmin || hasTeamRole(auth.user$ | async)
           "
         >
           <mat-icon>supervisor_account</mat-icon>
-          <span id="mainMenuTeams">Teams</span>
+          <span id="mainMenuTeams">My Teams</span>
         </a>
 
         <!-- Administrator Functions -->

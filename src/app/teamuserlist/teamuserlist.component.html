@@ -21,8 +21,13 @@
   </ng-container>
 
   <ng-container matColumnDef="uid">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell class="deleteRow" *matCellDef="let user">
+    <th mat-header-cell *matHeaderCellDef [hidden]="hideAddRemove"></th>
+    <td
+      mat-cell
+      class="deleteRow"
+      *matCellDef="let user"
+      [hidden]="hideAddRemove"
+    >
       <button
         mat-button
         matTooltip="Remove {{ user.displayName }} from team"
@@ -40,10 +45,10 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="stuff" sticky>
-    <th mat-header-cell *matHeaderCellDef colspan="5">
+  <ng-container matColumnDef="addButton" sticky>
+    <th mat-header-cell *matHeaderCellDef colspan="5" [hidden]="hideAddRemove">
       <button
-        class="stuffButton"
+        class="add-button"
         mat-button
         (click)="openTeamUserAddDialog(teamId)"
       >
@@ -52,7 +57,9 @@
     </th>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['stuff']" class="stuff"></tr>
+  <ng-container *ngIf="!hideAddRemove">
+    <tr mat-header-row *matHeaderRowDef="['addButton']" class="add-row"></tr>
+  </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

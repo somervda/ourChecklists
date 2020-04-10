@@ -70,7 +70,11 @@
       </mat-form-field>
     </fieldset>
 
-    <app-teamuserlist [teamId]="team.id"></app-teamuserlist>
+    <app-teamuserlist
+      [teamId]="team.id"
+      [hideAddRemove]="hideAddRemove"
+      *ngIf="crudAction != Crud.Create"
+    ></app-teamuserlist>
 
     <button
       mat-raised-button

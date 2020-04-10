@@ -6,6 +6,7 @@ import { Subscription, Observable } from "rxjs";
 import { TeamService } from "../services/team.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: "app-team",
@@ -17,6 +18,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   crudAction: Crud;
   // Declare an instance of crud enum to use for checking crudAction value
   Crud = Crud;
+  hideAddRemove = true;
 
   teamForm: FormGroup;
   teamSubscription$$: Subscription;
@@ -27,17 +29,21 @@ export class TeamComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    while (!this.auth.currentUser) {
+      await this.sleep(200);
+    }
     this.crudAction = Crud.Update;
     if (this.route.routeConfig.path == "team/delete/:id")
       this.crudAction = Crud.Delete;
     if (this.route.routeConfig.path == "team/create")
       this.crudAction = Crud.Create;
 
-    console.log("team onInit", this.crudAction);
+    // console.log("team onInit", this.crudAction);
     if (this.crudAction == Crud.Create) {
       this.team = {
         name: "",
@@ -85,6 +91,19 @@ export class TeamComponent implements OnInit, OnDestroy {
         this.teamForm.get(field).markAsTouched();
       }
     }
+
+    // update the app-teamuserlist to show or hide the user add/remove buttons
+    if (
+      this.auth.currentUser &&
+      (this.auth.currentUser.isAdmin ||
+        (this.auth.currentUser.managerOfTeams &&
+          this.auth.currentUser.managerOfTeams.includes(this.team.id)))
+    ) {
+      this.hideAddRemove = false;
+    }
+    if (this.crudAction != Crud.Update) {
+      this.hideAddRemove = true;
+    }
   }
 
   onCreate() {
@@ -125,6 +144,10 @@ export class TeamComponent implements OnInit, OnDestroy {
       .catch(function (error) {
         console.error("Error deleting team: ", error);
       });
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   // disableSelectedUpdatesIfProbeIsInUse(probeId: string) {

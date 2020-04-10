@@ -84,7 +84,7 @@ export class UserService {
   }
 
   findByTeamId(id: string): Observable<User[]> {
-    console.log("user findByTeam", id);
+    // console.log("user findByTeam", id);
 
     const teamMembers$ = this.afs
       .collection("users", (ref) =>
@@ -93,7 +93,7 @@ export class UserService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
-          console.log("teamMember snaps", snaps);
+          // console.log("teamMember snaps", snaps);
           return convertSnaps<User>(snaps).map((x) => ({
             ...x,
             role: "Member",
@@ -108,7 +108,7 @@ export class UserService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
-          console.log("teamManager snaps", snaps);
+          // console.log("teamManager snaps", snaps);
           return convertSnaps<User>(snaps).map((x) => ({
             ...x,
             role: "Manager",
@@ -123,7 +123,7 @@ export class UserService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
-          console.log("teamReviewer snaps", snaps);
+          // console.log("teamReviewer snaps", snaps);
           return convertSnaps<User>(snaps).map((x) => ({
             ...x,
             role: "Reviewer",

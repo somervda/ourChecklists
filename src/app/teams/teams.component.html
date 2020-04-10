@@ -1,14 +1,16 @@
 <app-subheading title="Team List" matIcon="supervisor_account"></app-subheading>
 <div class="page-container">
-  <button
-    mat-raised-button
-    routerLink="/team/create"
-    style="float: right; margin-bottom: 10px;"
-  >
-    <i class="material-icons-outlined">supervisor_account</i>&nbsp;
-    <span>Create a New Team</span>
-  </button>
-  <br />
+  <ng-container *ngIf="canCreateTeams">
+    <button
+      mat-raised-button
+      routerLink="/team/create"
+      style="float: right; margin-bottom: 10px;"
+    >
+      <i class="material-icons-outlined">supervisor_account</i>&nbsp;
+      <span>Create a New Team</span>
+    </button>
+    <br />
+  </ng-container>
 
   <table mat-table [dataSource]="teams$ | async" class="mat-elevation-z8">
     <ng-container matColumnDef="name" sticky>

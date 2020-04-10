@@ -49,6 +49,7 @@ export class UserComponent implements OnInit, OnDestroy {
     //console.log("this.user", this.user);
     const isAdmin = this.user.isAdmin ? "Yes" : "No";
     const isActivated = this.user.isActivated ? "Yes" : "No";
+    const canCreateTeams = this.user.canCreateTeams ? "Yes" : "No";
 
     this.userInitSub = this.auth.user$.subscribe((currentUser) => {
       // The user page is read only for non-administrators
@@ -76,6 +77,7 @@ export class UserComponent implements OnInit, OnDestroy {
       if (!this.updatableProfile) {
         this.kvps.push({ key: "Is Administrator?", value: isAdmin });
         this.kvps.push({ key: "Is Activated?", value: isActivated });
+        this.kvps.push({ key: "Can Create Teams?", value: canCreateTeams });
       }
       // for admins updating other users profile isAdmin and isActivated displayed
       // as updatable controls in the HTML template
@@ -98,6 +100,14 @@ export class UserComponent implements OnInit, OnDestroy {
       this.user.uid,
       "isActivated",
       !this.user.isActivated
+    );
+  }
+
+  updateCanCreateTeams() {
+    this.userservice.dbFieldUpdate(
+      this.user.uid,
+      "canCreateTeams",
+      !this.user.canCreateTeams
     );
   }
 

@@ -17,6 +17,7 @@ export interface User {
   managerOfTeams?: string[];
   memberOfTeams?: string[];
   reviewerOfTeams?: string[];
+  canCreateTeams?: boolean;
 }
 
 // export enum TeamRole {
