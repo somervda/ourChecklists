@@ -19,6 +19,7 @@ export class TeamComponent implements OnInit, OnDestroy {
   // Declare an instance of crud enum to use for checking crudAction value
   Crud = Crud;
   hideAddRemove = true;
+  readOnly = true;
 
   teamForm: FormGroup;
   teamSubscription$$: Subscription;
@@ -93,6 +94,7 @@ export class TeamComponent implements OnInit, OnDestroy {
     }
 
     // update the app-teamuserlist to show or hide the user add/remove buttons
+    // and allow team data updates if user is admin or the team manager
     if (
       this.auth.currentUser &&
       (this.auth.currentUser.isAdmin ||
@@ -100,6 +102,7 @@ export class TeamComponent implements OnInit, OnDestroy {
           this.auth.currentUser.managerOfTeams.includes(this.team.id)))
     ) {
       this.hideAddRemove = false;
+      this.readOnly = false;
     }
     if (this.crudAction != Crud.Update) {
       this.hideAddRemove = true;

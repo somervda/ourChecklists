@@ -21,7 +21,7 @@
 ></app-subheading>
 <div class="page-container">
   <form class="standard-form" [formGroup]="teamForm">
-    <fieldset [disabled]="crudAction == Crud.Delete">
+    <fieldset [disabled]="crudAction == Crud.Delete || readOnly">
       <mat-form-field class="full-width">
         <input
           matInput

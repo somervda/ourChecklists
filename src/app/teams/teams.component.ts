@@ -39,7 +39,7 @@ export class TeamsComponent implements OnInit {
               this.auth.currentUser.memberOfTeams.includes(team.id)) ||
             (this.auth.currentUser.managerOfTeams &&
               this.auth.currentUser.managerOfTeams.includes(team.id)) ||
-            (this.auth.currentUser.managerOfTeams &&
+            (this.auth.currentUser.reviewerOfTeams &&
               this.auth.currentUser.reviewerOfTeams.includes(team.id))
         );
       })
