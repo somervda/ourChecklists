@@ -39,7 +39,6 @@ import { NotfoundComponent } from "./notfound/notfound.component";
 import { AboutComponent } from "./about/about.component";
 import { LoginComponent } from "./login/login.component";
 import { ServiceWorkerModule } from "@angular/service-worker";
-import { AdministrationComponent } from "./administration/administration.component";
 import { UsersComponent } from "./users/users.component";
 import { UserComponent } from "./user/user.component";
 import { NotauthorizedComponent } from "./notauthorized/notauthorized.component";
@@ -50,6 +49,11 @@ import { TeamuserlistComponent } from "./teamuserlist/teamuserlist.component";
 import { TeamuserremoveComponent } from "./teamuserremove/teamuserremove.component";
 import { TeamuseraddComponent } from "./teamuseradd/teamuseradd.component";
 import { UserfinderComponent } from "./userfinder/userfinder.component";
+import { CategoriesComponent } from "./categories/categories.component";
+import { CategoryComponent } from "./category/category.component";
+import { CategoryactivitylistComponent } from './categoryactivitylist/categoryactivitylist.component';
+import { CategoryactivityaddComponent } from './categoryactivityadd/categoryactivityadd.component';
+import { CategoryactivitydeleteComponent } from './categoryactivitydelete/categoryactivitydelete.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +62,6 @@ import { UserfinderComponent } from "./userfinder/userfinder.component";
     NotfoundComponent,
     AboutComponent,
     LoginComponent,
-    AdministrationComponent,
     UsersComponent,
     UserComponent,
     NotauthorizedComponent,
@@ -69,6 +72,11 @@ import { UserfinderComponent } from "./userfinder/userfinder.component";
     TeamuserremoveComponent,
     TeamuseraddComponent,
     UserfinderComponent,
+    CategoriesComponent,
+    CategoryComponent,
+    CategoryactivitylistComponent,
+    CategoryactivityaddComponent,
+    CategoryactivitydeleteComponent,
   ],
   imports: [
     BrowserModule,

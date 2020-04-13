@@ -82,5 +82,10 @@ service cloud.firestore {
       allow read:  if isActivated();
       allow write:  if isAdmin();
     }
+
+    match /{path=**}/categories/{did} {
+      allow read:  if isActivated();
+      allow write:  if isAdmin();
+    }
   }
 }

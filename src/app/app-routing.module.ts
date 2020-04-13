@@ -7,26 +7,23 @@ import { LoginComponent } from "./login/login.component";
 import { UsersComponent } from "./users/users.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./services/user-resolver";
-import { AdministrationComponent } from "./administration/administration.component";
 import { IsAdminGuard } from "./guards/isAdmin.guard";
 import { IsActivatedGuard } from "./guards/isActivated.guard";
 import { NotauthorizedComponent } from "./notauthorized/notauthorized.component";
 import { TeamsComponent } from "./teams/teams.component";
 import { TeamComponent } from "./team/team.component";
 import { TeamResolver } from "./services/team-resolver";
+import { CategoryComponent } from "./category/category.component";
+import { CategoriesComponent } from "./categories/categories.component";
+import { CategoryResolver } from "./services/category-resolver";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
   { path: "teams", component: TeamsComponent },
-
+  { path: "categories", component: CategoriesComponent },
   { path: "notAuthorized", component: NotauthorizedComponent },
-  {
-    path: "administration",
-    component: AdministrationComponent,
-    canActivate: [IsAdminGuard],
-  },
   {
     path: "team/create",
     component: TeamComponent,
@@ -42,6 +39,24 @@ const routes: Routes = [
     path: "team/:id",
     component: TeamComponent,
     resolve: { team: TeamResolver },
+    canActivate: [IsActivatedGuard],
+  },
+
+  {
+    path: "category/create",
+    component: CategoryComponent,
+    canActivate: [IsActivatedGuard],
+  },
+  {
+    path: "category/delete/:id",
+    component: CategoryComponent,
+    resolve: { category: CategoryResolver },
+    canActivate: [IsActivatedGuard],
+  },
+  {
+    path: "category/:id",
+    component: CategoryComponent,
+    resolve: { category: CategoryResolver },
     canActivate: [IsActivatedGuard],
   },
 

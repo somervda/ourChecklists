@@ -24,6 +24,8 @@
           <span id="mainMenuMyProfile">My Profile</span>
         </a>
 
+        <!-- Teams  -->
+
         <a
           mat-list-item
           routerLink="teams"
@@ -36,14 +38,32 @@
         </a>
 
         <!-- Administrator Functions -->
+        <mat-divider
+          *ngIf="
+            (auth.user$ | async)?.isAdmin ||
+            (auth.user$ | async)?.isCategoryManager
+          "
+        ></mat-divider>
+        <!-- Categories  -->
+        <a
+          mat-list-item
+          routerLink="categories"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin ||
+            (auth.user$ | async)?.isCategoryManager
+          "
+        >
+          <mat-icon>category</mat-icon>
+          <span id="mainMenuCategories">Categories</span>
+        </a>
         <a
           mat-list-item
           *ngIf="(auth.user$ | async)?.isAdmin"
           mat-list-item
-          routerLink="administration"
+          routerLink="users"
         >
-          <mat-icon>security</mat-icon>
-          <span id="mainMenuAdministration">Administration</span>
+          <mat-icon>how_to_reg</mat-icon>
+          <span id="mainMenuUsers">User Management</span>
         </a>
       </span>
       <!-- Logged in options -->
