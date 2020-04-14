@@ -1,1 +1,9 @@
-<p>categoryactivitydelete works!</p>
+Are you sure you want to delete &quot;{{ (activity$ | async)?.name }}&quot; from
+this category? <br /><br />
+<button mat-button matTooltip="OK" (click)="deleteActivity()">
+  <mat-icon>check</mat-icon>Yes
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>No
+</button>

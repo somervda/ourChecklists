@@ -83,12 +83,12 @@ service cloud.firestore {
       allow write:  if isAdmin();
     }
 
-    match /{path=**}/categories/{did} {
+    match /{path=**}/categories/{cid} {
       allow read:  if isActivated();
       allow write:  if isAdmin();
     }
 
-    match /{path=**}/categories/activities/{aid} {
+    match /{path=**}/categories/{cid}/activities/{aid} {
       allow read:  if isActivated();
       allow write:  if isAdmin();
     }

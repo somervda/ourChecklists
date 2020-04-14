@@ -1,1 +1,56 @@
-<p>categoryactivityadd works!</p>
+<form class="standard-form" [formGroup]="activityForm">
+  <fieldset>
+    <mat-form-field class="full-width">
+      <input matInput formControlName="name" placeholder="Name" required />
+      <mat-error *ngIf="activityForm.controls['name'].hasError('required')">
+        Name is required.
+      </mat-error>
+      <mat-error *ngIf="activityForm.controls['name'].hasError('minlength')">
+        Name must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="activityForm.controls['name'].hasError('maxlength')">
+        Name must be no more than 35 characters long.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <textarea
+        matInput
+        formControlName="description"
+        matAutosizeMinRows="3"
+        matAutosizeMaxRows="5"
+        matTextareaAutosize
+        placeholder="Description"
+        required
+      ></textarea>
+      <mat-error
+        *ngIf="activityForm.controls['description'].hasError('required')"
+      >
+        Description is required.
+      </mat-error>
+      <mat-error
+        *ngIf="activityForm.controls['description'].hasError('minlength')"
+      >
+        Description must be at least 5 characters long.
+      </mat-error>
+      <mat-error
+        *ngIf="activityForm.controls['description'].hasError('maxlength')"
+      >
+        Description must be no more than 150 characters long.
+      </mat-error>
+    </mat-form-field>
+  </fieldset>
+</form>
+<br /><br />
+<button
+  mat-button
+  matTooltip="OK"
+  (click)="addActivity()"
+  [disabled]="!activityForm.valid"
+>
+  <mat-icon>check</mat-icon>Add
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>
