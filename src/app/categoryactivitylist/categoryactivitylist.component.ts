@@ -1,10 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, NgZone } from "@angular/core";
 import { Observable } from "rxjs";
 import { Activity } from "../models/activity.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivityService } from "../services/activity.service";
-import { CategoryactivitydeleteComponent } from "../categoryactivitydelete/categoryactivitydelete.component";
-import { CategoryactivityaddComponent } from "../categoryactivityadd/categoryactivityadd.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-categoryactivitylist",
@@ -18,7 +17,9 @@ export class CategoryactivitylistComponent implements OnInit {
 
   constructor(
     private activityService: ActivityService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private ngZone: NgZone,
+    private router: Router
   ) {}
   ngOnInit() {
     this.activities$ = this.activityService.findAllByCategory(
@@ -29,17 +30,20 @@ export class CategoryactivitylistComponent implements OnInit {
 
   onCategoryActivityDelete(activityId: string) {
     // console.log("remove click:", uid, displayName, teamId);
-    const dialogRef = this.dialog.open(CategoryactivitydeleteComponent, {
-      width: "280px",
-      data: { categoryId: this.categoryId, activityId: activityId },
-    });
+    this.ngZone.run(() =>
+      this.router.navigateByUrl(
+        "/category/" + this.categoryId + "/activity/delete/" + activityId
+      )
+    );
   }
 
   onCategoryActivityAdd() {
     console.log("add click:");
-    const dialogRef = this.dialog.open(CategoryactivityaddComponent, {
-      width: "380px",
-      data: { id: this.categoryId },
-    });
+
+    this.ngZone.run(() =>
+      this.router.navigateByUrl(
+        "/category/" + this.categoryId + "/activity/create"
+      )
+    );
   }
 }

@@ -11,15 +11,7 @@ import {
 } from "rxjs";
 import { User, TeamRoles } from "../models/user.model";
 import { convertSnaps } from "./db-utils";
-import {
-  first,
-  map,
-  take,
-  concatAll,
-  zipAll,
-  concatMap,
-  mergeMap,
-} from "rxjs/operators";
+import { first, map, take } from "rxjs/operators";
 import OrderByDirection = firebase.firestore.OrderByDirection;
 
 @Injectable({

@@ -38,9 +38,10 @@ export class ActivityService {
   }
 
   fieldUpdate(cid: string, aid: string, fieldName: string, newValue: any) {
-    // console.log("activity field update",cid,aid);
+    // console.log("activity field update", cid, aid, fieldName, newValue);
     if (cid && aid && fieldName) {
-      const docLocation = "/catagories/" + cid + "/activities/" + aid;
+      const docLocation = "/categories/" + cid + "/activities/" + aid;
+      // console.log("activity field update docLocation:", docLocation);
       const updateObject = {};
       dbFieldUpdate(docLocation, fieldName, newValue, this.afs);
     }

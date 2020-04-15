@@ -1,0 +1,95 @@
+<app-subheading
+  [title]="activity.name + ' [Update]'"
+  *ngIf="crudAction == Crud.Update"
+  [returnRoute]="'/category/' + categoryId"
+  returnTitle="Return to Category"
+  matIcon="emoji_flags"
+></app-subheading>
+<app-subheading
+  title="Create New Activity"
+  *ngIf="crudAction == Crud.Create"
+  [returnRoute]="'/category/' + categoryId"
+  returnTitle="Return to Category"
+  matIcon="emoji_flags"
+></app-subheading>
+<app-subheading
+  [title]="activity.name + ' [Delete]'"
+  *ngIf="crudAction == Crud.Delete"
+  [returnRoute]="'/category/' + categoryId"
+  returnTitle="Return to Category"
+  matIcon="emoji_flags"
+></app-subheading>
+<div class="page-container">
+  <form class="standard-form" [formGroup]="activityForm">
+    <fieldset [disabled]="crudAction == Crud.Delete">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          formControlName="name"
+          (change)="onFieldUpdate('name')"
+          placeholder="Activity Name"
+          required
+        />
+        <mat-error *ngIf="activityForm.controls['name'].hasError('required')">
+          Name is required.
+        </mat-error>
+        <mat-error *ngIf="activityForm.controls['name'].hasError('minlength')">
+          Name must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="activityForm.controls['name'].hasError('maxlength')">
+          Name must be no more than 35 characters long.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <textarea
+          matInput
+          formControlName="description"
+          (change)="onFieldUpdate('description')"
+          matAutosizeMinRows="3"
+          matAutosizeMaxRows="4"
+          matTextareaAutosize
+          placeholder="Description"
+          required
+        ></textarea>
+        <mat-error
+          *ngIf="activityForm.controls['description'].hasError('required')"
+        >
+          Description is required.
+        </mat-error>
+        <mat-error
+          *ngIf="activityForm.controls['description'].hasError('minlength')"
+        >
+          Description must be at least 5 characters long.
+        </mat-error>
+        <mat-error
+          *ngIf="activityForm.controls['description'].hasError('maxlength')"
+        >
+          Description must be no more than 150 characters long.
+        </mat-error>
+      </mat-form-field>
+    </fieldset>
+
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="crudAction == Crud.Create"
+      [disabled]="!activityForm.valid"
+      (click)="onCreate()"
+      id="btnCreate"
+    >
+      <mat-icon>add</mat-icon>
+      Create
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="crudAction == Crud.Delete"
+      (click)="onDelete()"
+      id="btnDelete"
+    >
+      <mat-icon>clear</mat-icon>
+      Delete
+    </button>
+  </form>
+</div>

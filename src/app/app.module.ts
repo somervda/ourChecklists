@@ -51,9 +51,8 @@ import { TeamuseraddComponent } from "./teamuseradd/teamuseradd.component";
 import { UserfinderComponent } from "./userfinder/userfinder.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryComponent } from "./category/category.component";
-import { CategoryactivitylistComponent } from './categoryactivitylist/categoryactivitylist.component';
-import { CategoryactivityaddComponent } from './categoryactivityadd/categoryactivityadd.component';
-import { CategoryactivitydeleteComponent } from './categoryactivitydelete/categoryactivitydelete.component';
+import { CategoryactivitylistComponent } from "./categoryactivitylist/categoryactivitylist.component";
+import { ActivityComponent } from "./activity/activity.component";
 
 @NgModule({
   declarations: [
@@ -75,8 +74,7 @@ import { CategoryactivitydeleteComponent } from './categoryactivitydelete/catego
     CategoriesComponent,
     CategoryComponent,
     CategoryactivitylistComponent,
-    CategoryactivityaddComponent,
-    CategoryactivitydeleteComponent,
+    ActivityComponent,
   ],
   imports: [
     BrowserModule,

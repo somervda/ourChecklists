@@ -34,6 +34,10 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log(
+      "this.route.snapshot.paramMap.get('id')",
+      this.route.snapshot.paramMap.get("id")
+    );
     this.crudAction = Crud.Update;
     if (this.route.routeConfig.path == "category/delete/:id")
       this.crudAction = Crud.Delete;

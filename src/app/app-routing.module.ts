@@ -16,6 +16,8 @@ import { TeamResolver } from "./services/team-resolver";
 import { CategoryComponent } from "./category/category.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryResolver } from "./services/category-resolver";
+import { ActivityComponent } from "./activity/activity.component";
+import { ActivityResolver } from "./services/activity.resolver";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -57,6 +59,23 @@ const routes: Routes = [
     path: "category/:id",
     component: CategoryComponent,
     resolve: { category: CategoryResolver },
+    canActivate: [IsActivatedGuard],
+  },
+
+  {
+    path: "category/:cid/activity/create",
+    component: ActivityComponent,
+    canActivate: [IsActivatedGuard],
+  },
+  {
+    path: "category/:cid/activity/delete/:aid",
+    component: ActivityComponent,
+    resolve: { activity: ActivityResolver },
+    canActivate: [IsActivatedGuard],
+  },
+  {
+    path: "category/:cid/activity/:aid",
+    component: ActivityComponent,
     canActivate: [IsActivatedGuard],
   },
 
