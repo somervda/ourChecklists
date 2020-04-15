@@ -53,6 +53,7 @@ import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryComponent } from "./category/category.component";
 import { CategoryactivitylistComponent } from "./categoryactivitylist/categoryactivitylist.component";
 import { ActivityComponent } from "./activity/activity.component";
+import { ResourcesComponent } from './resources/resources.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { ActivityComponent } from "./activity/activity.component";
     CategoryComponent,
     CategoryactivitylistComponent,
     ActivityComponent,
+    ResourcesComponent,
   ],
   imports: [
     BrowserModule,

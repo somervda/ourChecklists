@@ -18,65 +18,92 @@ import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryResolver } from "./services/category-resolver";
 import { ActivityComponent } from "./activity/activity.component";
 import { ActivityResolver } from "./services/activity.resolver";
+import { ResourcesComponent } from "./resources/resources.component";
+import { permissionGuard } from "./guards/permission.guard";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
-  { path: "teams", component: TeamsComponent },
-  { path: "categories", component: CategoriesComponent },
+  {
+    path: "teams",
+    component: TeamsComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "canCreateTeams"] },
+  },
+  {
+    path: "categories",
+    component: CategoriesComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
+  },
+  {
+    path: "resources",
+    component: ResourcesComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isResourceManager"] },
+  },
   { path: "notAuthorized", component: NotauthorizedComponent },
   {
     path: "team/create",
     component: TeamComponent,
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "canCreateTeams"] },
   },
   {
     path: "team/delete/:id",
     component: TeamComponent,
     resolve: { team: TeamResolver },
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "canCreateTeams"] },
   },
   {
     path: "team/:id",
     component: TeamComponent,
     resolve: { team: TeamResolver },
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "canCreateTeams"] },
   },
 
   {
     path: "category/create",
     component: CategoryComponent,
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
   {
     path: "category/delete/:id",
     component: CategoryComponent,
     resolve: { category: CategoryResolver },
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
   {
     path: "category/:id",
     component: CategoryComponent,
     resolve: { category: CategoryResolver },
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
 
   {
     path: "category/:cid/activity/create",
     component: ActivityComponent,
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
   {
     path: "category/:cid/activity/delete/:aid",
     component: ActivityComponent,
     resolve: { activity: ActivityResolver },
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
   {
     path: "category/:cid/activity/:aid",
     component: ActivityComponent,
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
 
   { path: "users", component: UsersComponent, canActivate: [IsAdminGuard] },

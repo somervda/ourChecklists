@@ -19,6 +19,7 @@ export interface User {
   reviewerOfTeams?: string[];
   canCreateTeams?: boolean;
   isCategoryManager?: boolean;
+  isResourceManager?: boolean;
 }
 
 // export enum TeamRole {
