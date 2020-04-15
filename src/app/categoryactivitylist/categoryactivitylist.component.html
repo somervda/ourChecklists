@@ -34,6 +34,9 @@
 
   <ng-container matColumnDef="addButton" sticky>
     <th mat-header-cell *matHeaderCellDef colspan="5">
+      <span class="activities-heading"
+        ><mat-icon>emoji_flags</mat-icon>Activities</span
+      >
       <button class="add-button" mat-button (click)="onCategoryActivityAdd()">
         <mat-icon>add</mat-icon>
         Add new activity

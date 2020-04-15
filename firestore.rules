@@ -27,6 +27,18 @@ service cloud.firestore {
           get( /databases/$(database)/documents/users/$(request.auth.uid)).data.managerOfTeams.size() != 0;
      }
 
+    function canCreateTeams() {
+       return isAuthenticated() &&
+          ("canCreateTeams" in get( /databases/$(database)/documents/users/$(request.auth.uid)).data) &&
+          get( /databases/$(database)/documents/users/$(request.auth.uid)).data.canCreateTeams == true;
+     }
+
+    function isCategoryManager() {
+       return isAuthenticated() &&
+          ("isCategoryManager" in get( /databases/$(database)/documents/users/$(request.auth.uid)).data) &&
+          get( /databases/$(database)/documents/users/$(request.auth.uid)).data.isCategoryManager == true;
+     }
+
     function updatingField(field) {
       // Check to see if named field is being updated
       return (field in request.resource.data) && resource.data[field] != request.resource.data[field];
@@ -43,6 +55,7 @@ service cloud.firestore {
         && !updatingField("isActivated") 
         && !updatingField("dateLastLogon") 
         && !updatingField("canCreateTeams") 
+        && !updatingField("isCategoryManager") 
        ) ;
      }
 
@@ -80,17 +93,17 @@ service cloud.firestore {
 
     match /{path=**}/teams/{did} {
       allow read:  if isActivated();
-      allow write:  if isAdmin();
+      allow write:  if isAdmin() || canCreateTeams();
     }
 
     match /{path=**}/categories/{cid} {
       allow read:  if isActivated();
-      allow write:  if isAdmin();
+      allow write:  if isAdmin() || isCategoryManager();
     }
 
     match /{path=**}/categories/{cid}/activities/{aid} {
       allow read:  if isActivated();
-      allow write:  if isAdmin();
+      allow write:  if isAdmin() || isCategoryManager();
     }
   }
 }
