@@ -56,6 +56,19 @@
           <mat-icon>category</mat-icon>
           <span id="mainMenuCategories">Categories</span>
         </a>
+        <!-- Resources  -->
+        <a
+          mat-list-item
+          routerLink="resources"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin ||
+            (auth.user$ | async)?.isResourceManager
+          "
+        >
+          <mat-icon>folder_open</mat-icon>
+          <span id="mainMenuResources">Resources</span>
+        </a>
+        <!-- User Management -->
         <a
           mat-list-item
           *ngIf="(auth.user$ | async)?.isAdmin"

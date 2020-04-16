@@ -116,6 +116,7 @@ service cloud.firestore {
     match /{path=**}/resources/{id} {
       allow read:  if isActivated();
       allow write:  if isAdmin() || isResourceManager();
+      // Add write options for isResourceOwner & isResourceReviewer(+ needsReview + only review field updates)
     }
   }
 }

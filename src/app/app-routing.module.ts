@@ -7,8 +7,6 @@ import { LoginComponent } from "./login/login.component";
 import { UsersComponent } from "./users/users.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./services/user-resolver";
-import { IsAdminGuard } from "./guards/isAdmin.guard";
-import { IsActivatedGuard } from "./guards/isActivated.guard";
 import { NotauthorizedComponent } from "./notauthorized/notauthorized.component";
 import { TeamsComponent } from "./teams/teams.component";
 import { TeamComponent } from "./team/team.component";
@@ -17,33 +15,25 @@ import { CategoryComponent } from "./category/category.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryResolver } from "./services/category-resolver";
 import { ActivityComponent } from "./activity/activity.component";
-import { ActivityResolver } from "./services/activity.resolver";
 import { ResourcesComponent } from "./resources/resources.component";
 import { permissionGuard } from "./guards/permission.guard";
+import { ActivityResolver } from "./services/activity-resolver";
+import { ResourceComponent } from "./resource/resource.component";
+import { ResourceResolver } from "./services/resource-resolver";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
+  { path: "notAuthorized", component: NotauthorizedComponent },
+
+  // Teams
   {
     path: "teams",
     component: TeamsComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isAdmin", "canCreateTeams"] },
   },
-  {
-    path: "categories",
-    component: CategoriesComponent,
-    canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isCategoryManager"] },
-  },
-  {
-    path: "resources",
-    component: ResourcesComponent,
-    canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isResourceManager"] },
-  },
-  { path: "notAuthorized", component: NotauthorizedComponent },
   {
     path: "team/create",
     component: TeamComponent,
@@ -65,27 +55,15 @@ const routes: Routes = [
     data: { permissions: ["isAdmin", "canCreateTeams"] },
   },
 
+  // Categories
   {
-    path: "category/create",
-    component: CategoryComponent,
-    canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isCategoryManager"] },
-  },
-  {
-    path: "category/delete/:id",
-    component: CategoryComponent,
-    resolve: { category: CategoryResolver },
-    canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isCategoryManager"] },
-  },
-  {
-    path: "category/:id",
-    component: CategoryComponent,
-    resolve: { category: CategoryResolver },
+    path: "categories",
+    component: CategoriesComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
 
+  // Category/Activity
   {
     path: "category/:cid/activity/create",
     component: ActivityComponent,
@@ -106,14 +84,50 @@ const routes: Routes = [
     data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
 
-  { path: "users", component: UsersComponent, canActivate: [IsAdminGuard] },
+  // Resources
+  {
+    path: "resources",
+    component: ResourcesComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isResourceManager"] },
+  },
+  {
+    path: "resource/create",
+    component: ResourceComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isResourceManager"] },
+  },
+  {
+    path: "resource/delete/:id",
+    component: ResourceComponent,
+    resolve: { resource: ResourceResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isResourceManager"] },
+  },
+  {
+    path: "resource/:id",
+    component: ResourceComponent,
+    resolve: { resource: ResourceResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isResourceManager"] },
+  },
+
+  //  Users
+  {
+    path: "users",
+    component: UsersComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin"] },
+  },
   {
     path: "user/:uid",
     component: UserComponent,
     resolve: { user: UserResolver },
-    canActivate: [IsActivatedGuard],
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
     runGuardsAndResolvers: "always",
   },
+  // Other
   { path: "notfound", component: NotfoundComponent },
   { path: "**", component: NotfoundComponent },
 ];
