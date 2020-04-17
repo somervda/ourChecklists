@@ -27,6 +27,7 @@ export class ResourceComponent implements OnInit {
   resourceForm: FormGroup;
   resourceSubscription$$: Subscription;
   ResourceTypeInfo = ResourceTypeInfo;
+  ResourceType: ResourceType;
 
   constructor(
     private resourceService: ResourceService,
@@ -39,14 +40,10 @@ export class ResourceComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(
-      "this.route.snapshot.paramMap.get('id')",
-      this.route.snapshot.paramMap.get("id")
-    );
     this.crudAction = Crud.Update;
-    if (this.route.routeConfig.path == "category/delete/:id")
+    if (this.route.routeConfig.path == "resource/delete/:id")
       this.crudAction = Crud.Delete;
-    if (this.route.routeConfig.path == "category/create")
+    if (this.route.routeConfig.path == "resource/create")
       this.crudAction = Crud.Create;
 
     // console.log("category onInit", this.crudAction);
@@ -54,11 +51,15 @@ export class ResourceComponent implements OnInit {
       this.resource = {
         name: "",
         description: "",
-        owner: { uid: "", displayName: "" },
+        owner: {
+          uid: this.auth.currentUser.uid,
+          displayName: this.auth.currentUser.displayName,
+        },
         resourceType: ResourceType.url,
-        content: "",
+        content: {},
         status: ResourceStatus.active,
       };
+      console.log("resource:", this.resource);
     } else {
       this.resource = this.route.snapshot.data["resource"];
       this.resourceSubscription$$ = this.resourceService
@@ -89,6 +90,26 @@ export class ResourceComponent implements OnInit {
         ],
       ],
       resourceType: [this.resource.resourceType],
+      url: [
+        this.resource.content.url,
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(120),
+        ],
+      ],
+      youtubeId: [
+        this.resource.content.youtubeId,
+        [
+          Validators.required,
+          Validators.minLength(11),
+          Validators.maxLength(11),
+        ],
+      ],
+      markdown: [
+        this.resource.content.markdown,
+        [Validators.required, Validators.maxLength(10000)],
+      ],
     });
 
     // Mark all fields as touched to trigger validation on initial entry to the fields

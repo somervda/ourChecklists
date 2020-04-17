@@ -11,7 +11,7 @@ export interface DocRef {
 
 export interface UserRef {
   uid: string;
-  displayName: string;
+  displayName?: string;
 }
 
 export enum Crud {
