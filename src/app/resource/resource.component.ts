@@ -1,11 +1,17 @@
 import { Component, OnInit, NgZone } from "@angular/core";
-import { Resource } from "../models/resource.model";
+import {
+  Resource,
+  ResourceType,
+  ResourceStatus,
+  ResourceTypeInfo,
+} from "../models/resource.model";
 import { Crud } from "../models/helper.model";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ResourceService } from "../services/resource.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-resource",
@@ -20,6 +26,7 @@ export class ResourceComponent implements OnInit {
 
   resourceForm: FormGroup;
   resourceSubscription$$: Subscription;
+  ResourceTypeInfo = ResourceTypeInfo;
 
   constructor(
     private resourceService: ResourceService,
@@ -47,9 +54,13 @@ export class ResourceComponent implements OnInit {
       this.resource = {
         name: "",
         description: "",
+        owner: { uid: "", displayName: "" },
+        resourceType: ResourceType.url,
+        content: "",
+        status: ResourceStatus.active,
       };
     } else {
-      this.resource = this.route.snapshot.data["category"];
+      this.resource = this.route.snapshot.data["resource"];
       this.resourceSubscription$$ = this.resourceService
         .findById(this.resource.id)
         .subscribe((category) => {
@@ -77,6 +88,7 @@ export class ResourceComponent implements OnInit {
           Validators.maxLength(500),
         ],
       ],
+      resourceType: [this.resource.resourceType],
     });
 
     // Mark all fields as touched to trigger validation on initial entry to the fields

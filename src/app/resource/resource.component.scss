@@ -20,3 +20,14 @@ mat-form-field {
 table {
   width: 100%;
 }
+
+mat-radio-button {
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+.rb-group {
+  border-bottom-style: solid;
+  border-color: black;
+  border-bottom-width: thin;
+}

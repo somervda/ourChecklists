@@ -68,6 +68,17 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
+
+      <div class="rb-group">
+        <div>Type</div>
+        <mat-radio-group formControlName="resourceType">
+          <mat-radio-button
+            *ngFor="let info of ResourceTypeInfo"
+            [value]="info.resourceType"
+            >{{ info.name }}</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
     </fieldset>
 
     <button

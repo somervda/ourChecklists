@@ -9,9 +9,9 @@ export interface Resource {
   content: string;
   status: ResourceStatus;
   supersedes?: DocRef;
-  dateReviewed: Date;
-  team: DocRef;
-  reviewer: UserRef;
+  dateReviewed?: Date;
+  team?: DocRef;
+  reviewer?: UserRef;
   dateCreated?: Date;
   dateUpdated?: Date;
   category?: DocRef;
