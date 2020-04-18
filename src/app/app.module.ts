@@ -56,7 +56,8 @@ import { CategoryactivitylistComponent } from "./categoryactivitylist/categoryac
 import { ActivityComponent } from "./activity/activity.component";
 import { ResourcesComponent } from "./resources/resources.component";
 import { ResourceComponent } from "./resource/resource.component";
-import { MarkedPipe } from './marked.pipe';
+import { MarkedPipe } from "./marked.pipe";
+import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component";
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { MarkedPipe } from './marked.pipe';
     ResourcesComponent,
     ResourceComponent,
     MarkedPipe,
+    YoutubeviewerComponent,
   ],
   imports: [
     BrowserModule,

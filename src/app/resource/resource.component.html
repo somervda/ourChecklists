@@ -109,26 +109,41 @@
         </ng-container>
 
         <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
-          <mat-form-field class="half-width">
-            <input
-              matInput
-              formControlName="content"
-              (change)="onFieldUpdate('content')"
-              placeholder="YouTube ID"
-              required
-            />
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('required')"
-            >
-              YouTubeId is required.
-            </mat-error>
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('pattern')"
-            >
-              Must be valid 11 character unique youtube video ID i.e.
-              ZCMGzo1D2_M
-            </mat-error>
-          </mat-form-field>
+          <mat-tab-group>
+            <mat-tab label="Edit">
+              <ng-template matTabContent>
+                <mat-form-field class="half-width">
+                  <input
+                    matInput
+                    formControlName="content"
+                    (change)="onFieldUpdate('content')"
+                    placeholder="YouTube ID"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      resourceForm.controls['content'].hasError('required')
+                    "
+                  >
+                    YouTubeId is required.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="resourceForm.controls['content'].hasError('pattern')"
+                  >
+                    Must be valid 11 character unique youtube video ID i.e.
+                    ZCMGzo1D2_M
+                  </mat-error>
+                </mat-form-field>
+              </ng-template>
+            </mat-tab>
+            <mat-tab label="View">
+              <ng-template matTabContent>
+                <app-youtubeviewer
+                  [youtubeId]="resource.content"
+                ></app-youtubeviewer
+              ></ng-template>
+            </mat-tab>
+          </mat-tab-group>
         </ng-container>
         <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
           <mat-tab-group>
