@@ -177,9 +177,9 @@ export class ResourceComponent implements OnInit {
       let newValue = this.resourceForm.get(fieldName).value;
       this.resourceService.fieldUpdate(this.resource.id, fieldName, newValue);
     }
-    // special code to apply resourceType during create
-    if (fieldName == "resourceType" && this.crudAction == Crud.Create) {
-      this.resource.resourceType = this.resourceForm.get("resourceType").value;
+    // special code to apply values during create
+    if (this.crudAction == Crud.Create) {
+      this.resource[fieldName] = this.resourceForm.get(fieldName).value;
     }
   }
 

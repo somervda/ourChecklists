@@ -30,6 +30,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatSortModule } from "@angular/material/sort";
+import { MatTabsModule } from "@angular/material/tabs";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -54,7 +55,8 @@ import { CategoryComponent } from "./category/category.component";
 import { CategoryactivitylistComponent } from "./categoryactivitylist/categoryactivitylist.component";
 import { ActivityComponent } from "./activity/activity.component";
 import { ResourcesComponent } from "./resources/resources.component";
-import { ResourceComponent } from './resource/resource.component';
+import { ResourceComponent } from "./resource/resource.component";
+import { MarkedPipe } from './marked.pipe';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,7 @@ import { ResourceComponent } from './resource/resource.component';
     ActivityComponent,
     ResourcesComponent,
     ResourceComponent,
+    MarkedPipe,
   ],
   imports: [
     BrowserModule,
@@ -96,6 +99,7 @@ import { ResourceComponent } from './resource/resource.component';
     MatChipsModule,
     MatTooltipModule,
     MatTableModule,
+    MatTabsModule,
     MatSnackBarModule,
     MatDialogModule,
     MatDividerModule,

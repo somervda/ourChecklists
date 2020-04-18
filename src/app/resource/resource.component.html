@@ -131,29 +131,36 @@
           </mat-form-field>
         </ng-container>
         <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
-          <mat-form-field class="full-width">
-            <textarea
-              matInput
-              matAutosizeMinRows="3"
-              matAutosizeMaxRows="15"
-              matTextareaAutosize
-              formControlName="content"
-              (change)="onFieldUpdate('content')"
-              placeholder="MarkDown"
-              required
-            ></textarea>
-            <mat-hint>Enter text using Markdown syntax</mat-hint>
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('required')"
-            >
-              Markdown text is required.
-            </mat-error>
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('maxlength')"
-            >
-              Markdown must be no more than 10,000 characters long.
-            </mat-error>
-          </mat-form-field>
+          <mat-tab-group>
+            <mat-tab label="Edit">
+              <mat-form-field class="full-width">
+                <textarea
+                  matInput
+                  matAutosizeMinRows="10"
+                  matAutosizeMaxRows="15"
+                  matTextareaAutosize
+                  formControlName="content"
+                  (change)="onFieldUpdate('content')"
+                  placeholder="MarkDown"
+                  required
+                ></textarea>
+                <mat-hint>Enter text using Markdown syntax</mat-hint>
+                <mat-error
+                  *ngIf="resourceForm.controls['content'].hasError('required')"
+                >
+                  Markdown text is required.
+                </mat-error>
+                <mat-error
+                  *ngIf="resourceForm.controls['content'].hasError('maxlength')"
+                >
+                  Markdown must be no more than 10,000 characters long.
+                </mat-error>
+              </mat-form-field>
+            </mat-tab>
+            <mat-tab label="View">
+              <div [innerHTML]="resource.content | marked"></div>
+            </mat-tab>
+          </mat-tab-group>
         </ng-container>
       </mat-card>
 
