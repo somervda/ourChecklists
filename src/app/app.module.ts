@@ -8,8 +8,11 @@ import { AngularFirePerformanceModule } from "@angular/fire/performance";
 
 import { environment } from "../environments/environment";
 import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFirestoreModule } from "@angular/fire/firestore";
-// import { AngularFireStorageModule } from "@angular/fire/storage";
+import {
+  AngularFirestoreModule,
+  AngularFirestore,
+} from "@angular/fire/firestore";
+import { AngularFireStorageModule } from "@angular/fire/storage";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -120,6 +123,7 @@ import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component"
     // Allow offline operations - useful when used in combination with PWA functionality
     // AngularFirestoreModule,
     AngularFirestoreModule.enablePersistence(),
+    AngularFireStorageModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
     }),

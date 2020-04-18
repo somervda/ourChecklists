@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
 import { Subscription } from "rxjs";
+import { AngularFireStorage } from "@angular/fire/storage";
 
 @Component({
   selector: "app-resource",
@@ -28,6 +29,7 @@ export class ResourceComponent implements OnInit {
   resourceSubscription$$: Subscription;
   ResourceTypeInfo = ResourceTypeInfo;
   ResourceType = ResourceType;
+  fileToUpload: File;
 
   constructor(
     private resourceService: ResourceService,
@@ -36,7 +38,8 @@ export class ResourceComponent implements OnInit {
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private storage: AngularFireStorage
   ) {}
 
   ngOnInit() {
@@ -150,6 +153,18 @@ export class ResourceComponent implements OnInit {
       .catch(function (error) {
         console.error("Error adding document: ", this.resource.name, error);
       });
+  }
+
+  onUploadFile(event) {
+    console.log("onUploadFile", event);
+    this.fileToUpload = event.target.files[0];
+    this.doUpload();
+  }
+
+  doUpload() {
+    console.log("this.fileToUpload.name", this.fileToUpload);
+    const task = this.storage.upload("resources/22.png", this.fileToUpload);
+    task.snapshotChanges().subscribe(console.log);
   }
 
   onDelete() {

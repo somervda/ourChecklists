@@ -145,6 +145,11 @@
             </mat-tab>
           </mat-tab-group>
         </ng-container>
+
+        <ng-container *ngIf="resource.resourceType == ResourceType.file">
+          <input type="file" (change)="onUploadFile($event)" />
+        </ng-container>
+
         <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
           <mat-tab-group>
             <mat-tab label="Edit">
