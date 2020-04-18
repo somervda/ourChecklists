@@ -70,8 +70,8 @@
       </mat-form-field>
 
       <mat-card>
+        <!-- <div class="card-header">Resource Content</div> -->
         <div class="rb-group">
-          <div>Type</div>
           <mat-radio-group
             formControlName="resourceType"
             (change)="
@@ -86,7 +86,7 @@
           </mat-radio-group>
         </div>
 
-        <ng-container *ngIf="resource.resourceType == 1">
+        <ng-container *ngIf="resource.resourceType == ResourceType.url">
           <mat-form-field class="full-width">
             <input
               matInput
@@ -101,19 +101,14 @@
               URL is required.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('minlength')"
+              *ngIf="resourceForm.controls['content'].hasError('pattern')"
             >
-              URL must be at least 6 characters long.
-            </mat-error>
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('maxlength')"
-            >
-              URL must be no more than 120 characters long.
+              Must be a valid URL.
             </mat-error>
           </mat-form-field>
         </ng-container>
 
-        <ng-container *ngIf="resource.resourceType == 2">
+        <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
           <mat-form-field class="half-width">
             <input
               matInput
@@ -128,18 +123,14 @@
               YouTubeId is required.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('minlength')"
+              *ngIf="resourceForm.controls['content'].hasError('pattern')"
             >
-              YouTubeId must be at least 11 characters long.
-            </mat-error>
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('maxlength')"
-            >
-              YouTubeId must be no more than 11 characters long.
+              Must be valid 11 character unique youtube video ID i.e.
+              ZCMGzo1D2_M
             </mat-error>
           </mat-form-field>
         </ng-container>
-        <ng-container *ngIf="resource.resourceType == 4">
+        <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
           <mat-form-field class="full-width">
             <textarea
               matInput

@@ -27,7 +27,7 @@ export class ResourceComponent implements OnInit {
   resourceForm: FormGroup;
   resourceSubscription$$: Subscription;
   ResourceTypeInfo = ResourceTypeInfo;
-  ResourceType: ResourceType;
+  ResourceType = ResourceType;
 
   constructor(
     private resourceService: ResourceService,
@@ -105,17 +105,17 @@ export class ResourceComponent implements OnInit {
     console.log("setContentValidators", resourceType);
     switch (resourceType) {
       case ResourceType.url:
+        const regURL = "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?";
         this.resourceForm.controls["content"].setValidators([
           Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(120),
+          Validators.pattern(regURL),
         ]);
         break;
       case ResourceType.youtubeId:
+        const regYouTubeId = "^([A-Za-z0-9_-]{11})$";
         this.resourceForm.controls["content"].setValidators([
           Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
+          Validators.pattern(regYouTubeId),
         ]);
         break;
       case ResourceType.markdown:
@@ -128,7 +128,7 @@ export class ResourceComponent implements OnInit {
   }
 
   onCreate() {
-    // console.log("create probe", this.probe);
+    // console.log("create resource", this.resource);
     for (const field in this.resourceForm.controls) {
       this.resource[field] = this.resourceForm.get(field).value;
     }
@@ -138,36 +138,33 @@ export class ResourceComponent implements OnInit {
       .then((newDoc) => {
         this.crudAction = Crud.Update;
         this.snackBar.open(
-          "Category '" + this.resource.name + "' created.",
+          "Resource '" + this.resource.name + "' created.",
           "",
           {
             duration: 2000,
           }
         );
         this.resource.id = newDoc.id;
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/category/" + this.resource.id)
-        );
+        this.ngZone.run(() => this.router.navigateByUrl("/resources"));
       })
       .catch(function (error) {
-        console.error("Error adding document: ", this.category.name, error);
+        console.error("Error adding document: ", this.resource.name, error);
       });
   }
 
   onDelete() {
-    // console.log("delete", this.probe.id);
-    const teamId = this.resource.id;
+    // console.log("delete", this.resource.id);
     const name = this.resource.name;
     this.resourceService
       .delete(this.resource.id)
       .then(() => {
-        this.snackBar.open("Category '" + name + "' deleted!", "", {
+        this.snackBar.open("Resource '" + name + "' deleted!", "", {
           duration: 2000,
         });
-        this.ngZone.run(() => this.router.navigateByUrl("/categories"));
+        this.ngZone.run(() => this.router.navigateByUrl("/resources"));
       })
       .catch(function (error) {
-        console.error("Error deleting category: ", error);
+        console.error("Error deleting resource: ", error);
       });
   }
 
@@ -179,6 +176,10 @@ export class ResourceComponent implements OnInit {
     ) {
       let newValue = this.resourceForm.get(fieldName).value;
       this.resourceService.fieldUpdate(this.resource.id, fieldName, newValue);
+    }
+    // special code to apply resourceType during create
+    if (fieldName == "resourceType" && this.crudAction == Crud.Create) {
+      this.resource.resourceType = this.resourceForm.get("resourceType").value;
     }
   }
 
