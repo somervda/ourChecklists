@@ -6,13 +6,7 @@ export interface Resource {
   owner: UserRef;
   description: string;
   resourceType: ResourceType;
-  content: {
-    url?: string;
-    youtubeId?: string;
-    fileId?: string;
-    imageId?: string;
-    markdown?: string;
-  };
+  content: string;
   status: ResourceStatus;
   supersedes?: DocRef;
   dateReviewed?: Date;

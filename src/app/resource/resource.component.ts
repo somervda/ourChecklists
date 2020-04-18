@@ -56,7 +56,7 @@ export class ResourceComponent implements OnInit {
           displayName: this.auth.currentUser.displayName,
         },
         resourceType: ResourceType.url,
-        content: {},
+        content: "",
         status: ResourceStatus.active,
       };
       console.log("resource:", this.resource);
@@ -90,33 +90,40 @@ export class ResourceComponent implements OnInit {
         ],
       ],
       resourceType: [this.resource.resourceType],
-      url: [
-        this.resource.content.url,
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(120),
-        ],
-      ],
-      youtubeId: [
-        this.resource.content.youtubeId,
-        [
-          Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
-        ],
-      ],
-      markdown: [
-        this.resource.content.markdown,
-        [Validators.required, Validators.maxLength(10000)],
-      ],
+      content: [this.resource.content],
     });
-
+    this.setContentValidators(this.resource.resourceType);
     // Mark all fields as touched to trigger validation on initial entry to the fields
     if (this.crudAction != Crud.Create) {
       for (const field in this.resourceForm.controls) {
         this.resourceForm.get(field).markAsTouched();
       }
+    }
+  }
+
+  setContentValidators(resourceType: ResourceType) {
+    console.log("setContentValidators", resourceType);
+    switch (resourceType) {
+      case ResourceType.url:
+        this.resourceForm.controls["content"].setValidators([
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(120),
+        ]);
+        break;
+      case ResourceType.youtubeId:
+        this.resourceForm.controls["content"].setValidators([
+          Validators.required,
+          Validators.minLength(11),
+          Validators.maxLength(11),
+        ]);
+        break;
+      case ResourceType.markdown:
+        this.resourceForm.controls["content"].setValidators([
+          Validators.required,
+          Validators.maxLength(10000),
+        ]);
+        break;
     }
   }
 

@@ -68,12 +68,15 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
+
       <mat-card>
         <div class="rb-group">
           <div>Type</div>
           <mat-radio-group
             formControlName="resourceType"
-            (change)="onFieldUpdate('resourceType')"
+            (change)="
+              onFieldUpdate('resourceType'); setContentValidators($event.value)
+            "
           >
             <mat-radio-button
               *ngFor="let info of ResourceTypeInfo"
@@ -82,27 +85,28 @@
             >
           </mat-radio-group>
         </div>
+
         <ng-container *ngIf="resource.resourceType == 1">
           <mat-form-field class="full-width">
             <input
               matInput
-              formControlName="url"
-              (change)="onFieldUpdate('url')"
+              formControlName="content"
+              (change)="onFieldUpdate('content')"
               placeholder="URL"
               required
             />
             <mat-error
-              *ngIf="resourceForm.controls['url'].hasError('required')"
+              *ngIf="resourceForm.controls['content'].hasError('required')"
             >
               URL is required.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['url'].hasError('minlength')"
+              *ngIf="resourceForm.controls['content'].hasError('minlength')"
             >
               URL must be at least 6 characters long.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['url'].hasError('maxlength')"
+              *ngIf="resourceForm.controls['content'].hasError('maxlength')"
             >
               URL must be no more than 120 characters long.
             </mat-error>
@@ -113,23 +117,23 @@
           <mat-form-field class="half-width">
             <input
               matInput
-              formControlName="youtubeId"
-              (change)="onFieldUpdate('youtubeId')"
+              formControlName="content"
+              (change)="onFieldUpdate('content')"
               placeholder="YouTube ID"
               required
             />
             <mat-error
-              *ngIf="resourceForm.controls['youtubeId'].hasError('required')"
+              *ngIf="resourceForm.controls['content'].hasError('required')"
             >
               YouTubeId is required.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['youtubeId'].hasError('minlength')"
+              *ngIf="resourceForm.controls['content'].hasError('minlength')"
             >
               YouTubeId must be at least 11 characters long.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['youtubeId'].hasError('maxlength')"
+              *ngIf="resourceForm.controls['content'].hasError('maxlength')"
             >
               YouTubeId must be no more than 11 characters long.
             </mat-error>
@@ -142,19 +146,19 @@
               matAutosizeMinRows="3"
               matAutosizeMaxRows="15"
               matTextareaAutosize
-              formControlName="markdown"
-              (change)="onFieldUpdate('markdown')"
+              formControlName="content"
+              (change)="onFieldUpdate('content')"
               placeholder="MarkDown"
               required
             ></textarea>
             <mat-hint>Enter text using Markdown syntax</mat-hint>
             <mat-error
-              *ngIf="resourceForm.controls['markdown'].hasError('required')"
+              *ngIf="resourceForm.controls['content'].hasError('required')"
             >
               Markdown text is required.
             </mat-error>
             <mat-error
-              *ngIf="resourceForm.controls['markdown'].hasError('maxlength')"
+              *ngIf="resourceForm.controls['content'].hasError('maxlength')"
             >
               Markdown must be no more than 10,000 characters long.
             </mat-error>
