@@ -127,6 +127,10 @@ export class ResourceComponent implements OnInit {
           Validators.maxLength(10000),
         ]);
         break;
+      case ResourceType.file:
+        this.resourceForm.controls["content"].setValidators([]);
+        this.resourceForm.controls["content"].updateValueAndValidity();
+        break;
     }
   }
 
@@ -134,6 +138,12 @@ export class ResourceComponent implements OnInit {
     // console.log("create resource", this.resource);
     for (const field in this.resourceForm.controls) {
       this.resource[field] = this.resourceForm.get(field).value;
+    }
+    if (
+      this.resource.resourceType == ResourceType.file ||
+      this.resource.resourceType == ResourceType.image
+    ) {
+      this.resource.content = this.fileToUpload.name;
     }
 
     this.resourceService
@@ -148,6 +158,13 @@ export class ResourceComponent implements OnInit {
           }
         );
         this.resource.id = newDoc.id;
+        if (
+          this.resource.resourceType == ResourceType.file ||
+          this.resource.resourceType == ResourceType.image
+        ) {
+          this.doUpload(this.resource.id);
+        }
+
         this.ngZone.run(() => this.router.navigateByUrl("/resources"));
       })
       .catch(function (error) {
@@ -158,12 +175,14 @@ export class ResourceComponent implements OnInit {
   onUploadFile(event) {
     console.log("onUploadFile", event);
     this.fileToUpload = event.target.files[0];
-    this.doUpload();
+    if (this.crudAction == Crud.Update) {
+      this.doUpload(this.resource.id);
+    }
   }
 
-  doUpload() {
-    console.log("this.fileToUpload.name", this.fileToUpload);
-    const task = this.storage.upload("resources/22.png", this.fileToUpload);
+  doUpload(id: string) {
+    console.log("this.fileToUpload.name", this.fileToUpload, id);
+    const task = this.storage.upload(`resources/${id}`, this.fileToUpload);
     task.snapshotChanges().subscribe(console.log);
   }
 

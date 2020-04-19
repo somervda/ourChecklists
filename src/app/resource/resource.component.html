@@ -191,13 +191,23 @@
       mat-raised-button
       color="primary"
       *ngIf="crudAction == Crud.Create"
-      [disabled]="!resourceForm.valid"
+      [disabled]="
+        !resourceForm.valid ||
+        (crudAction == Crud.Create &&
+          (resource.resourceType == ResourceType.file ||
+            resource.resourceType == ResourceType.image) &&
+          !fileToUpload.name)
+      "
       (click)="onCreate()"
       id="btnCreate"
     >
       <mat-icon>add</mat-icon>
       Create
     </button>
+    <!-- crudAction == Crud.Create : {{crudAction == Crud.Create}}<br>
+resourceType == ResourceType.file : {{resourceType == ResourceType.file}}<br>
+crudAction == Crud.Create : {{crudAction == Crud.Create}}<br>
+crudAction == Crud.Create : {{crudAction == Crud.Create}}<br> -->
     <button
       mat-raised-button
       color="primary"
