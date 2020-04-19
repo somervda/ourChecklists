@@ -128,6 +128,7 @@ export class ResourceComponent implements OnInit {
           Validators.required,
           Validators.pattern(regURL),
         ]);
+        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
       case ResourceType.youtubeId:
         const regYouTubeId = "^([A-Za-z0-9_-]{11})$";
@@ -135,14 +136,17 @@ export class ResourceComponent implements OnInit {
           Validators.required,
           Validators.pattern(regYouTubeId),
         ]);
+        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
       case ResourceType.markdown:
         this.resourceForm.controls["content"].setValidators([
           Validators.required,
           Validators.maxLength(10000),
         ]);
+        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
       case ResourceType.file:
+      case ResourceType.image:
         this.resourceForm.controls["content"].setValidators([]);
         this.resourceForm.controls["content"].updateValueAndValidity();
         break;
