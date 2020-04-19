@@ -11,7 +11,7 @@ import { ResourceService } from "../services/resource.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { AngularFireStorage } from "@angular/fire/storage";
 
 @Component({
@@ -24,12 +24,14 @@ export class ResourceComponent implements OnInit {
   crudAction: Crud;
   // Declare an instance of crud enum to use for checking crudAction value
   Crud = Crud;
+  showSpinner = false;
 
   resourceForm: FormGroup;
   resourceSubscription$$: Subscription;
   ResourceTypeInfo = ResourceTypeInfo;
   ResourceType = ResourceType;
   fileToUpload: File;
+  downloadUrl$: Observable<string>;
 
   constructor(
     private resourceService: ResourceService,
@@ -65,6 +67,19 @@ export class ResourceComponent implements OnInit {
       console.log("resource:", this.resource);
     } else {
       this.resource = this.route.snapshot.data["resource"];
+      if (
+        this.resource.resourceType == ResourceType.file ||
+        this.resource.resourceType == ResourceType.image
+      ) {
+        // get downloadUrl
+        console.log(
+          "getref:",
+          `resources/${this.resource.id}/${this.resource.content}`
+        );
+        this.downloadUrl$ = this.storage
+          .ref(`resources/${this.resource.id}/${this.resource.content}`)
+          .getDownloadURL();
+      }
       this.resourceSubscription$$ = this.resourceService
         .findById(this.resource.id)
         .subscribe((category) => {
@@ -145,11 +160,12 @@ export class ResourceComponent implements OnInit {
     ) {
       this.resource.content = this.fileToUpload.name;
     }
+    this.showSpinner = true;
 
     this.resourceService
       .create(this.resource)
       .then((newDoc) => {
-        this.crudAction = Crud.Update;
+        // this.crudAction = Crud.Update;
         this.snackBar.open(
           "Resource '" + this.resource.name + "' created.",
           "",
@@ -164,10 +180,12 @@ export class ResourceComponent implements OnInit {
         ) {
           this.doUpload(this.resource.id);
         }
+        this.showSpinner = false;
 
         this.ngZone.run(() => this.router.navigateByUrl("/resources"));
       })
       .catch(function (error) {
+        this.showSpinner = false;
         console.error("Error adding document: ", this.resource.name, error);
       });
   }
@@ -182,8 +200,25 @@ export class ResourceComponent implements OnInit {
 
   doUpload(id: string) {
     console.log("this.fileToUpload.name", this.fileToUpload, id);
-    const task = this.storage.upload(`resources/${id}`, this.fileToUpload);
-    task.snapshotChanges().subscribe(console.log);
+    this.showSpinner = true;
+    const task = this.storage
+      .upload(`resources/${id}/${this.fileToUpload.name}`, this.fileToUpload)
+      .then((t) => {
+        this.showSpinner = false;
+        if (this.crudAction != Crud.Create) {
+          this.resource.content = this.fileToUpload.name;
+          this.resourceForm.controls["content"].setValue(
+            this.fileToUpload.name
+          );
+          this.onFieldUpdate("content");
+          // get downloadUrl
+          this.downloadUrl$ = this.storage
+            .ref(`resources/${this.resource.id}/${this.resource.content}`)
+            .getDownloadURL();
+        }
+      })
+      .catch((e) => (this.showSpinner = false));
+    // task.snapshotChanges().subscribe(console.log);
   }
 
   onDelete() {
@@ -209,6 +244,7 @@ export class ResourceComponent implements OnInit {
       this.crudAction != Crud.Delete
     ) {
       let newValue = this.resourceForm.get(fieldName).value;
+      console.log("onFieldUpdate", fieldName, newValue, this.resource.id);
       this.resourceService.fieldUpdate(this.resource.id, fieldName, newValue);
     }
     // special code to apply values during create

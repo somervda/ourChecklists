@@ -42,3 +42,28 @@ mat-radio-button {
   padding-left: 0px;
   border-style: none;
 }
+
+.spinner_container {
+  border-radius: 10px;
+  height: 70px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  z-index: 3;
+  opacity: 0.5;
+}
+
+.file-name {
+  margin-right: 10px;
+  margin-bottom: 7px;
+}
+
+.type-container {
+  padding: 5px;
+  border-width: thin;
+  border-style: solid;
+  border-color: whitesmoke;
+  border-radius: 3px;
+}

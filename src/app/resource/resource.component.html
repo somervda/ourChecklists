@@ -1,3 +1,4 @@
+<mat-spinner *ngIf="showSpinner" class="spinner_container"></mat-spinner>
 <app-subheading
   [title]="resource.name + ' [Update]'"
   *ngIf="crudAction == Crud.Update"
@@ -85,103 +86,140 @@
             >
           </mat-radio-group>
         </div>
+        <div class="type-container">
+          <ng-container *ngIf="resource.resourceType == ResourceType.url">
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                formControlName="content"
+                (change)="onFieldUpdate('content')"
+                placeholder="URL"
+                required
+              />
+              <mat-error
+                *ngIf="resourceForm.controls['content'].hasError('required')"
+              >
+                URL is required.
+              </mat-error>
+              <mat-error
+                *ngIf="resourceForm.controls['content'].hasError('pattern')"
+              >
+                Must be a valid URL.
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
 
-        <ng-container *ngIf="resource.resourceType == ResourceType.url">
-          <mat-form-field class="full-width">
+          <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
+            <mat-tab-group>
+              <mat-tab label="Edit">
+                <ng-template matTabContent>
+                  <mat-form-field class="full-width">
+                    <input
+                      matInput
+                      formControlName="content"
+                      (change)="onFieldUpdate('content')"
+                      placeholder="YouTube ID"
+                      required
+                    />
+                    <mat-error
+                      *ngIf="
+                        resourceForm.controls['content'].hasError('required')
+                      "
+                    >
+                      YouTubeId is required.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        resourceForm.controls['content'].hasError('pattern')
+                      "
+                    >
+                      Must be valid 11 character unique youtube video ID i.e.
+                      ZCMGzo1D2_M
+                    </mat-error>
+                  </mat-form-field>
+                </ng-template>
+              </mat-tab>
+              <mat-tab label="View">
+                <ng-template matTabContent>
+                  <app-youtubeviewer
+                    [youtubeId]="resource.content"
+                  ></app-youtubeviewer
+                ></ng-template>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-container>
+
+          <ng-container
+            *ngIf="
+              resource.resourceType == ResourceType.file ||
+              resource.resourceType == ResourceType.image
+            "
+          >
+            <div *ngIf="crudAction != Crud.Create" class="file-name">
+              File Name:
+              <a [href]="downloadUrl$ | async" target="_blank">{{
+                resource.content
+              }}</a>
+            </div>
+            <div
+              *ngIf="crudAction == Crud.Create && fileToUpload"
+              class="file-name"
+            >
+              File To Upload: {{ fileToUpload.name }}
+            </div>
+            <!-- Use hidden file input button to have more control over button formatting -->
+            <button mat-raised-button (click)="fileUpload.click()">
+              {{ crudAction == Crud.Create ? "Select File" : "Update File" }}
+            </button>
             <input
-              matInput
-              formControlName="content"
-              (change)="onFieldUpdate('content')"
-              placeholder="URL"
-              required
+              type="file"
+              #fileUpload
+              hidden="true"
+              (change)="onUploadFile($event)"
+              multiple="false"
+              [attr.accept]="
+                resource.resourceType == ResourceType.image ? 'image/*' : null
+              "
             />
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('required')"
-            >
-              URL is required.
-            </mat-error>
-            <mat-error
-              *ngIf="resourceForm.controls['content'].hasError('pattern')"
-            >
-              Must be a valid URL.
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
+          </ng-container>
 
-        <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
-          <mat-tab-group>
-            <mat-tab label="Edit">
-              <ng-template matTabContent>
-                <mat-form-field class="half-width">
-                  <input
+          <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
+            <mat-tab-group>
+              <mat-tab label="Edit">
+                <mat-form-field class="full-width">
+                  <textarea
                     matInput
+                    matAutosizeMinRows="10"
+                    matAutosizeMaxRows="15"
+                    matTextareaAutosize
                     formControlName="content"
                     (change)="onFieldUpdate('content')"
-                    placeholder="YouTube ID"
+                    placeholder="MarkDown"
                     required
-                  />
+                  ></textarea>
+                  <mat-hint>Enter text using Markdown syntax</mat-hint>
                   <mat-error
                     *ngIf="
                       resourceForm.controls['content'].hasError('required')
                     "
                   >
-                    YouTubeId is required.
+                    Markdown text is required.
                   </mat-error>
                   <mat-error
-                    *ngIf="resourceForm.controls['content'].hasError('pattern')"
+                    *ngIf="
+                      resourceForm.controls['content'].hasError('maxlength')
+                    "
                   >
-                    Must be valid 11 character unique youtube video ID i.e.
-                    ZCMGzo1D2_M
+                    Markdown must be no more than 10,000 characters long.
                   </mat-error>
                 </mat-form-field>
-              </ng-template>
-            </mat-tab>
-            <mat-tab label="View">
-              <ng-template matTabContent>
-                <app-youtubeviewer
-                  [youtubeId]="resource.content"
-                ></app-youtubeviewer
-              ></ng-template>
-            </mat-tab>
-          </mat-tab-group>
-        </ng-container>
-
-        <ng-container *ngIf="resource.resourceType == ResourceType.file">
-          <input type="file" (change)="onUploadFile($event)" />
-        </ng-container>
-
-        <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
-          <mat-tab-group>
-            <mat-tab label="Edit">
-              <mat-form-field class="full-width">
-                <textarea
-                  matInput
-                  matAutosizeMinRows="10"
-                  matAutosizeMaxRows="15"
-                  matTextareaAutosize
-                  formControlName="content"
-                  (change)="onFieldUpdate('content')"
-                  placeholder="MarkDown"
-                  required
-                ></textarea>
-                <mat-hint>Enter text using Markdown syntax</mat-hint>
-                <mat-error
-                  *ngIf="resourceForm.controls['content'].hasError('required')"
-                >
-                  Markdown text is required.
-                </mat-error>
-                <mat-error
-                  *ngIf="resourceForm.controls['content'].hasError('maxlength')"
-                >
-                  Markdown must be no more than 10,000 characters long.
-                </mat-error>
-              </mat-form-field>
-            </mat-tab>
-            <mat-tab label="View">
-              <div [innerHTML]="resource.content | marked"></div>
-            </mat-tab>
-          </mat-tab-group>
-        </ng-container>
+              </mat-tab>
+              <mat-tab label="View">
+                <div [innerHTML]="resource.content | marked"></div>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-container>
+        </div>
       </mat-card>
 
       <div class="full-width">Owner: {{ resource?.owner?.displayName }}</div>
@@ -196,7 +234,7 @@
         (crudAction == Crud.Create &&
           (resource.resourceType == ResourceType.file ||
             resource.resourceType == ResourceType.image) &&
-          !fileToUpload.name)
+          (!fileToUpload || !fileToUpload.name))
       "
       (click)="onCreate()"
       id="btnCreate"
@@ -204,10 +242,7 @@
       <mat-icon>add</mat-icon>
       Create
     </button>
-    <!-- crudAction == Crud.Create : {{crudAction == Crud.Create}}<br>
-resourceType == ResourceType.file : {{resourceType == ResourceType.file}}<br>
-crudAction == Crud.Create : {{crudAction == Crud.Create}}<br>
-crudAction == Crud.Create : {{crudAction == Crud.Create}}<br> -->
+
     <button
       mat-raised-button
       color="primary"
