@@ -12,6 +12,7 @@ export class UserfinderComponent implements OnInit {
   constructor(private userService: UserService) {}
   @Output() userSelected: EventEmitter<any> = new EventEmitter();
   users$: Observable<User[]>;
+  selectedUid: string;
 
   ngOnInit(): void {
     this.users$ = this.userService.findByPartialName("");
@@ -24,6 +25,7 @@ export class UserfinderComponent implements OnInit {
 
   onUserSelected(uid) {
     console.log("onUserSelected", uid);
+    this.selectedUid = uid;
     this.userSelected.emit(uid);
   }
 }

@@ -1,0 +1,14 @@
+<div class="dialog-heading">Select User</div>
+<app-userfinder (userSelected)="onUserSelected($event)"></app-userfinder>
+<button
+  mat-button
+  matTooltip="Update User Information"
+  (click)="returnUser()"
+  [disabled]="!user"
+>
+  <mat-icon>check</mat-icon>Update
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>

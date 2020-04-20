@@ -70,6 +70,39 @@
         </mat-error>
       </mat-form-field>
 
+      <table>
+        <tr>
+          <td class="row-prompt">Owner</td>
+          <td>{{ resource?.owner?.displayName }}</td>
+          <td>
+            <button
+              class="update-field-button"
+              mat-raised-button
+              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+              matTooltip="Update Owner"
+              (click)="onUpdateOwner()"
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-prompt">Reviewer</td>
+          <td>{{ resource?.reviewer?.displayName }}</td>
+          <td>
+            <button
+              class="update-field-button"
+              mat-raised-button
+              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+              matTooltip="Update Reviewer"
+              (click)="onUpdateReviewer()"
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+      </table>
+
       <mat-card>
         <!-- <div class="card-header">Resource Content</div> -->
         <div class="rb-group">
@@ -221,8 +254,6 @@
           </ng-container>
         </div>
       </mat-card>
-
-      <div class="full-width">Owner: {{ resource?.owner?.displayName }}</div>
     </fieldset>
 
     <button

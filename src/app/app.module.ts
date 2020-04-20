@@ -61,6 +61,7 @@ import { ResourcesComponent } from "./resources/resources.component";
 import { ResourceComponent } from "./resource/resource.component";
 import { MarkedPipe } from "./marked.pipe";
 import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component";
+import { UserselectordialogComponent } from './userselectordialog/userselectordialog.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component"
     ResourceComponent,
     MarkedPipe,
     YoutubeviewerComponent,
+    UserselectordialogComponent,
   ],
   imports: [
     BrowserModule,

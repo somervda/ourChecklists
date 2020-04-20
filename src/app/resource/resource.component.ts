@@ -5,7 +5,7 @@ import {
   ResourceStatus,
   ResourceTypeInfo,
 } from "../models/resource.model";
-import { Crud } from "../models/helper.model";
+import { Crud, DocRef, UserRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ResourceService } from "../services/resource.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -13,6 +13,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
 import { Subscription, Observable } from "rxjs";
 import { AngularFireStorage } from "@angular/fire/storage";
+import { MatDialog } from "@angular/material/dialog";
+import { UserselectordialogComponent } from "../userselectordialog/userselectordialog.component";
 
 @Component({
   selector: "app-resource",
@@ -41,7 +43,8 @@ export class ResourceComponent implements OnInit {
     private ngZone: NgZone,
     private router: Router,
     private auth: AuthService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -63,6 +66,10 @@ export class ResourceComponent implements OnInit {
         resourceType: ResourceType.url,
         content: "",
         status: ResourceStatus.active,
+        reviewer: {
+          uid: this.auth.currentUser.uid,
+          displayName: this.auth.currentUser.displayName,
+        },
       };
       console.log("resource:", this.resource);
     } else {
@@ -200,6 +207,56 @@ export class ResourceComponent implements OnInit {
     if (this.crudAction == Crud.Update) {
       this.doUpload(this.resource.id);
     }
+  }
+
+  isOwner() {
+    if (this.auth.currentUser.uid == this.resource?.owner?.uid) {
+      return true;
+    }
+    return false;
+  }
+
+  isAdmin() {
+    if (this.auth.currentUser.isAdmin) {
+      return true;
+    }
+    return false;
+  }
+
+  onUpdateOwner() {
+    console.log("onUpdateOwner");
+    const dialogRef = this.dialog.open(UserselectordialogComponent, {
+      width: "380px",
+      data: { uid: this.resource?.owner?.uid },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("New Owner", result);
+        const userRef: UserRef = {
+          uid: result.uid,
+          displayName: result.displayName,
+        };
+        this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
+      }
+    });
+  }
+
+  onUpdateReviewer() {
+    console.log("onUpdateReviewer");
+    const dialogRef = this.dialog.open(UserselectordialogComponent, {
+      width: "380px",
+      data: { uid: this.resource?.reviewer?.uid },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("New Reviewer", result);
+        const userRef: UserRef = {
+          uid: result.uid,
+          displayName: result.displayName,
+        };
+        this.resourceService.fieldUpdate(this.resource.id, "reviewer", userRef);
+      }
+    });
   }
 
   doUpload(id: string) {

@@ -63,6 +63,27 @@ const routes: Routes = [
     data: { permissions: ["isAdmin", "isCategoryManager"] },
   },
 
+  {
+    path: "category/create",
+    component: CategoryComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
+  },
+  {
+    path: "category/delete/:id",
+    component: CategoryComponent,
+    resolve: { category: CategoryResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
+  },
+  {
+    path: "category/:id",
+    component: CategoryComponent,
+    resolve: { category: CategoryResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isCategoryManager"] },
+  },
+
   // Category/Activity
   {
     path: "category/:cid/activity/create",
