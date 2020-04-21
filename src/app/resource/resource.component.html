@@ -73,32 +73,47 @@
       <table>
         <tr>
           <td class="row-prompt">Owner</td>
-          <td>{{ resource?.owner?.displayName }}</td>
           <td>
-            <button
-              class="update-field-button"
+            {{ resource?.owner?.displayName }}
+            <mat-icon
+              class="update-field-icon"
               mat-raised-button
               *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
               matTooltip="Update Owner"
               (click)="onUpdateOwner()"
             >
-              Update
-            </button>
+              edit
+            </mat-icon>
           </td>
         </tr>
         <tr>
           <td class="row-prompt">Reviewer</td>
-          <td>{{ resource?.reviewer?.displayName }}</td>
           <td>
-            <button
-              class="update-field-button"
+            {{ resource?.reviewer?.displayName }}
+            <mat-icon
+              class="update-field-icon"
               mat-raised-button
               *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
               matTooltip="Update Reviewer"
               (click)="onUpdateReviewer()"
             >
-              Update
-            </button>
+              edit
+            </mat-icon>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-prompt">Team</td>
+          <td>
+            {{ resource?.team?.name }}
+            <mat-icon
+              class="update-field-icon"
+              mat-raised-button
+              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+              matTooltip="Update Team"
+              (click)="onUpdateTeam()"
+            >
+              edit
+            </mat-icon>
           </td>
         </tr>
       </table>

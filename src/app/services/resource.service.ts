@@ -3,7 +3,7 @@ import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
-import { map } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -18,7 +18,8 @@ export class ResourceService {
       .pipe(
         map((snap) => {
           return convertSnap<Resource>(snap);
-        })
+        }),
+        first()
       );
   }
 

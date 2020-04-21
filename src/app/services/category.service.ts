@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Category } from "../models/category.model";
-import { map } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 
 @Injectable({
@@ -18,7 +18,8 @@ export class CategoryService {
       .pipe(
         map((snap) => {
           return convertSnap<Category>(snap);
-        })
+        }),
+        first()
       );
   }
 

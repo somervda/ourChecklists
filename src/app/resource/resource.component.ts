@@ -15,6 +15,7 @@ import { Subscription, Observable } from "rxjs";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { MatDialog } from "@angular/material/dialog";
 import { UserselectordialogComponent } from "../userselectordialog/userselectordialog.component";
+import { TeamselectordialogComponent } from "../teamselectordialog/teamselectordialog.component";
 
 @Component({
   selector: "app-resource",
@@ -237,6 +238,7 @@ export class ResourceComponent implements OnInit {
           displayName: result.displayName,
         };
         this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
+        this.resource.owner = userRef;
       }
     });
   }
@@ -255,6 +257,26 @@ export class ResourceComponent implements OnInit {
           displayName: result.displayName,
         };
         this.resourceService.fieldUpdate(this.resource.id, "reviewer", userRef);
+        this.resource.reviewer = userRef;
+      }
+    });
+  }
+
+  onUpdateTeam() {
+    console.log("onUpdateTeam");
+    const dialogRef = this.dialog.open(TeamselectordialogComponent, {
+      width: "380px",
+      data: { id: this.resource?.team?.id },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("New Team", result);
+        const teamRef: DocRef = {
+          id: result.id,
+          name: result.name,
+        };
+        this.resourceService.fieldUpdate(this.resource.id, "team", teamRef);
+        this.resource.team = teamRef;
       }
     });
   }

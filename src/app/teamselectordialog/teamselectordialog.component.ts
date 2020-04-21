@@ -32,7 +32,11 @@ export class TeamselectordialogComponent implements OnInit {
     this.teamService
       .findById(id)
       .toPromise()
-      .then((team) => (this.team = team));
+      .then((team) => {
+        console.log("set team:", team);
+        this.team = team;
+      })
+      .catch((e) => console.error("error:", e));
   }
 
   onKey(event: any) {

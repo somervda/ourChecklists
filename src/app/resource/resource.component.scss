@@ -75,8 +75,23 @@ table {
 
 td {
   padding: 3px;
+  vertical-align: text-top;
 }
 
 .row-prompt {
   font-weight: 600;
+}
+
+.update-field-icon {
+  margin: 10px;
+  border-style: solid;
+  border-color: white;
+  border-width: thin;
+  border-radius: 2px;
+}
+.update-field-icon:hover {
+  border-style: solid;
+  border-color: lightgrey;
+  border-width: thin;
+  border-radius: 2px;
 }

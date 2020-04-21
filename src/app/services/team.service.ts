@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Team } from "../models/team.model";
-import { map } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 
 @Injectable({
@@ -12,13 +12,16 @@ export class TeamService {
   constructor(private afs: AngularFirestore) {}
 
   findById(id: string): Observable<Team> {
+    console.log("team findById", id);
     return this.afs
       .doc("/teams/" + id)
       .snapshotChanges()
       .pipe(
         map((snap) => {
+          console.log("team findById snap", snap);
           return convertSnap<Team>(snap);
-        })
+        }),
+        first()
       );
   }
 
@@ -48,10 +51,7 @@ export class TeamService {
       );
   }
 
-  findByPartialName(
-    name: string,
-    pageSize: number = 100
-  ): Observable<Team[]> {
+  findByPartialName(name: string, pageSize: number = 100): Observable<Team[]> {
     // console.log( "findByPartialName",  pageSize  );
     return this.afs
       .collection("teams", (ref) =>
