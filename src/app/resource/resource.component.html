@@ -74,22 +74,35 @@
         <tr>
           <td class="row-prompt">Owner</td>
           <td>
-            {{ resource?.owner?.displayName }}
-            <mat-icon
-              class="update-field-icon"
-              mat-raised-button
-              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
               matTooltip="Update Owner"
               (click)="onUpdateOwner()"
             >
-              edit
-            </mat-icon>
+              {{ resource?.owner?.displayName }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ resource?.owner?.displayName }}
+            </div>
           </td>
         </tr>
         <tr>
           <td class="row-prompt">Reviewer</td>
           <td>
-            {{ resource?.reviewer?.displayName }}
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
+              matTooltip="Update Reviewer"
+              (click)="onUpdateReviewer()"
+            >
+              {{ resource?.reviewer?.displayName }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ resource?.reviewer?.displayName }}
+            </div>
+
+            <!-- {{ resource?.reviewer?.displayName }}
             <mat-icon
               class="update-field-icon"
               mat-raised-button
@@ -98,22 +111,49 @@
               (click)="onUpdateReviewer()"
             >
               edit
-            </mat-icon>
+            </mat-icon> -->
           </td>
         </tr>
         <tr>
           <td class="row-prompt">Team</td>
           <td>
-            {{ resource?.team?.name }}
-            <mat-icon
-              class="update-field-icon"
-              mat-raised-button
-              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
               matTooltip="Update Team"
               (click)="onUpdateTeam()"
             >
+              {{ resource?.team?.name }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ resource?.team?.name }}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-prompt">Category</td>
+          <td>
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
+              matTooltip="Update Category"
+              (click)="onUpdateCategory()"
+            >
+              {{ resource?.category?.name }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ resource?.category?.name }}
+            </div>
+
+            <!-- <mat-icon
+              class="update-field-icon"
+              mat-raised-button
+              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+              matTooltip="Update Category"
+              (click)="onUpdateCategory()"
+            >
               edit
-            </mat-icon>
+            </mat-icon> -->
           </td>
         </tr>
       </table>

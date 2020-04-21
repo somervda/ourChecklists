@@ -36,6 +36,27 @@ export class CategoryService {
       );
   }
 
+  findByPartialName(
+    name: string,
+    pageSize: number = 100
+  ): Observable<Category[]> {
+    // console.log( "findByPartialName",  pageSize  );
+    return this.afs
+      .collection("categories", (ref) =>
+        ref
+          .where("name", ">=", name)
+          .where("name", "<=", name + "~")
+          .orderBy("name", "asc")
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Category>(snaps);
+        })
+      );
+  }
+
   fieldUpdate(docId: string, fieldName: string, newValue: any) {
     if (docId && fieldName) {
       const updateObject = {};

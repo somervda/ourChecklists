@@ -1,0 +1,33 @@
+<div class="dialog-heading">Select Category</div>
+
+<mat-form-field class="full-width">
+  <input
+    matInput
+    (keyup)="onKey($event)"
+    placeholder="Search for Category"
+    autocomplete="off"
+  />
+</mat-form-field>
+
+<div class="category-list">
+  <div
+    *ngFor="let c of categories$ | async"
+    [style.backgroundColor]="category?.id == c.id ? 'lightgrey' : 'white'"
+    (click)="onCategorySelected(c.id)"
+  >
+    {{ c.name }}
+  </div>
+</div>
+
+<button
+  mat-button
+  matTooltip="Update Category Information"
+  (click)="returnCategory()"
+  [disabled]="!category"
+>
+  <mat-icon>check</mat-icon>Update
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>

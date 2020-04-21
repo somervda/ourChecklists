@@ -63,6 +63,7 @@ import { MarkedPipe } from "./marked.pipe";
 import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component";
 import { UserselectordialogComponent } from './userselectordialog/userselectordialog.component';
 import { TeamselectordialogComponent } from './teamselectordialog/teamselectordialog.component';
+import { CategoryselectordialogComponent } from './categoryselectordialog/categoryselectordialog.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { TeamselectordialogComponent } from './teamselectordialog/teamselectordi
     YoutubeviewerComponent,
     UserselectordialogComponent,
     TeamselectordialogComponent,
+    CategoryselectordialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -59,6 +59,17 @@
           ></mat-checkbox>
         </td>
       </tr>
+      <tr>
+        <td class="nowrap">
+          <b>Can Manage Resources?</b>
+        </td>
+        <td>
+          <mat-checkbox
+            [(ngModel)]="user.isResourceManager"
+            (click)="updateIsResourceManager()"
+          ></mat-checkbox>
+        </td>
+      </tr>
     </ng-container>
   </table>
 </div>

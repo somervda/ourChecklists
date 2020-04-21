@@ -16,6 +16,7 @@ import { AngularFireStorage } from "@angular/fire/storage";
 import { MatDialog } from "@angular/material/dialog";
 import { UserselectordialogComponent } from "../userselectordialog/userselectordialog.component";
 import { TeamselectordialogComponent } from "../teamselectordialog/teamselectordialog.component";
+import { CategoryselectordialogComponent } from "../categoryselectordialog/categoryselectordialog.component";
 
 @Component({
   selector: "app-resource",
@@ -210,16 +211,35 @@ export class ResourceComponent implements OnInit {
     }
   }
 
-  isOwner() {
-    if (this.auth.currentUser.uid == this.resource?.owner?.uid) {
-      return true;
-    }
-    return false;
-  }
+  // isOwner() {
+  //   if (this.auth.currentUser.uid == this.resource?.owner?.uid) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
-  isAdmin() {
-    if (this.auth.currentUser.isAdmin) {
-      return true;
+  // isAdmin() {
+  //   if (this.auth.currentUser.isAdmin) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  isUpdater() {
+    // Rules for being able to update a resource
+    // 1. isAdmin
+    // 2. isOwner of the resource
+    // 3. is a manager of team that resource is associated with.
+    // And we must be in update mode
+    if (
+      this.auth.currentUser.isAdmin ||
+      this.auth.currentUser.uid == this.resource?.owner?.uid ||
+      (this.auth.currentUser.managerOfTeams &&
+        this.auth.currentUser.managerOfTeams.includes(this.resource?.team?.id))
+    ) {
+      if (this.crudAction == Crud.Update) {
+        return true;
+      }
     }
     return false;
   }
@@ -277,6 +297,29 @@ export class ResourceComponent implements OnInit {
         };
         this.resourceService.fieldUpdate(this.resource.id, "team", teamRef);
         this.resource.team = teamRef;
+      }
+    });
+  }
+
+  onUpdateCategory() {
+    console.log("onUpdateCategory");
+    const dialogRef = this.dialog.open(CategoryselectordialogComponent, {
+      width: "380px",
+      data: { id: this.resource?.category?.id },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("New Category", result);
+        const categoryRef: DocRef = {
+          id: result.id,
+          name: result.name,
+        };
+        this.resourceService.fieldUpdate(
+          this.resource.id,
+          "category",
+          categoryRef
+        );
+        this.resource.category = categoryRef;
       }
     });
   }
