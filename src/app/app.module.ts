@@ -64,6 +64,7 @@ import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component"
 import { UserselectordialogComponent } from './userselectordialog/userselectordialog.component';
 import { TeamselectordialogComponent } from './teamselectordialog/teamselectordialog.component';
 import { CategoryselectordialogComponent } from './categoryselectordialog/categoryselectordialog.component';
+import { ConfirmdialogComponent } from './confirmdialog/confirmdialog.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { CategoryselectordialogComponent } from './categoryselectordialog/catego
     UserselectordialogComponent,
     TeamselectordialogComponent,
     CategoryselectordialogComponent,
+    ConfirmdialogComponent,
   ],
   imports: [
     BrowserModule,

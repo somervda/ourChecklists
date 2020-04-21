@@ -1,3 +1,4 @@
+import { catchError } from "rxjs/operators";
 import { Component, OnInit, NgZone } from "@angular/core";
 import {
   Resource,
@@ -18,6 +19,8 @@ import { UserselectordialogComponent } from "../userselectordialog/userselectord
 import { TeamselectordialogComponent } from "../teamselectordialog/teamselectordialog.component";
 import { CategoryselectordialogComponent } from "../categoryselectordialog/categoryselectordialog.component";
 import { HighContrastMode } from "@angular/cdk/a11y";
+import { ConfirmdialogComponent } from "../confirmdialog/confirmdialog.component";
+import { applySourceSpanToExpressionIfNeeded } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-resource",
@@ -239,61 +242,73 @@ export class ResourceComponent implements OnInit {
     // 2. Add a note in the description of the superseded resource about the supersession and link to superseded item
     // 3. set the superseded resource status to superseded (and so lock it)
     // 4. Take the user to the new resource (so they can update it)
-    if (confirm("Are you sure you want to supersede the resource?")) {
-      this.showSpinner = true;
-      let newResource = { ...this.resource };
-      delete newResource.id;
-      newResource.supersedes = <DocRef>{
-        id: this.resource.id,
-        name: this.resource.name,
-      };
+    const prompt = "Are you sure you want to supersede this resource?";
+    const dialogRef = this.dialog.open(ConfirmdialogComponent, {
+      width: "300px",
+      data: { heading: "Confirm", prompt: prompt },
+    });
+    let carryOn = false;
+    dialogRef.afterClosed().subscribe((choice) => {
+      if (choice) {
+        this.supersede();
+      }
+    });
+  }
 
-      this.resourceService
-        .create(newResource)
-        .then((newDoc) => {
-          // this.crudAction = Crud.Update;
-          console.log("superseding:", newDoc);
-          newDoc.id;
-          const description =
-            this.resource.description +
-            String.fromCharCode(13) +
-            "[Superseded on " +
-            Date().toString() +
-            " by " +
-            this.auth.currentUser.displayName +
-            "]";
-          this.resourceService.fieldUpdate(
-            this.resource.id,
-            "description",
-            description
-          );
-          this.resourceService.fieldUpdate(
-            this.resource.id,
-            "status",
-            ResourceStatus.superseded
-          );
+  supersede() {
+    this.showSpinner = true;
+    let newResource = { ...this.resource };
+    delete newResource.id;
+    newResource.supersedes = <DocRef>{
+      id: this.resource.id,
+      name: this.resource.name,
+    };
 
-          this.snackBar.open(
-            "Superseding Resource '" + this.resource.name + "' created.",
-            "",
-            {
-              duration: 2000,
-            }
-          );
+    this.resourceService
+      .create(newResource)
+      .then((newDoc) => {
+        // this.crudAction = Crud.Update;
+        console.log("superseding:", newDoc);
+        newDoc.id;
+        const description =
+          this.resource.description +
+          String.fromCharCode(13) +
+          "[Superseded on " +
+          Date().toString() +
+          " by " +
+          this.auth.currentUser.displayName +
+          "]";
+        this.resourceService.fieldUpdate(
+          this.resource.id,
+          "description",
+          description
+        );
+        this.resourceService.fieldUpdate(
+          this.resource.id,
+          "status",
+          ResourceStatus.superseded
+        );
 
-          this.showSpinner = false;
+        this.snackBar.open(
+          "Superseding Resource '" + this.resource.name + "' created.",
+          "",
+          {
+            duration: 2000,
+          }
+        );
 
-          this.ngZone.run(() => this.router.navigateByUrl("/resources"));
-        })
-        .catch(function (error) {
-          this.showSpinner = false;
-          console.error(
-            "Error adding superseding document: ",
-            this.resource.id,
-            error
-          );
-        });
-    }
+        this.showSpinner = false;
+
+        this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+      })
+      .catch(function (error) {
+        this.showSpinner = false;
+        console.error(
+          "Error adding superseding document: ",
+          this.resource.id,
+          error
+        );
+      });
   }
 
   onUpdateOwner() {
