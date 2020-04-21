@@ -1,0 +1,33 @@
+<div class="dialog-heading">Select Team</div>
+
+<mat-form-field class="full-width">
+  <input
+    matInput
+    (keyup)="onKey($event)"
+    placeholder="Search for Team"
+    autocomplete="off"
+  />
+</mat-form-field>
+
+<div class="team-list">
+  <div
+    *ngFor="let team of teams$ | async"
+    [style.backgroundColor]="team.id == selectedId ? 'lightgrey' : 'white'"
+    (click)="onTeamSelected(team.id)"
+  >
+    {{ team.name }}
+  </div>
+</div>
+
+<button
+  mat-button
+  matTooltip="Update Team Information"
+  (click)="returnTeam()"
+  [disabled]="!team"
+>
+  <mat-icon>check</mat-icon>Update
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>

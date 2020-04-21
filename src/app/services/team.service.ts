@@ -48,6 +48,27 @@ export class TeamService {
       );
   }
 
+  findByPartialName(
+    name: string,
+    pageSize: number = 100
+  ): Observable<Team[]> {
+    // console.log( "findByPartialName",  pageSize  );
+    return this.afs
+      .collection("teams", (ref) =>
+        ref
+          .where("name", ">=", name)
+          .where("name", "<=", name + "~")
+          .orderBy("name", "asc")
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Team>(snaps);
+        })
+      );
+  }
+
   fieldUpdate(docId: string, fieldName: string, newValue: any) {
     if (docId && fieldName) {
       const updateObject = {};

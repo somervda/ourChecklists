@@ -62,6 +62,7 @@ import { ResourceComponent } from "./resource/resource.component";
 import { MarkedPipe } from "./marked.pipe";
 import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component";
 import { UserselectordialogComponent } from './userselectordialog/userselectordialog.component';
+import { TeamselectordialogComponent } from './teamselectordialog/teamselectordialog.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { UserselectordialogComponent } from './userselectordialog/userselectordi
     MarkedPipe,
     YoutubeviewerComponent,
     UserselectordialogComponent,
+    TeamselectordialogComponent,
   ],
   imports: [
     BrowserModule,
