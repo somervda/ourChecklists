@@ -80,7 +80,11 @@
               matTooltip="Update Owner"
               (click)="onUpdateOwner()"
             >
-              {{ resource?.owner?.displayName }}
+              {{
+                resource?.owner?.displayName
+                  ? resource?.owner?.displayName
+                  : "[...]"
+              }}
             </div>
             <div *ngIf="!isUpdater()">
               {{ resource?.owner?.displayName }}
@@ -96,22 +100,15 @@
               matTooltip="Update Reviewer"
               (click)="onUpdateReviewer()"
             >
-              {{ resource?.reviewer?.displayName }}
+              {{
+                resource?.reviewer?.displayName
+                  ? resource?.reviewer?.displayName
+                  : "[...]"
+              }}
             </div>
             <div *ngIf="!isUpdater()">
               {{ resource?.reviewer?.displayName }}
             </div>
-
-            <!-- {{ resource?.reviewer?.displayName }}
-            <mat-icon
-              class="update-field-icon"
-              mat-raised-button
-              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
-              matTooltip="Update Reviewer"
-              (click)="onUpdateReviewer()"
-            >
-              edit
-            </mat-icon> -->
           </td>
         </tr>
         <tr>
@@ -123,7 +120,7 @@
               matTooltip="Update Team"
               (click)="onUpdateTeam()"
             >
-              {{ resource?.team?.name }}
+              {{ resource?.team?.name ? resource?.team?.name : "[...]" }}
             </div>
             <div *ngIf="!isUpdater()">
               {{ resource?.team?.name }}
@@ -139,21 +136,38 @@
               matTooltip="Update Category"
               (click)="onUpdateCategory()"
             >
-              {{ resource?.category?.name }}
+              {{
+                resource?.category?.name ? resource?.category?.name : "[...]"
+              }}
             </div>
             <div *ngIf="!isUpdater()">
               {{ resource?.category?.name }}
             </div>
+          </td>
+        </tr>
 
-            <!-- <mat-icon
-              class="update-field-icon"
-              mat-raised-button
-              *ngIf="(isOwner() || isAdmin()) && crudAction == Crud.Update"
+        <tr>
+          <td class="row-prompt">Status</td>
+          <td>
+            <!-- <div
+              class="update-field"
+              *ngIf="isUpdater()"
               matTooltip="Update Category"
               (click)="onUpdateCategory()"
             >
-              edit
-            </mat-icon> -->
+              {{
+                resource?.category?.name ? resource?.category?.name : "[...]"
+              }}
+            </div> -->
+            <!-- <div *ngIf="!isUpdater()"> -->
+            {{ ResourceStatus[resource?.status] | titlecase
+            }}{{
+              resource.supersedes
+                ? " Supersedes: " + resource.supersedes.name
+                : ""
+            }}
+
+            <!-- </div> -->
           </td>
         </tr>
       </table>
@@ -313,6 +327,7 @@
 
     <button
       mat-raised-button
+      class="action-button"
       color="primary"
       *ngIf="crudAction == Crud.Create"
       [disabled]="
@@ -331,6 +346,20 @@
 
     <button
       mat-raised-button
+      class="action-button"
+      color="primary"
+      *ngIf="crudAction == Crud.Update && isUpdater()"
+      (click)="onSupersede()"
+      id="btnSupersede"
+      matTooltip="Supersede this Resource (Note: The superseded resource is locked)"
+    >
+      <mat-icon>file_copy</mat-icon>
+      Supersede
+    </button>
+
+    <button
+      mat-raised-button
+      class="action-button"
       color="primary"
       *ngIf="crudAction == Crud.Delete"
       (click)="onDelete()"

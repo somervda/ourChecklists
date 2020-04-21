@@ -11,12 +11,13 @@ import { ResourceService } from "../services/resource.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
-import { Subscription, Observable } from "rxjs";
+import { Subscription, Observable, timer } from "rxjs";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { MatDialog } from "@angular/material/dialog";
 import { UserselectordialogComponent } from "../userselectordialog/userselectordialog.component";
 import { TeamselectordialogComponent } from "../teamselectordialog/teamselectordialog.component";
 import { CategoryselectordialogComponent } from "../categoryselectordialog/categoryselectordialog.component";
+import { HighContrastMode } from "@angular/cdk/a11y";
 
 @Component({
   selector: "app-resource",
@@ -33,6 +34,7 @@ export class ResourceComponent implements OnInit {
   resourceForm: FormGroup;
   resourceSubscription$$: Subscription;
   ResourceTypeInfo = ResourceTypeInfo;
+  ResourceStatus = ResourceStatus;
   ResourceType = ResourceType;
   fileToUpload: File;
   downloadUrl$: Observable<string>;
@@ -211,20 +213,6 @@ export class ResourceComponent implements OnInit {
     }
   }
 
-  // isOwner() {
-  //   if (this.auth.currentUser.uid == this.resource?.owner?.uid) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // isAdmin() {
-  //   if (this.auth.currentUser.isAdmin) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   isUpdater() {
     // Rules for being able to update a resource
     // 1. isAdmin
@@ -242,6 +230,70 @@ export class ResourceComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  onSupersede() {
+    console.log("onSupersede");
+    // Supersede will
+    // 1.create a copy of the current resource (Not content or storage, that needs to be recreated for a superseded resource)
+    // 2. Add a note in the description of the superseded resource about the supersession and link to superseded item
+    // 3. set the superseded resource status to superseded (and so lock it)
+    // 4. Take the user to the new resource (so they can update it)
+    if (confirm("Are you sure you want to supersede the resource?")) {
+      this.showSpinner = true;
+      let newResource = { ...this.resource };
+      delete newResource.id;
+      newResource.supersedes = <DocRef>{
+        id: this.resource.id,
+        name: this.resource.name,
+      };
+
+      this.resourceService
+        .create(newResource)
+        .then((newDoc) => {
+          // this.crudAction = Crud.Update;
+          console.log("superseding:", newDoc);
+          newDoc.id;
+          const description =
+            this.resource.description +
+            String.fromCharCode(13) +
+            "[Superseded on " +
+            Date().toString() +
+            " by " +
+            this.auth.currentUser.displayName +
+            "]";
+          this.resourceService.fieldUpdate(
+            this.resource.id,
+            "description",
+            description
+          );
+          this.resourceService.fieldUpdate(
+            this.resource.id,
+            "status",
+            ResourceStatus.superseded
+          );
+
+          this.snackBar.open(
+            "Superseding Resource '" + this.resource.name + "' created.",
+            "",
+            {
+              duration: 2000,
+            }
+          );
+
+          this.showSpinner = false;
+
+          this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+        })
+        .catch(function (error) {
+          this.showSpinner = false;
+          console.error(
+            "Error adding superseding document: ",
+            this.resource.id,
+            error
+          );
+        });
+    }
   }
 
   onUpdateOwner() {
