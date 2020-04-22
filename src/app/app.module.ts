@@ -66,6 +66,7 @@ import { UserselectordialogComponent } from "./userselectordialog/userselectordi
 import { TeamselectordialogComponent } from "./teamselectordialog/teamselectordialog.component";
 import { CategoryselectordialogComponent } from "./categoryselectordialog/categoryselectordialog.component";
 import { ConfirmdialogComponent } from "./confirmdialog/confirmdialog.component";
+import { RedirectComponent } from './redirect/redirect.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { ConfirmdialogComponent } from "./confirmdialog/confirmdialog.component"
     TeamselectordialogComponent,
     CategoryselectordialogComponent,
     ConfirmdialogComponent,
+    RedirectComponent,
   ],
   imports: [
     BrowserModule,

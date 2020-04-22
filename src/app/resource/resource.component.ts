@@ -80,7 +80,17 @@ export class ResourceComponent implements OnInit {
       };
       console.log("resource:", this.resource);
     } else {
+      console.log("this.route.snapshot", this.route.snapshot);
       this.resource = this.route.snapshot.data["resource"];
+      if (this.resource.status == ResourceStatus.superseded) {
+        this.snackBar.open(
+          "This resource has been superseded. Updates not allowed.",
+          "",
+          {
+            duration: 3000,
+          }
+        );
+      }
       if (
         this.resource.resourceType == ResourceType.file ||
         this.resource.resourceType == ResourceType.image
@@ -221,14 +231,17 @@ export class ResourceComponent implements OnInit {
     // 1. isAdmin
     // 2. isOwner of the resource
     // 3. is a manager of team that resource is associated with.
-    // And we must be in update mode
+    // And we must be in update mode & resource is not superseded
     if (
       this.auth.currentUser.isAdmin ||
       this.auth.currentUser.uid == this.resource?.owner?.uid ||
       (this.auth.currentUser.managerOfTeams &&
         this.auth.currentUser.managerOfTeams.includes(this.resource?.team?.id))
     ) {
-      if (this.crudAction == Crud.Update) {
+      if (
+        this.crudAction == Crud.Update &&
+        this.resource.status != ResourceStatus.superseded
+      ) {
         return true;
       }
     }

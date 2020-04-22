@@ -22,7 +22,12 @@
 ></app-subheading>
 <div class="page-container">
   <form class="standard-form" [formGroup]="resourceForm">
-    <fieldset [disabled]="crudAction == Crud.Delete">
+    <fieldset
+      [disabled]="
+        crudAction == Crud.Delete ||
+        resource.status == ResourceStatus.superseded
+      "
+    >
       <mat-form-field class="full-width">
         <input
           matInput
@@ -149,25 +154,15 @@
         <tr>
           <td class="row-prompt">Status</td>
           <td>
-            <!-- <div
-              class="update-field"
-              *ngIf="isUpdater()"
-              matTooltip="Update Category"
-              (click)="onUpdateCategory()"
+            {{ ResourceStatus[resource?.status] | titlecase }}
+          </td>
+        </tr>
+        <tr>
+          <td class="row-prompt"></td>
+          <td>
+            <a routerLink="/redirect/resource/{{ resource.supersedes?.id }}">
+              {{ resource.supersedes?.name }}</a
             >
-              {{
-                resource?.category?.name ? resource?.category?.name : "[...]"
-              }}
-            </div> -->
-            <!-- <div *ngIf="!isUpdater()"> -->
-            {{ ResourceStatus[resource?.status] | titlecase
-            }}{{
-              resource.supersedes
-                ? " Supersedes: " + resource.supersedes.name
-                : ""
-            }}
-
-            <!-- </div> -->
           </td>
         </tr>
       </table>
@@ -348,7 +343,11 @@
       mat-raised-button
       class="action-button supersedeButton"
       color="primary"
-      *ngIf="crudAction == Crud.Update && isUpdater()"
+      *ngIf="
+        crudAction == Crud.Update &&
+        isUpdater() &&
+        resource.status != ResourceStatus.superseded
+      "
       (click)="onSupersede()"
       id="btnSupersede"
       matTooltip="Supersede this Resource (Note: The superseded resource is locked)"

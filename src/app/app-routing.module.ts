@@ -20,12 +20,19 @@ import { permissionGuard } from "./guards/permission.guard";
 import { ActivityResolver } from "./services/activity-resolver";
 import { ResourceComponent } from "./resource/resource.component";
 import { ResourceResolver } from "./services/resource-resolver";
+import { RedirectComponent } from "./redirect/redirect.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
   { path: "notAuthorized", component: NotauthorizedComponent },
+  {
+    path: "redirect/:component/:id",
+    component: RedirectComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
 
   // Teams
   {

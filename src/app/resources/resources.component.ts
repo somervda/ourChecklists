@@ -10,7 +10,13 @@ import {
 import { ResourceService } from "../services/resource.service";
 import { AuthService } from "../services/auth.service";
 import { map } from "rxjs/operators";
-import { RippleRef } from "@angular/material/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { TeamService } from "../services/team.service";
+import { Team } from "../models/team.model";
+import { CategoryService } from "../services/category.service";
+import { Category } from "../models/category.model";
+import { UserService } from "../services/user.service";
+import { User } from "../models/user.model";
 
 @Component({
   selector: "app-resources",
@@ -26,22 +32,73 @@ export class ResourcesComponent implements OnInit {
   showFile = true;
   showMarkdown = true;
   showImage = true;
+  maxToRetrieve = 100;
+  nameFilter = "";
+  teamFilter = "";
+  categoryFilter = "";
+  ownerFilter = "";
+  reviewerFilter = "";
+  filterType = "Team";
+  teams$: Observable<Team[]>;
+  categories$: Observable<Category[]>;
+  users$: Observable<User[]>;
 
   resourceTypeInfo = ResourceTypeInfo;
   ResourceStatus = ResourceStatus;
 
   constructor(
     private resourceService: ResourceService,
-    private auth: AuthService
+    private auth: AuthService,
+    private snackBar: MatSnackBar,
+    private teamService: TeamService,
+    private categoryService: CategoryService,
+    private userService: UserService
   ) {}
   ngOnInit() {
+    this.teams$ = this.teamService.findAll(100);
+    this.categories$ = this.categoryService.findAll(100);
+    this.users$ = this.userService.findByPartialName("", 100);
     this.getResourceList();
   }
 
   getResourceList() {
+    let filter = "";
+    switch (this.filterType) {
+      case "Team":
+        filter = this.teamFilter;
+        break;
+      case "Category":
+        filter = this.categoryFilter;
+        break;
+      case "Owner":
+        filter = this.ownerFilter;
+        break;
+      case "Reviewer":
+        filter = this.reviewerFilter;
+        break;
+    }
     this.resources$ = this.resourceService
-      .findAll(100)
-      .pipe(map((r) => r.filter((ri) => this.showResource(ri))));
+      .findAllFiltered(
+        this.nameFilter,
+        this.filterType,
+        filter,
+        this.maxToRetrieve
+      )
+      .pipe(
+        map((r) => {
+          // Show message if it looks like we hit the max retrieval limit
+          if (r.length == this.maxToRetrieve) {
+            this.snackBar.open(
+              `More than the limit of ${this.maxToRetrieve} resources found. Try adding filters to keep within the data retrieval limit. `,
+              "",
+              {
+                duration: 5000,
+              }
+            );
+          }
+          return r.filter((ri) => this.showResource(ri));
+        })
+      );
   }
 
   showResource(ri: Resource): boolean {
@@ -55,6 +112,12 @@ export class ResourcesComponent implements OnInit {
         (this.showMarkdown && ri.resourceType == ResourceType.markdown) ||
         (this.showImage && ri.resourceType == ResourceType.image));
     return selector;
+  }
+
+  onNameKey(event: any) {
+    console.log("searchName", event.target.value);
+    this.nameFilter = event.target.value;
+    this.getResourceList();
   }
 
   getResourceTypeInfoItem(type: ResourceType): ResourceTypeInfoItem {

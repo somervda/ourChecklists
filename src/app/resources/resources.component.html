@@ -8,7 +8,118 @@
             Filters
           </mat-panel-title>
         </mat-expansion-panel-header>
+        <table>
+          <tr height="40px">
+            <td>Name</td>
+            <td>
+              <input type="text" (keyup)="onNameKey($event)" />
+            </td>
+          </tr>
+          <tr>
+            <td>Optional Filter</td>
+            <td>
+              <mat-radio-group
+                class="filterType-radio-group"
+                (change)="getResourceList()"
+                [(ngModel)]="filterType"
+              >
+                <mat-radio-button class="filterType-radio-button" value="Team">
+                  Team
+                </mat-radio-button>
 
+                <mat-radio-button
+                  class="filterType-radio-button"
+                  value="Category"
+                >
+                  Category
+                </mat-radio-button>
+
+                <mat-radio-button class="filterType-radio-button" value="Owner">
+                  Owner
+                </mat-radio-button>
+
+                <mat-radio-button
+                  class="filterType-radio-button"
+                  value="Reviewer"
+                >
+                  Reviewer
+                </mat-radio-button>
+              </mat-radio-group>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <mat-form-field [hidden]="filterType != 'Team'">
+                <mat-select
+                  [(ngModel)]="teamFilter"
+                  (selectionChange)="filterType = 'Team'; getResourceList()"
+                >
+                  <mat-option value="">
+                    All
+                  </mat-option>
+                  <mat-option
+                    *ngFor="let team of teams$ | async"
+                    [value]="team.id"
+                  >
+                    {{ team.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field [hidden]="filterType != 'Category'">
+                <mat-select
+                  [(ngModel)]="categoryFilter"
+                  (selectionChange)="filterType = 'Category'; getResourceList()"
+                >
+                  <mat-option value="">
+                    All
+                  </mat-option>
+                  <mat-option
+                    *ngFor="let category of categories$ | async"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field [hidden]="filterType != 'Owner'">
+                <mat-select
+                  [(ngModel)]="ownerFilter"
+                  (selectionChange)="filterType = 'Owner'; getResourceList()"
+                >
+                  <mat-option value="">
+                    All
+                  </mat-option>
+                  <mat-option
+                    *ngFor="let user of users$ | async"
+                    [value]="user.uid"
+                  >
+                    {{ user.displayName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field [hidden]="filterType != 'Reviewer'">
+                <mat-select
+                  [(ngModel)]="reviewerFilter"
+                  (selectionChange)="filterType = 'Reviewer'; getResourceList()"
+                >
+                  <mat-option value="">
+                    All
+                  </mat-option>
+                  <mat-option
+                    *ngFor="let user of users$ | async"
+                    [value]="user.uid"
+                  >
+                    {{ user.displayName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
         <div>
           <mat-checkbox [(ngModel)]="showSuperseded" (click)="getResourceList()"
             >Show Superseded?</mat-checkbox

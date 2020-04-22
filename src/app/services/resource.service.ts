@@ -1,5 +1,9 @@
 import { Injectable } from "@angular/core";
-import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
+import {
+  AngularFirestore,
+  DocumentReference,
+  CollectionReference,
+} from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
@@ -35,6 +39,68 @@ export class ResourceService {
         })
       );
   }
+
+  findAllFiltered(
+    name: string,
+    filterType: string,
+    filter: string,
+    pageSize: number
+  ): Observable<Resource[]> {
+    console.log(
+      "findAllFiltered",
+      name,
+      " filterType:",
+      filterType,
+      " filter:",
+      filter,
+      " pagesize:",
+      pageSize
+    );
+    return this.afs
+      .collection("resources", (ref) => {
+        let refVal = ref as any;
+        if (name == "") {
+          refVal = refVal.where("name", ">=", name);
+        } else {
+          refVal = refVal
+            .where("name", ">=", name)
+            .where("name", "<=", name + "~");
+        }
+        if (filterType == "Team" && filter != "") {
+          refVal = refVal.where("team.id", "==", filter);
+        }
+        if (filterType == "Category" && filter != "") {
+          refVal = refVal.where("category.id", "==", filter);
+        }
+        if (filterType == "Owner" && filter != "") {
+          // console.log("owner", filter);
+          refVal = refVal.where("owner.uid", "==", filter);
+        }
+        if (filterType == "Reviewer" && filter != "") {
+          refVal = refVal.where("reviewer.uid", "==", filter);
+        }
+
+        refVal = refVal.orderBy("name", "asc").limit(pageSize);
+
+        return refVal;
+      })
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Resource>(snaps);
+        })
+      );
+  }
+
+  // getFilterRefs(ref: CollectionReference,name:string) {
+  //   let refBuilder = ref as any;
+  //   if (name == "") {
+  //     refBuilder = refBuilder.where("name", ">=", name)
+  //     }
+  //   }
+  //   return refBuilder;
+
+  // }
 
   fieldUpdate(docId: string, fieldName: string, newValue: any) {
     if (docId && fieldName) {
