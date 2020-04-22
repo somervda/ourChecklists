@@ -22,6 +22,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from "@angular/material/divider";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
@@ -61,10 +62,10 @@ import { ResourcesComponent } from "./resources/resources.component";
 import { ResourceComponent } from "./resource/resource.component";
 import { MarkedPipe } from "./marked.pipe";
 import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component";
-import { UserselectordialogComponent } from './userselectordialog/userselectordialog.component';
-import { TeamselectordialogComponent } from './teamselectordialog/teamselectordialog.component';
-import { CategoryselectordialogComponent } from './categoryselectordialog/categoryselectordialog.component';
-import { ConfirmdialogComponent } from './confirmdialog/confirmdialog.component';
+import { UserselectordialogComponent } from "./userselectordialog/userselectordialog.component";
+import { TeamselectordialogComponent } from "./teamselectordialog/teamselectordialog.component";
+import { CategoryselectordialogComponent } from "./categoryselectordialog/categoryselectordialog.component";
+import { ConfirmdialogComponent } from "./confirmdialog/confirmdialog.component";
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ import { ConfirmdialogComponent } from './confirmdialog/confirmdialog.component'
     AppRoutingModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatExpansionModule,
     MatIconModule,
     MatCardModule,
     MatSidenavModule,
