@@ -28,6 +28,8 @@
         resource.status == ResourceStatus.superseded
       "
     >
+      <!-- **** Name & description ***** -->
+
       <mat-form-field class="full-width">
         <input
           matInput
@@ -74,6 +76,8 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
+
+      <!-- **** Owner, Reviewer, Team, category and status info ***** -->
 
       <table>
         <tr>
@@ -167,7 +171,9 @@
         </tr>
       </table>
 
-      <mat-card>
+      <!-- **********  Content Card *******-->
+
+      <mat-card class="content-card">
         <!-- <div class="card-header">Resource Content</div> -->
         <div class="rb-group">
           <mat-radio-group

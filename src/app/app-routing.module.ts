@@ -39,7 +39,7 @@ const routes: Routes = [
     path: "teams",
     component: TeamsComponent,
     canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "canCreateTeams"] },
+    data: { permissions: ["isAdmin", "isActivated"] },
   },
   {
     path: "team/create",
@@ -59,7 +59,7 @@ const routes: Routes = [
     component: TeamComponent,
     resolve: { team: TeamResolver },
     canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "canCreateTeams"] },
+    data: { permissions: ["isAdmin", "isActivated"] },
   },
 
   // Categories

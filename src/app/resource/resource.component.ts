@@ -41,6 +41,7 @@ export class ResourceComponent implements OnInit {
   ResourceType = ResourceType;
   fileToUpload: File;
   downloadUrl$: Observable<string>;
+  isInit = true;
 
   constructor(
     private resourceService: ResourceService,
@@ -141,10 +142,37 @@ export class ResourceComponent implements OnInit {
         this.resourceForm.get(field).markAsTouched();
       }
     }
+    this.isInit = false;
   }
 
   setContentValidators(resourceType: ResourceType) {
     console.log("setContentValidators", resourceType);
+
+    if (this.crudAction == Crud.Update && !this.isInit) {
+      const prompt =
+        "Are you sure you want to update the content type of an existing resource. The content value will be deleted and need to be reentered.";
+      const dialogRef = this.dialog.open(ConfirmdialogComponent, {
+        width: "300px",
+        data: { heading: "Confirm", prompt: prompt },
+      });
+      let carryOn = false;
+      dialogRef.afterClosed().subscribe((choice) => {
+        if (choice) {
+          this.updateContentValidator(resourceType);
+          // Reset content value if changing content type
+          this.resourceService.fieldUpdate(this.resource.id, "content", "");
+        } else {
+          this.resourceForm.controls["resourceType"].setValue(
+            this.resource.resourceType
+          );
+        }
+      });
+    } else {
+      this.updateContentValidator(resourceType);
+    }
+  }
+
+  updateContentValidator(resourceType: ResourceType) {
     switch (resourceType) {
       case ResourceType.url:
         const regURL = "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?";
@@ -152,7 +180,6 @@ export class ResourceComponent implements OnInit {
           Validators.required,
           Validators.pattern(regURL),
         ]);
-        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
       case ResourceType.youtubeId:
         const regYouTubeId = "^([A-Za-z0-9_-]{11})$";
@@ -160,21 +187,21 @@ export class ResourceComponent implements OnInit {
           Validators.required,
           Validators.pattern(regYouTubeId),
         ]);
-        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
       case ResourceType.markdown:
         this.resourceForm.controls["content"].setValidators([
           Validators.required,
           Validators.maxLength(10000),
         ]);
-        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
       case ResourceType.file:
       case ResourceType.image:
         this.resourceForm.controls["content"].setValidators([]);
-        this.resourceForm.controls["content"].updateValueAndValidity();
         break;
     }
+    this.resourceForm.controls["content"].setValue("");
+    this.resource.resourceType = resourceType;
+    this.resourceForm.controls["content"].updateValueAndValidity();
   }
 
   onCreate() {
