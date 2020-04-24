@@ -1,10 +1,14 @@
 {
   "baseUrl": "http://localhost:4200/",
   "env": {
-    "nonAdminUser": "test01@ourDars.com",
-    "nonAdminUserPassword": "password",
-    "adminUser": "test02@ourDars.com",
-    "adminUserPassword": "password"
+    "adminUser": "admin@ourChecklists.com",
+    "adminPassword": "password",
+    "managerUser": "manager@ourChecklists.com",
+    "managerPassword": "password",
+    "memberUser": "member@ourChecklists.com",
+    "memberPassword": "password",
+    "inactiveUser": "inactive@ourChecklists.com",
+    "inactivePassword": "password"
   },
   "requestTimeout": 10000,
   "defaultCommandTimeout": 8000

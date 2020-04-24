@@ -41,14 +41,28 @@ Cypress.Commands.add("verifyHomeComponent", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuHome").click();
   // Verify component was rendered
-  cy.get(".mat-card-title").contains("Code");
+  cy.get(".mat-card-title").contains("Checklists");
 });
 
 Cypress.Commands.add("verifyMyProfileComponent", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuMyProfile").click();
   // Verify component was rendered
-  cy.get("h1").contains("User Profile");
+  cy.get("app-subheading > .mat-toolbar").contains("User Profile");
+});
+
+Cypress.Commands.add("openMyTeamsComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuTeams").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("Team List");
+});
+
+Cypress.Commands.add("verifyTeamComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuTeams").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("Team List");
 });
 
 Cypress.Commands.add("verifyAdminComponent", () => {
@@ -72,7 +86,16 @@ Cypress.Commands.add("verifyLogout", () => {
 Cypress.Commands.add("verifyNotAdministrator", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuHome").should("exist");
-  cy.get("#mainMenuAdministration").should("not.exist");
+  cy.get("#mainMenuUsers").should("not.exist");
+  cy.get(".mat-drawer-backdrop").click();
+});
+
+Cypress.Commands.add("verifyAllNonAdminRoles", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuHome").should("exist");
+  cy.get("#mainMenuTeams").should("exist");
+  cy.get("#mainMenuCategories").should("exist");
+  cy.get("#mainMenuResources").should("exist");
   cy.get(".mat-drawer-backdrop").click();
 });
 
@@ -80,6 +103,7 @@ Cypress.Commands.add("verifyNotActivated", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuHome").should("exist");
   cy.get("#mainMenuMyProfile").should("not.exist");
+  cy.get("#mainToolBarNotActivated").should("exist");
   cy.get(".mat-drawer-backdrop").click();
 });
 
