@@ -7,13 +7,13 @@
 context("Admin user login", () => {
   it("Site opens", () => {
     cy.visit("", {
-      onBeforeLoad: win => {
+      onBeforeLoad: (win) => {
         win.sessionStorage.clear();
-      }
+      },
     });
   });
   it("Login", () => {
-    cy.logonEmail(Cypress.env("adminUser"), Cypress.env("adminUserPassword"));
+    cy.logonEmail(Cypress.env("adminUser"), Cypress.env("adminPassword"));
   });
   it("Navigate to About Page", () => {
     cy.verifyAboutComponent();
@@ -25,8 +25,18 @@ context("Admin user login", () => {
     cy.verifyMyProfileComponent();
   });
 
-  it("Navigate to Admin", () => {
+  it("Navigate Users", () => {
     cy.verifyAdminComponent();
+  });
+
+  it("Navigate Categories", () => {
+    cy.verifyCategoriesComponent();
+    cy.wait(1000);
+  });
+
+  it("Navigate Resources", () => {
+    cy.verifyResourcesComponent();
+    cy.wait(1000);
   });
 
   it("Logout", () => {

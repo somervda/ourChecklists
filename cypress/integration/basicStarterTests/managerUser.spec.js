@@ -27,16 +27,13 @@ context("Basic user login", () => {
   it("Verify My Teams", () => {
     cy.openMyTeamsComponent();
     cy.get(".cdk-column-name > a").should("contain", "Angular");
-    cy.get(".cdk-column-name > a").should("contain", "Java Developers");
+    cy.get(".cdk-column-name > a").should("contain", "e2eTeam");
     cy.get(".mat-button-wrapper > span").should("contain", "New Team");
   });
   it("Verify My Team", () => {
-    cy.get(".cdk-column-name > a").contains("Angular").click();
-    cy.get("app-subheading > .mat-toolbar").contains("Angular [Update]");
-    cy.get("tbody > :nth-child(1) > .cdk-column-displayName").should(
-      "contain",
-      "normal user"
-    );
+    cy.get(".cdk-column-name > a").contains("e2eTeam").click();
+    cy.get("app-subheading > .mat-toolbar").contains("e2eTeam [Update]");
+    cy.contains("Manager User");
     cy.get(".add-button").should("contain", "Add");
   });
 

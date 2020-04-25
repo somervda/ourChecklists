@@ -65,15 +65,39 @@ Cypress.Commands.add("verifyTeamComponent", () => {
   cy.get("app-subheading > .mat-toolbar").contains("Team List");
 });
 
+Cypress.Commands.add("verifyCategoriesComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuCategories").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("Categories List");
+  cy.get(".mat-button-wrapper > span").should("contain", "Create");
+  cy.get(".page-container").contains("e2eCategory").click();
+  cy.get("app-subheading > .mat-toolbar").contains("e2eCategory [Update]");
+  cy.get(".add-button > .mat-button-wrapper").should(
+    "contain",
+    "Add new activity"
+  );
+  cy.get(".page-container").contains("e2eActivity").click();
+  cy.get("app-subheading > .mat-toolbar").contains("e2eActivity [Update]");
+});
+
+Cypress.Commands.add("verifyResourcesComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuResources").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("Resource List");
+  cy.get(".mat-button-wrapper > span").should("contain", "Create");
+  cy.get(".page-container").contains("e2eResource").click();
+  cy.get("app-subheading > .mat-toolbar").contains("e2eResource");
+});
+
 Cypress.Commands.add("verifyAdminComponent", () => {
   cy.get("#mainMenu").click();
-  cy.get("#mainMenuAdministration").click();
-  cy.get("h1").contains("Administration");
-  cy.get('[routerlink="/users"]').click();
-  cy.get("h1").contains("Users");
-  cy.contains(Cypress.env("nonAdminUser").toLowerCase()).click();
+  cy.get("#mainMenuUsers").click();
+  cy.get("app-subheading > .mat-toolbar").contains("Users");
+  cy.contains(Cypress.env("memberUser").toLowerCase()).click();
   cy.url().should("include", "user/");
-  cy.get("h1").contains("User Profile");
+  cy.get("app-subheading > .mat-toolbar").contains("User Profile");
 });
 
 Cypress.Commands.add("verifyLogout", () => {
