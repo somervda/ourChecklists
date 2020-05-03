@@ -21,6 +21,7 @@ import { ActivityResolver } from "./services/activity-resolver";
 import { ResourceComponent } from "./resource/resource.component";
 import { ResourceResolver } from "./services/resource-resolver";
 import { RedirectComponent } from "./redirect/redirect.component";
+import { ChecklistsComponent } from "./checklists/checklists.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -30,6 +31,14 @@ const routes: Routes = [
   {
     path: "redirect/:component/:id",
     component: RedirectComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
+
+  // Checklists
+  {
+    path: "checklists",
+    component: ChecklistsComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },
   },

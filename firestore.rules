@@ -118,5 +118,10 @@ service cloud.firestore {
       allow write:  if isAdmin() || isResourceManager();
       // Add write options for isResourceOwner & isResourceReviewer(+ needsReview + only review field updates)
     }
+
+    match /{path=**}/checklists/{id} {
+      allow read:  if isActivated();
+      allow write:  if isAdmin() ;
+    }
   }
 }
