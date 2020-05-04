@@ -67,7 +67,9 @@ import { TeamselectordialogComponent } from "./teamselectordialog/teamselectordi
 import { CategoryselectordialogComponent } from "./categoryselectordialog/categoryselectordialog.component";
 import { ConfirmdialogComponent } from "./confirmdialog/confirmdialog.component";
 import { RedirectComponent } from "./redirect/redirect.component";
-import { ChecklistsComponent } from "./checklists/checklists.component";
+import { MychecklistsComponent } from "./mychecklists/mychecklists.component";
+import { ChecklistlistComponent } from "./checklistlist/checklistlist.component";
+import { TeamchecklistsComponent } from './teamchecklists/teamchecklists.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +101,9 @@ import { ChecklistsComponent } from "./checklists/checklists.component";
     CategoryselectordialogComponent,
     ConfirmdialogComponent,
     RedirectComponent,
-    ChecklistsComponent,
+    MychecklistsComponent,
+    ChecklistlistComponent,
+    TeamchecklistsComponent,
   ],
   imports: [
     BrowserModule,

@@ -36,10 +36,20 @@
           <mat-icon>supervisor_account</mat-icon>
           <span id="mainMenuTeams">My Teams</span>
         </a>
+        <a
+          mat-list-item
+          routerLink="teamchecklists"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin || hasTeamRole(auth.user$ | async)
+          "
+        >
+          <mat-icon>playlist_add_check</mat-icon>
+          <span id="mainMenuTeamChecklists">Team Checklists</span>
+        </a>
 
-        <!-- Checklists  -->
+        <!-- My Checklists  -->
 
-        <a mat-list-item routerLink="checklists">
+        <a mat-list-item routerLink="mychecklists">
           <mat-icon>playlist_add_check</mat-icon>
           <span id="mainMenuMyChecklists">My Checklists</span>
         </a>

@@ -21,7 +21,8 @@ import { ActivityResolver } from "./services/activity-resolver";
 import { ResourceComponent } from "./resource/resource.component";
 import { ResourceResolver } from "./services/resource-resolver";
 import { RedirectComponent } from "./redirect/redirect.component";
-import { ChecklistsComponent } from "./checklists/checklists.component";
+import { MychecklistsComponent } from "./mychecklists/mychecklists.component";
+import { TeamchecklistsComponent } from "./teamchecklists/teamchecklists.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -37,8 +38,14 @@ const routes: Routes = [
 
   // Checklists
   {
-    path: "checklists",
-    component: ChecklistsComponent,
+    path: "mychecklists",
+    component: MychecklistsComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
+  {
+    path: "teamchecklists",
+    component: TeamchecklistsComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },
   },
