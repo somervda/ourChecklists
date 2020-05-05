@@ -4,12 +4,14 @@ import { Observable } from "rxjs";
 import { Team } from "../models/team.model";
 import { map, first } from "rxjs/operators";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
+import { AuthService } from "./auth.service";
+import * as firebase from "firebase";
 
 @Injectable({
   providedIn: "root",
 })
 export class TeamService {
-  constructor(private afs: AngularFirestore) {}
+  constructor(private afs: AngularFirestore, private auth: AuthService) {}
 
   findById(id: string): Observable<Team> {
     console.log("team findById", id);
@@ -33,6 +35,23 @@ export class TeamService {
       .pipe(
         map((snaps) => {
           // console.log("findDevices", convertSnaps<Device>(snaps));
+          return convertSnaps<Team>(snaps);
+        })
+      );
+  }
+
+  findMyTeams(pageSize: number): Observable<Team[]> {
+    const myTeams: string[] = this.auth.currentUser.managerOfTeams;
+    console.log("checklist findMyTeams", myTeams, pageSize);
+    return this.afs
+      .collection("teams", (ref) =>
+        ref
+          .where(firebase.firestore.FieldPath.documentId(), "in", myTeams)
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
           return convertSnaps<Team>(snaps);
         })
       );

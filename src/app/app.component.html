@@ -4,55 +4,44 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/">
         <mat-icon>home</mat-icon>
-        <span id="mainMenuHome">Home</span>
-      </a>
-      <a mat-list-item routerLink="about">
-        <mat-icon>question_answer</mat-icon>
-        <span id="mainMenuAbout">About</span>
+        <span id="mainMenuHome">&nbsp;Home</span>
       </a>
 
-      <!-- Logged in and activated options -->
       <span
         *ngIf="(auth.loggedIn$ | async) && (auth.user$ | async)?.isActivated"
       >
-        <!-- User functions , if we have too many then add a navigation page  -->
-        <a
-          mat-list-item
-          [routerLink]="['user/', (auth.user$ | async)?.uid || '']"
-        >
-          <mat-icon>person</mat-icon>
-          <span id="mainMenuMyProfile">My Profile</span>
-        </a>
-
-        <!-- Teams  -->
-
-        <a
-          mat-list-item
-          routerLink="teams"
-          *ngIf="
-            (auth.user$ | async)?.isAdmin || hasTeamRole(auth.user$ | async)
-          "
-        >
-          <mat-icon>supervisor_account</mat-icon>
-          <span id="mainMenuTeams">My Teams</span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="teamchecklists"
-          *ngIf="
-            (auth.user$ | async)?.isAdmin || hasTeamRole(auth.user$ | async)
-          "
-        >
-          <mat-icon>playlist_add_check</mat-icon>
-          <span id="mainMenuTeamChecklists">Team Checklists</span>
-        </a>
-
         <!-- My Checklists  -->
 
         <a mat-list-item routerLink="mychecklists">
           <mat-icon>playlist_add_check</mat-icon>
-          <span id="mainMenuMyChecklists">My Checklists</span>
+          <span id="mainMenuMyChecklists">&nbsp;My Checklists</span>
         </a>
+
+        <!-- Teams  -->
+        <ng-container>
+          <a
+            mat-list-item
+            routerLink="teams"
+            *ngIf="
+              (auth.user$ | async)?.isAdmin ||
+              hasCrossTeamRole(auth.user$ | async)
+            "
+          >
+            <mat-icon>supervisor_account</mat-icon>
+            <span id="mainMenuTeams">&nbsp;My Teams</span>
+          </a>
+
+          <!-- <a
+          mat-list-item
+          routerLink="teamchecklists"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin || hasCrossTeamRole(auth.user$ | async)
+          "
+        >
+          <mat-icon>home_work</mat-icon>
+          <span id="mainMenuTeamChecklists">&nbsp;Team Checklists</span>
+        </a> -->
+        </ng-container>
 
         <!-- Administrator Functions -->
         <mat-divider
@@ -71,7 +60,7 @@
           "
         >
           <mat-icon>category</mat-icon>
-          <span id="mainMenuCategories">Categories</span>
+          <span id="mainMenuCategories">&nbsp;Categories</span>
         </a>
         <!-- Resources  -->
         <a
@@ -83,7 +72,7 @@
           "
         >
           <mat-icon>folder_open</mat-icon>
-          <span id="mainMenuResources">Resources</span>
+          <span id="mainMenuResources">&nbsp;Resources</span>
         </a>
         <!-- User Management -->
         <a
@@ -93,12 +82,31 @@
           routerLink="users"
         >
           <mat-icon>how_to_reg</mat-icon>
-          <span id="mainMenuUsers">User Management</span>
+          <span id="mainMenuUsers">&nbsp;User Management</span>
         </a>
       </span>
-      <!-- Logged in options -->
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="about">
+        <mat-icon>question_answer</mat-icon>
+        <span id="mainMenuAbout">&nbsp;About</span>
+      </a>
+
+      <!-- Logged in and activated options -->
+      <span
+        *ngIf="(auth.loggedIn$ | async) && (auth.user$ | async)?.isActivated"
+      >
+        <!-- User functions , if we have too many then add a navigation page  -->
+        <a
+          mat-list-item
+          [routerLink]="['user/', (auth.user$ | async)?.uid || '']"
+        >
+          <mat-icon>person</mat-icon>
+          <span id="mainMenuMyProfile">&nbsp;My Profile</span>
+        </a>
+      </span>
+
       <span *ngIf="auth.loggedIn$ | async">
-        <mat-divider></mat-divider>
         <a
           mat-list-item
           routerLink="logout"
@@ -106,7 +114,7 @@
           *ngIf="auth.loggedIn$ | async"
         >
           <mat-icon>exit_to_app</mat-icon>
-          <span id="mainMenuLogout">Logout</span>
+          <span id="mainMenuLogout">&nbsp;Logout</span>
         </a>
       </span>
 
@@ -115,7 +123,7 @@
         <mat-divider></mat-divider>
         <a mat-list-item routerLink="login">
           <mat-icon>account_circle</mat-icon>
-          <span id="mainMenuLogin">Login</span>
+          <span id="mainMenuLogin">&nbsp;Login</span>
         </a>
       </span>
     </mat-nav-list>

@@ -67,16 +67,14 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // isTeamManager(teams: UserTeam[]) {
-  //   if (teams === undefined || teams === null) {
-  //     return false;
-  //   }
-  //   return (
-  //     teams.filter((team) => team.teamRole === TeamRole.manager).length > 0
-  //   );
-  // }
+  isTeamManager(user: User) {
+    if (user === undefined || user === null) {
+      return false;
+    }
+    if (user.managerOfTeams && user.managerOfTeams.length > 0) return true;
+  }
 
-  hasTeamRole(user: User) {
+  hasCrossTeamRole(user: User) {
     if (user === undefined || user === null) {
       return false;
     }

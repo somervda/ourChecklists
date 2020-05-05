@@ -1,7 +1,10 @@
 <app-subheading
-  title="Team Checklists"
+  [title]="'Team Checklists: ' + (team$ | async)?.name"
   matIcon="playlist_add_check"
 ></app-subheading>
 <div class="page-container">
-  <app-checklistlist [checklists$]="checklists$"></app-checklistlist>
+  <app-checklistlist
+    [checklists$]="checklists$"
+    hideCreate="true"
+  ></app-checklistlist>
 </div>

@@ -59,7 +59,21 @@ export class ChecklistService {
     console.log("checklist findMyTeamChecklists", myTeams, pageSize);
     return this.afs
       .collection("checklists", (ref) =>
-        ref.where("team.in", "in", myTeams).limit(pageSize)
+        ref.where("team.id", "in", myTeams).limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Checklist>(snaps);
+        })
+      );
+  }
+
+  findByTeam(id: string, pageSize: number): Observable<Checklist[]> {
+    console.log("checklist findByTeam", id, pageSize);
+    return this.afs
+      .collection("checklists", (ref) =>
+        ref.where("team.id", "==", id).limit(pageSize)
       )
       .snapshotChanges()
       .pipe(

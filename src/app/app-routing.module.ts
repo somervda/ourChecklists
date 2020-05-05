@@ -44,7 +44,7 @@ const routes: Routes = [
     data: { permissions: ["isActivated"] },
   },
   {
-    path: "teamchecklists",
+    path: "teamchecklists/:id",
     component: TeamchecklistsComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },

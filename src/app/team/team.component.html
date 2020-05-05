@@ -1,5 +1,5 @@
 <app-subheading
-  [title]="team.name + ' [Update]'"
+  [title]="'Team: ' + team.name + (readOnly ? '' : ' [Update]')"
   *ngIf="crudAction == Crud.Update"
   returnRoute="/teams"
   returnTitle="Return to Teams"
@@ -13,7 +13,7 @@
   matIcon="supervisor_account"
 ></app-subheading>
 <app-subheading
-  [title]="team.name + ' [Delete]'"
+  [title]="'Team: ' + team.name + ' [Delete]'"
   *ngIf="crudAction == Crud.Delete"
   returnRoute="/teams"
   returnTitle="Return to Teams"
@@ -70,6 +70,7 @@
       </mat-form-field>
     </fieldset>
 
+    <app-subheading title="Team Members"></app-subheading>
     <app-teamuserlist
       [teamId]="team.id"
       [hideAddRemove]="hideAddRemove"

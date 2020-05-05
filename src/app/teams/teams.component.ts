@@ -13,14 +13,12 @@ import { AuthService } from "../services/auth.service";
 export class TeamsComponent implements OnInit {
   teams$: Observable<Team[]>;
   canCreateTeams = false;
-  displayedColumns: string[] = ["name", "description", "id"];
+  displayedColumns: string[] = ["name", "description", "Checklists", "id"];
 
   constructor(private teamservice: TeamService, private auth: AuthService) {}
+
   async ngOnInit() {
-    while (!this.auth.currentUser) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-    }
+    await this.waitForCurrentUser();
     if (this.auth.currentUser.isAdmin || this.auth.currentUser.canCreateTeams) {
       this.canCreateTeams = true;
     }
@@ -44,6 +42,15 @@ export class TeamsComponent implements OnInit {
         );
       })
     );
+  }
+
+  async waitForCurrentUser() {
+    let waitMS = 5000;
+    while (!this.auth.currentUser && waitMS > 0) {
+      console.log("Waiting for user to show up!");
+      await this.sleep(200);
+      waitMS -= 200;
+    }
   }
 
   sleep(ms) {
