@@ -1,1 +1,75 @@
-<p>checklistdesign works!</p>
+<app-subheading
+  [title]="'Checklists Design:' + checklists.name + ' [Update]'"
+  *ngIf="crudAction == Crud.Update"
+  matIcon="playlist_add_check"
+></app-subheading>
+<app-subheading
+  title="Checklist Design"
+  *ngIf="crudAction == Crud.Create"
+  matIcon="playlist_add_check"
+></app-subheading>
+
+<div class="page-container">
+  <form class="standard-form" [formGroup]="checklistForm">
+    <fieldset [disabled]="crudAction == Crud.Delete">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          formControlName="name"
+          (change)="onFieldUpdate('name')"
+          placeholder="Name"
+          required
+        />
+        <mat-error *ngIf="checklistForm.controls['name'].hasError('required')">
+          Name is required.
+        </mat-error>
+        <mat-error *ngIf="checklistForm.controls['name'].hasError('minlength')">
+          Name must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="checklistForm.controls['name'].hasError('maxlength')">
+          Name must be no more than 70 characters long.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <textarea
+          matInput
+          formControlName="description"
+          (change)="onFieldUpdate('description')"
+          matAutosizeMinRows="3"
+          matAutosizeMaxRows="10"
+          matTextareaAutosize
+          placeholder="Description"
+          required
+        ></textarea>
+        <mat-error
+          *ngIf="checklistForm.controls['description'].hasError('required')"
+        >
+          Description is required.
+        </mat-error>
+        <mat-error
+          *ngIf="checklistForm.controls['description'].hasError('minlength')"
+        >
+          Description must be at least 10 characters long.
+        </mat-error>
+        <mat-error
+          *ngIf="checklistForm.controls['description'].hasError('maxlength')"
+        >
+          Description must be no more than 500 characters long.
+        </mat-error>
+      </mat-form-field>
+    </fieldset>
+
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="crudAction == Crud.Create"
+      [disabled]="!checklistForm.valid"
+      (click)="onCreate()"
+      id="btnCreate"
+    >
+      <mat-icon>add</mat-icon>
+      Create
+    </button>
+  </form>
+</div>
