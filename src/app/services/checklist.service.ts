@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/firestore";
+import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Checklist } from "../models/checklist.model";
 import { map } from "rxjs/operators";
-import { convertSnap, convertSnaps } from "./db-utils";
+import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 import { AuthService } from "./auth.service";
 import { UserRef } from "../models/helper.model";
 
@@ -81,5 +81,16 @@ export class ChecklistService {
           return convertSnaps<Checklist>(snaps);
         })
       );
+  }
+
+  fieldUpdate(docId: string, fieldName: string, newValue: any) {
+    if (docId && fieldName) {
+      const updateObject = {};
+      dbFieldUpdate("/checklists/" + docId, fieldName, newValue, this.afs);
+    }
+  }
+
+  create(checklist: Checklist): Promise<DocumentReference> {
+    return this.afs.collection("checklists").add(checklist);
   }
 }

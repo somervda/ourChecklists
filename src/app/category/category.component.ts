@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from "@angular/core";
+import { Component, OnInit, NgZone, OnDestroy } from "@angular/core";
 import { Team } from "../models/team.model";
 import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -14,7 +14,7 @@ import { Category } from "../models/category.model";
   templateUrl: "./category.component.html",
   styleUrls: ["./category.component.scss"],
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
   category: Category;
   crudAction: Crud;
   // Declare an instance of crud enum to use for checking crudAction value

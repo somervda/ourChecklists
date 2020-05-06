@@ -23,6 +23,8 @@ import { ResourceResolver } from "./services/resource-resolver";
 import { RedirectComponent } from "./redirect/redirect.component";
 import { MychecklistsComponent } from "./mychecklists/mychecklists.component";
 import { TeamchecklistsComponent } from "./teamchecklists/teamchecklists.component";
+import { ChecklistdesignComponent } from "./checklistdesign/checklistdesign.component";
+import { ChecklistResolver } from "./services/checklist-resolver";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -48,6 +50,19 @@ const routes: Routes = [
     component: TeamchecklistsComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },
+  },
+  {
+    path: "checklistdesign/create",
+    component: ChecklistdesignComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isActivated"] },
+  },
+  {
+    path: "checklistdesign/:id",
+    component: ChecklistdesignComponent,
+    resolve: { checklist: ChecklistResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isActivated"] },
   },
 
   // Teams
