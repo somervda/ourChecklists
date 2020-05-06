@@ -1,12 +1,12 @@
 <app-subheading
   [title]="'Checklists Design: ' + checklist.name + ' [Update]'"
   *ngIf="crudAction == Crud.Update"
-  matIcon="playlist_add_check"
+  matIcon="build"
 ></app-subheading>
 <app-subheading
   title="Checklist Design"
   *ngIf="crudAction == Crud.Create"
-  matIcon="playlist_add_check"
+  matIcon="build"
 ></app-subheading>
 
 <div class="page-container">
@@ -58,6 +58,63 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <textarea
+          matInput
+          formControlName="comments"
+          (change)="onFieldUpdate('comments')"
+          matAutosizeMinRows="3"
+          matAutosizeMaxRows="10"
+          matTextareaAutosize
+          placeholder="Comments"
+        ></textarea>
+        <mat-error
+          *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
+        >
+          Comments must be no more than 500 characters long.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="half-width">
+        <mat-label>Team</mat-label>
+        <mat-select
+          formControlName="team"
+          (selectionChange)="onTeamChange($event)"
+          [compareWith]="objectComparisonFunction"
+        >
+          <mat-option
+            *ngFor="let t of myteams$ | async"
+            [value]="{ id: t.id, name: t.name }"
+          >
+            {{ t.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="half-width">
+        <mat-label>Category</mat-label>
+        <mat-select
+          formControlName="category"
+          (selectionChange)="onCategoryChange($event)"
+          [compareWith]="objectComparisonFunction"
+        >
+          <mat-option
+            *ngFor="let c of categories$ | async"
+            [value]="{ id: c.id, name: c.name }"
+          >
+            {{ c.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="full-width">
+        <div><mat-label>Assignees</mat-label></div>
+        <span
+          *ngFor="let a of checklist.assignee; let i = index"
+          class="assignee"
+          >{{ i > 0 ? ", " : "" }}{{ a.displayName }}</span
+        >
+      </div>
     </fieldset>
 
     <button

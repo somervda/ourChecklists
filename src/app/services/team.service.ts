@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
-import { Observable } from "rxjs";
+import { Observable, combineLatest, of } from "rxjs";
 import { Team } from "../models/team.model";
 import { map, first } from "rxjs/operators";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
@@ -30,7 +30,7 @@ export class TeamService {
   findAll(pageSize: number): Observable<Team[]> {
     // console.log( "team findAll",  pageSize  );
     return this.afs
-      .collection("teams", (ref) => ref.limit(pageSize))
+      .collection("teams", (ref) => ref.orderBy("name").limit(pageSize))
       .snapshotChanges()
       .pipe(
         map((snaps) => {
@@ -40,9 +40,19 @@ export class TeamService {
       );
   }
 
-  findMyTeams(pageSize: number): Observable<Team[]> {
-    const myTeams: string[] = this.auth.currentUser.managerOfTeams;
-    console.log("checklist findMyTeams", myTeams, pageSize);
+  findMyMemberOfTeams(pageSize: number): Observable<Team[]> {
+    console.log(
+      "checklist findMyMemberOfTeams",
+      this.auth.currentUser.memberOfTeams,
+      pageSize
+    );
+    if (
+      !this.auth.currentUser.memberOfTeams ||
+      this.auth.currentUser.memberOfTeams.length == 0
+    ) {
+      return of<Team[]>([]);
+    }
+    const myTeams: string[] = this.auth.currentUser.memberOfTeams;
     return this.afs
       .collection("teams", (ref) =>
         ref
@@ -55,6 +65,61 @@ export class TeamService {
           return convertSnaps<Team>(snaps);
         })
       );
+  }
+
+  findMyManagerOfTeams(pageSize: number): Observable<Team[]> {
+    console.log(
+      "checklist findMyManagerOfTeams",
+      this.auth.currentUser.managerOfTeams,
+      pageSize
+    );
+    if (
+      !this.auth.currentUser.managerOfTeams ||
+      this.auth.currentUser.managerOfTeams.length == 0
+    ) {
+      return of<Team[]>([]);
+    }
+    const myTeams: string[] = this.auth.currentUser.managerOfTeams;
+    return this.afs
+      .collection("teams", (ref) =>
+        ref
+          .where(firebase.firestore.FieldPath.documentId(), "in", myTeams)
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Team>(snaps);
+        })
+      );
+  }
+
+  findMyMemberManagerOfTeams(): Observable<Team[]> {
+    console.log("team findMyMemberManagerOfTeams");
+
+    const teamMembers$ = this.findMyMemberOfTeams(10);
+
+    const teamManagers$ = this.findMyManagerOfTeams(10);
+
+    return combineLatest([teamMembers$, teamManagers$]).pipe(
+      map(([members, managers]) => {
+        console.log("members,managers", members, managers);
+        // return members.concat(managers);
+        // Use spread and Set to return only unique values
+        const mergedTeams = [...new Set([...members, ...managers])];
+        return mergedTeams.sort((a, b) => {
+          var x = a.name.toLowerCase();
+          var y = b.name.toLowerCase();
+          if (x < y) {
+            return -1;
+          }
+          if (x > y) {
+            return 1;
+          }
+          return 0;
+        });
+      })
+    );
   }
 
   findByName(name: string): Observable<Team[]> {

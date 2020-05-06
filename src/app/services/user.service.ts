@@ -1,14 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import {
-  Observable,
-  merge,
-  combineLatest,
-  concat,
-  forkJoin,
-  zip,
-  from,
-} from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { User, TeamRoles } from "../models/user.model";
 import { convertSnaps } from "./db-utils";
 import { first, map, take } from "rxjs/operators";

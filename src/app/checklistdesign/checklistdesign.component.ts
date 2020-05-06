@@ -3,12 +3,15 @@ import { Component, OnInit } from "@angular/core";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
 import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { ChecklistService } from "../services/checklist.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
-import { ResourceStatus } from "../models/resource.model";
+import { Team } from "../models/team.model";
+import { TeamService } from "../services/team.service";
+import { Category } from "../models/category.model";
+import { CategoryService } from "../services/category.service";
 
 @Component({
   selector: "app-checklistdesign",
@@ -23,9 +26,13 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
 
   checklistForm: FormGroup;
   checklistSubscription$$: Subscription;
+  myteams$: Observable<Team[]>;
+  categories$: Observable<Category[]>;
 
   constructor(
     private checklistService: ChecklistService,
+    private teamService: TeamService,
+    private categoryService: CategoryService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -39,6 +46,12 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
       "this.route.snapshot.paramMap.get('id')",
       this.route.snapshot.paramMap.get("id")
     );
+    if (this.auth.currentUser.isAdmin) {
+      this.myteams$ = this.teamService.findAll(100);
+    } else {
+      this.myteams$ = this.teamService.findMyMemberManagerOfTeams();
+    }
+    this.categories$ = this.categoryService.findAll(100);
     this.crudAction = Crud.Update;
     // if (this.route.routeConfig.path == "category/delete/:id")
     //   this.crudAction = Crud.Delete;
@@ -63,12 +76,12 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
       };
     } else {
       this.checklist = this.route.snapshot.data["checklist"];
-      console.log("create checklist:", this.checklist);
+      console.log("update checklist:", this.checklist);
       this.checklistSubscription$$ = this.checklistService
         .findById(this.checklist.id)
         .subscribe((checklist) => {
           this.checklist = checklist;
-          // console.log("subscribed category", this.checklist);
+          // console.log("subscribed checklist", this.checklist);
           this.checklistForm.patchValue(this.checklist);
         });
     }
@@ -90,6 +103,11 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
           Validators.minLength(10),
           Validators.maxLength(500),
         ],
+      ],
+      comments: [this.checklist.comments, [Validators.maxLength(500)]],
+      team: [{ id: this.checklist.team.id, name: this.checklist.team.name }],
+      category: [
+        { id: this.checklist.category.id, name: this.checklist.category.name },
       ],
     });
 
@@ -136,6 +154,33 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     ) {
       let newValue = this.checklistForm.get(fieldName).value;
       this.checklistService.fieldUpdate(this.checklist.id, fieldName, newValue);
+    }
+  }
+
+  objectComparisonFunction = function (option, value): boolean {
+    // Needed to compare objects in select dropdowns
+    // console.log("objectComparisonFunction", option, value);
+    return option.id === value.id;
+  };
+
+  onTeamChange(event) {
+    console.log("onTeamChange: ", event);
+    const newTeam = event.value;
+    // console.log("onTeamChange form:", this.checklistForm);
+    if (this.crudAction == Crud.Update) {
+      this.checklistService.fieldUpdate(this.checklist.id, "team", newTeam);
+    }
+  }
+
+  onCategoryChange(event) {
+    console.log("onCategoryChange: ", event);
+    const newCategory = event.value;
+    if (this.crudAction == Crud.Update) {
+      this.checklistService.fieldUpdate(
+        this.checklist.id,
+        "category",
+        newCategory
+      );
     }
   }
 

@@ -84,8 +84,8 @@ export class ChecklistService {
   }
 
   fieldUpdate(docId: string, fieldName: string, newValue: any) {
+    console.log("checklist fieldUpdate", docId, fieldName, newValue);
     if (docId && fieldName) {
-      const updateObject = {};
       dbFieldUpdate("/checklists/" + docId, fieldName, newValue, this.afs);
     }
   }
