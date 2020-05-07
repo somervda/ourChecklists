@@ -1,5 +1,8 @@
 <div class="dialog-heading">Select User</div>
-<app-userfinder (userSelected)="onUserSelected($event)"></app-userfinder>
+<app-userfinder
+  (userSelected)="onUserSelected($event)"
+  [uidHide]="uidHide"
+></app-userfinder>
 <button
   mat-button
   matTooltip="Update User Information"

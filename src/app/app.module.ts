@@ -77,6 +77,7 @@ import { ChecklisteditComponent } from './checklistedit/checklistedit.component'
 import { ChecklistComponent } from './checklist/checklist.component';
 import { ChecklistitemComponent } from './checklistitem/checklistitem.component';
 import { ResourcelistComponent } from './resourcelist/resourcelist.component';
+import { UserlisteditComponent } from './userlistedit/userlistedit.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { ResourcelistComponent } from './resourcelist/resourcelist.component';
     ChecklistComponent,
     ChecklistitemComponent,
     ResourcelistComponent,
+    UserlisteditComponent,
   ],
   imports: [
     BrowserModule,

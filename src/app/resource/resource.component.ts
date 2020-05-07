@@ -355,7 +355,7 @@ export class ResourceComponent implements OnInit {
     console.log("onUpdateOwner");
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
-      data: { uid: this.resource?.owner?.uid },
+      data: { uidHide: [this.resource?.owner?.uid] },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -374,7 +374,7 @@ export class ResourceComponent implements OnInit {
     console.log("onUpdateReviewer");
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
-      data: { uid: this.resource?.reviewer?.uid },
+      data: { uidHide: [this.resource?.reviewer?.uid] },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

@@ -11,6 +11,8 @@ import { User } from "../models/user.model";
 })
 export class UserselectordialogComponent implements OnInit {
   user: User;
+  // uidHide is a list of UIDs not to show in the userfinder selection
+  uidHide: string[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -18,7 +20,12 @@ export class UserselectordialogComponent implements OnInit {
     private dialogRef: MatDialogRef<UserselectordialogComponent>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("userselectordialog this.data.uidHide:", this.data.uidHide);
+    if (this.data.uidHide) {
+      this.uidHide = this.data.uidHide;
+    }
+  }
 
   returnUser() {
     this.dialogRef.close(this.user);

@@ -69,13 +69,30 @@
         </mat-error>
       </mat-form-field>
     </fieldset>
+    <mat-accordion *ngIf="crudAction != Crud.Create">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Team Members
+        </mat-expansion-panel-header>
 
-    <app-subheading title="Team Members"></app-subheading>
-    <app-teamuserlist
-      [teamId]="team.id"
-      [hideAddRemove]="hideAddRemove"
-      *ngIf="crudAction != Crud.Create"
-    ></app-teamuserlist>
+        <ng-template matExpansionPanelContent>
+          <app-teamuserlist
+            [teamId]="team.id"
+            [hideAddRemove]="hideAddRemove"
+          ></app-teamuserlist>
+        </ng-template>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Checklists
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
+          <app-teamchecklists [teamId]="team.id"></app-teamchecklists>
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
 
     <button
       mat-raised-button

@@ -12,6 +12,7 @@
     *ngFor="let user of users$ | async"
     [style.backgroundColor]="user.uid == selectedUid ? 'lightgrey' : 'white'"
     (click)="onUserSelected(user.id)"
+    [hidden]="isHidden(user.id)"
   >
     {{ user.displayName }}
   </div>

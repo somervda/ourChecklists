@@ -13,7 +13,7 @@ import { AuthService } from "../services/auth.service";
 export class TeamsComponent implements OnInit {
   teams$: Observable<Team[]>;
   canCreateTeams = false;
-  displayedColumns: string[] = ["name", "description", "Checklists", "id"];
+  displayedColumns: string[] = ["name", "description", "id"];
 
   constructor(private teamservice: TeamService, private auth: AuthService) {}
 

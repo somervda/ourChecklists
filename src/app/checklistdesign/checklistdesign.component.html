@@ -107,17 +107,40 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div class="full-width">
+      <!-- <div class="full-width">
         <div><mat-label>Assignees</mat-label></div>
         <span
           *ngFor="let a of checklist.assignee; let i = index"
           class="assignee"
           >{{ i > 0 ? ", " : "" }}{{ a.displayName }}</span
         >
-      </div>
+      </div> -->
     </fieldset>
 
-    <app-resourcelist [resources$]="resources$"></app-resourcelist>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Assignees
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
+          <app-userlistedit
+            [users]="checklist.assignee"
+            (change)="onAssigneeChange($event)"
+          ></app-userlistedit>
+        </ng-template>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Resources
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
+          <app-resourcelist [resources$]="resources$"></app-resourcelist>
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
 
     <button
       mat-raised-button
