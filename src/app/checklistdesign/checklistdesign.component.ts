@@ -12,6 +12,8 @@ import { Team } from "../models/team.model";
 import { TeamService } from "../services/team.service";
 import { Category } from "../models/category.model";
 import { CategoryService } from "../services/category.service";
+import { Resource } from "../models/resource.model";
+import { ResourceService } from "../services/resource.service";
 
 @Component({
   selector: "app-checklistdesign",
@@ -28,11 +30,13 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   checklistSubscription$$: Subscription;
   myteams$: Observable<Team[]>;
   categories$: Observable<Category[]>;
+  resources$: Observable<Resource[]>;
 
   constructor(
     private checklistService: ChecklistService,
     private teamService: TeamService,
     private categoryService: CategoryService,
+    private resourceService: ResourceService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -85,6 +89,10 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
           this.checklistForm.patchValue(this.checklist);
         });
     }
+
+    this.resources$ = this.resourceService.findAllIn(
+      this.checklist.resources.map((r) => r.id)
+    );
 
     // Create form group and initialize with probe values
     this.checklistForm = this.fb.group({

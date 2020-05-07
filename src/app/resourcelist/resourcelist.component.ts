@@ -14,8 +14,8 @@ import {
   styleUrls: ["./resourcelist.component.scss"],
 })
 export class ResourcelistComponent implements OnInit {
-  @Input() checklists$: Observable<Resource[]>;
-  displayedColumns: string[] = ["name", "description", "type"];
+  @Input() resources$: Observable<Resource[]>;
+  displayedColumns: string[] = ["name", "description", "resourceType"];
   resourceTypeInfo = ResourceTypeInfo;
   ResourceStatus = ResourceStatus;
 

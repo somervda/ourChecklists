@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 import { map, first } from "rxjs/operators";
+import * as firebase from "firebase";
 
 @Injectable({
   providedIn: "root",
@@ -31,6 +32,21 @@ export class ResourceService {
     // console.log( "team findAll",  pageSize  );
     return this.afs
       .collection("resources", (ref) => ref.limit(pageSize))
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          // console.log("findDevices", convertSnaps<Device>(snaps));
+          return convertSnaps<Resource>(snaps);
+        })
+      );
+  }
+
+  findAllIn(resources: string[]): Observable<Resource[]> {
+    console.log("resource findAllIn", resources);
+    return this.afs
+      .collection("resources", (ref) =>
+        ref.where(firebase.firestore.FieldPath.documentId(), "in", resources)
+      )
       .snapshotChanges()
       .pipe(
         map((snaps) => {
