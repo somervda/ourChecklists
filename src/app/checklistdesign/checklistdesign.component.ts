@@ -30,13 +30,11 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   checklistSubscription$$: Subscription;
   myteams$: Observable<Team[]>;
   categories$: Observable<Category[]>;
-  resources$: Observable<Resource[]>;
 
   constructor(
     private checklistService: ChecklistService,
     private teamService: TeamService,
     private categoryService: CategoryService,
-    private resourceService: ResourceService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -90,9 +88,9 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         });
     }
 
-    this.resources$ = this.resourceService.findAllIn(
-      this.checklist.resources.map((r) => r.id)
-    );
+    // this.resources$ = this.resourceService.findAllIn(
+    //   this.checklist.resources.map((r) => r.id)
+    // );
 
     // Create form group and initialize with probe values
     this.checklistForm = this.fb.group({

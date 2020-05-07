@@ -137,7 +137,9 @@
         </mat-expansion-panel-header>
 
         <ng-template matExpansionPanelContent>
-          <app-resourcelist [resources$]="resources$"></app-resourcelist>
+          <app-resourcelistedit
+            [resources]="checklist.resources"
+          ></app-resourcelistedit>
         </ng-template>
       </mat-expansion-panel>
     </mat-accordion>
