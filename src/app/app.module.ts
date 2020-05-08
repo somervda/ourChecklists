@@ -80,6 +80,7 @@ import { ResourcelistComponent } from './resourcelist/resourcelist.component';
 import { UserlisteditComponent } from './userlistedit/userlistedit.component';
 import { ResourcelisteditComponent } from './resourcelistedit/resourcelistedit.component';
 import { ResourcefinderComponent } from './resourcefinder/resourcefinder.component';
+import { ResourceviewdialogComponent } from './resourceviewdialog/resourceviewdialog.component';
 
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ import { ResourcefinderComponent } from './resourcefinder/resourcefinder.compone
     UserlisteditComponent,
     ResourcelisteditComponent,
     ResourcefinderComponent,
+    ResourceviewdialogComponent,
   ],
   imports: [
     BrowserModule,

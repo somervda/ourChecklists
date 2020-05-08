@@ -1,0 +1,25 @@
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+  padding-right: 8px;
+  min-width: 350px;
+}
+
+.close-x {
+  float: right;
+  z-index: 2000;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid darkgrey;
+  background-color: lightgrey;
+  padding: 3px;
+  padding-bottom: 0px;
+  border-radius: 3px;
+}
+
+.image-type {
+  width: 100%;
+}

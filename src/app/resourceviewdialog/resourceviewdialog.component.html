@@ -1,0 +1,28 @@
+<div (click)="close()" class="close-x" title="Close">
+  <mat-icon>close</mat-icon>
+</div>
+
+<ng-container *ngIf="resource.resourceType == ResourceType.url">
+  <a [href]="resource.content" target="_blank">{{ resource.content }}</a>
+</ng-container>
+
+<ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
+  <app-youtubeviewer [youtubeId]="resource.content"></app-youtubeviewer>
+</ng-container>
+
+<ng-container *ngIf="resource.resourceType == ResourceType.file"
+  ><h3>File Download</h3>
+  <mat-divider></mat-divider>
+  File Name:
+  <a [href]="downloadUrl$ | async" target="_blank" title="Click to download">{{
+    resource.content
+  }}</a>
+</ng-container>
+<ng-container *ngIf="resource.resourceType == ResourceType.image"
+  ><h3>Image</h3>
+  <div><img [src]="downloadUrl$ | async" class="image-type" /></div>
+</ng-container>
+
+<ng-container *ngIf="resource.resourceType == ResourceType.markdown">
+  <div [innerHTML]="resource.content | marked"></div>
+</ng-container>

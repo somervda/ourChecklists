@@ -21,6 +21,7 @@ import {
 } from "../models/resource.model";
 import { ResourceService } from "../services/resource.service";
 import { ResourcefinderComponent } from "../resourcefinder/resourcefinder.component";
+import { ResourceviewdialogComponent } from "../resourceviewdialog/resourceviewdialog.component";
 
 @Component({
   selector: "app-resourcelistedit",
@@ -100,6 +101,15 @@ export class ResourcelisteditComponent implements OnInit {
 
   getResourceTypeInfoItem(type: ResourceType): ResourceTypeInfoItem {
     return this.resourceTypeInfo.find((info) => info.resourceType == type);
+  }
+
+  openResourceView(resource) {
+    const dialogRef = this.dialog.open(ResourceviewdialogComponent, {
+      width: "95%",
+      maxWidth: "800px",
+      maxHeight: "90%",
+      data: { resource: resource },
+    });
   }
 
   refresh() {
