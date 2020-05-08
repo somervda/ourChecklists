@@ -139,6 +139,7 @@
         <ng-template matExpansionPanelContent>
           <app-resourcelistedit
             [resources]="checklist.resources"
+            (change)="onResourcesChange($event)"
           ></app-resourcelistedit>
         </ng-template>
       </mat-expansion-panel>

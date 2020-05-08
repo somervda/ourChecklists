@@ -26,7 +26,10 @@ export class UserfinderComponent implements OnInit {
   }
 
   isHidden(uid) {
-    return this.uidHide.includes(uid);
+    if (this.uidHide) {
+      return this.uidHide.includes(uid);
+    }
+    return false;
   }
 
   onUserSelected(uid) {

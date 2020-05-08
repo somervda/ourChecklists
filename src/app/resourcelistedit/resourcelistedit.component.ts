@@ -56,22 +56,22 @@ export class ResourcelisteditComponent implements OnInit {
       width: "300px",
       data: { heading: "Confirm", prompt: prompt },
     });
-    // dialogRef.afterClosed().subscribe((choice) => {
-    //   if (choice) {
-    //     this.users.splice(
-    //       this.users.findIndex((u) => u.uid == uid),
-    //       1
-    //     );
-    //     this.table.renderRows();
-    //     this.change.emit(this.users);
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe((choice) => {
+      if (choice) {
+        this.resources.splice(
+          this.resources.findIndex((r) => r.id == resource.id),
+          1
+        );
+        this.refresh();
+        this.change.emit(this.resources);
+      }
+    });
   }
 
   addResource() {
     if (this.resources.length >= 10) {
       this.snackBar.open(
-        "No more resources can be added (10 max), remove and existing resource before adding another.",
+        "No more resources can be added (10 max), remove an existing resource before adding another.",
         "",
         {
           duration: 5000,
@@ -82,18 +82,19 @@ export class ResourcelisteditComponent implements OnInit {
         width: "380px",
         data: { idHide: this.resources.map((r) => r.id) },
       });
-      //     dialogRef.afterClosed().subscribe((result) => {
-      //       if (result) {
-      //         console.log("addUser", result);
-      //         const newUser: UserRef = {
-      //           uid: result.uid,
-      //           displayName: result.displayName,
-      //         };
-      //         this.users.push(newUser);
-      //         this.table.renderRows();
-      //         this.change.emit(this.users);
-      //       }
-      //     });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          console.log("addResource", result);
+          const newResource: DocRef = {
+            id: result.id,
+            name: result.name,
+          };
+          this.resources.push(newResource);
+
+          this.refresh();
+          this.change.emit(this.resources);
+        }
+      });
     }
   }
 

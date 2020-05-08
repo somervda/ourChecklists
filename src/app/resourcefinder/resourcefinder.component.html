@@ -1,1 +1,36 @@
-<p>resourcefinder works!</p>
+<mat-form-field class="full-width">
+  <input
+    matInput
+    (keyup)="onKey($event)"
+    placeholder="Search for Resource"
+    autocomplete="off"
+  />
+</mat-form-field>
+
+<div class="resource-list">
+  <div
+    *ngFor="let resource of resources$ | async"
+    [style.backgroundColor]="
+      resource.id == selectedResource?.id ? 'lightgrey' : 'white'
+    "
+    (click)="onResourceSelected(resource)"
+    [hidden]="isHidden(resource)"
+    [title]="resourceTitle(resource)"
+  >
+    {{ resource.name }}
+  </div>
+</div>
+
+<button
+  mat-button
+  matTooltip="Add Resource"
+  (click)="returnResource()"
+  [disabled]="!selectedResource"
+  class="action-button"
+>
+  <mat-icon>check</mat-icon>Update
+</button>
+
+<button class="action-button" mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>

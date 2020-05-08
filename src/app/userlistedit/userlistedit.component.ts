@@ -51,7 +51,7 @@ export class UserlisteditComponent implements OnInit {
   addUser() {
     if (this.users.length >= 10) {
       this.snackBar.open(
-        "No more users can be added (10 max), remove and existing user before adding another.",
+        "No more users can be added (10 max), remove an existing user before adding another.",
         "",
         {
           duration: 5000,

@@ -168,6 +168,15 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     this.checklistService.fieldUpdate(this.checklist.id, "assignee", assignee);
   }
 
+  onResourcesChange(resources: Resource[]) {
+    console.log("onResourcesChange", resources);
+    this.checklistService.fieldUpdate(
+      this.checklist.id,
+      "resources",
+      resources
+    );
+  }
+
   objectComparisonFunction = function (option, value): boolean {
     // Needed to compare objects in select dropdowns
     // console.log("objectComparisonFunction", option, value);

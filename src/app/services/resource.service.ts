@@ -108,6 +108,28 @@ export class ResourceService {
       );
   }
 
+  findByPartialName(
+    name: string,
+    pageSize: number = 100
+  ): Observable<Resource[]> {
+    console.log("findByPartialName", name, pageSize);
+    return this.afs
+      .collection("resources", (ref) =>
+        ref
+          .where("name", ">=", name)
+          .where("name", "<=", name + "~")
+          .orderBy("name", "asc")
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          console.log(snaps);
+          return convertSnaps<Resource>(snaps);
+        })
+      );
+  }
+
   // getFilterRefs(ref: CollectionReference,name:string) {
   //   let refBuilder = ref as any;
   //   if (name == "") {
