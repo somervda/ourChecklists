@@ -36,6 +36,11 @@ export class CategoryService {
       );
   }
 
+  /**
+   *
+   * @param name
+   * @param pageSize
+   */
   findByPartialName(
     name: string,
     pageSize: number = 100

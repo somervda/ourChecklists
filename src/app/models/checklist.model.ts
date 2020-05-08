@@ -1,6 +1,6 @@
 import { DocRef, UserRef } from "./helper.model";
 
-export class Checklist {
+export interface Checklist {
   id?: string;
   name: string;
   isTemplate: boolean;
