@@ -30,6 +30,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   checklistSubscription$$: Subscription;
   myteams$: Observable<Team[]>;
   categories$: Observable<Category[]>;
+  ChecklistStatus = ChecklistStatus;
 
   constructor(
     private checklistService: ChecklistService,
@@ -44,6 +45,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.waitForCurrentUser();
     console.log(
       "this.route.snapshot.paramMap.get('id')",
       this.route.snapshot.paramMap.get("id")
@@ -202,6 +204,19 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         newCategory
       );
     }
+  }
+
+  async waitForCurrentUser() {
+    let waitMS = 5000;
+    while (!this.auth.currentUser && waitMS > 0) {
+      console.log("Waiting for user to show up!");
+      await this.sleep(200);
+      waitMS -= 200;
+    }
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   ngOnDestroy() {

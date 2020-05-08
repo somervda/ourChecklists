@@ -69,18 +69,19 @@ import { ConfirmdialogComponent } from "./confirmdialog/confirmdialog.component"
 import { RedirectComponent } from "./redirect/redirect.component";
 import { MychecklistsComponent } from "./mychecklists/mychecklists.component";
 import { ChecklistlistComponent } from "./checklistlist/checklistlist.component";
-import { TeamchecklistsComponent } from './teamchecklists/teamchecklists.component';
-import { ChecklistdesignComponent } from './checklistdesign/checklistdesign.component';
-import { ChecklistitemdesignComponent } from './checklistitemdesign/checklistitemdesign.component';
-import { ChecklistitemeditComponent } from './checklistitemedit/checklistitemedit.component';
-import { ChecklisteditComponent } from './checklistedit/checklistedit.component';
-import { ChecklistComponent } from './checklist/checklist.component';
-import { ChecklistitemComponent } from './checklistitem/checklistitem.component';
-import { ResourcelistComponent } from './resourcelist/resourcelist.component';
-import { UserlisteditComponent } from './userlistedit/userlistedit.component';
-import { ResourcelisteditComponent } from './resourcelistedit/resourcelistedit.component';
-import { ResourcefinderComponent } from './resourcefinder/resourcefinder.component';
-import { ResourceviewdialogComponent } from './resourceviewdialog/resourceviewdialog.component';
+import { TeamchecklistsComponent } from "./teamchecklists/teamchecklists.component";
+import { ChecklistdesignComponent } from "./checklistdesign/checklistdesign.component";
+import { ChecklistitemdesignComponent } from "./checklistitemdesign/checklistitemdesign.component";
+import { ChecklistitemeditComponent } from "./checklistitemedit/checklistitemedit.component";
+import { ChecklisteditComponent } from "./checklistedit/checklistedit.component";
+import { ChecklistComponent } from "./checklist/checklist.component";
+import { ChecklistitemComponent } from "./checklistitem/checklistitem.component";
+import { ResourcelistComponent } from "./resourcelist/resourcelist.component";
+import { UserlisteditComponent } from "./userlistedit/userlistedit.component";
+import { ResourcelisteditComponent } from "./resourcelistedit/resourcelistedit.component";
+import { ResourcefinderComponent } from "./resourcefinder/resourcefinder.component";
+import { ResourceviewdialogComponent } from "./resourceviewdialog/resourceviewdialog.component";
+import { ChecklistitemlistComponent } from "./checklistitemlist/checklistitemlist.component";
 
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import { ResourceviewdialogComponent } from './resourceviewdialog/resourceviewdi
     ResourcelisteditComponent,
     ResourcefinderComponent,
     ResourceviewdialogComponent,
+    ChecklistitemlistComponent,
   ],
   imports: [
     BrowserModule,

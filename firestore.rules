@@ -123,5 +123,10 @@ service cloud.firestore {
       allow read:  if isActivated();
       allow write:  if isAdmin() ;
     }
+
+    match /{path=**}/checklists/{cid}/checklistitems/{clid} {
+      allow read:  if isActivated();
+      allow write:  if isAdmin() ;
+    }
   }
 }

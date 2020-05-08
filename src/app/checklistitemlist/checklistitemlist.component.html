@@ -1,0 +1,31 @@
+<button
+  mat-raised-button
+  [routerLink]="'/checklist/' + checklist.id + '/checklistitemedit/create'"
+  style="float: right; margin-bottom: 10px;"
+  [hidden]="hideCreate"
+>
+  <i class="material-icons-outlined">add</i>&nbsp;
+  <span>Create a New Checklist Item</span>
+</button>
+<br />
+
+<table
+  mat-table
+  [dataSource]="checklistitems$ | async"
+  class="mat-elevation-z8"
+>
+  <ng-container matColumnDef="name" sticky>
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let checklistitem">
+      <!-- Depending on checklists status and user's role then different links are shown -->
+      <a
+        [routerLink]="getChecklistitemLinkAction(checklistitem).link"
+        [matTooltip]="getChecklistitemLinkAction(checklistitem).tooltip"
+        >{{ checklistitem.name }}</a
+      >
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

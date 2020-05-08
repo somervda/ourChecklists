@@ -143,6 +143,19 @@
           ></app-resourcelistedit>
         </ng-template>
       </mat-expansion-panel>
+
+      <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header>
+          Checklist Line Items
+        </mat-expansion-panel-header>
+
+        <ng-template matExpansionPanelContent>
+          <app-checklistitemlist
+            [checklist]="checklist"
+            [hideCreate]="checklist.status != ChecklistStatus.UnderConstruction"
+          ></app-checklistitemlist>
+        </ng-template>
+      </mat-expansion-panel>
     </mat-accordion>
 
     <button

@@ -28,7 +28,9 @@ export class UserlisteditComponent implements OnInit {
 
   constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("UserlisteditComponent:", this.users);
+  }
 
   removeUser(uid, displayName) {
     const prompt = `Are you sure you want to remove "${displayName}" user from the list?`;
