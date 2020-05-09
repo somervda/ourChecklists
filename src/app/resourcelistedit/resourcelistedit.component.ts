@@ -46,6 +46,9 @@ export class ResourcelisteditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.resources) {
+      this.resources = [];
+    }
     this.resources$ = this.resourceService.findAllIn(
       this.resources.map((r) => r.id)
     );
@@ -70,7 +73,7 @@ export class ResourcelisteditComponent implements OnInit {
   }
 
   addResource() {
-    if (this.resources.length >= 10) {
+    if (this.resources && this.resources.length >= 10) {
       this.snackBar.open(
         "No more resources can be added (10 max), remove an existing resource before adding another.",
         "",

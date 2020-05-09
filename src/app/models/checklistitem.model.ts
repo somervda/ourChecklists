@@ -10,21 +10,21 @@ export interface Checklistitem {
   dateUpdate?: Date;
   evidence?: string;
   allowNA: boolean;
-  resultValue: ChecklistItemResultValue;
-  resultType: ChecklistItemResultType;
+  resultValue: ChecklistitemResultValue;
+  resultType: ChecklistitemResultType;
   comment?: string;
   resources?: DocRef[];
   tagId?: string;
 }
 
-export enum ChecklistItemResultType {
+export enum ChecklistitemResultType {
   checkbox = 0,
   checkboxNA = 1,
   rating = 2,
   ratingNA = 3,
 }
 
-export enum ChecklistItemResultValue {
+export enum ChecklistitemResultValue {
   NA = -1,
   false = 0,
   true = 1,

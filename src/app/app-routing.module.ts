@@ -66,6 +66,12 @@ const routes: Routes = [
     canActivate: [permissionGuard],
     data: { permissions: ["isAdmin", "isActivated"] },
   },
+  {
+    path: "checklist/:cid/checklistitemdesign/create",
+    component: ChecklistitemdesignComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isActivated"] },
+  },
 
   // Teams
   {

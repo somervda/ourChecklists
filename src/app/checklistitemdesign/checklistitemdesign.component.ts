@@ -1,10 +1,10 @@
 import {
   Checklistitem,
-  ChecklistItemResultValue,
-  ChecklistItemResultType,
+  ChecklistitemResultValue,
+  ChecklistitemResultType,
 } from "./../models/checklistitem.model";
 import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
-import { Crud } from "../models/helper.model";
+import { Crud, DocRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
@@ -14,6 +14,7 @@ import { AuthService } from "../services/auth.service";
 import { Checklist } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
 import { Activity } from "../models/activity.model";
+import { Resource } from "../models/resource.model";
 
 @Component({
   selector: "app-checklistitemdesign",
@@ -31,6 +32,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
 
   checklistitemForm: FormGroup;
   checklistitemSubscription$$: Subscription;
+  ChecklistitemResultType = ChecklistitemResultType;
 
   constructor(
     private checklistitemService: ChecklistitemService,
@@ -67,8 +69,8 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         description: "",
         sequence: 0,
         allowNA: false,
-        resultValue: ChecklistItemResultValue.false,
-        resultType: ChecklistItemResultType.checkbox,
+        resultValue: ChecklistitemResultValue.false,
+        resultType: ChecklistitemResultType.checkbox,
       };
     } else {
       this.checklistitem = this.route.snapshot.data["checklistitem"];
@@ -112,7 +114,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
   }
 
   onCreate() {
-    // console.log("create checklistitem", this.checklistitem);
+    console.log("onCreate", this.checklistitem);
     for (const field in this.checklistitemForm.controls) {
       this.checklistitem[field] = this.checklistitemForm.get(field).value;
     }
@@ -164,8 +166,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
   onFieldUpdate(fieldName: string, toType?: string) {
     if (
       this.checklistitemForm.get(fieldName).valid &&
-      this.checklistitem.id != "" &&
-      this.crudAction != Crud.Delete
+      this.crudAction == Crud.Update
     ) {
       let newValue = this.checklistitemForm.get(fieldName).value;
       this.checklistitemService.fieldUpdate(
@@ -177,27 +178,63 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  onActivitiesChange(activities: Activity[]) {
+  onActivitiesChange(activities: DocRef[]) {
     console.log("onActivitiesChange", activities);
-    this.checklistitemService.fieldUpdate(
-      this.cid,
-      this.clid,
-      "activities",
-      activities
-    );
+    this.checklistitem.activities = activities;
+    if (this.crudAction == Crud.Update) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.clid,
+        "activities",
+        activities
+      );
+    }
   }
 
-  activitiesString(): string {
-    if (this.checklistitem.activities) {
-      let activities = this.checklistitem.activities.reduce(
-        (accumulator, activity, index) => {
-          return (accumulator += (index == 0 ? "" : ", ") + activity.name);
-        },
-        ""
+  onResourcesChange(resources: DocRef[]) {
+    console.log("onResourcesChange", resources);
+    this.checklistitem.resources = resources;
+    if (this.crudAction == Crud.Update) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.clid,
+        "resources",
+        resources
       );
-      return activities;
+    }
+  }
+
+  flatDocRefArray(docRefArray: DocRef[]): string {
+    if (docRefArray) {
+      return docRefArray.reduce((accumulator, docRef, index) => {
+        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
+      }, "");
     }
     return "";
+  }
+
+  updateResultType() {
+    console.log("updateResultType");
+    if (this.crudAction == Crud.Update) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.clid,
+        "resultType",
+        this.checklistitem.resultType
+      );
+    }
+  }
+
+  updateAllowNA() {
+    console.log("updateAllowNA");
+    if (this.crudAction == Crud.Update) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.clid,
+        "allowNA",
+        this.checklistitem.allowNA
+      );
+    }
   }
 
   ngOnDestroy() {

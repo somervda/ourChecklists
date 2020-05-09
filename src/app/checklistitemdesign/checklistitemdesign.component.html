@@ -1,5 +1,5 @@
 <app-subheading
-  [title]="'Checklist Item Design:' + checklistitem.name + ' [Update]'"
+  title="Checklist Item Design"
   *ngIf="crudAction == Crud.Update"
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
@@ -83,7 +83,7 @@
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Activity Tags: {{ activitiesString() }}
+          Activity Tags: {{ flatDocRefArray(checklistitem.activities) }}
         </mat-panel-title>
         <mat-panel-description>
           <mat-icon style="margin-left: auto;">edit</mat-icon>
@@ -99,7 +99,48 @@
         </app-activitylistedit>
       </ng-template>
     </mat-expansion-panel>
-
+    <br />
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Resources: {{ flatDocRefArray(checklistitem.resources) }}
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon style="margin-left: auto;">edit</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <app-resourcelistedit
+          [resources]="checklistitem.resources"
+          (change)="onResourcesChange($event)"
+        ></app-resourcelistedit>
+      </ng-template>
+    </mat-expansion-panel>
+    <br />
+    <mat-card>
+      <h6>Checklist Result Options</h6>
+      <mat-radio-group
+        [(ngModel)]="checklistitem.resultType"
+        [ngModelOptions]="{ standalone: true }"
+        (change)="updateResultType()"
+      >
+        <mat-radio-button [value]="ChecklistitemResultType.checkbox">
+          Checkbox
+        </mat-radio-button>
+        <mat-radio-button [value]="ChecklistitemResultType.rating">
+          Rating
+        </mat-radio-button>
+      </mat-radio-group>
+      <div>
+        <mat-checkbox
+          class="full-width"
+          (change)="updateAllowNA()"
+          [(ngModel)]="checklistitem.allowNA"
+          [ngModelOptions]="{ standalone: true }"
+          >Allow users to enter NA (Not Applicable) as response?</mat-checkbox
+        >
+      </div>
+    </mat-card>
     <button
       mat-raised-button
       color="primary"
