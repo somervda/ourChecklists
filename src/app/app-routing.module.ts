@@ -24,6 +24,8 @@ import { RedirectComponent } from "./redirect/redirect.component";
 import { MychecklistsComponent } from "./mychecklists/mychecklists.component";
 import { ChecklistdesignComponent } from "./checklistdesign/checklistdesign.component";
 import { ChecklistResolver } from "./services/checklist-resolver";
+import { ChecklistitemdesignComponent } from "./checklistitemdesign/checklistitemdesign.component";
+import { ChecklistitemResolver } from "./services/checklistitem-resolver";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -54,6 +56,13 @@ const routes: Routes = [
     path: "checklistdesign/:id",
     component: ChecklistdesignComponent,
     resolve: { checklist: ChecklistResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isActivated"] },
+  },
+  {
+    path: "checklist/:cid/checklistitemdesign/:clid",
+    component: ChecklistitemdesignComponent,
+    resolve: { checklistitem: ChecklistitemResolver },
     canActivate: [permissionGuard],
     data: { permissions: ["isAdmin", "isActivated"] },
   },
