@@ -3,21 +3,21 @@
   *ngIf="crudAction == Crud.Update"
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
-  matIcon="checklistitem"
+  matIcon="check_box"
 ></app-subheading>
 <app-subheading
   title="Create New Checklist Item"
   *ngIf="crudAction == Crud.Create"
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
-  matIcon="checklistitem"
+  matIcon="check_box"
 ></app-subheading>
 <app-subheading
   [title]="'Checklist Item Design:' + checklistitem.name + ' [Delete]'"
   *ngIf="crudAction == Crud.Delete"
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
-  matIcon="checklistitem"
+  matIcon="check_box"
 ></app-subheading>
 <div class="page-container">
   <form class="standard-form" [formGroup]="checklistitemForm">
@@ -80,10 +80,25 @@
       </mat-form-field>
     </fieldset>
 
-    <app-categoryactivitylist
-      [categoryId]="checklistitem.id"
-      *ngIf="crudAction == Crud.Update"
-    ></app-categoryactivitylist>
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Activity Tags: {{ activitiesString() }}
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-icon style="margin-left: auto;">edit</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <app-activitylistedit
+          [activities]="checklistitem.activities"
+          [categoryRef]="(checklist$ | async).category"
+          (change)="onActivitiesChange($event)"
+        >
+        </app-activitylistedit>
+      </ng-template>
+    </mat-expansion-panel>
 
     <button
       mat-raised-button

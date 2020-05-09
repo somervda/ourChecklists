@@ -6,11 +6,14 @@ import {
 import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
 import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
+import { Checklist } from "../models/checklist.model";
+import { ChecklistService } from "../services/checklist.service";
+import { Activity } from "../models/activity.model";
 
 @Component({
   selector: "app-checklistitemdesign",
@@ -19,6 +22,7 @@ import { AuthService } from "../services/auth.service";
 })
 export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
   checklistitem: Checklistitem;
+  checklist$: Observable<Checklist>;
   cid: string;
   clid: string;
   crudAction: Crud;
@@ -35,15 +39,17 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private checklistService: ChecklistService
   ) {}
 
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get("cid");
+    this.checklist$ = this.checklistService.findById(this.cid);
 
     console.log(
-      "this.route.snapshot.paramMap.get('cid')",
-      this.route.snapshot.paramMap.get("cid"),
+      "ChecklistitemdesignComponent",
+      this.cid,
       this.route.snapshot.paramMap.get("clid")
     );
     this.crudAction = Crud.Update;
@@ -169,6 +175,29 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         newValue
       );
     }
+  }
+
+  onActivitiesChange(activities: Activity[]) {
+    console.log("onActivitiesChange", activities);
+    this.checklistitemService.fieldUpdate(
+      this.cid,
+      this.clid,
+      "activities",
+      activities
+    );
+  }
+
+  activitiesString(): string {
+    if (this.checklistitem.activities) {
+      let activities = this.checklistitem.activities.reduce(
+        (accumulator, activity, index) => {
+          return (accumulator += (index == 0 ? "" : ", ") + activity.name);
+        },
+        ""
+      );
+      return activities;
+    }
+    return "";
   }
 
   ngOnDestroy() {

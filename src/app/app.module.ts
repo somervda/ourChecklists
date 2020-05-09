@@ -82,6 +82,8 @@ import { ResourcelisteditComponent } from "./resourcelistedit/resourcelistedit.c
 import { ResourcefinderComponent } from "./resourcefinder/resourcefinder.component";
 import { ResourceviewdialogComponent } from "./resourceviewdialog/resourceviewdialog.component";
 import { ChecklistitemlistComponent } from "./checklistitemlist/checklistitemlist.component";
+import { ActivitylisteditComponent } from './activitylistedit/activitylistedit.component';
+import { ActivityfinderdialogComponent } from './activityfinderdialog/activityfinderdialog.component';
 
 @NgModule({
   declarations: [
@@ -128,6 +130,8 @@ import { ChecklistitemlistComponent } from "./checklistitemlist/checklistitemlis
     ResourcefinderComponent,
     ResourceviewdialogComponent,
     ChecklistitemlistComponent,
+    ActivitylisteditComponent,
+    ActivityfinderdialogComponent,
   ],
   imports: [
     BrowserModule,
