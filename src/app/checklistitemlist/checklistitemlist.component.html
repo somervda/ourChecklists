@@ -26,6 +26,25 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell class="deleteRow" *matCellDef="let checklistitem">
+      <button
+        mat-button
+        [routerLink]="
+          '/checklist/' +
+          checklist.id +
+          '/checklistitemdesign/' +
+          checklistitem.id +
+          '/delete'
+        "
+        matTooltip="Delete Checklist Item"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

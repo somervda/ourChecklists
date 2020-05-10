@@ -13,7 +13,7 @@
   matIcon="check_box"
 ></app-subheading>
 <app-subheading
-  [title]="'Checklist Item Design:' + checklistitem.name + ' [Delete]'"
+  [title]="'Delete Checklist Item'"
   *ngIf="crudAction == Crud.Delete"
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
@@ -80,7 +80,7 @@
       </mat-form-field>
     </fieldset>
 
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Activity Tags: {{ flatDocRefArray(checklistitem.activities) }}
@@ -100,7 +100,7 @@
       </ng-template>
     </mat-expansion-panel>
     <br />
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Resources: {{ flatDocRefArray(checklistitem.resources) }}
@@ -123,6 +123,7 @@
         [(ngModel)]="checklistitem.resultType"
         [ngModelOptions]="{ standalone: true }"
         (change)="updateResultType()"
+        [disabled]="crudAction == Crud.Delete"
       >
         <mat-radio-button [value]="ChecklistitemResultType.checkbox">
           Checkbox
@@ -137,10 +138,12 @@
           (change)="updateAllowNA()"
           [(ngModel)]="checklistitem.allowNA"
           [ngModelOptions]="{ standalone: true }"
+          [disabled]="crudAction == Crud.Delete"
           >Allow users to enter NA (Not Applicable) as response?</mat-checkbox
         >
       </div>
     </mat-card>
+    <br />
     <button
       mat-raised-button
       color="primary"

@@ -12,7 +12,7 @@ import { ChecklistitemService } from "../services/checklistitem.service";
 export class ChecklistitemlistComponent implements OnInit {
   @Input() checklist: Checklist;
   @Input() hideCreate: boolean;
-  displayedColumns: string[] = ["name"];
+  displayedColumns: string[] = ["name", "id"];
   ChecklistStatus = ChecklistStatus;
   checklistitems$: Observable<Checklistitem[]>;
 

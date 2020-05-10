@@ -55,11 +55,15 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
       this.route.snapshot.paramMap.get("clid")
     );
     this.crudAction = Crud.Update;
+    console.log("route path", this.route.routeConfig.path);
     if (
-      this.route.routeConfig.path == "checklist/:cid/checklistitem/delete/:clid"
+      this.route.routeConfig.path ==
+      "checklist/:cid/checklistitemdesign/:clid/delete"
     )
       this.crudAction = Crud.Delete;
-    if (this.route.routeConfig.path == "checklist/:cid/checklistitem/create")
+    if (
+      this.route.routeConfig.path == "checklist/:cid/checklistitemdesign/create"
+    )
       this.crudAction = Crud.Create;
 
     // console.log("category onInit", this.crudAction);
