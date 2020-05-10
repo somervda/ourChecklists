@@ -73,6 +73,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         description: "",
         sequence: 0,
         allowNA: false,
+        requireEvidence: false,
         resultValue: ChecklistitemResultValue.false,
         resultType: ChecklistitemResultType.checkbox,
       };
@@ -214,7 +215,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
       }, "");
     }
-    return "";
+    return "None";
   }
 
   updateResultType() {
@@ -237,6 +238,18 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         this.clid,
         "allowNA",
         this.checklistitem.allowNA
+      );
+    }
+  }
+
+  updateRequireEvidence() {
+    console.log("updateRequireEvidence");
+    if (this.crudAction == Crud.Update) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.clid,
+        "requireEvidence",
+        this.checklistitem.requireEvidence
       );
     }
   }

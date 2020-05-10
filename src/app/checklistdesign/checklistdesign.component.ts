@@ -190,6 +190,21 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
+  userRefToDocRef(userRef: UserRef[]): DocRef[] {
+    return userRef.map((a) => {
+      return { id: a.uid, name: a.displayName };
+    });
+  }
+
+  getFlatDocRefArray(docRefArray: DocRef[]): string {
+    if (docRefArray) {
+      return docRefArray.reduce((accumulator, docRef, index) => {
+        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
+      }, "");
+    }
+    return "None";
+  }
+
   objectComparisonFunction = function (option, value): boolean {
     // Needed to compare objects in select dropdowns
     // console.log("objectComparisonFunction", option, value);

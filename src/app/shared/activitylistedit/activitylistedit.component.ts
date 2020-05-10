@@ -48,6 +48,7 @@ export class ActivitylisteditComponent implements OnInit {
 
   removeActivity(activity: Activity) {
     const prompt = `Are you sure you want to remove "${activity.name}" activity from the list?`;
+
     const dialogRef = this.dialog.open(ConfirmdialogComponent, {
       width: "300px",
       data: { heading: "Confirm", prompt: prompt },

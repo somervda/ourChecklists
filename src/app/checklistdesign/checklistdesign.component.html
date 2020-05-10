@@ -117,9 +117,11 @@
       </div> -->
     </fieldset>
 
-    <mat-expansion-panel [disabled]="crudAction == Crud.Delete">
+    <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
-        Assignees
+        Assignees:
+        {{ getFlatDocRefArray(userRefToDocRef(checklist.assignee)) }}
+        <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
@@ -130,9 +132,10 @@
       </ng-template>
     </mat-expansion-panel>
     <br />
-    <mat-expansion-panel [disabled]="crudAction == Crud.Delete">
+    <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
-        Resources
+        Resources: {{ getFlatDocRefArray(checklist.resources) }}
+        <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
@@ -148,9 +151,11 @@
       [expanded]="crudAction == Crud.Update"
       [disabled]="crudAction == Crud.Delete"
       [hidden]="crudAction == Crud.Create"
+      hideToggle
     >
       <mat-expansion-panel-header>
         Checklist Items
+        <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>

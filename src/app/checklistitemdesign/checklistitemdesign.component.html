@@ -142,6 +142,16 @@
           >Allow users to enter NA (Not Applicable) as response?</mat-checkbox
         >
       </div>
+      <div>
+        <mat-checkbox
+          class="full-width"
+          (change)="updateRequireEvidence()"
+          [(ngModel)]="checklistitem.requireEvidence"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="crudAction == Crud.Delete"
+          >User must provide evidence?</mat-checkbox
+        >
+      </div>
     </mat-card>
     <br />
     <button

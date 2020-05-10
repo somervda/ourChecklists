@@ -10,6 +10,7 @@ export interface Checklistitem {
   dateUpdate?: Date;
   evidence?: string;
   allowNA: boolean;
+  requireEvidence: boolean;
   resultValue: ChecklistitemResultValue;
   resultType: ChecklistitemResultType;
   comment?: string;

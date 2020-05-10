@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
 import { Team } from "../models/team.model";
-import { Crud } from "../models/helper.model";
+import { Crud, UserRef, DocRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { TeamService } from "../services/team.service";
