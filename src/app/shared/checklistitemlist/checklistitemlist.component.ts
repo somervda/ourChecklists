@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Checklist, ChecklistStatus } from "../models/checklist.model";
-import { Checklistitem } from "../models/checklistitem.model";
+import { Checklist, ChecklistStatus } from "../../models/checklist.model";
+import { Checklistitem } from "../../models/checklistitem.model";
 import { Observable } from "rxjs";
-import { ChecklistitemService } from "../services/checklistitem.service";
+import { ChecklistitemService } from "../../services/checklistitem.service";
 
 @Component({
   selector: "app-checklistitemlist",

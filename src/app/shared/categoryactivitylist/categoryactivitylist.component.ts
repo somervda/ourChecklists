@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, NgZone } from "@angular/core";
 import { Observable } from "rxjs";
-import { Activity } from "../models/activity.model";
+import { Activity } from "../../models/activity.model";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivityService } from "../services/activity.service";
+import { ActivityService } from "../../services/activity.service";
 import { Router } from "@angular/router";
 
 @Component({

@@ -6,7 +6,7 @@ import {
   ResourceType,
   ResourceStatus,
   ResourceTypeInfoItem,
-} from "../models/resource.model";
+} from "../../models/resource.model";
 
 @Component({
   selector: "app-resourcelist",

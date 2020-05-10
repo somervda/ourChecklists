@@ -7,10 +7,10 @@ import {
   EventEmitter,
 } from "@angular/core";
 import { MatTable } from "@angular/material/table";
-import { DocRef } from "../models/helper.model";
+import { DocRef } from "../../models/helper.model";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
+import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialog.component";
 import { Observable } from "rxjs";
 import {
   Resource,
@@ -18,10 +18,10 @@ import {
   ResourceStatus,
   ResourceType,
   ResourceTypeInfoItem,
-} from "../models/resource.model";
-import { ResourceService } from "../services/resource.service";
-import { ResourcefinderComponent } from "../dialogs/resourcefinder/resourcefinder.component";
-import { ResourceviewdialogComponent } from "../dialogs/resourceviewdialog/resourceviewdialog.component";
+} from "../../models/resource.model";
+import { ResourceService } from "../../services/resource.service";
+import { ResourcefinderComponent } from "../../dialogs/resourcefinder/resourcefinder.component";
+import { ResourceviewdialogComponent } from "../../dialogs/resourceviewdialog/resourceviewdialog.component";
 
 @Component({
   selector: "app-resourcelistedit",

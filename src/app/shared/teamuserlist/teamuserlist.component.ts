@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Observable } from "rxjs";
-import { UserService } from "../services/user.service";
-import { User } from "../models/user.model";
+import { UserService } from "../../services/user.service";
+import { User } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
-import { TeamuserremoveComponent } from "../dialogs/teamuserremove/teamuserremove.component";
-import { TeamuseraddComponent } from "../dialogs/teamuseradd/teamuseradd.component";
+import { TeamuserremoveComponent } from "../../dialogs/teamuserremove/teamuserremove.component";
+import { TeamuseraddComponent } from "../../dialogs/teamuseradd/teamuseradd.component";
 
 @Component({
   selector: "app-teamuserlist",

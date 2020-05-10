@@ -5,8 +5,8 @@ import {
   ChecklistStatusInfo,
   ChecklistStatus,
   ChecklistStatusInfoItem,
-} from "../models/checklist.model";
-import { AuthService } from "../services/auth.service";
+} from "../../models/checklist.model";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-checklistlist",

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { UserService } from "../services/user.service";
+import { UserService } from "../../services/user.service";
 import { Observable } from "rxjs";
-import { User } from "../models/user.model";
+import { User } from "../../models/user.model";
 
 @Component({
   selector: "app-userfinder",
