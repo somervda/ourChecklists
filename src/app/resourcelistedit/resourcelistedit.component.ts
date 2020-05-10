@@ -10,7 +10,7 @@ import { MatTable } from "@angular/material/table";
 import { DocRef } from "../models/helper.model";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ConfirmdialogComponent } from "../confirmdialog/confirmdialog.component";
+import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
 import { Observable } from "rxjs";
 import {
   Resource,
@@ -20,8 +20,8 @@ import {
   ResourceTypeInfoItem,
 } from "../models/resource.model";
 import { ResourceService } from "../services/resource.service";
-import { ResourcefinderComponent } from "../resourcefinder/resourcefinder.component";
-import { ResourceviewdialogComponent } from "../resourceviewdialog/resourceviewdialog.component";
+import { ResourcefinderComponent } from "../dialogs/resourcefinder/resourcefinder.component";
+import { ResourceviewdialogComponent } from "../dialogs/resourceviewdialog/resourceviewdialog.component";
 
 @Component({
   selector: "app-resourcelistedit",

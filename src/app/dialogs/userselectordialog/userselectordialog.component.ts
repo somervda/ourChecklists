@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { UserService } from "../services/user.service";
-import { User } from "../models/user.model";
+import { UserService } from "../../services/user.service";
+import { User } from "../../models/user.model";
 
 @Component({
   selector: "app-userselectordialog",

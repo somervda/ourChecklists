@@ -51,8 +51,8 @@ import { TeamsComponent } from "./teams/teams.component";
 import { SubheadingComponent } from "./subheading/subheading.component";
 import { TeamComponent } from "./team/team.component";
 import { TeamuserlistComponent } from "./teamuserlist/teamuserlist.component";
-import { TeamuserremoveComponent } from "./teamuserremove/teamuserremove.component";
-import { TeamuseraddComponent } from "./teamuseradd/teamuseradd.component";
+import { TeamuserremoveComponent } from "./dialogs/teamuserremove/teamuserremove.component";
+import { TeamuseraddComponent } from "./dialogs/teamuseradd/teamuseradd.component";
 import { UserfinderComponent } from "./userfinder/userfinder.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryComponent } from "./category/category.component";
@@ -62,10 +62,10 @@ import { ResourcesComponent } from "./resources/resources.component";
 import { ResourceComponent } from "./resource/resource.component";
 import { MarkedPipe } from "./marked.pipe";
 import { YoutubeviewerComponent } from "./youtubeviewer/youtubeviewer.component";
-import { UserselectordialogComponent } from "./userselectordialog/userselectordialog.component";
-import { TeamselectordialogComponent } from "./teamselectordialog/teamselectordialog.component";
-import { CategoryselectordialogComponent } from "./categoryselectordialog/categoryselectordialog.component";
-import { ConfirmdialogComponent } from "./confirmdialog/confirmdialog.component";
+import { UserselectordialogComponent } from "./dialogs/userselectordialog/userselectordialog.component";
+import { TeamselectordialogComponent } from "./dialogs/teamselectordialog/teamselectordialog.component";
+import { CategoryselectordialogComponent } from "./dialogs/categoryselectordialog/categoryselectordialog.component";
+import { ConfirmdialogComponent } from "./dialogs/confirmdialog/confirmdialog.component";
 import { RedirectComponent } from "./redirect/redirect.component";
 import { MychecklistsComponent } from "./mychecklists/mychecklists.component";
 import { ChecklistlistComponent } from "./checklistlist/checklistlist.component";
@@ -79,11 +79,11 @@ import { ChecklistitemComponent } from "./checklistitem/checklistitem.component"
 import { ResourcelistComponent } from "./resourcelist/resourcelist.component";
 import { UserlisteditComponent } from "./userlistedit/userlistedit.component";
 import { ResourcelisteditComponent } from "./resourcelistedit/resourcelistedit.component";
-import { ResourcefinderComponent } from "./resourcefinder/resourcefinder.component";
-import { ResourceviewdialogComponent } from "./resourceviewdialog/resourceviewdialog.component";
+import { ResourcefinderComponent } from "./dialogs/resourcefinder/resourcefinder.component";
+import { ResourceviewdialogComponent } from "./dialogs/resourceviewdialog/resourceviewdialog.component";
 import { ChecklistitemlistComponent } from "./checklistitemlist/checklistitemlist.component";
-import { ActivitylisteditComponent } from './activitylistedit/activitylistedit.component';
-import { ActivityfinderdialogComponent } from './activityfinderdialog/activityfinderdialog.component';
+import { ActivitylisteditComponent } from "./activitylistedit/activitylistedit.component";
+import { ActivityfinderdialogComponent } from "./dialogs/activityfinderdialog/activityfinderdialog.component";
 
 @NgModule({
   declarations: [

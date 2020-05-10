@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, Inject } from "@angular/core";
-import { ResourceService } from "../services/resource.service";
+import { ResourceService } from "../../services/resource.service";
 import { Observable } from "rxjs";
-import { Resource, ResourceStatus } from "../models/resource.model";
+import { Resource, ResourceStatus } from "../../models/resource.model";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({

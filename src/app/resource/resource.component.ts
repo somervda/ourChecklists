@@ -15,11 +15,11 @@ import { AuthService } from "../services/auth.service";
 import { Subscription, Observable, timer } from "rxjs";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { MatDialog } from "@angular/material/dialog";
-import { UserselectordialogComponent } from "../userselectordialog/userselectordialog.component";
-import { TeamselectordialogComponent } from "../teamselectordialog/teamselectordialog.component";
-import { CategoryselectordialogComponent } from "../categoryselectordialog/categoryselectordialog.component";
+import { UserselectordialogComponent } from "../dialogs/userselectordialog/userselectordialog.component";
+import { TeamselectordialogComponent } from "../dialogs/teamselectordialog/teamselectordialog.component";
+import { CategoryselectordialogComponent } from "../dialogs/categoryselectordialog/categoryselectordialog.component";
 import { HighContrastMode } from "@angular/cdk/a11y";
-import { ConfirmdialogComponent } from "../confirmdialog/confirmdialog.component";
+import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
 import { applySourceSpanToExpressionIfNeeded } from "@angular/compiler/src/output/output_ast";
 
 @Component({

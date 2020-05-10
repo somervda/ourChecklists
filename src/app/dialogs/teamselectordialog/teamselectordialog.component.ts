@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import { Team } from "../models/team.model";
+import { Team } from "../../models/team.model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { TeamService } from "../services/team.service";
+import { TeamService } from "../../services/team.service";
 import { Observable } from "rxjs";
 
 @Component({

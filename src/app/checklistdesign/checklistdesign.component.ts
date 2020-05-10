@@ -1,7 +1,7 @@
 import { OnDestroy, NgZone } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
-import { Crud } from "../models/helper.model";
+import { Crud, DocRef, UserRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistService } from "../services/checklist.service";
@@ -59,7 +59,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     this.crudAction = Crud.Update;
     // if (this.route.routeConfig.path == "category/delete/:id")
     //   this.crudAction = Crud.Delete;
-    if (this.route.routeConfig.path == "category/create")
+    if (this.route.routeConfig.path == "checklistdesign/create")
       this.crudAction = Crud.Create;
 
     // console.log("category onInit", this.crudAction);
@@ -157,26 +157,37 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   onFieldUpdate(fieldName: string, toType?: string) {
     if (
       this.checklistForm.get(fieldName).valid &&
-      this.checklist.id != "" &&
-      this.crudAction != Crud.Delete
+      this.crudAction == Crud.Update
     ) {
       let newValue = this.checklistForm.get(fieldName).value;
       this.checklistService.fieldUpdate(this.checklist.id, fieldName, newValue);
     }
   }
 
-  onAssigneeChange(assignee) {
+  onAssigneeChange(assignee: UserRef[]) {
     console.log("onAssigneeChange", assignee);
-    this.checklistService.fieldUpdate(this.checklist.id, "assignee", assignee);
+    this.checklist.assignee = assignee;
+    if (this.crudAction == Crud.Update) {
+      this.checklistService.fieldUpdate(
+        this.checklist.id,
+        "assignee",
+        this.checklist.assignee
+      );
+    }
   }
 
   onResourcesChange(resources: Resource[]) {
     console.log("onResourcesChange", resources);
-    this.checklistService.fieldUpdate(
-      this.checklist.id,
-      "resources",
-      resources
-    );
+    this.checklist.resources = resources.map((r) => {
+      return { id: r.id, name: r.name };
+    });
+    if (this.crudAction == Crud.Update) {
+      this.checklistService.fieldUpdate(
+        this.checklist.id,
+        "resources",
+        this.checklist.resources
+      );
+    }
   }
 
   objectComparisonFunction = function (option, value): boolean {
@@ -185,23 +196,27 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     return option.id === value.id;
   };
 
-  onTeamChange(event) {
+  onTeamChange(teamRef: DocRef) {
     console.log("onTeamChange: ", event);
-    const newTeam = event.value;
+    this.checklist.team = teamRef;
     // console.log("onTeamChange form:", this.checklistForm);
     if (this.crudAction == Crud.Update) {
-      this.checklistService.fieldUpdate(this.checklist.id, "team", newTeam);
+      this.checklistService.fieldUpdate(
+        this.checklist.id,
+        "team",
+        this.checklist.team
+      );
     }
   }
 
-  onCategoryChange(event) {
+  onCategoryChange(categoryRef: DocRef) {
     console.log("onCategoryChange: ", event);
-    const newCategory = event.value;
+    this.checklist.category = categoryRef;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
         this.checklist.id,
         "category",
-        newCategory
+        this.checklist.category
       );
     }
   }

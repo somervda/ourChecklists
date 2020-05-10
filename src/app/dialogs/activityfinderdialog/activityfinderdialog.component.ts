@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import { ActivityService } from "../services/activity.service";
+import { ActivityService } from "../../services/activity.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
-import { Activity } from "../models/activity.model";
-import { DocRef } from "../models/helper.model";
+import { Activity } from "../../models/activity.model";
+import { DocRef } from "../../models/helper.model";
 
 @Component({
   selector: "app-activityfinderdialog",

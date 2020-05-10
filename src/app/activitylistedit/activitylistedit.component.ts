@@ -11,9 +11,9 @@ import { MatTable } from "@angular/material/table";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivityService } from "../services/activity.service";
-import { ConfirmdialogComponent } from "../confirmdialog/confirmdialog.component";
+import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
 import { Activity } from "../models/activity.model";
-import { ActivityfinderdialogComponent } from "../activityfinderdialog/activityfinderdialog.component";
+import { ActivityfinderdialogComponent } from "../dialogs/activityfinderdialog/activityfinderdialog.component";
 
 @Component({
   selector: "app-activitylistedit",

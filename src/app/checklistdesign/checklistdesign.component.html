@@ -1,10 +1,10 @@
 <app-subheading
-  [title]="'Checklists Design: ' + checklist.name + ' [Update]'"
+  title="Checklists Design"
   *ngIf="crudAction == Crud.Update"
   matIcon="build"
 ></app-subheading>
 <app-subheading
-  title="Checklist Design"
+  title="Create a new Checklist"
   *ngIf="crudAction == Crud.Create"
   matIcon="build"
 ></app-subheading>
@@ -117,47 +117,51 @@
       </div> -->
     </fieldset>
 
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          Assignees
-        </mat-expansion-panel-header>
+    <mat-expansion-panel [disabled]="crudAction == Crud.Delete">
+      <mat-expansion-panel-header>
+        Assignees
+      </mat-expansion-panel-header>
 
-        <ng-template matExpansionPanelContent>
-          <app-userlistedit
-            [users]="checklist.assignee"
-            (change)="onAssigneeChange($event)"
-          ></app-userlistedit>
-        </ng-template>
-      </mat-expansion-panel>
+      <ng-template matExpansionPanelContent>
+        <app-userlistedit
+          [users]="checklist.assignee"
+          (change)="onAssigneeChange($event)"
+        ></app-userlistedit>
+      </ng-template>
+    </mat-expansion-panel>
+    <br />
+    <mat-expansion-panel [disabled]="crudAction == Crud.Delete">
+      <mat-expansion-panel-header>
+        Resources
+      </mat-expansion-panel-header>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          Resources
-        </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <app-resourcelistedit
+          [resources]="checklist.resources"
+          (change)="onResourcesChange($event)"
+        ></app-resourcelistedit>
+      </ng-template>
+    </mat-expansion-panel>
+    <br />
 
-        <ng-template matExpansionPanelContent>
-          <app-resourcelistedit
-            [resources]="checklist.resources"
-            (change)="onResourcesChange($event)"
-          ></app-resourcelistedit>
-        </ng-template>
-      </mat-expansion-panel>
+    <mat-expansion-panel
+      [expanded]="crudAction == Crud.Update"
+      [disabled]="crudAction == Crud.Delete"
+      [hidden]="crudAction == Crud.Create"
+    >
+      <mat-expansion-panel-header>
+        Checklist Items
+      </mat-expansion-panel-header>
 
-      <mat-expansion-panel expanded="true">
-        <mat-expansion-panel-header>
-          Checklist Line Items
-        </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <app-checklistitemlist
+          [checklist]="checklist"
+          [hideCreate]="checklist.status != ChecklistStatus.UnderConstruction"
+        ></app-checklistitemlist>
+      </ng-template>
+    </mat-expansion-panel>
 
-        <ng-template matExpansionPanelContent>
-          <app-checklistitemlist
-            [checklist]="checklist"
-            [hideCreate]="checklist.status != ChecklistStatus.UnderConstruction"
-          ></app-checklistitemlist>
-        </ng-template>
-      </mat-expansion-panel>
-    </mat-accordion>
-
+    <br />
     <button
       mat-raised-button
       color="primary"

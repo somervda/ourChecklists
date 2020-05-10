@@ -7,8 +7,8 @@ import {
   EventEmitter,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ConfirmdialogComponent } from "../confirmdialog/confirmdialog.component";
-import { UserselectordialogComponent } from "../userselectordialog/userselectordialog.component";
+import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
+import { UserselectordialogComponent } from "../dialogs/userselectordialog/userselectordialog.component";
 import { UserRef } from "../models/helper.model";
 import { MatTable } from "@angular/material/table";
 import { MatSnackBar } from "@angular/material/snack-bar";

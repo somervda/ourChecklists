@@ -43,17 +43,20 @@ export class ResourceService {
 
   findAllIn(resources: string[]): Observable<Resource[]> {
     console.log("resource findAllIn", resources);
-    return this.afs
-      .collection("resources", (ref) =>
-        ref.where(firebase.firestore.FieldPath.documentId(), "in", resources)
-      )
-      .snapshotChanges()
-      .pipe(
-        map((snaps) => {
-          // console.log("findDevices", convertSnaps<Device>(snaps));
-          return convertSnaps<Resource>(snaps);
-        })
-      );
+    if (resources && resources.length > 0) {
+      return this.afs
+        .collection("resources", (ref) =>
+          ref.where(firebase.firestore.FieldPath.documentId(), "in", resources)
+        )
+        .snapshotChanges()
+        .pipe(
+          map((snaps) => {
+            // console.log("findDevices", convertSnaps<Device>(snaps));
+            return convertSnaps<Resource>(snaps);
+          })
+        );
+    }
+    return null;
   }
 
   findAllFiltered(

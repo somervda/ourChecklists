@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Resource, ResourceType } from "../models/resource.model";
+import { Resource, ResourceType } from "../../models/resource.model";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 
