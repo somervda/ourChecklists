@@ -1,1 +1,28 @@
-<p>checklistedit works!</p>
+<app-subheading title="Checklist" matIcon="check_box"></app-subheading>
+
+<div class="page-container colgrid2">
+  <div>
+    <span class="prompt">Name</span>
+    {{ checklist.name }}
+  </div>
+
+  <div class="prompt">Description</div>
+  <div>{{ checklist.description }}</div>
+  <div>
+    <span class="prompt">Status</span>
+    {{ getChecklistStatusInfoItem(checklist.status).name }}
+  </div>
+  <div class="prompt">Resources</div>
+  <div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        {{ getFlatDocRefArray(checklist.resources) }}
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <app-resourcelist [resources$]="resources$"></app-resourcelist>
+      </ng-template>
+    </mat-expansion-panel>
+  </div>
+  <div><span class="prompt">Team</span>{{ checklist.team.name }}</div>
+  <div><span class="prompt">Category</span>{{ checklist.category.name }}</div>
+</div>
