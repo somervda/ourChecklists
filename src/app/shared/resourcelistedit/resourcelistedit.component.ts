@@ -20,7 +20,7 @@ import {
   ResourceTypeInfoItem,
 } from "../../models/resource.model";
 import { ResourceService } from "../../services/resource.service";
-import { ResourcefinderComponent } from "../../dialogs/resourcefinder/resourcefinder.component";
+import { ResourcefinderdialogComponent } from "../../dialogs/resourcefinderdialog/resourcefinderdialog.component";
 import { ResourceviewdialogComponent } from "../../dialogs/resourceviewdialog/resourceviewdialog.component";
 
 @Component({
@@ -82,7 +82,7 @@ export class ResourcelisteditComponent implements OnInit {
         }
       );
     } else {
-      const dialogRef = this.dialog.open(ResourcefinderComponent, {
+      const dialogRef = this.dialog.open(ResourcefinderdialogComponent, {
         width: "380px",
         data: { idHide: this.resources.map((r) => r.id) },
       });

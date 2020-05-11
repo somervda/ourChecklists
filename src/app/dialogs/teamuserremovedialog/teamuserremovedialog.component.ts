@@ -3,15 +3,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserService } from "../../services/user.service";
 
 @Component({
-  selector: "app-teamuserremove",
-  templateUrl: "./teamuserremove.component.html",
-  styleUrls: ["./teamuserremove.component.scss"],
+  selector: "app-teamuserremovedialog",
+  templateUrl: "./teamuserremovedialog.component.html",
+  styleUrls: ["./teamuserremovedialog.component.scss"],
 })
-export class TeamuserremoveComponent implements OnInit {
+export class TeamuserremovedialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
-    private dialogRef: MatDialogRef<TeamuserremoveComponent>
+    private dialogRef: MatDialogRef<TeamuserremovedialogComponent>
   ) {}
 
   ngOnInit(): void {}

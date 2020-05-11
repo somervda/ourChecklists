@@ -51,8 +51,8 @@ import { TeamsComponent } from "./teams/teams.component";
 import { SubheadingComponent } from "./shared/subheading/subheading.component";
 import { TeamComponent } from "./team/team.component";
 import { TeamuserlistComponent } from "./shared/teamuserlist/teamuserlist.component";
-import { TeamuserremoveComponent } from "./dialogs/teamuserremove/teamuserremove.component";
-import { TeamuseraddComponent } from "./dialogs/teamuseradd/teamuseradd.component";
+import { TeamuserremovedialogComponent } from "./dialogs/teamuserremovedialog/teamuserremovedialog.component";
+import { TeamuseradddialogComponent } from "./dialogs/teamuseradddialog/teamuseradddialog.component";
 import { UserfinderComponent } from "./shared/userfinder/userfinder.component";
 import { CategoriesComponent } from "./categories/categories.component";
 import { CategoryComponent } from "./category/category.component";
@@ -79,7 +79,7 @@ import { ChecklistitemComponent } from "./checklistitem/checklistitem.component"
 import { ResourcelistComponent } from "./shared/resourcelist/resourcelist.component";
 import { UserlisteditComponent } from "./shared/userlistedit/userlistedit.component";
 import { ResourcelisteditComponent } from "./shared/resourcelistedit/resourcelistedit.component";
-import { ResourcefinderComponent } from "./dialogs/resourcefinder/resourcefinder.component";
+import { ResourcefinderdialogComponent } from "./dialogs/resourcefinderdialog/resourcefinderdialog.component";
 import { ResourceviewdialogComponent } from "./dialogs/resourceviewdialog/resourceviewdialog.component";
 import { ChecklistitemlistComponent } from "./shared/checklistitemlist/checklistitemlist.component";
 import { ActivitylisteditComponent } from "./shared/activitylistedit/activitylistedit.component";
@@ -99,8 +99,8 @@ import { ActivityfinderdialogComponent } from "./dialogs/activityfinderdialog/ac
     SubheadingComponent,
     TeamuserlistComponent,
     TeamComponent,
-    TeamuserremoveComponent,
-    TeamuseraddComponent,
+    TeamuserremovedialogComponent,
+    TeamuseradddialogComponent,
     UserfinderComponent,
     CategoriesComponent,
     CategoryComponent,
@@ -127,7 +127,7 @@ import { ActivityfinderdialogComponent } from "./dialogs/activityfinderdialog/ac
     ResourcelistComponent,
     UserlisteditComponent,
     ResourcelisteditComponent,
-    ResourcefinderComponent,
+    ResourcefinderdialogComponent,
     ResourceviewdialogComponent,
     ChecklistitemlistComponent,
     ActivitylisteditComponent,

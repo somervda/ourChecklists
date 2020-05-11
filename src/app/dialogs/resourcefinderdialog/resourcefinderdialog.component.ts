@@ -5,14 +5,14 @@ import { Resource, ResourceStatus } from "../../models/resource.model";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
-  selector: "app-resourcefinder",
-  templateUrl: "./resourcefinder.component.html",
-  styleUrls: ["./resourcefinder.component.scss"],
+  selector: "app-resourcefinderdialog",
+  templateUrl: "./resourcefinderdialog.component.html",
+  styleUrls: ["./resourcefinderdialog.component.scss"],
 })
-export class ResourcefinderComponent implements OnInit {
+export class ResourcefinderdialogComponent implements OnInit {
   constructor(
     private resourceService: ResourceService,
-    private dialogRef: MatDialogRef<ResourcefinderComponent>,
+    private dialogRef: MatDialogRef<ResourcefinderdialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
   idHide: string[];
@@ -24,7 +24,7 @@ export class ResourcefinderComponent implements OnInit {
     if (this.data.idHide) {
       this.idHide = this.data.idHide;
     }
-    console.log("resourcefinder idHide:", this.idHide);
+    console.log("resourcefinderdialog idHide:", this.idHide);
 
     this.resources$ = this.resourceService.findByPartialName("");
   }

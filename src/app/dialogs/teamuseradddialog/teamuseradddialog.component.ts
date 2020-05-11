@@ -8,10 +8,10 @@ import { UserService } from "../../services/user.service";
 
 @Component({
   selector: "app-teamuseradd",
-  templateUrl: "./teamuseradd.component.html",
-  styleUrls: ["./teamuseradd.component.scss"],
+  templateUrl: "./teamuseradddialog.component.html",
+  styleUrls: ["./teamuseradddialog.component.scss"],
 })
-export class TeamuseraddComponent implements OnInit {
+export class TeamuseradddialogComponent implements OnInit {
   team$: Observable<Team>;
   teamRoles = TeamRoles;
   selectedUid = "";
@@ -22,7 +22,7 @@ export class TeamuseraddComponent implements OnInit {
     private teamService: TeamService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
-    private dialogRef: MatDialogRef<TeamuseraddComponent>
+    private dialogRef: MatDialogRef<TeamuseradddialogComponent>
   ) {}
 
   ngOnInit(): void {

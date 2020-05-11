@@ -3,8 +3,8 @@ import { Observable } from "rxjs";
 import { UserService } from "../../services/user.service";
 import { User } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
-import { TeamuserremoveComponent } from "../../dialogs/teamuserremove/teamuserremove.component";
-import { TeamuseraddComponent } from "../../dialogs/teamuseradd/teamuseradd.component";
+import { TeamuserremovedialogComponent } from "../../dialogs/teamuserremovedialog/teamuserremovedialog.component";
+import { TeamuseradddialogComponent } from "../../dialogs/teamuseradddialog/teamuseradddialog.component";
 
 @Component({
   selector: "app-teamuserlist",
@@ -27,7 +27,7 @@ export class TeamuserlistComponent implements OnInit {
 
   openTeamUserRemoveDialog(uid, displayName, teamId, role) {
     // console.log("remove click:", uid, displayName, teamId);
-    const dialogRef = this.dialog.open(TeamuserremoveComponent, {
+    const dialogRef = this.dialog.open(TeamuserremovedialogComponent, {
       width: "250px",
       data: { uid: uid, displayName: displayName, teamId: teamId, role: role },
     });
@@ -35,7 +35,7 @@ export class TeamuserlistComponent implements OnInit {
 
   openTeamUserAddDialog(teamId) {
     console.log("add click:", teamId);
-    const dialogRef = this.dialog.open(TeamuseraddComponent, {
+    const dialogRef = this.dialog.open(TeamuseradddialogComponent, {
       width: "380px",
       data: { teamId: teamId },
     });
