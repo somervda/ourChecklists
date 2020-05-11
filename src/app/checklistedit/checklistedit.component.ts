@@ -20,6 +20,7 @@ import { DocRef } from "../models/helper.model";
 export class ChecklisteditComponent implements OnInit {
   checklist: Checklist;
   resources$: Observable<Resource[]>;
+  hideDetails = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +37,15 @@ export class ChecklisteditComponent implements OnInit {
 
   getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
     return ChecklistStatusInfo.find((clsii) => clsii.status == status);
+  }
+
+  updateComments() {
+    console.log("updateComments");
+    this.checklistService.fieldUpdate(
+      this.checklist.id,
+      "comments",
+      this.checklist.comments
+    );
   }
 
   getFlatDocRefArray(docRefArray: DocRef[]): string {

@@ -11,7 +11,7 @@ export interface Checklistitem {
   evidence?: string;
   allowNA: boolean;
   requireEvidence: boolean;
-  resultValue: ChecklistitemResultValue;
+  resultValue?: ChecklistitemResultValue;
   resultType: ChecklistitemResultType;
   comment?: string;
   resources?: DocRef[];

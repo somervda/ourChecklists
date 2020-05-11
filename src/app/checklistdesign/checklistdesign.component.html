@@ -59,23 +59,6 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <textarea
-          matInput
-          formControlName="comments"
-          (change)="onFieldUpdate('comments')"
-          matAutosizeMinRows="3"
-          matAutosizeMaxRows="10"
-          matTextareaAutosize
-          placeholder="Comments"
-        ></textarea>
-        <mat-error
-          *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
-        >
-          Comments must be no more than 500 characters long.
-        </mat-error>
-      </mat-form-field>
-
       <mat-form-field class="half-width">
         <mat-label>Team</mat-label>
         <mat-select

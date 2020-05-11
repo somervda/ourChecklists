@@ -4,10 +4,12 @@ table {
 }
 
 .mat-column-name {
-  padding-right: 10px;
+  padding-right: 5px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .mat-column-description {
   width: 100%;
-  padding-right: 10px;
+  padding-right: 5px;
 }

@@ -19,13 +19,9 @@
         resource.status == ResourceStatus.superseded ? '0.5' : '1'
       "
     >
-      <button
-        mat-button
-        (click)="openResourceView(resource)"
-        matTooltip="View Resource"
-      >
+      <div (click)="openResourceView(resource)" title="View Resource">
         {{ resource.name }}
-      </button>
+      </div>
     </td>
   </ng-container>
 

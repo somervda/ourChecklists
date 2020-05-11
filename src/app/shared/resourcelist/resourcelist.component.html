@@ -8,7 +8,9 @@
         resource.status == ResourceStatus.superseded ? '0.5' : '1'
       "
     >
-      {{ resource.name }}
+      <div (click)="openResourceView(resource)" title="View Resource">
+        {{ resource.name }}
+      </div>
     </td>
   </ng-container>
 

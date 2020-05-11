@@ -74,7 +74,6 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         sequence: 0,
         allowNA: false,
         requireEvidence: false,
-        resultValue: ChecklistitemResultValue.false,
         resultType: ChecklistitemResultType.checkbox,
       };
     } else {

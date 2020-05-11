@@ -1,0 +1,75 @@
+<div
+  [style.opacity]="checklistitem.resultValue == undefined ? '0.5' : '1'"
+  [title]="checklistitem.resultValue == undefined ? 'Not Touched' : ''"
+>
+  <ng-container
+    *ngIf="
+      checklistitem.resultType == ChecklistitemResultType.checkbox &&
+      !checklistitem.allowNA
+    "
+    class="result"
+  >
+    <mat-checkbox
+      [ngModel]="checklistitem.resultValue"
+      (change)="onChange($event, true)"
+    ></mat-checkbox>
+  </ng-container>
+
+  <ng-container
+    *ngIf="
+      checklistitem.resultType == ChecklistitemResultType.checkbox &&
+      checklistitem.allowNA
+    "
+    class="result"
+  >
+    <mat-select
+      [ngModel]="checklistitem.resultValue"
+      (selectionChange)="onChange($event, false)"
+    >
+      <mat-option [value]="ChecklistitemResultValue.NA">
+        N/A
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.false">
+        No
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.true">
+        Yes
+      </mat-option>
+    </mat-select>
+  </ng-container>
+
+  <ng-container
+    *ngIf="
+      checklistitem.resultType == ChecklistitemResultType.rating ||
+      checklistitem.resultType == ChecklistitemResultType.ratingNA
+    "
+    class="result"
+  >
+    <mat-select
+      [ngModel]="checklistitem.resultValue"
+      (selectionChange)="onChange($event, false)"
+    >
+      <mat-option
+        [value]="ChecklistitemResultValue.NA"
+        [hidden]="!checklistitem.allowNA"
+      >
+        N/A
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.low">
+        Low
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.mediumLow">
+        Medium/Low
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.medium">
+        Medium
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.mediumHigh">
+        Medium/High
+      </mat-option>
+      <mat-option [value]="ChecklistitemResultValue.mediumHigh">
+        High
+      </mat-option>
+    </mat-select>
+  </ng-container>
+</div>
