@@ -9,21 +9,31 @@
 <br />
 
 <ng-container *ngIf="resource.resourceType == ResourceType.url">
+  URL* :
   <a [href]="resource.content" target="_blank">{{ resource.content }}</a>
+  <br /><br />
+  <div>{{ resource.description }}</div>
+  <br /><sup>* Click to go to URL.</sup>
 </ng-container>
 
 <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
   <app-youtubeviewer [youtubeId]="resource.content"></app-youtubeviewer>
+  <div>{{ resource.description }}</div>
 </ng-container>
 
 <ng-container *ngIf="resource.resourceType == ResourceType.file">
-  File Name:
+  File Name* :
   <a [href]="downloadUrl$ | async" target="_blank" title="Click to download">{{
     resource.content
   }}</a>
+  <br /><br />
+
+  <div>{{ resource.description }}</div>
+  <br /><sup>* Click to download file.</sup>
 </ng-container>
 <ng-container *ngIf="resource.resourceType == ResourceType.image">
   <div><img [src]="downloadUrl$ | async" class="image-type" /></div>
+  <div>{{ resource.description }}</div>
 </ng-container>
 
 <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
