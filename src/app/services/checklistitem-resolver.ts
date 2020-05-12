@@ -19,11 +19,11 @@ export class ChecklistitemResolver implements Resolve<Checklistitem> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<Checklistitem> {
-    console.log(
-      "ChecklistitemResolver :",
-      route.paramMap.get("cid"),
-      route.paramMap.get("clid")
-    );
+    // console.log(
+    //   "ChecklistitemResolver :",
+    //   route.paramMap.get("cid"),
+    //   route.paramMap.get("clid")
+    // );
     return this.checklistitemService
       .findById(route.paramMap.get("cid"), route.paramMap.get("clid"))
       .pipe(first());

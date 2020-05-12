@@ -24,8 +24,9 @@
     <td mat-cell *matCellDef="let checklistitem">
       <app-checklistitemresult
         [checklistitem]="checklistitem"
-        [checklist]="checklist"
+        [cid]="checklist.id"
         (change)="onResultChange($event, checklistitem)"
+        [redirectForEvidence]="true"
       ></app-checklistitemresult>
     </td>
   </ng-container>

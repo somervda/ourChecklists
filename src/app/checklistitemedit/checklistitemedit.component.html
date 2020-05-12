@@ -1,1 +1,63 @@
-<p>checklistitemedit works!</p>
+<app-subheading
+  title="Checklist Item"
+  matIcon="check_box"
+  [returnRoute]="'/checklistedit/' + cid"
+  returnTitle="Return to Checklist"
+></app-subheading>
+<div class="page-container">
+  <div class="prompt">Name</div>
+  <div>{{ checklistitem.name }}</div>
+  <div class="prompt">Description</div>
+  <div>{{ checklistitem.description }}</div>
+  <div class="prompt">Resources</div>
+  <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
+  <div class="prompt">Activities</div>
+  <div>{{ getFlatDocRefArray(checklistitem.activities) }}</div>
+  <div class="prompt">Comment</div>
+  <div>
+    <textarea
+      matInput
+      class="full-width"
+      [(ngModel)]="checklistitem.comment"
+      (change)="updateComment()"
+      matAutosizeMinRows="3"
+      matAutosizeMaxRows="10"
+      matTextareaAutosize
+      placeholder="Comment"
+    ></textarea>
+  </div>
+  <div class="prompt">Evidence</div>
+  <div>
+    <textarea
+      matInput
+      class="full-width"
+      [(ngModel)]="checklistitem.evidence"
+      (change)="updateEvidence()"
+      matAutosizeMinRows="3"
+      matAutosizeMaxRows="10"
+      matTextareaAutosize
+      placeholder="Evidence"
+    ></textarea>
+  </div>
+  <div class="prompt">Result</div>
+  <app-checklistitemresult
+    class="result"
+    [checklistitem]="checklistitem"
+    [cid]="cid"
+    (change)="onResultChange($event, checklistitem)"
+    [disabled]="
+      checklistitem.requireEvidence &&
+      (!checklistitem.evidence || checklistitem.evidence.length == 0)
+    "
+  ></app-checklistitemresult>
+
+  <div
+    class="result-error"
+    *ngIf="
+      checklistitem.requireEvidence &&
+      (!checklistitem.evidence || checklistitem.evidence.length == 0)
+    "
+  >
+    Evidence must be filled in before the result can be entered.
+  </div>
+</div>

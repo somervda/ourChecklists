@@ -21,7 +21,7 @@ export class ChecklistitemeditlistComponent implements OnInit {
   }
 
   onResultChange(resultValue, checklistitem) {
-    // console.log("onResultChange", event);
+    // console.log("onResultChange", resultValue);
     this.checklistitemService.fieldUpdate(
       this.checklist.id,
       checklistitem.id,

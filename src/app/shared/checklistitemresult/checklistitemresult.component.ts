@@ -12,9 +12,11 @@ import { Checklist } from "src/app/models/checklist.model";
   styleUrls: ["./checklistitemresult.component.scss"],
 })
 export class ChecklistitemresultComponent implements OnInit {
-  @Input() checklist: Checklist;
+  @Input() cid: string;
   @Input() checklistitem: Checklistitem;
   @Output() change = new EventEmitter();
+  @Input() redirectForEvidence: boolean;
+  @Input() disabled: boolean;
   ChecklistitemResultType = ChecklistitemResultType;
   ChecklistitemResultValue = ChecklistitemResultValue;
 

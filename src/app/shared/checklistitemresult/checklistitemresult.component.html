@@ -1,9 +1,15 @@
-<div [hidden]="!checklistitem.requireEvidence">
+<div
+  [hidden]="
+    !checklistitem.requireEvidence ||
+    !redirectForEvidence ||
+    (checklistitem.evidence && checklistitem.evidence.length > 0)
+  "
+>
   <a
     [routerLink]="
-      '/checklist/' + checklist.id + '/checklistitemedit/' + checklistitem.id
+      '/checklist/' + cid + '/checklistitemedit/' + checklistitem.id
     "
-    title="Evidence is required, click to go to item details"
+    matTooltip="Evidence is required, so must be entered in the item details"
   >
     <mat-icon>subdirectory_arrow_right</mat-icon></a
   >
@@ -11,7 +17,11 @@
 <div
   [style.opacity]="checklistitem.resultValue == undefined ? '0.5' : '1'"
   [title]="checklistitem.resultValue == undefined ? 'Not Touched' : ''"
-  [hidden]="checklistitem.requireEvidence"
+  [hidden]="
+    checklistitem.requireEvidence &&
+    redirectForEvidence &&
+    (!checklistitem.evidence || checklistitem.evidence.length == 0)
+  "
 >
   <ng-container
     *ngIf="
@@ -23,6 +33,7 @@
     <mat-checkbox
       [ngModel]="checklistitem.resultValue"
       (change)="onChange($event, true)"
+      [disabled]="disabled"
     ></mat-checkbox>
   </ng-container>
 
@@ -36,6 +47,7 @@
     <mat-select
       [ngModel]="checklistitem.resultValue"
       (selectionChange)="onChange($event, false)"
+      [disabled]="disabled"
     >
       <mat-option [value]="ChecklistitemResultValue.NA">
         N/A
@@ -59,6 +71,7 @@
     <mat-select
       [ngModel]="checklistitem.resultValue"
       (selectionChange)="onChange($event, false)"
+      [disabled]="disabled"
     >
       <mat-option
         [value]="ChecklistitemResultValue.NA"
@@ -78,7 +91,7 @@
       <mat-option [value]="ChecklistitemResultValue.mediumHigh">
         Medium/High
       </mat-option>
-      <mat-option [value]="ChecklistitemResultValue.mediumHigh">
+      <mat-option [value]="ChecklistitemResultValue.high">
         High
       </mat-option>
     </mat-select>

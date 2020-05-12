@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
   Checklist,
   ChecklistStatusInfo,
@@ -31,9 +31,11 @@ export class ChecklisteditComponent implements OnInit {
 
   ngOnInit(): void {
     this.checklist = this.route.snapshot.data["checklist"];
-    this.resources$ = this.resourceService.findAllIn(
-      this.checklist.resources.map((r) => r.id)
-    );
+    if (this.checklist.resources) {
+      this.resources$ = this.resourceService.findAllIn(
+        this.checklist.resources.map((r) => r.id)
+      );
+    }
   }
 
   getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
