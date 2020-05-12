@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
   selector: "app-subheading",
@@ -10,8 +10,15 @@ export class SubheadingComponent implements OnInit {
   @Input() returnRoute: string;
   @Input() returnTitle: string;
   @Input() matIcon: string;
+  @Input() showAll: boolean;
+  @Output() showAllChange = new EventEmitter();
 
   constructor() {}
 
   ngOnInit() {}
+
+  onShowAll(event) {
+    // console.log("onShowAll", event);
+    this.showAllChange.emit(event.checked);
+  }
 }

@@ -42,7 +42,7 @@ export class ResourceService {
   }
 
   findAllIn(resources: string[]): Observable<Resource[]> {
-    console.log("resource findAllIn", resources);
+    // console.log("resource findAllIn", resources);
     if (resources && resources.length > 0) {
       return this.afs
         .collection("resources", (ref) =>
@@ -65,16 +65,16 @@ export class ResourceService {
     filter: string,
     pageSize: number
   ): Observable<Resource[]> {
-    console.log(
-      "findAllFiltered",
-      name,
-      " filterType:",
-      filterType,
-      " filter:",
-      filter,
-      " pagesize:",
-      pageSize
-    );
+    // console.log(
+    //   "findAllFiltered",
+    //   name,
+    //   " filterType:",
+    //   filterType,
+    //   " filter:",
+    //   filter,
+    //   " pagesize:",
+    //   pageSize
+    // );
     return this.afs
       .collection("resources", (ref) => {
         let refVal = ref as any;

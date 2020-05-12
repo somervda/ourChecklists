@@ -32,6 +32,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -84,8 +85,8 @@ import { ResourceviewdialogComponent } from "./dialogs/resourceviewdialog/resour
 import { ChecklistitemlistComponent } from "./shared/checklistitemlist/checklistitemlist.component";
 import { ActivitylisteditComponent } from "./shared/activitylistedit/activitylistedit.component";
 import { ActivityfinderdialogComponent } from "./dialogs/activityfinderdialog/activityfinderdialog.component";
-import { ChecklistitemeditlistComponent } from './shared/checklistitemeditlist/checklistitemeditlist.component';
-import { ChecklistitemresultComponent } from './shared/checklistitemresult/checklistitemresult.component';
+import { ChecklistitemeditlistComponent } from "./shared/checklistitemeditlist/checklistitemeditlist.component";
+import { ChecklistitemresultComponent } from "./shared/checklistitemresult/checklistitemresult.component";
 
 @NgModule({
   declarations: [
@@ -150,6 +151,7 @@ import { ChecklistitemresultComponent } from './shared/checklistitemresult/check
     MatCardModule,
     MatSidenavModule,
     MatListModule,
+    MatSlideToggleModule,
     MatToolbarModule,
     MatChipsModule,
     MatTooltipModule,

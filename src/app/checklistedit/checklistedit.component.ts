@@ -21,6 +21,7 @@ export class ChecklisteditComponent implements OnInit {
   checklist: Checklist;
   resources$: Observable<Resource[]>;
   hideDetails = true;
+  showResources = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,8 +40,13 @@ export class ChecklisteditComponent implements OnInit {
     return ChecklistStatusInfo.find((clsii) => clsii.status == status);
   }
 
+  onShowAllChange(checked) {
+    // console.log("onshowallchange", checked);
+    this.hideDetails = !checked;
+  }
+
   updateComments() {
-    console.log("updateComments");
+    // console.log("updateComments");
     this.checklistService.fieldUpdate(
       this.checklist.id,
       "comments",

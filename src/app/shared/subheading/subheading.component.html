@@ -16,4 +16,9 @@
       >arrow_back</i
     >
   </button>
+  <mat-slide-toggle
+    (change)="onShowAll($event)"
+    matTooltip="Show all details?"
+    [hidden]="!showAll"
+  ></mat-slide-toggle>
 </mat-toolbar>

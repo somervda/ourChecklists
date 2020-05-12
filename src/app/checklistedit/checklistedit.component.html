@@ -1,11 +1,30 @@
-<app-subheading title="Checklist" matIcon="check_box"></app-subheading>
+<app-subheading
+  title="Checklist"
+  matIcon="check_box"
+  showAll="true"
+  (showAllChange)="onShowAllChange($event)"
+></app-subheading>
 
 <div class="page-container colgrid2">
-  <div class="prompt">Name</div>
+  <div class="prompt">
+    Name
+  </div>
   <div>{{ checklist.name }}</div>
 
   <div class="prompt">Description</div>
   <div>{{ checklist.description }}</div>
+  <div class="prompt">
+    Resources
+    <mat-slide-toggle [(ngModel)]="showResources">Show</mat-slide-toggle>
+  </div>
+  <!-- {{ getFlatDocRefArray(checklist.resources) }} -->
+
+  <!-- <mat-expansion-panel> -->
+
+  <app-resourcelist
+    [resources$]="resources$"
+    *ngIf="showResources"
+  ></app-resourcelist>
 
   <div class="prompt">Comments</div>
   <div>
@@ -21,16 +40,8 @@
     ></textarea>
   </div>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      Resources: {{ getFlatDocRefArray(checklist.resources) }}
-    </mat-expansion-panel-header>
-    <ng-template matExpansionPanelContent>
-      <app-resourcelist [resources$]="resources$"></app-resourcelist>
-    </ng-template>
-  </mat-expansion-panel>
-
   <div [hidden]="hideDetails">
+    <mat-divider></mat-divider>
     <div class="prompt">Team</div>
     <div>{{ checklist.team.name }}</div>
 
@@ -40,10 +51,13 @@
     <div class="prompt">Status</div>
     <div>{{ getChecklistStatusInfoItem(checklist.status).name }}</div>
 
+    <!-- </mat-expansion-panel> -->
+
     <!-- <div class="prompt">Resources</div>
-        <div>
-          <app-resourcelist [resources$]="resources$"></app-resourcelist>
-        </div> -->
+    <div>
+      <app-resourcelist [resources$]="resources$"></app-resourcelist>
+    </div> -->
+    <mat-divider></mat-divider>
   </div>
 
   <div class="prompt">Checklist Items</div>

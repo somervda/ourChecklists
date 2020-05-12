@@ -28,6 +28,7 @@ export class ChecklistlistComponent implements OnInit {
     checklist: Checklist
   ): { link: string; tooltip: string } {
     let linkAction = { link: "", tooltip: "" };
+    // console.log("getChecklistLinkAction", checklist);
     if (
       !this.auth.currentUser.isAdmin &&
       !checklist.assignee.find((u) => this.auth.currentUser.uid == u.uid)

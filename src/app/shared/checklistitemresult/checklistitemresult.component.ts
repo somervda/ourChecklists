@@ -4,6 +4,7 @@ import {
   Checklistitem,
   ChecklistitemResultValue,
 } from "src/app/models/checklistitem.model";
+import { Checklist } from "src/app/models/checklist.model";
 
 @Component({
   selector: "app-checklistitemresult",
@@ -11,6 +12,7 @@ import {
   styleUrls: ["./checklistitemresult.component.scss"],
 })
 export class ChecklistitemresultComponent implements OnInit {
+  @Input() checklist: Checklist;
   @Input() checklistitem: Checklistitem;
   @Output() change = new EventEmitter();
   ChecklistitemResultType = ChecklistitemResultType;

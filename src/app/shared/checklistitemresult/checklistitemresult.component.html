@@ -1,6 +1,17 @@
+<div [hidden]="!checklistitem.requireEvidence">
+  <a
+    [routerLink]="
+      '/checklist/' + checklist.id + '/checklistitemedit/' + checklistitem.id
+    "
+    title="Evidence is required, click to go to item details"
+  >
+    <mat-icon>subdirectory_arrow_right</mat-icon></a
+  >
+</div>
 <div
   [style.opacity]="checklistitem.resultValue == undefined ? '0.5' : '1'"
   [title]="checklistitem.resultValue == undefined ? 'Not Touched' : ''"
+  [hidden]="checklistitem.requireEvidence"
 >
   <ng-container
     *ngIf="

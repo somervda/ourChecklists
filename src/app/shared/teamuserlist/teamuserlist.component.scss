@@ -1,20 +1,20 @@
 table {
   width: 100%;
   margin-bottom: 10px;
+  min-width: 340px;
 }
 
 .mat-column-role {
-  padding-right: 10px;
+  padding-right: 5px;
 }
 
 .mat-column-email {
-  padding-right: 10px;
+  padding-right: 5px;
   width: 100%;
 }
 
 .mat-column-displayName {
-  white-space: nowrap;
-  padding-right: 10px;
+  padding-right: 5px;
 }
 
 .add-row th {
