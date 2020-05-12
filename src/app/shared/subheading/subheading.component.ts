@@ -11,7 +11,9 @@ export class SubheadingComponent implements OnInit {
   @Input() returnTitle: string;
   @Input() matIcon: string;
   @Input() showAll: boolean;
+  @Input() showClose: boolean;
   @Output() showAllChange = new EventEmitter();
+  @Output() close = new EventEmitter();
 
   constructor() {}
 
@@ -20,5 +22,9 @@ export class SubheadingComponent implements OnInit {
   onShowAll(event) {
     // console.log("onShowAll", event);
     this.showAllChange.emit(event.checked);
+  }
+
+  onClose() {
+    this.close.emit(true);
   }
 }

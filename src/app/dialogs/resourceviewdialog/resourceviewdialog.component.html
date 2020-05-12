@@ -1,6 +1,12 @@
-<div (click)="close()" class="close-x" title="Close">
+<!-- <div (click)="close()" class="close-x" title="Close">
   <mat-icon>close</mat-icon>
-</div>
+</div> -->
+<app-subheading
+  [title]="resource.name"
+  [showClose]="true"
+  (close)="close()"
+></app-subheading>
+<br />
 
 <ng-container *ngIf="resource.resourceType == ResourceType.url">
   <a [href]="resource.content" target="_blank">{{ resource.content }}</a>
@@ -10,16 +16,13 @@
   <app-youtubeviewer [youtubeId]="resource.content"></app-youtubeviewer>
 </ng-container>
 
-<ng-container *ngIf="resource.resourceType == ResourceType.file"
-  ><h3>File Download</h3>
-  <mat-divider></mat-divider>
+<ng-container *ngIf="resource.resourceType == ResourceType.file">
   File Name:
   <a [href]="downloadUrl$ | async" target="_blank" title="Click to download">{{
     resource.content
   }}</a>
 </ng-container>
-<ng-container *ngIf="resource.resourceType == ResourceType.image"
-  ><h3>Image</h3>
+<ng-container *ngIf="resource.resourceType == ResourceType.image">
   <div><img [src]="downloadUrl$ | async" class="image-type" /></div>
 </ng-container>
 

@@ -3,21 +3,25 @@ import { Observable } from "rxjs";
 import {
   Resource,
   ResourceTypeInfo,
-  ResourceType,
   ResourceStatus,
+  ResourceType,
   ResourceTypeInfoItem,
-} from "../../models/resource.model";
+} from "src/app/models/resource.model";
 import { ResourceviewdialogComponent } from "src/app/dialogs/resourceviewdialog/resourceviewdialog.component";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-  selector: "app-resourcelist",
-  templateUrl: "./resourcelist.component.html",
-  styleUrls: ["./resourcelist.component.scss"],
+  selector: "app-resourcelistsimple",
+  templateUrl: "./resourcelistsimple.component.html",
+  styleUrls: ["./resourcelistsimple.component.scss"],
 })
-export class ResourcelistComponent implements OnInit {
+
+/**
+ * Show a list of resources as a simple comma delimited lists
+ * where you can click on the name to see a popup dialog with resource details
+ */
+export class ResourcelistsimpleComponent implements OnInit {
   @Input() resources$: Observable<Resource[]>;
-  displayedColumns: string[] = ["name", "description", "resourceType"];
   resourceTypeInfo = ResourceTypeInfo;
   ResourceStatus = ResourceStatus;
 
@@ -30,6 +34,7 @@ export class ResourcelistComponent implements OnInit {
   }
 
   openResourceView(resource) {
+    console.log("openResourceView", resource);
     const dialogRef = this.dialog.open(ResourceviewdialogComponent, {
       width: "95%",
       maxWidth: "800px",
@@ -38,4 +43,13 @@ export class ResourcelistComponent implements OnInit {
       autoFocus: false,
     });
   }
+
+  // getFlatDocRefArray(docRefArray: DocRef[]): string {
+  //   if (docRefArray) {
+  //     return docRefArray.reduce((accumulator, docRef, index) => {
+  //       return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
+  //     }, "");
+  //   }
+  //   return "None";
+  // }
 }

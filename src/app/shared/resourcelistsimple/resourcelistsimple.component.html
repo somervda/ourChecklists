@@ -1,0 +1,7 @@
+<span
+  *ngFor="let resource of resources$ | async"
+  (click)="openResourceView(resource)"
+  class="resource_item"
+  [matTooltip]="'Open ' + resource.name + ' view'"
+  >{{ resource.name }}</span
+>

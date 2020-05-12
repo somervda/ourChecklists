@@ -21,4 +21,17 @@
     matTooltip="Show all details?"
     [hidden]="!showAll"
   ></mat-slide-toggle>
+  <button
+    mat-button
+    style="min-width: 40px; padding: 0px; text-align: center;"
+    *ngIf="showClose"
+    title="Close"
+    (click)="onClose()"
+  >
+    <i
+      class="material-icons-outlined"
+      style="margin-left: 5px; margin-right: 5px;"
+      >close</i
+    >
+  </button>
 </mat-toolbar>

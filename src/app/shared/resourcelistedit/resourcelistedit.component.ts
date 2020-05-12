@@ -112,6 +112,7 @@ export class ResourcelisteditComponent implements OnInit {
       maxWidth: "800px",
       maxHeight: "90%",
       data: { resource: resource },
+      autoFocus: false,
     });
   }
 

@@ -15,16 +15,13 @@
   <div>{{ checklist.description }}</div>
   <div class="prompt">
     Resources
-    <mat-slide-toggle [(ngModel)]="showResources">Show</mat-slide-toggle>
+  </div>
+  <div>
+    <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
   </div>
   <!-- {{ getFlatDocRefArray(checklist.resources) }} -->
 
   <!-- <mat-expansion-panel> -->
-
-  <app-resourcelist
-    [resources$]="resources$"
-    *ngIf="showResources"
-  ></app-resourcelist>
 
   <div class="prompt">Comments</div>
   <div>
