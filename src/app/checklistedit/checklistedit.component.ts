@@ -11,6 +11,8 @@ import { ResourceService } from "../services/resource.service";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { DocRef, UserRef } from "../models/helper.model";
+import { MatDialog } from "@angular/material/dialog";
+import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 
 @Component({
   selector: "app-checklistedit",
@@ -26,7 +28,8 @@ export class ChecklisteditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private checklistService: ChecklistService,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +43,27 @@ export class ChecklisteditComponent implements OnInit {
 
   getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
     return ChecklistStatusInfo.find((clsii) => clsii.status == status);
+  }
+
+  statusDialog() {
+    console.log("statusDialog");
+    const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {
+      width: "90%",
+      minWidth: "340px",
+      maxWidth: "600px",
+      data: { checklist: this.checklist },
+    });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if (result) {
+    //     console.log("New Owner", result);
+    //     const userRef: UserRef = {
+    //       uid: result.uid,
+    //       displayName: result.displayName,
+    //     };
+    //     this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
+    //     this.resource.owner = userRef;
+    //   }
+    // });
   }
 
   onShowAllChange(checked) {

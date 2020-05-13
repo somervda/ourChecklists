@@ -60,6 +60,14 @@
         </mat-error>
       </mat-form-field>
 
+      <div class="prompt">
+        Status:
+        {{ getChecklistStatusInfoItem(checklist.status).name }}
+        <button mat-button matTooltip="Update Status" (click)="statusDialog()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
       <mat-form-field class="half-width">
         <mat-label>Team</mat-label>
         <mat-select

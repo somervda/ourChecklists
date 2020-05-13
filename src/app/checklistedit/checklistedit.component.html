@@ -17,7 +17,7 @@
   <div class="prompt">Status</div>
   <div>
     {{ getChecklistStatusInfoItem(checklist.status).name }}
-    <button mat-button matTooltip="Update Status">
+    <button mat-button matTooltip="Update Status" (click)="statusDialog()">
       <mat-icon>edit</mat-icon>
     </button>
   </div>

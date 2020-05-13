@@ -1,0 +1,52 @@
+<app-subheading
+  title="Checklist Status"
+  [showClose]="true"
+  (close)="close()"
+></app-subheading>
+<div class="prompt">Current Status</div>
+<div>{{ getChecklistStatusInfoItem(checklist.status).name }}</div>
+<div class="prompt">Update Status to...</div>
+<div>
+  <mat-radio-group [(ngModel)]="newStatus">
+    <mat-radio-button
+      [value]="ChecklistStatus.UnderConstruction"
+      *ngIf="checklist.status == ChecklistStatus.Active"
+    >
+      Under Construction
+    </mat-radio-button>
+    <mat-radio-button
+      [value]="ChecklistStatus.Active"
+      *ngIf="
+        checklist.status == ChecklistStatus.UnderConstruction ||
+        checklist.status == ChecklistStatus.Done
+      "
+    >
+      Active
+    </mat-radio-button>
+    <mat-radio-button
+      [value]="ChecklistStatus.Done"
+      *ngIf="
+        checklist.status == ChecklistStatus.Active ||
+        checklist.status == ChecklistStatus.Complete
+      "
+    >
+      Done
+    </mat-radio-button>
+    <mat-radio-button
+      [value]="ChecklistStatus.Complete"
+      *ngIf="checklist.status == ChecklistStatus.Done"
+    >
+      Complete
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+<br />
+<button
+  mat-raised-button
+  matTooltip="Update Status"
+  (click)="updateStatus()"
+  class="update-button"
+  [disabled]="!newStatus"
+>
+  <mat-icon>check</mat-icon>Update Status
+</button>

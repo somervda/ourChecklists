@@ -1,6 +1,11 @@
 import { OnDestroy, NgZone } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
-import { Checklist, ChecklistStatus } from "../models/checklist.model";
+import {
+  Checklist,
+  ChecklistStatus,
+  ChecklistStatusInfoItem,
+  ChecklistStatusInfo,
+} from "../models/checklist.model";
 import { Crud, DocRef, UserRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
@@ -14,6 +19,8 @@ import { Category } from "../models/category.model";
 import { CategoryService } from "../services/category.service";
 import { Resource } from "../models/resource.model";
 import { ResourceService } from "../services/resource.service";
+import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-checklistdesign",
@@ -41,7 +48,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -234,6 +242,31 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         this.checklist.category
       );
     }
+  }
+
+  getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
+    return ChecklistStatusInfo.find((clsii) => clsii.status == status);
+  }
+
+  statusDialog() {
+    console.log("statusDialog");
+    const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {
+      width: "90%",
+      minWidth: "340px",
+      maxWidth: "600px",
+      data: { checklist: this.checklist },
+    });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if (result) {
+    //     console.log("New Owner", result);
+    //     const userRef: UserRef = {
+    //       uid: result.uid,
+    //       displayName: result.displayName,
+    //     };
+    //     this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
+    //     this.resource.owner = userRef;
+    //   }
+    // });
   }
 
   async waitForCurrentUser() {

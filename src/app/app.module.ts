@@ -87,7 +87,8 @@ import { ActivitylisteditComponent } from "./shared/activitylistedit/activitylis
 import { ActivityfinderdialogComponent } from "./dialogs/activityfinderdialog/activityfinderdialog.component";
 import { ChecklistitemeditlistComponent } from "./shared/checklistitemeditlist/checklistitemeditlist.component";
 import { ChecklistitemresultComponent } from "./shared/checklistitemresult/checklistitemresult.component";
-import { ResourcelistsimpleComponent } from './shared/resourcelistsimple/resourcelistsimple.component';
+import { ResourcelistsimpleComponent } from "./shared/resourcelistsimple/resourcelistsimple.component";
+import { CheckliststatusdialogComponent } from "./dialogs/checkliststatusdialog/checkliststatusdialog.component";
 
 @NgModule({
   declarations: [
@@ -139,6 +140,7 @@ import { ResourcelistsimpleComponent } from './shared/resourcelistsimple/resourc
     ChecklistitemeditlistComponent,
     ChecklistitemresultComponent,
     ResourcelistsimpleComponent,
+    CheckliststatusdialogComponent,
   ],
   imports: [
     BrowserModule,
