@@ -1,24 +1,17 @@
 <app-subheading
-  [title]="resource.name + ' [Update]'"
-  *ngIf="crudAction == Crud.Update"
+  [title]="
+    'Resource - ' +
+    (crudAction == Crud.Create
+      ? 'Create'
+      : crudAction == Crud.Update
+      ? 'Update'
+      : 'Delete')
+  "
   returnRoute="/resources"
   returnTitle="Return to Resources"
   matIcon="folder_open"
 ></app-subheading>
-<app-subheading
-  title="Create New Resource"
-  *ngIf="crudAction == Crud.Create"
-  returnRoute="/resources"
-  returnTitle="Return to Resources"
-  matIcon="folder_open"
-></app-subheading>
-<app-subheading
-  [title]="resource.name + ' [Delete]'"
-  *ngIf="crudAction == Crud.Delete"
-  returnRoute="/resources"
-  returnTitle="Return to Resources"
-  matIcon="folder_open"
-></app-subheading>
+
 <div class="page-container">
   <mat-spinner *ngIf="showSpinner" class="spinner_container"></mat-spinner>
   <form class="standard-form" [formGroup]="resourceForm">

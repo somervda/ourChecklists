@@ -24,21 +24,35 @@ export class ChecklistitemresultComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onChange(resultEvent, isCheckbox) {
+  onChange(resultEvent, resultControl) {
     // console.log(
     //   "onChange",
-    //   resultEvent,
-    //   this.checklistitem.resultValue,
-    //   resultEvent.source
+    //   resultControl,
+    //   resultEvent
     // );
-    if (isCheckbox) {
-      if (resultEvent.checked) {
-        this.change.emit(ChecklistitemResultValue.true);
-      } else {
-        this.change.emit(ChecklistitemResultValue.false);
-      }
-    } else {
-      this.change.emit(resultEvent.value);
+    switch (resultControl) {
+      case "YesNo":
+        if (resultEvent.checked) {
+          this.change.emit(ChecklistitemResultValue.true);
+          this.checklistitem.resultValue = ChecklistitemResultValue.true;
+        } else {
+          this.change.emit(ChecklistitemResultValue.false);
+          this.checklistitem.resultValue = ChecklistitemResultValue.false;
+        }
+        break;
+      case "NA":
+        if (resultEvent.checked) {
+          this.change.emit(ChecklistitemResultValue.NA);
+          this.checklistitem.resultValue = ChecklistitemResultValue.NA;
+        } else {
+          this.change.emit(ChecklistitemResultValue.false);
+          this.checklistitem.resultValue = ChecklistitemResultValue.false;
+        }
+        break;
+      case "Rating":
+        this.change.emit(resultEvent.value);
+        this.checklistitem.resultValue = resultEvent.value;
+        break;
     }
   }
 }

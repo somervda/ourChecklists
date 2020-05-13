@@ -1,24 +1,16 @@
 <app-subheading
-  title="Checklist Item Design"
-  *ngIf="crudAction == Crud.Update"
+  title="Checklist Item Design - ' +
+  (crudAction == Crud.Create
+    ? 'Create'
+    : crudAction == Crud.Update
+    ? 'Update'
+    : 'Delete')
+"
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
   matIcon="check_box"
 ></app-subheading>
-<app-subheading
-  title="Create New Checklist Item"
-  *ngIf="crudAction == Crud.Create"
-  [returnRoute]="'/checklistdesign/' + cid"
-  returnTitle="Return to Checklist Design"
-  matIcon="check_box"
-></app-subheading>
-<app-subheading
-  [title]="'Delete Checklist Item'"
-  *ngIf="crudAction == Crud.Delete"
-  [returnRoute]="'/checklistdesign/' + cid"
-  returnTitle="Return to Checklist Design"
-  matIcon="check_box"
-></app-subheading>
+
 <div class="page-container">
   <form class="standard-form" [formGroup]="checklistitemForm">
     <fieldset [disabled]="crudAction == Crud.Delete">
@@ -139,7 +131,7 @@
           [(ngModel)]="checklistitem.allowNA"
           [ngModelOptions]="{ standalone: true }"
           [disabled]="crudAction == Crud.Delete"
-          >Allow users to enter NA (Not Applicable) as response?</mat-checkbox
+          >Allow users to enter NA ?</mat-checkbox
         >
       </div>
       <div>

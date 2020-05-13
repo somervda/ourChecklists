@@ -1,24 +1,17 @@
 <app-subheading
-  [title]="activity.name + ' [Update]'"
-  *ngIf="crudAction == Crud.Update"
+  [title]="
+    'Activity - ' +
+    (crudAction == Crud.Create
+      ? 'Create'
+      : crudAction == Crud.Update
+      ? 'Update'
+      : 'Delete')
+  "
   [returnRoute]="'/category/' + categoryId"
   returnTitle="Return to Category"
   matIcon="emoji_flags"
 ></app-subheading>
-<app-subheading
-  title="Create New Activity"
-  *ngIf="crudAction == Crud.Create"
-  [returnRoute]="'/category/' + categoryId"
-  returnTitle="Return to Category"
-  matIcon="emoji_flags"
-></app-subheading>
-<app-subheading
-  [title]="activity.name + ' [Delete]'"
-  *ngIf="crudAction == Crud.Delete"
-  [returnRoute]="'/category/' + categoryId"
-  returnTitle="Return to Category"
-  matIcon="emoji_flags"
-></app-subheading>
+
 <div class="page-container">
   <form class="standard-form" [formGroup]="activityForm">
     <fieldset [disabled]="crudAction == Crud.Delete">

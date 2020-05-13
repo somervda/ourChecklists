@@ -1,11 +1,12 @@
 <app-subheading
-  title="Checklists Design"
-  *ngIf="crudAction == Crud.Update"
-  matIcon="build"
-></app-subheading>
-<app-subheading
-  title="Create a new Checklist"
-  *ngIf="crudAction == Crud.Create"
+  [title]="
+    'Checklist Design - ' +
+    (crudAction == Crud.Create
+      ? 'Create'
+      : crudAction == Crud.Update
+      ? 'Update'
+      : 'Delete')
+  "
   matIcon="build"
 ></app-subheading>
 

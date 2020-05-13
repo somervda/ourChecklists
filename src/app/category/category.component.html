@@ -1,20 +1,12 @@
 <app-subheading
-  [title]="category.name + ' [Update]'"
-  *ngIf="crudAction == Crud.Update"
-  returnRoute="/categories"
-  returnTitle="Return to Categories"
-  matIcon="category"
-></app-subheading>
-<app-subheading
-  title="Create New Category"
-  *ngIf="crudAction == Crud.Create"
-  returnRoute="/categories"
-  returnTitle="Return to Categories"
-  matIcon="category"
-></app-subheading>
-<app-subheading
-  [title]="category.name + ' [Delete]'"
-  *ngIf="crudAction == Crud.Delete"
+  [title]="
+    'Category - ' +
+    (crudAction == Crud.Create
+      ? 'Create'
+      : crudAction == Crud.Update
+      ? 'Update'
+      : 'Delete')
+  "
   returnRoute="/categories"
   returnTitle="Return to Categories"
   matIcon="category"

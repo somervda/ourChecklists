@@ -9,7 +9,7 @@
     [routerLink]="
       '/checklist/' + cid + '/checklistitemedit/' + checklistitem.id
     "
-    matTooltip="Evidence is required, so must be entered in the item details"
+    matTooltip="Evidence is required, so must be entered in the checklist item details"
   >
     <mat-icon>subdirectory_arrow_right</mat-icon></a
   >
@@ -32,9 +32,11 @@
   >
     <mat-checkbox
       [ngModel]="checklistitem.resultValue"
-      (change)="onChange($event, true)"
+      (change)="onChange($event, 'YesNo')"
       [disabled]="disabled"
-    ></mat-checkbox>
+      matTooltip="Select Yes or No"
+      >Y/N</mat-checkbox
+    >
   </ng-container>
 
   <ng-container
@@ -44,7 +46,22 @@
     "
     class="result"
   >
-    <mat-select
+    <mat-checkbox
+      [checked]="checklistitem.resultValue == ChecklistitemResultValue.true"
+      (change)="onChange($event, 'YesNo')"
+      [disabled]="disabled"
+      matTooltip="Select Yes or No"
+      >Y/N</mat-checkbox
+    >
+    <mat-checkbox
+      [checked]="checklistitem.resultValue == ChecklistitemResultValue.NA"
+      (change)="onChange($event, 'NA')"
+      [disabled]="disabled"
+      style="margin-left: 5px;"
+      matTooltip="or select 'N/A' if the item is Not Applicable"
+      >N/A</mat-checkbox
+    >
+    <!-- <mat-select
       [ngModel]="checklistitem.resultValue"
       (selectionChange)="onChange($event, false)"
       [disabled]="disabled"
@@ -58,7 +75,7 @@
       <mat-option [value]="ChecklistitemResultValue.true">
         Yes
       </mat-option>
-    </mat-select>
+    </mat-select> -->
   </ng-container>
 
   <ng-container
@@ -70,8 +87,9 @@
   >
     <mat-select
       [ngModel]="checklistitem.resultValue"
-      (selectionChange)="onChange($event, false)"
+      (selectionChange)="onChange($event, 'Rating')"
       [disabled]="disabled"
+      matTooltip="Select a rating"
     >
       <mat-option
         [value]="ChecklistitemResultValue.NA"
@@ -80,19 +98,19 @@
         N/A
       </mat-option>
       <mat-option [value]="ChecklistitemResultValue.low">
-        Low
+        1. Low
       </mat-option>
       <mat-option [value]="ChecklistitemResultValue.mediumLow">
-        Medium/Low
+        2. Medium/Low
       </mat-option>
       <mat-option [value]="ChecklistitemResultValue.medium">
-        Medium
+        3. Medium
       </mat-option>
       <mat-option [value]="ChecklistitemResultValue.mediumHigh">
-        Medium/High
+        4. Medium/High
       </mat-option>
       <mat-option [value]="ChecklistitemResultValue.high">
-        High
+        5. High
       </mat-option>
     </mat-select>
   </ng-container>

@@ -1,24 +1,17 @@
 <app-subheading
-  title="Team"
-  *ngIf="crudAction == Crud.Update"
+  [title]="
+    'Team - ' +
+    (crudAction == Crud.Create
+      ? 'Create'
+      : crudAction == Crud.Update
+      ? 'Update'
+      : 'Delete')
+  "
   returnRoute="/teams"
   returnTitle="Return to Teams"
   matIcon="supervisor_account"
 ></app-subheading>
-<app-subheading
-  title="Create New Team"
-  *ngIf="crudAction == Crud.Create"
-  returnRoute="/teams"
-  returnTitle="Return to Teams"
-  matIcon="supervisor_account"
-></app-subheading>
-<app-subheading
-  title="Delete Team"
-  *ngIf="crudAction == Crud.Delete"
-  returnRoute="/teams"
-  returnTitle="Return to Teams"
-  matIcon="supervisor_account"
-></app-subheading>
+
 <div class="page-container">
   <form class="standard-form" [formGroup]="teamForm">
     <fieldset [disabled]="crudAction == Crud.Delete || readOnly">
@@ -74,6 +67,7 @@
       *ngIf="crudAction != Crud.Create"
       [disabled]="crudAction == Crud.Delete"
       hideToggle
+      [expanded]="true"
     >
       <mat-expansion-panel-header>
         Team Members
@@ -91,11 +85,9 @@
     <mat-expansion-panel
       *ngIf="crudAction != Crud.Create"
       [disabled]="crudAction == Crud.Delete"
-      hideToggle
     >
       <mat-expansion-panel-header>
         Checklists
-        <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>

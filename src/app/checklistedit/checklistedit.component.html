@@ -13,6 +13,15 @@
 
   <div class="prompt">Description</div>
   <div>{{ checklist.description }}</div>
+
+  <div class="prompt">Status</div>
+  <div>
+    {{ getChecklistStatusInfoItem(checklist.status).name }}
+    <button mat-button matTooltip="Update Status">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+
   <div class="prompt">
     Resources
   </div>
@@ -38,21 +47,17 @@
   </div>
 
   <div [hidden]="hideDetails">
-    <div class="prompt">Team</div>
-    <div>{{ checklist.team.name }}</div>
+    <div class="prompt">Additional Information...</div>
+    <div class="page-container">
+      <div class="prompt">Team</div>
+      <div>{{ checklist.team.name }}</div>
 
-    <div class="prompt">Category</div>
-    <div>{{ checklist.category.name }}</div>
+      <div class="prompt">Category</div>
+      <div>{{ checklist.category.name }}</div>
 
-    <div class="prompt">Status</div>
-    <div>{{ getChecklistStatusInfoItem(checklist.status).name }}</div>
-
-    <!-- </mat-expansion-panel> -->
-
-    <!-- <div class="prompt">Resources</div>
-    <div>
-      <app-resourcelist [resources$]="resources$"></app-resourcelist>
-    </div> -->
+      <div class="prompt">Assignees</div>
+      <div>{{ getFlatDocRefArray(userRefToDocRef(checklist.assignee)) }}</div>
+    </div>
   </div>
 
   <div class="prompt">Checklist Items</div>

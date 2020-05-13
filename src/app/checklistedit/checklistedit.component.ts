@@ -10,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ResourceService } from "../services/resource.service";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
-import { DocRef } from "../models/helper.model";
+import { DocRef, UserRef } from "../models/helper.model";
 
 @Component({
   selector: "app-checklistedit",
@@ -54,6 +54,12 @@ export class ChecklisteditComponent implements OnInit {
       "comments",
       this.checklist.comments
     );
+  }
+
+  userRefToDocRef(userRef: UserRef[]): DocRef[] {
+    return userRef.map((a) => {
+      return { id: a.uid, name: a.displayName };
+    });
   }
 
   getFlatDocRefArray(docRefArray: DocRef[]): string {
