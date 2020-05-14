@@ -1,1 +1,89 @@
-<p>checklist works!</p>
+<app-subheading title="Checklist Viewer" matIcon="check_box"></app-subheading>
+
+<div class="page-container">
+  <div class="prompt">
+    Name
+  </div>
+  <div>{{ checklist.name }}</div>
+
+  <div class="prompt">Description</div>
+  <div>{{ checklist.description }}</div>
+
+  <div class="prompt">Status</div>
+  <div>
+    {{ getChecklistStatusInfoItem(checklist.status).name }}
+    <!-- Only functionality available that is not a view -->
+    <button mat-button matTooltip="Update Status" (click)="statusDialog()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+
+  <div class="prompt">
+    Resources
+  </div>
+  <div>
+    <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
+  </div>
+
+  <div class="prompt">Comments</div>
+  <div>
+    {{ checklist.comments }}
+  </div>
+
+  <div class="prompt">Team</div>
+  <div>{{ checklist.team.name }}</div>
+
+  <div class="prompt">Category</div>
+  <div>{{ checklist.category.name }}</div>
+
+  <div class="prompt">Assignees</div>
+  <div>{{ getFlatDocRefArray(userRefToDocRef(checklist.assignee)) }}</div>
+  <br />
+  <div class="checklistitem-frame">
+    <div>
+      <span class="prompt">Checklist Items</span>
+      <mat-slide-toggle class="checklistitem-slide" #itemdetails color="primary"
+        >Show Details</mat-slide-toggle
+      >
+    </div>
+
+    <table
+      mat-table
+      [dataSource]="checklistitems$ | async"
+      class="mat-elevation-z8"
+    >
+      <ng-container matColumnDef="name" sticky>
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let checklistitem; let i = index">
+          <div>{{ i + 1 }}. {{ checklistitem.name }}</div>
+          <div class="item-details" *ngIf="itemdetails.checked">
+            <div
+              *ngIf="checklistitem.comment && checklistitem.comment.length > 0"
+            >
+              <span class="item-prompt">Comment </span>
+              <span class="item-detail">{{ checklistitem.comment }}</span>
+            </div>
+            <div
+              *ngIf="
+                checklistitem.evidence && checklistitem.evidence.length > 0
+              "
+            >
+              <span class="item-prompt">Evidence </span>
+              <span class="item-detail">{{ checklistitem.evidence }}</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="resultType" sticky>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let checklistitem">
+          {{ getResultValueName(checklistitem.resultValue) }}
+        </td>
+      </ng-container>
+
+      <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

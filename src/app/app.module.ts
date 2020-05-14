@@ -76,7 +76,6 @@ import { ChecklistitemdesignComponent } from "./checklistitemdesign/checklistite
 import { ChecklistitemeditComponent } from "./checklistitemedit/checklistitemedit.component";
 import { ChecklisteditComponent } from "./checklistedit/checklistedit.component";
 import { ChecklistComponent } from "./checklist/checklist.component";
-import { ChecklistitemComponent } from "./checklistitem/checklistitem.component";
 import { ResourcelistComponent } from "./shared/resourcelist/resourcelist.component";
 import { UserlisteditComponent } from "./shared/userlistedit/userlistedit.component";
 import { ResourcelisteditComponent } from "./shared/resourcelistedit/resourcelistedit.component";
@@ -128,7 +127,6 @@ import { CheckliststatusdialogComponent } from "./dialogs/checkliststatusdialog/
     ChecklistitemeditComponent,
     ChecklisteditComponent,
     ChecklistComponent,
-    ChecklistitemComponent,
     ResourcelistComponent,
     UserlisteditComponent,
     ResourcelisteditComponent,

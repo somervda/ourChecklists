@@ -28,6 +28,7 @@ import { ChecklistitemdesignComponent } from "./checklistitemdesign/checklistite
 import { ChecklistitemResolver } from "./services/checklistitem-resolver";
 import { ChecklisteditComponent } from "./checklistedit/checklistedit.component";
 import { ChecklistitemeditComponent } from "./checklistitemedit/checklistitemedit.component";
+import { ChecklistComponent } from "./checklist/checklist.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -93,6 +94,15 @@ const routes: Routes = [
     path: "checklist/:cid/checklistitemedit/:clid",
     component: ChecklistitemeditComponent,
     resolve: { checklistitem: ChecklistitemResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin", "isActivated"] },
+  },
+
+  // Checklist
+  {
+    path: "checklist/:id",
+    component: ChecklistComponent,
+    resolve: { checklist: ChecklistResolver },
     canActivate: [permissionGuard],
     data: { permissions: ["isAdmin", "isActivated"] },
   },
