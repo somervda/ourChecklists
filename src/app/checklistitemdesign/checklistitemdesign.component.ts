@@ -174,8 +174,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     ) {
       let newValue = this.checklistitemForm.get(fieldName).value;
       if (toType == "number") {
-      if (toType == "number") {
-
+        newValue = parseFloat(this.checklistitemForm.get(fieldName).value);
       }
       this.checklistitemService.fieldUpdate(
         this.cid,

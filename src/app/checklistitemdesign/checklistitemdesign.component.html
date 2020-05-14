@@ -1,11 +1,12 @@
 <app-subheading
-  title="Checklist Item Design - ' +
-  (crudAction == Crud.Create
-    ? 'Create'
-    : crudAction == Crud.Update
-    ? 'Update'
-    : 'Delete')
-"
+  [title]="
+    'Checklist Item Design - ' +
+    (crudAction == Crud.Create
+      ? 'Create'
+      : crudAction == Crud.Update
+      ? 'Update'
+      : 'Delete')
+  "
   [returnRoute]="'/checklistdesign/' + cid"
   returnTitle="Return to Checklist Design"
   matIcon="check_box"
@@ -75,7 +76,7 @@
         <input
           matInput
           formControlName="sequence"
-          (change)="onFieldUpdate('sequence')"
+          (change)="onFieldUpdate('sequence', 'number')"
           placeholder="Sequence Number"
           required
         />

@@ -13,8 +13,8 @@
   min-width: 350px;
 }
 
-.result {
-  max-width: 200px;
+::ng-deep .mat-select .mat-select-trigger {
+  width: 150px;
 }
 
 .result-error {

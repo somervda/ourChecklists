@@ -40,16 +40,17 @@
     ></textarea>
   </div>
   <div class="prompt">Result</div>
-  <app-checklistitemresult
-    class="result"
-    [checklistitem]="checklistitem"
-    [cid]="cid"
-    (change)="onResultChange($event, checklistitem)"
-    [disabled]="
-      checklistitem.requireEvidence &&
-      (!checklistitem.evidence || checklistitem.evidence.length == 0)
-    "
-  ></app-checklistitemresult>
+  <div class="result">
+    <app-checklistitemresult
+      [checklistitem]="checklistitem"
+      [cid]="cid"
+      (change)="onResultChange($event, checklistitem)"
+      [disabled]="
+        checklistitem.requireEvidence &&
+        (!checklistitem.evidence || checklistitem.evidence.length == 0)
+      "
+    ></app-checklistitemresult>
+  </div>
 
   <div
     class="result-error"
