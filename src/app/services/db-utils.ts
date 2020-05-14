@@ -40,3 +40,20 @@ export function dbFieldUpdate(
       );
   }
 }
+
+export function dbFieldUpdateAsPromise(
+  docPath: string,
+  fieldName: string,
+  newValue: any,
+  db: AngularFirestore
+): Promise<void> {
+  if (docPath && fieldName) {
+    // console.log("dbFieldUpdate: ", docPath, fieldName, newValue);
+    let updateObject = {};
+    updateObject[fieldName] = newValue;
+    // console.log(updateObject);
+    return db.doc(docPath).update(updateObject);
+  } else {
+    return null;
+  }
+}

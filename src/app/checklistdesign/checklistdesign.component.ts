@@ -251,22 +251,9 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   statusDialog() {
     console.log("statusDialog");
     const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {
-      width: "90%",
-      minWidth: "340px",
-      maxWidth: "600px",
+      width: "350px",
       data: { checklist: this.checklist },
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     console.log("New Owner", result);
-    //     const userRef: UserRef = {
-    //       uid: result.uid,
-    //       displayName: result.displayName,
-    //     };
-    //     this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
-    //     this.resource.owner = userRef;
-    //   }
-    // });
   }
 
   async waitForCurrentUser() {

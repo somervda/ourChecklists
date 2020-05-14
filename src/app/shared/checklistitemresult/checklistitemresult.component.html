@@ -15,8 +15,7 @@
   >
 </div>
 <div
-  [style.opacity]="checklistitem.resultValue == undefined ? '0.5' : '1'"
-  [title]="checklistitem.resultValue == undefined ? 'Not Touched' : ''"
+  [style.color]="checklistitem.resultValue == undefined ? 'grey' : 'black'"
   [hidden]="
     checklistitem.requireEvidence &&
     redirectForEvidence &&
@@ -34,7 +33,10 @@
       [ngModel]="checklistitem.resultValue"
       (change)="onChange($event, 'YesNo')"
       [disabled]="disabled"
-      matTooltip="Select Yes or No"
+      [matTooltip]="
+        'Select Yes or No' +
+        (checklistitem.resultValue == undefined ? ' : Not Touched' : '')
+      "
       >Y/N</mat-checkbox
     >
   </ng-container>
@@ -50,7 +52,10 @@
       [checked]="checklistitem.resultValue == ChecklistitemResultValue.true"
       (change)="onChange($event, 'YesNo')"
       [disabled]="disabled"
-      matTooltip="Select Yes or No"
+      [matTooltip]="
+        'Select Yes or No' +
+        (checklistitem.resultValue == undefined ? ' : Not Touched' : '')
+      "
       >Y/N</mat-checkbox
     >
     <mat-checkbox
@@ -89,7 +94,10 @@
       [ngModel]="checklistitem.resultValue"
       (selectionChange)="onChange($event, 'Rating')"
       [disabled]="disabled"
-      matTooltip="Select a rating"
+      [matTooltip]="
+        'Select a rating' +
+        (checklistitem.resultValue == undefined ? ' : Not Touched' : '')
+      "
     >
       <mat-option
         [value]="ChecklistitemResultValue.NA"

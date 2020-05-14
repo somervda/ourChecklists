@@ -3,7 +3,12 @@ import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Checklist } from "../models/checklist.model";
 import { map } from "rxjs/operators";
-import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
+import {
+  convertSnap,
+  convertSnaps,
+  dbFieldUpdate,
+  dbFieldUpdateAsPromise,
+} from "./db-utils";
 import { AuthService } from "./auth.service";
 import { UserRef } from "../models/helper.model";
 
@@ -87,6 +92,24 @@ export class ChecklistService {
     console.log("checklist fieldUpdate", docId, fieldName, newValue);
     if (docId && fieldName) {
       dbFieldUpdate("/checklists/" + docId, fieldName, newValue, this.afs);
+    }
+  }
+
+  fieldUpdateAsPromise(
+    docId: string,
+    fieldName: string,
+    newValue: any
+  ): Promise<void> {
+    console.log("checklist fieldUpdate", docId, fieldName, newValue);
+    if (docId && fieldName) {
+      return dbFieldUpdateAsPromise(
+        "/checklists/" + docId,
+        fieldName,
+        newValue,
+        this.afs
+      );
+    } else {
+      return null;
     }
   }
 

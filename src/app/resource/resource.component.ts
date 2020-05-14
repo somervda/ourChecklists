@@ -18,9 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { UserselectordialogComponent } from "../dialogs/userselectordialog/userselectordialog.component";
 import { TeamselectordialogComponent } from "../dialogs/teamselectordialog/teamselectordialog.component";
 import { CategoryselectordialogComponent } from "../dialogs/categoryselectordialog/categoryselectordialog.component";
-import { HighContrastMode } from "@angular/cdk/a11y";
 import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
-import { applySourceSpanToExpressionIfNeeded } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-resource",

@@ -16,6 +16,7 @@ import { UserRef, DocRef } from "../models/helper.model";
 import { Checklistitem } from "../models/checklistitem.model";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: "app-checklist",
@@ -33,10 +34,12 @@ export class ChecklistComponent implements OnInit {
     private checklistService: ChecklistService,
     private checklistitemService: ChecklistitemService,
     private resourceService: ResourceService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.waitForCurrentUser();
     this.checklist = this.route.snapshot.data["checklist"];
     this.checklistitems$ = this.checklistitemService.findAll(this.checklist.id);
     if (this.checklist.resources) {
@@ -68,22 +71,16 @@ export class ChecklistComponent implements OnInit {
   statusDialog() {
     console.log("statusDialog");
     const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {
-      width: "90%",
-      minWidth: "340px",
-      maxWidth: "600px",
+      width: "350px",
       data: { checklist: this.checklist },
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     console.log("New Owner", result);
-    //     const userRef: UserRef = {
-    //       uid: result.uid,
-    //       displayName: result.displayName,
-    //     };
-    //     this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
-    //     this.resource.owner = userRef;
-    //   }
-    // });
+  }
+
+  isTeamManagerOrAdmin(): Boolean {
+    return (
+      this.auth.currentUser.isAdmin ||
+      this.auth.currentUser.managerOfTeams?.includes(this.checklist.team.id)
+    );
   }
 
   getResultValueName(value: ChecklistitemResultValue): string {
@@ -107,5 +104,17 @@ export class ChecklistComponent implements OnInit {
       case ChecklistitemResultValue.high:
         return "5: High";
     }
+  }
+  async waitForCurrentUser() {
+    let waitMS = 5000;
+    while (!this.auth.currentUser && waitMS > 0) {
+      console.log("Waiting for user to show up!");
+      await this.sleep(200);
+      waitMS -= 200;
+    }
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

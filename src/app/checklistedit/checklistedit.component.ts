@@ -13,6 +13,7 @@ import { Resource } from "../models/resource.model";
 import { DocRef, UserRef } from "../models/helper.model";
 import { MatDialog } from "@angular/material/dialog";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: "app-checklistedit",
@@ -29,10 +30,12 @@ export class ChecklisteditComponent implements OnInit {
     private route: ActivatedRoute,
     private checklistService: ChecklistService,
     private resourceService: ResourceService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.waitForCurrentUser();
     this.checklist = this.route.snapshot.data["checklist"];
     if (this.checklist.resources) {
       this.resources$ = this.resourceService.findAllIn(
@@ -48,22 +51,9 @@ export class ChecklisteditComponent implements OnInit {
   statusDialog() {
     console.log("statusDialog");
     const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {
-      width: "90%",
-      minWidth: "340px",
-      maxWidth: "600px",
+      width: "350px",
       data: { checklist: this.checklist },
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result) {
-    //     console.log("New Owner", result);
-    //     const userRef: UserRef = {
-    //       uid: result.uid,
-    //       displayName: result.displayName,
-    //     };
-    //     this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
-    //     this.resource.owner = userRef;
-    //   }
-    // });
   }
 
   onShowAllChange(checked) {
@@ -93,5 +83,18 @@ export class ChecklisteditComponent implements OnInit {
       }, "");
     }
     return "None";
+  }
+
+  async waitForCurrentUser() {
+    let waitMS = 5000;
+    while (!this.auth.currentUser && waitMS > 0) {
+      console.log("Waiting for user to show up!");
+      await this.sleep(200);
+      waitMS -= 200;
+    }
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
