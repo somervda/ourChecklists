@@ -52,8 +52,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     public dialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    this.waitForCurrentUser();
+  async ngOnInit() {
+    await this.waitForCurrentUser();
     console.log(
       "this.route.snapshot.paramMap.get('id')",
       this.route.snapshot.paramMap.get("id")

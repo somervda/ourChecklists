@@ -3,7 +3,12 @@
 }
 
 mat-radio-button {
-  margin-right: 5px;
+  margin-left: 10px;
+  display: block;
+}
+
+.current-status {
+  margin-left: 10px;
 }
 
 .update-button {

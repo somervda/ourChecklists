@@ -34,8 +34,8 @@ export class ChecklisteditComponent implements OnInit {
     private auth: AuthService
   ) {}
 
-  ngOnInit(): void {
-    this.waitForCurrentUser();
+  async ngOnInit() {
+    await this.waitForCurrentUser();
     this.checklist = this.route.snapshot.data["checklist"];
     if (this.checklist.resources) {
       this.resources$ = this.resourceService.findAllIn(

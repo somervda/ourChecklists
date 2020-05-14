@@ -70,6 +70,21 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field class="half-width">
+        <input
+          matInput
+          formControlName="sequence"
+          (change)="onFieldUpdate('sequence')"
+          placeholder="Sequence Number"
+          required
+        />
+        <mat-error
+          *ngIf="checklistitemForm.controls['sequence'].hasError('required')"
+        >
+          Sequence is required.
+        </mat-error>
+      </mat-form-field>
     </fieldset>
 
     <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">

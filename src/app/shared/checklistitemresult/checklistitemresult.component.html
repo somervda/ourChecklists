@@ -15,7 +15,7 @@
   >
 </div>
 <div
-  [style.color]="checklistitem.resultValue == undefined ? 'grey' : 'black'"
+  [style.color]="checklistitem.resultValue == undefined ? 'lightgrey' : 'black'"
   [hidden]="
     checklistitem.requireEvidence &&
     redirectForEvidence &&
@@ -35,7 +35,7 @@
       [disabled]="disabled"
       [matTooltip]="
         'Select Yes or No' +
-        (checklistitem.resultValue == undefined ? ' : Not Touched' : '')
+        (checklistitem.resultValue == undefined ? ' : Currently untouched' : '')
       "
       >Y/N</mat-checkbox
     >
@@ -54,7 +54,7 @@
       [disabled]="disabled"
       [matTooltip]="
         'Select Yes or No' +
-        (checklistitem.resultValue == undefined ? ' : Not Touched' : '')
+        (checklistitem.resultValue == undefined ? ' : Currently untouched' : '')
       "
       >Y/N</mat-checkbox
     >
@@ -96,7 +96,7 @@
       [disabled]="disabled"
       [matTooltip]="
         'Select a rating' +
-        (checklistitem.resultValue == undefined ? ' : Not Touched' : '')
+        (checklistitem.resultValue == undefined ? ' : Currently untouched' : '')
       "
     >
       <mat-option

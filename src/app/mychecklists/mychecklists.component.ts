@@ -16,8 +16,8 @@ export class MychecklistsComponent implements OnInit {
     private checklistService: ChecklistService,
     private auth: AuthService
   ) {}
-  ngOnInit() {
-    this.waitForCurrentUser();
+  async ngOnInit() {
+    await this.waitForCurrentUser();
     this.checklists$ = this.checklistService.findMyChecklists(100);
   }
 

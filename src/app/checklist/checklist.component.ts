@@ -38,8 +38,8 @@ export class ChecklistComponent implements OnInit {
     private auth: AuthService
   ) {}
 
-  ngOnInit(): void {
-    this.waitForCurrentUser();
+  async ngOnInit() {
+    await this.waitForCurrentUser();
     this.checklist = this.route.snapshot.data["checklist"];
     this.checklistitems$ = this.checklistitemService.findAll(this.checklist.id);
     if (this.checklist.resources) {

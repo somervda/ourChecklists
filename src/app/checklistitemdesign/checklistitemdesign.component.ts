@@ -173,6 +173,10 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
       this.crudAction == Crud.Update
     ) {
       let newValue = this.checklistitemForm.get(fieldName).value;
+      if (toType == "number") {
+      if (toType == "number") {
+
+      }
       this.checklistitemService.fieldUpdate(
         this.cid,
         this.clid,
