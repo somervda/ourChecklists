@@ -5,11 +5,15 @@ table {
 
 .mat-column-description {
   padding-right: 5px;
-  width: 100%;
 }
 
 .mat-column-name {
   padding-right: 5px;
+}
+
+.mat-column-id {
+  text-align: right;
+  justify-content: flex-end;
 }
 
 .cb-selector {

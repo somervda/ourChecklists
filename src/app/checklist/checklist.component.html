@@ -56,7 +56,13 @@
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let checklistitem; let i = index">
           <div>{{ i + 1 }}. {{ checklistitem.name }}</div>
+
           <div class="item-details" *ngIf="itemdetails.checked">
+            <div>
+              <span class="item-prompt">Description </span>
+              <span class="item-detail">{{ checklistitem.description }}</span>
+            </div>
+
             <div
               *ngIf="checklistitem.comment && checklistitem.comment.length > 0"
             >

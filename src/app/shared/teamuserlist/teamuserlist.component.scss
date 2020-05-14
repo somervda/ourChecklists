@@ -10,12 +10,16 @@ table {
 
 .mat-column-email {
   padding-right: 5px;
-  width: 100%;
   word-break: break-all;
 }
 
 .mat-column-displayName {
   padding-right: 5px;
+}
+
+.mat-column-uid {
+  text-align: right;
+  justify-content: flex-end;
 }
 
 .add-row th {

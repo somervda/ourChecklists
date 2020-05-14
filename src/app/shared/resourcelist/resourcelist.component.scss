@@ -5,7 +5,6 @@ table {
 
 .mat-column-description {
   padding-right: 5px;
-  width: 100%;
 }
 
 .mat-column-name {
@@ -13,4 +12,9 @@ table {
   padding-right: 5px;
   cursor: pointer;
   font-weight: 600;
+}
+
+.mat-column-resourceType {
+  text-align: right;
+  justify-content: flex-end;
 }

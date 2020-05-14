@@ -5,10 +5,13 @@ table {
 
 .mat-column-description {
   padding-right: 5px;
-  width: 100%;
 }
 
 .mat-column-name {
-  white-space: nowrap;
   padding-right: 5px;
+}
+
+.mat-column-id {
+  text-align: right;
+  justify-content: flex-end;
 }
