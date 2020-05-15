@@ -29,6 +29,8 @@ import { ChecklistitemResolver } from "./services/checklistitem-resolver";
 import { ChecklisteditComponent } from "./checklistedit/checklistedit.component";
 import { ChecklistitemeditComponent } from "./checklistitemedit/checklistitemedit.component";
 import { ChecklistComponent } from "./checklist/checklist.component";
+import { CheckliststatusGuard } from "./guards/checkliststatus.guard";
+import { ChecklistStatus } from "./models/checklist.model";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -59,8 +61,11 @@ const routes: Routes = [
     path: "checklistdesign/:id",
     component: ChecklistdesignComponent,
     resolve: { checklist: ChecklistResolver },
-    canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isActivated"] },
+    canActivate: [permissionGuard, CheckliststatusGuard],
+    data: {
+      permissions: ["isAdmin", "isActivated"],
+      validStatuses: [ChecklistStatus.UnderConstruction],
+    },
   },
   {
     path: "checklist/:cid/checklistitemdesign/create",
@@ -87,8 +92,11 @@ const routes: Routes = [
     path: "checklistedit/:id",
     component: ChecklisteditComponent,
     resolve: { checklist: ChecklistResolver },
-    canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isActivated"] },
+    canActivate: [permissionGuard, CheckliststatusGuard],
+    data: {
+      permissions: ["isAdmin", "isActivated"],
+      validStatuses: [ChecklistStatus.Active],
+    },
   },
   {
     path: "checklist/:cid/checklistitemedit/:clid",
@@ -104,7 +112,9 @@ const routes: Routes = [
     component: ChecklistComponent,
     resolve: { checklist: ChecklistResolver },
     canActivate: [permissionGuard],
-    data: { permissions: ["isAdmin", "isActivated"] },
+    data: {
+      permissions: ["isAdmin", "isActivated"],
+    },
   },
 
   // Teams
