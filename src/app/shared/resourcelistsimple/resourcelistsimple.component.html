@@ -7,3 +7,6 @@
     >{{ resource.name }}</span
   ></ng-container
 >
+<ng-container *ngIf="!resources$ || (resources$ | async).length == 0"
+  >None</ng-container
+>

@@ -7,8 +7,10 @@
       ? 'Update'
       : 'Delete')
   "
-  matIcon="build"
-></app-subheading>
+  [matIcon]="getChecklistStatusInfoItem(checklist.status).icon"
+>
+  ></app-subheading
+>
 
 <div class="page-container">
   <form class="standard-form" [formGroup]="checklistForm">
@@ -62,9 +64,14 @@
 
       <div class="prompt">
         Status:
-        {{ getChecklistStatusInfoItem(checklist.status).name }}
-        <button mat-button matTooltip="Update Status" (click)="statusDialog()">
-          <mat-icon>edit</mat-icon>
+      </div>
+      <div style="margin-bottom: 5px;">
+        <button
+          mat-raised-button
+          matTooltip="Update Status"
+          (click)="statusDialog()"
+        >
+          {{ getChecklistStatusInfoItem(checklist.status).name }}
         </button>
       </div>
 

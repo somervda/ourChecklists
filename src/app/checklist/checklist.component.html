@@ -1,4 +1,8 @@
-<app-subheading title="Checklist Viewer" matIcon="check_box"></app-subheading>
+<app-subheading
+  title="Checklist Viewer"
+  [matIcon]="getChecklistStatusInfoItem(checklist.status).icon"
+  [showPrint]="true"
+></app-subheading>
 
 <div class="page-container">
   <div class="prompt">
@@ -11,16 +15,18 @@
 
   <div class="prompt">Status</div>
   <div>
-    {{ getChecklistStatusInfoItem(checklist.status).name }}
-    <!-- Only functionality available that is not a view -->
     <button
-      mat-button
+      mat-raised-button
       matTooltip="Update Status"
       (click)="statusDialog()"
       *ngIf="isTeamManagerOrAdmin()"
     >
-      <mat-icon>edit</mat-icon>
+      {{ getChecklistStatusInfoItem(checklist.status).name }}
+      <!-- Only functionality available that is not a view -->
     </button>
+    <ng-container *ngIf="!isTeamManagerOrAdmin()">
+      {{ getChecklistStatusInfoItem(checklist.status).name }}
+    </ng-container>
   </div>
 
   <div class="prompt">

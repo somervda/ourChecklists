@@ -16,12 +16,13 @@
 >
   <ng-container matColumnDef="name" sticky>
     <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let checklistitem">
+    <td mat-cell *matCellDef="let checklistitem; let i = index">
       <!-- Depending on checklists status and user's role then different links are shown -->
+
       <a
         [routerLink]="getChecklistitemLinkAction(checklistitem).link"
         [matTooltip]="getChecklistitemLinkAction(checklistitem).tooltip"
-        >{{ checklistitem.name }}</a
+        >{{ i + 1 }}. {{ checklistitem.name }}</a
       >
     </td>
   </ng-container>

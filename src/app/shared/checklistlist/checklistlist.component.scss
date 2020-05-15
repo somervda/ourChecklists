@@ -13,11 +13,15 @@ table {
   // min-width: 120px;
 }
 
-.mat-column-status {
-  white-space: nowrap;
+.mat-column-viewprint {
   padding-right: 5px;
   text-align: right;
   justify-content: flex-end;
+}
+
+.mat-column-status {
+  white-space: nowrap;
+  padding-right: 5px;
 }
 
 .mat-column-team {

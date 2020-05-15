@@ -21,6 +21,9 @@
     matTooltip="See more details?"
     [hidden]="!showAll"
   ></mat-slide-toggle>
+  <mat-icon (click)="print()" matTooltip="Click to print" [hidden]="!showPrint"
+    >print</mat-icon
+  >
   <button
     mat-button
     style="min-width: 40px; padding: 0px; text-align: center;"

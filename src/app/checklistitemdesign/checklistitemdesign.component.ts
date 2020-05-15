@@ -120,7 +120,13 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
   onCreate() {
     console.log("onCreate", this.checklistitem);
     for (const field in this.checklistitemForm.controls) {
-      this.checklistitem[field] = this.checklistitemForm.get(field).value;
+      if (field == "sequence") {
+        this.checklistitem[field] = parseFloat(
+          this.checklistitemForm.get(field).value
+        );
+      } else {
+        this.checklistitem[field] = this.checklistitemForm.get(field).value;
+      }
     }
 
     this.checklistitemService

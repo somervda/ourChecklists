@@ -12,6 +12,7 @@ export class SubheadingComponent implements OnInit {
   @Input() matIcon: string;
   @Input() showAll: boolean;
   @Input() showClose: boolean;
+  @Input() showPrint: boolean;
   @Output() showAllChange = new EventEmitter();
   @Output() close = new EventEmitter();
 
@@ -26,5 +27,10 @@ export class SubheadingComponent implements OnInit {
 
   onClose() {
     this.close.emit(true);
+  }
+
+  print() {
+    // do other stuff...
+    window.print();
   }
 }

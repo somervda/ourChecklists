@@ -16,7 +16,13 @@ import { AuthService } from "../../services/auth.service";
 export class ChecklistlistComponent implements OnInit {
   @Input() checklists$: Observable<Checklist[]>;
   @Input() hideCreate: boolean;
-  displayedColumns: string[] = ["name", "description", "status", "team"];
+  displayedColumns: string[] = [
+    "name",
+    "status",
+    "description",
+    "team",
+    "viewprint",
+  ];
 
   constructor(private auth: AuthService) {}
 
