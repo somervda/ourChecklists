@@ -35,7 +35,7 @@
       [disabled]="disabled"
       [matTooltip]="
         'Select Yes or No' +
-        (checklistitem.resultValue == undefined ? ' : Currently untouched' : '')
+        (checklistitem.resultValue == undefined ? ' : No value set!' : '')
       "
       >Y/N</mat-checkbox
     >
@@ -54,7 +54,7 @@
       [disabled]="disabled"
       [matTooltip]="
         'Select Yes or No' +
-        (checklistitem.resultValue == undefined ? ' : Currently untouched' : '')
+        (checklistitem.resultValue == undefined ? ' : No value set!' : '')
       "
       >Y/N</mat-checkbox
     >
@@ -66,21 +66,6 @@
       matTooltip="or select 'N/A' if the item is Not Applicable"
       >N/A</mat-checkbox
     >
-    <!-- <mat-select
-      [ngModel]="checklistitem.resultValue"
-      (selectionChange)="onChange($event, false)"
-      [disabled]="disabled"
-    >
-      <mat-option [value]="ChecklistitemResultValue.NA">
-        N/A
-      </mat-option>
-      <mat-option [value]="ChecklistitemResultValue.false">
-        No
-      </mat-option>
-      <mat-option [value]="ChecklistitemResultValue.true">
-        Yes
-      </mat-option>
-    </mat-select> -->
   </ng-container>
 
   <ng-container
@@ -96,7 +81,7 @@
       [disabled]="disabled"
       [matTooltip]="
         'Select a rating' +
-        (checklistitem.resultValue == undefined ? ' : Currently untouched' : '')
+        (checklistitem.resultValue == undefined ? ' : No value set!' : '')
       "
     >
       <mat-option

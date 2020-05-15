@@ -6,7 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
   styleUrls: ["./subheading.component.scss"],
 })
 export class SubheadingComponent implements OnInit {
-  @Input() title: string;
+  @Input() prompt: string;
   @Input() returnRoute: string;
   @Input() returnTitle: string;
   @Input() matIcon: string;
