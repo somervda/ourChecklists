@@ -13,8 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "../services/auth.service";
 import { Checklist } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
-import { Activity } from "../models/activity.model";
-import { Resource } from "../models/resource.model";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-checklistitemdesign",
@@ -24,6 +23,7 @@ import { Resource } from "../models/resource.model";
 export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
   checklistitem: Checklistitem;
   checklist$: Observable<Checklist>;
+  maxSeq$$: Subscription;
   cid: string;
   clid: string;
   crudAction: Crud;
@@ -45,7 +45,8 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     private checklistService: ChecklistService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.waitForCurrentUser();
     this.cid = this.route.snapshot.paramMap.get("cid");
     this.checklist$ = this.checklistService.findById(this.cid);
 
@@ -71,11 +72,27 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
       this.checklistitem = {
         name: "",
         description: "",
-        sequence: 0,
+        sequence: 10,
         allowNA: false,
         requireEvidence: false,
         resultType: ChecklistitemResultType.checkbox,
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
+      // Code to work out what the next sequence number should be to add the
+      // new checklistitem to the end of the list
+      this.maxSeq$$ = this.checklistitemService
+        .findMaxSequence(this.cid)
+        .subscribe((c) => {
+          if (c[0]) {
+            console.log(
+              "getHighestSequence",
+              this.checklistitem.sequence,
+              c[0]
+            );
+            this.checklistitem.sequence = c[0].sequence + 10;
+            this.checklistitemForm.patchValue(this.checklistitem);
+          }
+        });
     } else {
       this.checklistitem = this.route.snapshot.data["checklistitem"];
       this.clid = this.route.snapshot.paramMap.get("clid");
@@ -265,5 +282,21 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.checklistitemSubscription$$)
       this.checklistitemSubscription$$.unsubscribe();
+    if (this.maxSeq$$) {
+      this.maxSeq$$.unsubscribe();
+    }
+  }
+
+  async waitForCurrentUser() {
+    let waitMS = 5000;
+    while (!this.auth.currentUser && waitMS > 0) {
+      console.log("Waiting for user to show up!");
+      await this.sleep(200);
+      waitMS -= 200;
+    }
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

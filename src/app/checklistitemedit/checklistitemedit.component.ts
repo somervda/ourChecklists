@@ -64,6 +64,8 @@ export class ChecklistitemeditComponent implements OnInit {
 
   onResultChange(resultValue, checklistitem) {
     console.log("onResultChange", resultValue, checklistitem);
+    // Also update user and optionally the dateUpdateFirst value
+
     this.checklistitemService.fieldUpdate(
       this.cid,
       checklistitem.id,

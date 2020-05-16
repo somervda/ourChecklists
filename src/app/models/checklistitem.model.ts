@@ -1,4 +1,4 @@
-import { DocRef } from "./helper.model";
+import { DocRef, UserRef } from "./helper.model";
 
 export interface Checklistitem {
   id?: string;
@@ -6,8 +6,8 @@ export interface Checklistitem {
   sequence: number;
   description: string;
   activities?: DocRef[];
-  dateCreated?: Date;
-  dateUpdate?: Date;
+  dateCreated?: Date | any;
+  dateResultSet?: Date | any;
   evidence?: string;
   allowNA: boolean;
   requireEvidence: boolean;

@@ -5,6 +5,7 @@ import { Checklistitem } from "../models/checklistitem.model";
 import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 import { map } from "rxjs/operators";
 import { Checklist } from "../models/checklist.model";
+import * as firebase from "firebase";
 
 @Injectable({
   providedIn: "root",
@@ -47,6 +48,24 @@ export class ChecklistitemService {
       );
   }
 
+  findMaxSequence(cid: string): Observable<Checklistitem[]> {
+    return this.afs
+      .collection("checklists/" + cid + "/checklistitems", (ref) =>
+        ref.orderBy("sequence", "desc").limit(1)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          console.log(
+            "findMaxSequence",
+            snaps,
+            convertSnaps<Checklistitem>(snaps)
+          );
+          return convertSnaps<Checklistitem>(snaps);
+        })
+      );
+  }
+
   /**
    * Updates a selected property on a checklistitem
    * @param cid checklist.id
@@ -62,6 +81,15 @@ export class ChecklistitemService {
         newValue,
         this.afs
       );
+      // May move dateUpdated to a function
+      if (fieldName == "resultValue") {
+        dbFieldUpdate(
+          "/checklists/" + cid + "/checklistitems/" + clid,
+          "dateResultSet",
+          firebase.firestore.FieldValue.serverTimestamp(),
+          this.afs
+        );
+      }
     }
   }
 
