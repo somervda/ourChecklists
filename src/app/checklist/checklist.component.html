@@ -48,7 +48,9 @@
   <div>{{ checklist.category.name }}</div>
 
   <div class="prompt">Assignees</div>
-  <div>{{ getFlatDocRefArray(userRefToDocRef(checklist.assignee)) }}</div>
+  <div>
+    {{ getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee)) }}
+  </div>
   <br />
   <div class="checklistitem-frame">
     <div>

@@ -17,6 +17,7 @@ import { Checklistitem } from "../models/checklistitem.model";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { AuthService } from "../services/auth.service";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-checklist",
@@ -35,7 +36,8 @@ export class ChecklistComponent implements OnInit {
     private checklistitemService: ChecklistitemService,
     private resourceService: ResourceService,
     public dialog: MatDialog,
-    private auth: AuthService
+    private auth: AuthService,
+    public helper: HelperService
   ) {}
 
   async ngOnInit() {
