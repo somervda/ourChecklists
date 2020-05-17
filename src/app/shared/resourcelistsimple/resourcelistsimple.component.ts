@@ -43,13 +43,4 @@ export class ResourcelistsimpleComponent implements OnInit {
       autoFocus: false,
     });
   }
-
-  // getFlatDocRefArray(docRefArray: DocRef[]): string {
-  //   if (docRefArray) {
-  //     return docRefArray.reduce((accumulator, docRef, index) => {
-  //       return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
-  //     }, "");
-  //   }
-  //   return "None";
-  // }
 }

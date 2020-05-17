@@ -1,3 +1,4 @@
+import { HelperService } from "./../services/helper.service";
 import { OnDestroy, NgZone } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 import {
@@ -49,7 +50,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private router: Router,
     private auth: AuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public helper: HelperService
   ) {}
 
   async ngOnInit() {
@@ -198,21 +200,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  userRefToDocRef(userRef: UserRef[]): DocRef[] {
-    return userRef.map((a) => {
-      return { id: a.uid, name: a.displayName };
-    });
-  }
-
-  getFlatDocRefArray(docRefArray: DocRef[]): string {
-    if (docRefArray) {
-      return docRefArray.reduce((accumulator, docRef, index) => {
-        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
-      }, "");
-    }
-    return "None";
-  }
-
   objectComparisonFunction = function (option, value): boolean {
     // Needed to compare objects in select dropdowns
     // console.log("objectComparisonFunction", option, value);
@@ -242,10 +229,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         this.checklist.category
       );
     }
-  }
-
-  getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
-    return ChecklistStatusInfo.find((clsii) => clsii.status == status);
   }
 
   statusDialog() {

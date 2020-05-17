@@ -1,3 +1,4 @@
+import { HelperService } from "./../services/helper.service";
 import { Component, OnInit } from "@angular/core";
 import { Checklistitem } from "../models/checklistitem.model";
 import { Observable } from "rxjs";
@@ -20,7 +21,8 @@ export class ChecklistitemeditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private checklistitemService: ChecklistitemService,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    public helper: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -31,15 +33,6 @@ export class ChecklistitemeditComponent implements OnInit {
         this.checklistitem.resources.map((r) => r.id)
       );
     }
-  }
-
-  getFlatDocRefArray(docRefArray: DocRef[]): string {
-    if (docRefArray) {
-      return docRefArray.reduce((accumulator, docRef, index) => {
-        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
-      }, "");
-    }
-    return "None";
   }
 
   updateComment() {

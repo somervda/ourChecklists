@@ -1,6 +1,6 @@
 <app-subheading
   prompt="Checklist Entry"
-  [matIcon]="getChecklistStatusInfoItem(checklist.status).icon"
+  [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
 >
   showAll="true" (showAllChange)="onShowAllChange($event)" ></app-subheading
 >
@@ -21,7 +21,7 @@
       matTooltip="Update Status"
       (click)="statusDialog()"
     >
-      {{ getChecklistStatusInfoItem(checklist.status).name }}
+      {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
     </button>
   </div>
 
@@ -31,9 +31,6 @@
   <div>
     <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
   </div>
-  <!-- {{ getFlatDocRefArray(checklist.resources) }} -->
-
-  <!-- <mat-expansion-panel> -->
 
   <div class="prompt">Comments</div>
   <div>
@@ -59,7 +56,11 @@
       <div>{{ checklist.category.name }}</div>
 
       <div class="prompt">Assignees</div>
-      <div>{{ getFlatDocRefArray(userRefToDocRef(checklist.assignee)) }}</div>
+      <div>
+        {{
+          helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee))
+        }}
+      </div>
     </div>
   </div>
 

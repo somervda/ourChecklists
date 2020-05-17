@@ -1,3 +1,4 @@
+import { HelperService } from "./../../services/helper.service";
 import { Component, OnInit, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import {
@@ -24,7 +25,7 @@ export class ChecklistlistComponent implements OnInit {
     "viewprint",
   ];
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, public helper: HelperService) {}
 
   async ngOnInit() {
     await this.waitForCurrentUser();
@@ -68,9 +69,6 @@ export class ChecklistlistComponent implements OnInit {
     }
 
     return linkAction;
-  }
-  getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
-    return ChecklistStatusInfo.find((clsii) => clsii.status == status);
   }
 
   async waitForCurrentUser() {

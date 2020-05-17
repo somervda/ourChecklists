@@ -51,25 +51,6 @@ export class ChecklistComponent implements OnInit {
     }
   }
 
-  userRefToDocRef(userRef: UserRef[]): DocRef[] {
-    return userRef.map((a) => {
-      return { id: a.uid, name: a.displayName };
-    });
-  }
-
-  getFlatDocRefArray(docRefArray: DocRef[]): string {
-    if (docRefArray) {
-      return docRefArray.reduce((accumulator, docRef, index) => {
-        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
-      }, "");
-    }
-    return "None";
-  }
-
-  getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
-    return ChecklistStatusInfo.find((clsii) => clsii.status == status);
-  }
-
   statusDialog() {
     console.log("statusDialog");
     const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {

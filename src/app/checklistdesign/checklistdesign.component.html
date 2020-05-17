@@ -7,7 +7,7 @@
       ? 'Update'
       : 'Delete')
   "
-  [matIcon]="getChecklistStatusInfoItem(checklist.status).icon"
+  [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
 >
   ></app-subheading
 >
@@ -71,7 +71,7 @@
           matTooltip="Update Status"
           (click)="statusDialog()"
         >
-          {{ getChecklistStatusInfoItem(checklist.status).name }}
+          {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
         </button>
       </div>
 
@@ -119,7 +119,9 @@
     <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
         Assignees:
-        {{ getFlatDocRefArray(userRefToDocRef(checklist.assignee)) }}
+        {{
+          helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee))
+        }}
         <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 
@@ -133,7 +135,7 @@
     <br />
     <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
-        Resources: {{ getFlatDocRefArray(checklist.resources) }}
+        Resources: {{ helper.getFlatDocRefArray(checklist.resources) }}
         <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 

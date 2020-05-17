@@ -1,3 +1,4 @@
+import { HelperService } from "./../services/helper.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
   Checklist,
@@ -31,7 +32,8 @@ export class ChecklisteditComponent implements OnInit {
     private checklistService: ChecklistService,
     private resourceService: ResourceService,
     public dialog: MatDialog,
-    private auth: AuthService
+    private auth: AuthService,
+    public helper: HelperService
   ) {}
 
   async ngOnInit() {
@@ -42,10 +44,6 @@ export class ChecklisteditComponent implements OnInit {
         this.checklist.resources.map((r) => r.id)
       );
     }
-  }
-
-  getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
-    return ChecklistStatusInfo.find((clsii) => clsii.status == status);
   }
 
   statusDialog() {
@@ -68,21 +66,6 @@ export class ChecklisteditComponent implements OnInit {
       "comments",
       this.checklist.comments
     );
-  }
-
-  userRefToDocRef(userRef: UserRef[]): DocRef[] {
-    return userRef.map((a) => {
-      return { id: a.uid, name: a.displayName };
-    });
-  }
-
-  getFlatDocRefArray(docRefArray: DocRef[]): string {
-    if (docRefArray) {
-      return docRefArray.reduce((accumulator, docRef, index) => {
-        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
-      }, "");
-    }
-    return "None";
   }
 
   async waitForCurrentUser() {

@@ -12,7 +12,7 @@
   <div class="prompt">Resources</div>
   <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
   <div class="prompt">Activities</div>
-  <div>{{ getFlatDocRefArray(checklistitem.activities) }}</div>
+  <div>{{ helper.getFlatDocRefArray(checklistitem.activities) }}</div>
   <div class="prompt">Comment</div>
   <div>
     <textarea

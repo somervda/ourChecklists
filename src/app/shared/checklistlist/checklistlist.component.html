@@ -26,8 +26,10 @@
     <th mat-header-cell *matHeaderCellDef>Status</th>
     <td mat-cell *matCellDef="let checklist">
       <mat-icon
-        [matTooltip]="getChecklistStatusInfoItem(checklist.status).name"
-        >{{ getChecklistStatusInfoItem(checklist.status).icon }}</mat-icon
+        [matTooltip]="helper.getChecklistStatusInfoItem(checklist.status).name"
+        >{{
+          helper.getChecklistStatusInfoItem(checklist.status).icon
+        }}</mat-icon
       >
     </td>
   </ng-container>

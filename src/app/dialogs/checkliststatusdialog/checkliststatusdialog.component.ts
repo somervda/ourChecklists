@@ -1,3 +1,4 @@
+import { HelperService } from "./../../services/helper.service";
 import { Component, OnInit, Inject, NgZone } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import {
@@ -25,17 +26,14 @@ export class CheckliststatusdialogComponent implements OnInit {
     private checklistService: ChecklistService,
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
-    private router: Router
+    private router: Router,
+    public helper: HelperService
   ) {}
 
   ngOnInit(): void {
     if (this.data.checklist) {
       this.checklist = this.data.checklist;
     }
-  }
-
-  getChecklistStatusInfoItem(status: ChecklistStatus): ChecklistStatusInfoItem {
-    return ChecklistStatusInfo.find((clsii) => clsii.status == status);
   }
 
   updateStatus() {

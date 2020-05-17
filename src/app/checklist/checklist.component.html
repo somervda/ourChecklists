@@ -1,6 +1,6 @@
 <app-subheading
   prompt="Checklist Viewer"
-  [matIcon]="getChecklistStatusInfoItem(checklist.status).icon"
+  [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
   [showPrint]="true"
 ></app-subheading>
 
@@ -21,11 +21,11 @@
       (click)="statusDialog()"
       *ngIf="isTeamManagerOrAdmin()"
     >
-      {{ getChecklistStatusInfoItem(checklist.status).name }}
+      {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
       <!-- Only functionality available that is not a view -->
     </button>
     <ng-container *ngIf="!isTeamManagerOrAdmin()">
-      {{ getChecklistStatusInfoItem(checklist.status).name }}
+      {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
     </ng-container>
   </div>
 
@@ -49,7 +49,7 @@
 
   <div class="prompt">Assignees</div>
   <div>
-    {{ getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee)) }}
+    {{ helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee)) }}
   </div>
   <br />
   <div class="checklistitem-frame">
