@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { IconAction } from "src/app/models/helper.model";
 
 @Component({
   selector: "app-subheading",
@@ -15,6 +16,8 @@ export class SubheadingComponent implements OnInit {
   @Input() showPrint: boolean;
   @Output() showAllChange = new EventEmitter();
   @Output() close = new EventEmitter();
+  @Input() iconActions: IconAction[];
+  @Output() iconAction = new EventEmitter();
 
   constructor() {}
 
@@ -32,5 +35,10 @@ export class SubheadingComponent implements OnInit {
   print() {
     // do other stuff...
     window.print();
+  }
+
+  iconActionClick(value: string) {
+    console.log("iconActionClick:", value);
+    this.iconAction.emit(value);
   }
 }

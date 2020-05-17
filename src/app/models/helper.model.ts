@@ -28,9 +28,9 @@ export enum Crud {
  * a specific value.
  *
  */
-export interface iconActions {
+export interface IconAction {
   icon: string;
   toolTip: string;
-  lingAction?: string;
-  emitAction?: string;
+  routerLink?: string;
+  emitValue?: string;
 }

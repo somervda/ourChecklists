@@ -21,9 +21,11 @@
     matTooltip="See more details?"
     [hidden]="!showAll"
   ></mat-slide-toggle>
+
   <mat-icon (click)="print()" matTooltip="Click to print" [hidden]="!showPrint"
     >print</mat-icon
   >
+
   <button
     mat-button
     style="min-width: 40px; padding: 0px; text-align: center;"
@@ -36,5 +38,14 @@
       style="margin-left: 5px; margin-right: 5px;"
       >close</i
     >
+  </button>
+  <button
+    mat-button
+    *ngFor="let iconAction of iconActions"
+    [routerLink]="iconAction.routerLink"
+    (click)="iconActionClick(iconAction.emitValue)"
+    [matTooltip]="iconAction.toolTip"
+  >
+    <mat-icon>{{ iconAction.icon }}</mat-icon>
   </button>
 </mat-toolbar>

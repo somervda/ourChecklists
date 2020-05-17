@@ -1,4 +1,16 @@
-<app-subheading prompt="Categories List" matIcon="category"></app-subheading>
+<app-subheading
+  prompt="Categories List"
+  matIcon="category"
+  [iconActions]="[
+    {
+      icon: 'remove_circle_outline',
+      toolTip: 'Link to about',
+      routerLink: '/about'
+    },
+    { icon: 'weekend', toolTip: 'Click weekend', emitValue: 'weekend' }
+  ]"
+  (iconAction)="iconAction($event)"
+></app-subheading>
 <div class="page-container">
   <button
     mat-raised-button
