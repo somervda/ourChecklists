@@ -15,6 +15,7 @@ import { DocRef, UserRef } from "../models/helper.model";
 import { MatDialog } from "@angular/material/dialog";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { AuthService } from "../services/auth.service";
+import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-checklistedit",
@@ -26,6 +27,7 @@ export class ChecklisteditComponent implements OnInit {
   resources$: Observable<Resource[]>;
   hideDetails = true;
   showResources = false;
+  checklistForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,7 +35,8 @@ export class ChecklisteditComponent implements OnInit {
     private resourceService: ResourceService,
     public dialog: MatDialog,
     private auth: AuthService,
-    public helper: HelperService
+    public helper: HelperService,
+    private fb: FormBuilder
   ) {}
 
   async ngOnInit() {
@@ -44,6 +47,11 @@ export class ChecklisteditComponent implements OnInit {
         this.checklist.resources.map((r) => r.id)
       );
     }
+
+    // Create validators
+    this.checklistForm = this.fb.group({
+      comments: [this.checklist.comments, [Validators.maxLength(5000)]],
+    });
   }
 
   statusDialog() {
@@ -61,11 +69,13 @@ export class ChecklisteditComponent implements OnInit {
 
   updateComments() {
     // console.log("updateComments");
-    this.checklistService.fieldUpdate(
-      this.checklist.id,
-      "comments",
-      this.checklist.comments
-    );
+    if (this.checklistForm.get("comments").valid) {
+      this.checklistService.fieldUpdate(
+        this.checklist.id,
+        "comments",
+        this.checklist.comments
+      );
+    }
   }
 
   async waitForCurrentUser() {

@@ -7,6 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ResourceService } from "../services/resource.service";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { DocRef } from "../models/helper.model";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-checklistitemedit",
@@ -17,12 +18,14 @@ export class ChecklistitemeditComponent implements OnInit {
   checklistitem: Checklistitem;
   resources$: Observable<Resource[]>;
   cid: string;
+  checklistitemForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private checklistitemService: ChecklistitemService,
     private resourceService: ResourceService,
-    public helper: HelperService
+    public helper: HelperService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -33,26 +36,36 @@ export class ChecklistitemeditComponent implements OnInit {
         this.checklistitem.resources.map((r) => r.id)
       );
     }
+
+    // Create validators
+    this.checklistitemForm = this.fb.group({
+      comment: [this.checklistitem.comment, [Validators.maxLength(5000)]],
+      evidence: [this.checklistitem.evidence, [Validators.maxLength(5000)]],
+    });
   }
 
   updateComment() {
     // console.log("updateComment");
-    this.checklistitemService.fieldUpdate(
-      this.cid,
-      this.checklistitem.id,
-      "comment",
-      this.checklistitem.comment
-    );
+    if (this.checklistitemForm.get("comment").valid) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.checklistitem.id,
+        "comment",
+        this.checklistitem.comment
+      );
+    }
   }
 
   updateEvidence() {
     // console.log("updateEvidence");
-    this.checklistitemService.fieldUpdate(
-      this.cid,
-      this.checklistitem.id,
-      "evidence",
-      this.checklistitem.evidence
-    );
+    if (this.checklistitemForm.get("evidence").valid) {
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.checklistitem.id,
+        "evidence",
+        this.checklistitem.evidence
+      );
+    }
   }
 
   onResultChange(resultValue, checklistitem) {

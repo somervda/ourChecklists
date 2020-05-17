@@ -34,16 +34,26 @@
 
   <div class="prompt">Comments</div>
   <div>
-    <textarea
-      matInput
-      class="full-width"
-      [(ngModel)]="checklist.comments"
-      (change)="updateComments()"
-      matAutosizeMinRows="3"
-      matAutosizeMaxRows="10"
-      matTextareaAutosize
-      placeholder="Comments"
-    ></textarea>
+    <form class="standard-form" [formGroup]="checklistForm">
+      <fieldset>
+        <textarea
+          matInput
+          formControlName="comments"
+          class="full-width"
+          [(ngModel)]="checklist.comments"
+          (change)="updateComments()"
+          matAutosizeMinRows="3"
+          matAutosizeMaxRows="10"
+          matTextareaAutosize
+          placeholder="Comments"
+        ></textarea>
+        <mat-error
+          *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
+        >
+          Comments can not be more than 5000 characters long.
+        </mat-error>
+      </fieldset>
+    </form>
   </div>
 
   <div [hidden]="hideDetails">

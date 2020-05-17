@@ -29,8 +29,7 @@ export class ActivityComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
-    private router: Router,
-    private auth: AuthService
+    private router: Router
   ) {}
 
   ngOnInit() {
