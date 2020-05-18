@@ -1,18 +1,18 @@
 <app-subheading
   prompt="Checklist Entry"
-  [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
->
-  showAll="true" (showAllChange)="onShowAllChange($event)" ></app-subheading
->
+  [matIcon]="helper.getChecklistStatusInfoItem(checklist?.status)?.icon"
+  [showAll]="true"
+  (showAllChange)="onShowAllChange($event)"
+></app-subheading>
 
 <div class="page-container">
   <div class="prompt">
     Name
   </div>
-  <div>{{ checklist.name }}</div>
+  <div>{{ checklist?.name }}</div>
 
   <div class="prompt">Description</div>
-  <div>{{ checklist.description }}</div>
+  <div>{{ checklist?.description }}</div>
 
   <div class="prompt">Status</div>
   <div>
@@ -21,7 +21,7 @@
       matTooltip="Update Status"
       (click)="statusDialog()"
     >
-      {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
+      {{ helper.getChecklistStatusInfoItem(checklist?.status)?.name }}
     </button>
   </div>
 
@@ -40,7 +40,6 @@
           matInput
           formControlName="comments"
           class="full-width"
-          [(ngModel)]="checklist.comments"
           (change)="updateComments()"
           matAutosizeMinRows="3"
           matAutosizeMaxRows="10"

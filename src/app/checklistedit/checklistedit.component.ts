@@ -50,7 +50,7 @@ export class ChecklisteditComponent implements OnInit {
 
     // Create validators
     this.checklistForm = this.fb.group({
-      comments: [this.checklist.comments, [Validators.maxLength(5000)]],
+      comments: [this.checklist?.comments, [Validators.maxLength(5000)]],
     });
   }
 
