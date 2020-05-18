@@ -18,7 +18,7 @@
     {{ helper.getChecklistStatusInfoItem(checklist.status).description }}
   </div>
 </div>
-<div class="prompt">Update Status to...</div>
+<div class="prompt">You can change the Status to...</div>
 <div>
   <mat-radio-group [(ngModel)]="newStatus">
     <ng-container *ngIf="checklist.status == ChecklistStatus.Active">

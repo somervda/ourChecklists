@@ -32,13 +32,14 @@ export const ChecklistStatusInfo: ChecklistStatusInfoItem[] = [
     name: "Under Construction",
     icon: "build",
     description:
-      "Checklist is in design mode, basic checklist information can be updated and checklist items can be added, removed or edited",
+      "Checklist is in design mode, basic definitional information can be updated and checklist items can be added, removed or edited",
   },
   {
     status: 2,
     name: "Active",
     icon: "check_box",
-    description: "Checklist is in use, checklist item results can be entered.",
+    description:
+      "Checklist is in use, checklist item results (Checkboxes, Ratings etc) can be entered.",
   },
   {
     status: 3,

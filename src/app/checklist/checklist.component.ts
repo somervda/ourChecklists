@@ -1,7 +1,5 @@
-import { ChecklistitemResultValue } from "./../models/checklistitem.model";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ChecklistService } from "../services/checklist.service";
 import { ResourceService } from "../services/resource.service";
 import { MatDialog } from "@angular/material/dialog";
 import { Checklist } from "../models/checklist.model";
@@ -71,28 +69,29 @@ export class ChecklistComponent implements OnInit {
     }
   }
 
-  getResultValueName(value: ChecklistitemResultValue): string {
-    switch (value) {
-      case undefined:
-        return "...";
-      case ChecklistitemResultValue.NA:
-        return "N/A";
-      case ChecklistitemResultValue.false:
-        return "No";
-      case ChecklistitemResultValue.true:
-        return "Yes";
-      case ChecklistitemResultValue.low:
-        return "1: Low";
-      case ChecklistitemResultValue.mediumLow:
-        return "2: Medium Low";
-      case ChecklistitemResultValue.medium:
-        return "3: Medium";
-      case ChecklistitemResultValue.mediumHigh:
-        return "4: Medium High";
-      case ChecklistitemResultValue.high:
-        return "5: High";
-    }
-  }
+  // getResultValueName(value: ChecklistitemResultValue): string {
+  //   switch (value) {
+  //     case undefined:
+  //       return "...";
+  //     case ChecklistitemResultValue.NA:
+  //       return "N/A";
+  //     case ChecklistitemResultValue.false:
+  //       return "No";
+  //     case ChecklistitemResultValue.true:
+  //       return "Yes";
+  //     case ChecklistitemResultValue.low:
+  //       return "1: Low";
+  //     case ChecklistitemResultValue.mediumLow:
+  //       return "2: Medium Low";
+  //     case ChecklistitemResultValue.medium:
+  //       return "3: Medium";
+  //     case ChecklistitemResultValue.mediumHigh:
+  //       return "4: Medium High";
+  //     case ChecklistitemResultValue.high:
+  //       return "5: High";
+  //   }
+  // }
+
   async waitForCurrentUser() {
     let waitMS = 5000;
     while (!this.auth.currentUser && waitMS > 0) {
