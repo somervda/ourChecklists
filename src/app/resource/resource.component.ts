@@ -19,6 +19,7 @@ import { UserselectordialogComponent } from "../dialogs/userselectordialog/users
 import { TeamselectordialogComponent } from "../dialogs/teamselectordialog/teamselectordialog.component";
 import { CategoryselectordialogComponent } from "../dialogs/categoryselectordialog/categoryselectordialog.component";
 import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-resource",
@@ -50,7 +51,8 @@ export class ResourceComponent implements OnInit {
     private router: Router,
     private auth: AuthService,
     private storage: AngularFireStorage,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private helper: HelperService
   ) {}
 
   ngOnInit() {
@@ -219,13 +221,13 @@ export class ResourceComponent implements OnInit {
       .create(this.resource)
       .then((newDoc) => {
         // this.crudAction = Crud.Update;
-        this.snackBar.open(
-          "Resource '" + this.resource.name + "' created.",
-          "",
-          {
-            duration: 2000,
-          }
-        );
+        // this.snackBar.open(
+        //   "Resource '" + this.resource.name + "' created.",
+        //   "",
+        //   {
+        //     duration: 2000,
+        //   }
+        // );
         this.resource.id = newDoc.id;
         if (
           this.resource.resourceType == ResourceType.file ||
@@ -235,7 +237,12 @@ export class ResourceComponent implements OnInit {
         }
         this.showSpinner = false;
 
-        this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+        // this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+        this.helper.snackBarRedirect(
+          "Resource '" + this.resource.name + "' created.",
+          2000,
+          "/resources"
+        );
       })
       .catch(function (error) {
         this.showSpinner = false;

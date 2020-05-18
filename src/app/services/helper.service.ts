@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import { UserRef, DocRef } from "../models/helper.model";
 import {
   ChecklistStatus,
@@ -10,12 +10,18 @@ import {
   ChecklistitemResultItem,
   ChecklistitemResultInfo,
 } from "../models/checklistitem.model";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
 })
 export class HelperService {
-  constructor() {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private ngZone: NgZone,
+    private router: Router
+  ) {}
 
   userRefToDocRef(userRef: UserRef[]): DocRef[] {
     return userRef.map((a) => {
@@ -41,6 +47,22 @@ export class HelperService {
       return { value: null, name: "...", description: "Not Set" };
     } else {
       return ChecklistitemResultInfo.find((cmirv) => cmirv.value == value);
+    }
+  }
+
+  /**
+   * Helper function to display both a snackbar and optionally
+   * route the user to another component.
+   * @param msg Message to display in the snackBar
+   * @param ms Number of milliseconds to display the snackbar
+   * @param url Optional: URL to a new route
+   */
+  snackBarRedirect(msg: string, ms: number, url?: string) {
+    this.snackBar.open(msg, "", {
+      duration: ms,
+    });
+    if (url) {
+      this.ngZone.run(() => this.router.navigateByUrl("/resources"));
     }
   }
 }
