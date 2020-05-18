@@ -57,8 +57,11 @@ export class ChecklisteditComponent implements OnInit {
   statusDialog() {
     console.log("statusDialog");
     const dialogRef = this.dialog.open(CheckliststatusdialogComponent, {
-      width: "350px",
+      minWidth: "380px",
+      maxWidth: "500px",
+      width: "80%",
       data: { checklist: this.checklist },
+      autoFocus: false,
     });
   }
 

@@ -12,40 +12,77 @@
 <div class="prompt">Current Status</div>
 <div class="current-status">
   {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
+  <div class="status-description">
+    {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
+    :
+    {{ helper.getChecklistStatusInfoItem(checklist.status).description }}
+  </div>
 </div>
 <div class="prompt">Update Status to...</div>
 <div>
   <mat-radio-group [(ngModel)]="newStatus">
-    <mat-radio-button
-      [value]="ChecklistStatus.UnderConstruction"
-      *ngIf="checklist.status == ChecklistStatus.Active"
-    >
-      Under Construction
-    </mat-radio-button>
-    <mat-radio-button
-      [value]="ChecklistStatus.Active"
+    <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
+      <mat-radio-button [value]="ChecklistStatus.UnderConstruction">
+        Under Construction
+      </mat-radio-button>
+      <div class="status-description current-status">
+        {{
+          helper.getChecklistStatusInfoItem(ChecklistStatus.UnderConstruction)
+            .name
+        }}:
+        {{
+          helper.getChecklistStatusInfoItem(ChecklistStatus.UnderConstruction)
+            .description
+        }}
+      </div>
+    </ng-container>
+
+    <ng-container
       *ngIf="
         checklist.status == ChecklistStatus.UnderConstruction ||
         checklist.status == ChecklistStatus.Done
       "
     >
-      Active
-    </mat-radio-button>
-    <mat-radio-button
-      [value]="ChecklistStatus.Done"
+      <mat-radio-button [value]="ChecklistStatus.Active">
+        Active
+      </mat-radio-button>
+      <div class="status-description current-status">
+        {{ helper.getChecklistStatusInfoItem(ChecklistStatus.Active).name }}:
+        {{
+          helper.getChecklistStatusInfoItem(ChecklistStatus.Active).description
+        }}
+      </div>
+    </ng-container>
+
+    <ng-container
       *ngIf="
         checklist.status == ChecklistStatus.Active ||
         checklist.status == ChecklistStatus.Complete
       "
     >
-      Done
-    </mat-radio-button>
-    <mat-radio-button
-      [value]="ChecklistStatus.Complete"
-      *ngIf="checklist.status == ChecklistStatus.Done"
-    >
-      Complete
-    </mat-radio-button>
+      <mat-radio-button [value]="ChecklistStatus.Done">
+        Done
+      </mat-radio-button>
+      <div class="status-description current-status">
+        {{ helper.getChecklistStatusInfoItem(ChecklistStatus.Done).name }}:
+        {{
+          helper.getChecklistStatusInfoItem(ChecklistStatus.Done).description
+        }}
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="checklist.status == ChecklistStatus.Done">
+      <mat-radio-button [value]="ChecklistStatus.Complete">
+        Complete
+      </mat-radio-button>
+      <div class="status-description current-status">
+        {{ helper.getChecklistStatusInfoItem(ChecklistStatus.Complete).name }}:
+        {{
+          helper.getChecklistStatusInfoItem(ChecklistStatus.Complete)
+            .description
+        }}
+      </div>
+    </ng-container>
   </mat-radio-group>
 </div>
 <br />
