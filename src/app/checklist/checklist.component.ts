@@ -66,6 +66,15 @@ export class ChecklistComponent implements OnInit {
     );
   }
 
+  iconAction(value) {
+    // console.log("iconAction:", value, ":");
+    switch (value) {
+      case "print":
+        window.print();
+        break;
+    }
+  }
+
   getResultValueName(value: ChecklistitemResultValue): string {
     switch (value) {
       case undefined:

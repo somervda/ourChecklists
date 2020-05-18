@@ -1,8 +1,13 @@
 <app-subheading
   prompt="Checklist Item"
   matIcon="check_box"
-  [returnRoute]="'/checklistedit/' + cid"
-  returnTitle="Return to Checklist"
+  [iconActions]="[
+    {
+      icon: 'arrow_back',
+      toolTip: 'Return to Checklist',
+      routerLink: '/checklistedit/' + cid
+    }
+  ]"
 ></app-subheading>
 <div class="page-container">
   <div class="prompt">Name</div>

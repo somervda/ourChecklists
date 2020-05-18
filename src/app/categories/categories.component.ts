@@ -20,8 +20,4 @@ export class CategoriesComponent implements OnInit {
   ngOnInit() {
     this.categories$ = this.categoryService.findAll(100);
   }
-
-  iconAction(value) {
-    console.log("iconAction:", value);
-  }
 }

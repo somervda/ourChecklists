@@ -7,8 +7,13 @@
       ? 'Update'
       : 'Delete')
   "
-  returnRoute="/resources"
-  returnTitle="Return to Resources"
+  [iconActions]="[
+    {
+      icon: 'arrow_back',
+      toolTip: 'Return to Resources',
+      routerLink: '/resources'
+    }
+  ]"
   matIcon="folder_open"
 ></app-subheading>
 

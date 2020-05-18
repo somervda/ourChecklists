@@ -7,8 +7,13 @@
       ? 'Update'
       : 'Delete')
   "
-  [returnRoute]="'/checklistdesign/' + cid"
-  returnTitle="Return to Checklist Design"
+  [iconActions]="[
+    {
+      icon: 'arrow_back',
+      toolTip: 'Return to Checklist Design',
+      routerLink: '/checklistdesign/' + cid
+    }
+  ]"
   matIcon="check_box"
 ></app-subheading>
 

@@ -39,8 +39,12 @@ export class ResourceviewdialogComponent implements OnInit {
     }
   }
 
-  close() {
-    console.log("Close");
-    this.dialogRef.close();
+  iconAction(value) {
+    // console.log("iconAction:", value, ":");
+    switch (value) {
+      case "close":
+        this.dialogRef.close();
+        break;
+    }
   }
 }

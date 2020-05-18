@@ -3,8 +3,14 @@
 </div> -->
 <app-subheading
   [prompt]="resource.name"
-  [showClose]="true"
-  (close)="close()"
+  [iconActions]="[
+    {
+      icon: 'close',
+      toolTip: 'Close',
+      emitValue: 'close'
+    }
+  ]"
+  (iconAction)="iconAction($event)"
 ></app-subheading>
 <br />
 

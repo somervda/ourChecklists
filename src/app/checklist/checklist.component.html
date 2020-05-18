@@ -1,7 +1,14 @@
 <app-subheading
   prompt="Checklist Viewer"
   [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
-  [showPrint]="true"
+  [iconActions]="[
+    {
+      icon: 'print',
+      toolTip: 'Print',
+      emitValue: 'print'
+    }
+  ]"
+  (iconAction)="iconAction($event)"
 ></app-subheading>
 
 <div class="page-container">

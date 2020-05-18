@@ -3,42 +3,12 @@
   >&nbsp;
   {{ prompt }}
   <span style="width: 100%;"> </span>
-  <button
-    mat-button
-    [routerLink]="returnRoute"
-    style="min-width: 40px; padding: 0px; text-align: center;"
-    *ngIf="returnRoute"
-    [title]="returnTitle ? returnTitle : 'Return to parent'"
-  >
-    <i
-      class="material-icons-outlined"
-      style="margin-left: 5px; margin-right: 5px;"
-      >arrow_back</i
-    >
-  </button>
   <mat-slide-toggle
     (change)="onShowAll($event)"
     matTooltip="See more details?"
     [hidden]="!showAll"
   ></mat-slide-toggle>
 
-  <mat-icon (click)="print()" matTooltip="Click to print" [hidden]="!showPrint"
-    >print</mat-icon
-  >
-
-  <button
-    mat-button
-    style="min-width: 40px; padding: 0px; text-align: center;"
-    *ngIf="showClose"
-    title="Close"
-    (click)="onClose()"
-  >
-    <i
-      class="material-icons-outlined"
-      style="margin-left: 5px; margin-right: 5px;"
-      >close</i
-    >
-  </button>
   <button
     mat-button
     *ngFor="let iconAction of iconActions"

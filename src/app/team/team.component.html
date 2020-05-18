@@ -7,8 +7,13 @@
       ? 'Update'
       : 'Delete')
   "
-  returnRoute="/teams"
-  returnTitle="Return to Teams"
+  [iconActions]="[
+    {
+      icon: 'arrow_back',
+      toolTip: 'Return to Teams',
+      routerLink: '/teams'
+    }
+  ]"
   matIcon="supervisor_account"
 ></app-subheading>
 

@@ -1,7 +1,13 @@
 <app-subheading
   prompt="Checklist Status"
-  [showClose]="true"
-  (close)="close()"
+  [iconActions]="[
+    {
+      icon: 'close',
+      toolTip: 'Close',
+      emitValue: 'close'
+    }
+  ]"
+  (iconAction)="iconAction($event)"
 ></app-subheading>
 <div class="prompt">Current Status</div>
 <div class="current-status">

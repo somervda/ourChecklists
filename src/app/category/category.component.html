@@ -7,8 +7,13 @@
       ? 'Update'
       : 'Delete')
   "
-  returnRoute="/categories"
-  returnTitle="Return to Categories"
+  [iconActions]="[
+    {
+      icon: 'arrow_back',
+      toolTip: 'Return to Categories',
+      routerLink: '/categories'
+    }
+  ]"
   matIcon="category"
 ></app-subheading>
 <div class="page-container">

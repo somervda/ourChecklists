@@ -8,14 +8,9 @@ import { IconAction } from "src/app/models/helper.model";
 })
 export class SubheadingComponent implements OnInit {
   @Input() prompt: string;
-  @Input() returnRoute: string;
-  @Input() returnTitle: string;
   @Input() matIcon: string;
   @Input() showAll: boolean;
-  @Input() showClose: boolean;
-  @Input() showPrint: boolean;
   @Output() showAllChange = new EventEmitter();
-  @Output() close = new EventEmitter();
   @Input() iconActions: IconAction[];
   @Output() iconAction = new EventEmitter();
 
@@ -26,15 +21,6 @@ export class SubheadingComponent implements OnInit {
   onShowAll(event) {
     // console.log("onShowAll", event);
     this.showAllChange.emit(event.checked);
-  }
-
-  onClose() {
-    this.close.emit(true);
-  }
-
-  print() {
-    // do other stuff...
-    window.print();
   }
 
   iconActionClick(value: string) {
