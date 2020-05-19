@@ -9,11 +9,10 @@ import {
 import { DocRef } from "../../models/helper.model";
 import { MatTable } from "@angular/material/table";
 import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActivityService } from "../../services/activity.service";
 import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialog.component";
 import { Activity } from "../../models/activity.model";
 import { ActivityfinderdialogComponent } from "../../dialogs/activityfinderdialog/activityfinderdialog.component";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-activitylistedit",
@@ -29,11 +28,7 @@ export class ActivitylisteditComponent implements OnInit {
 
   displayedColumns: string[] = ["name", "id"];
 
-  constructor(
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private resourceService: ActivityService
-  ) {}
+  constructor(public dialog: MatDialog, private helper: HelperService) {}
 
   ngOnInit(): void {
     console.log(
@@ -66,12 +61,9 @@ export class ActivitylisteditComponent implements OnInit {
 
   addActivity() {
     if (this.activities.length >= 10) {
-      this.snackBar.open(
+      this.helper.snackbar(
         "No more activities can be added (10 max), remove an existing activity before adding another.",
-        "",
-        {
-          duration: 5000,
-        }
+        5000
       );
     } else {
       const dialogRef = this.dialog.open(ActivityfinderdialogComponent, {

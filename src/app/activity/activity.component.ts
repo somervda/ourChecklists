@@ -1,12 +1,11 @@
-import { Component, OnInit, NgZone } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { AuthService } from "../services/auth.service";
+import { ActivatedRoute } from "@angular/router";
 import { Crud } from "../models/helper.model";
 import { Activity } from "../models/activity.model";
 import { ActivityService } from "../services/activity.service";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-activity",
@@ -27,9 +26,7 @@ export class ActivityComponent implements OnInit {
     private activityService: ActivityService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router
+    private helper: HelperService
   ) {}
 
   ngOnInit() {
@@ -95,16 +92,11 @@ export class ActivityComponent implements OnInit {
     this.activityService
       .create(this.categoryId, this.activity)
       .then((newDoc) => {
-        this.snackBar.open(
+        this.helper.snackbar(
           "Activity '" + this.activity.name + "' created.",
-          "",
-          {
-            duration: 2000,
-          }
+          2000
         );
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/category/" + this.categoryId)
-        );
+        this.helper.redirect("/category/" + this.categoryId);
       })
       .catch(function (error) {
         console.error("Error adding document: ", this.category.name, error);
@@ -118,12 +110,8 @@ export class ActivityComponent implements OnInit {
     this.activityService
       .delete(this.categoryId, this.activity.id)
       .then(() => {
-        this.snackBar.open("Activity '" + name + "' deleted!", "", {
-          duration: 2000,
-        });
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/category/" + this.categoryId)
-        );
+        this.helper.snackbar("Activity '" + name + "' deleted!", 2000);
+        this.helper.redirect("/category/" + this.categoryId);
       })
       .catch(function (error) {
         console.error("Error deleting activity: ", error);

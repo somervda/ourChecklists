@@ -1,13 +1,11 @@
-import { Component, OnInit, NgZone, OnDestroy } from "@angular/core";
-import { Team } from "../models/team.model";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { CategoryService } from "../services/category.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { AuthService } from "../services/auth.service";
+import { ActivatedRoute } from "@angular/router";
 import { Category } from "../models/category.model";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-category",
@@ -27,10 +25,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router,
-    private auth: AuthService
+    private helper: HelperService
   ) {}
 
   ngOnInit() {
@@ -99,17 +94,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
       .create(this.category)
       .then((newDoc) => {
         this.crudAction = Crud.Update;
-        this.snackBar.open(
-          "Category '" + this.category.name + "' created.",
-          "",
-          {
-            duration: 2000,
-          }
-        );
         this.category.id = newDoc.id;
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/category/" + this.category.id)
+        this.helper.snackbar(
+          "Category '" + this.category.name + "' created.",
+          2000
         );
+        this.helper.redirect("/category/" + this.category.id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", this.category.name, error);
@@ -123,10 +113,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.categoryService
       .delete(this.category.id)
       .then(() => {
-        this.snackBar.open("Category '" + name + "' deleted!", "", {
-          duration: 2000,
-        });
-        this.ngZone.run(() => this.router.navigateByUrl("/categories"));
+        this.helper.snackbar("Category '" + name + "' deleted!", 2000);
+        this.helper.redirect("/categories");
       })
       .catch(function (error) {
         console.error("Error deleting category: ", error);

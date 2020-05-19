@@ -1,15 +1,8 @@
 import { HelperService } from "./../../services/helper.service";
-import { Component, OnInit, Inject, NgZone } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import {
-  Checklist,
-  ChecklistStatus,
-  ChecklistStatusInfoItem,
-  ChecklistStatusInfo,
-} from "src/app/models/checklist.model";
+import { Checklist, ChecklistStatus } from "src/app/models/checklist.model";
 import { ChecklistService } from "src/app/services/checklist.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-checkliststatusdialog",
@@ -24,9 +17,6 @@ export class CheckliststatusdialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<CheckliststatusdialogComponent>,
     private checklistService: ChecklistService,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router,
     public helper: HelperService
   ) {}
 
@@ -41,39 +31,30 @@ export class CheckliststatusdialogComponent implements OnInit {
     this.checklistService
       .fieldUpdateAsPromise(this.checklist.id, "status", this.newStatus)
       .then((p) => {
-        this.snackBar.open(
+        this.helper.snackbar(
           "Checklist '" + this.checklist.name + "' status updated.",
-          "",
-          {
-            duration: 5000,
-          }
+          5000
         );
-        this.ngZone.run(() => {
-          switch (this.newStatus) {
-            case ChecklistStatus.UnderConstruction:
-              this.router.navigateByUrl(
-                "/checklistdesign/" + this.checklist.id
-              );
-              this.dialogRef.close();
-              break;
-            case ChecklistStatus.Active:
-              this.router.navigateByUrl("/checklistedit/" + this.checklist.id);
-              this.dialogRef.close();
-              break;
-            default:
-              this.router.navigateByUrl("/checklist/" + this.checklist.id);
-              this.dialogRef.close();
-              break;
-          }
-        });
+
+        switch (this.newStatus) {
+          case ChecklistStatus.UnderConstruction:
+            this.helper.redirect("/checklistdesign/" + this.checklist.id);
+            this.dialogRef.close();
+            break;
+          case ChecklistStatus.Active:
+            this.helper.redirect("/checklistedit/" + this.checklist.id);
+            this.dialogRef.close();
+            break;
+          default:
+            this.helper.redirect("/checklist/" + this.checklist.id);
+            this.dialogRef.close();
+            break;
+        }
       })
       .catch((e) => {
-        this.snackBar.open(
+        this.helper.snackbar(
           "Checklist '" + this.checklist.name + "' status was not updated." + e,
-          "",
-          {
-            duration: 5000,
-          }
+          5000
         );
         console.error("Status update failed:", e);
       });

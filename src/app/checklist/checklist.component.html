@@ -15,7 +15,30 @@
   <div class="prompt">
     Name
   </div>
-  <div>{{ checklist.name }}</div>
+  <div>
+    <ng-container
+      *ngIf="
+        checklist.status != ChecklistStatus.UnderConstruction &&
+        checklist.status != ChecklistStatus.Active
+      "
+    >
+      {{ checklist.name }}
+    </ng-container>
+    <ng-container *ngIf="checklist.status == ChecklistStatus.UnderConstruction">
+      <a
+        [routerLink]="'/checklistdesign/' + checklist.id"
+        matTooltip="Design Checklist"
+        >{{ checklist?.name }}</a
+      ></ng-container
+    >
+    <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
+      <a
+        [routerLink]="'/checklistedit/' + checklist.id"
+        matTooltip="Edit Checklist"
+        >{{ checklist?.name }}</a
+      ></ng-container
+    >
+  </div>
 
   <div class="prompt">Description</div>
   <div>{{ checklist.description }}</div>

@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Team } from "../models/team.model";
-import { Crud, UserRef, DocRef } from "../models/helper.model";
+import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { TeamService } from "../services/team.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../services/auth.service";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-team",
@@ -28,10 +28,8 @@ export class TeamComponent implements OnInit, OnDestroy {
     private teamService: TeamService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private helper: HelperService
   ) {}
 
   async ngOnInit() {
@@ -119,13 +117,10 @@ export class TeamComponent implements OnInit, OnDestroy {
       .create(this.team)
       .then((newDoc) => {
         this.crudAction = Crud.Update;
-        this.snackBar.open("Team '" + this.team.name + "' created.", "", {
-          duration: 2000,
-        });
+
         this.team.id = newDoc.id;
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/team/" + this.team.id)
-        );
+        this.helper.snackbar("Team '" + this.team.name + "' created.", 2000);
+        this.helper.redirect("/team/" + this.team.id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", this.team.name, error);
@@ -139,10 +134,8 @@ export class TeamComponent implements OnInit, OnDestroy {
     this.teamService
       .delete(this.team.id)
       .then(() => {
-        this.snackBar.open("Team '" + name + "' deleted!", "", {
-          duration: 2000,
-        });
-        this.ngZone.run(() => this.router.navigateByUrl("/teams"));
+        this.helper.snackbar("Team '" + name + "' deleted!", 2000);
+        this.helper.redirect("/teams");
       })
       .catch(function (error) {
         console.error("Error deleting team: ", error);

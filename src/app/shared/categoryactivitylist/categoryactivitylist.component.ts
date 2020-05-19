@@ -4,6 +4,7 @@ import { Activity } from "../../models/activity.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivityService } from "../../services/activity.service";
 import { Router } from "@angular/router";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-categoryactivitylist",
@@ -19,7 +20,8 @@ export class CategoryactivitylistComponent implements OnInit {
     private activityService: ActivityService,
     public dialog: MatDialog,
     private ngZone: NgZone,
-    private router: Router
+    private router: Router,
+    private helper: HelperService
   ) {}
   ngOnInit() {
     this.activities$ = this.activityService.findAllByCategory(
@@ -30,20 +32,14 @@ export class CategoryactivitylistComponent implements OnInit {
 
   onCategoryActivityDelete(activityId: string) {
     // console.log("remove click:", uid, displayName, teamId);
-    this.ngZone.run(() =>
-      this.router.navigateByUrl(
-        "/category/" + this.categoryId + "/activity/delete/" + activityId
-      )
+    this.helper.redirect(
+      "/category/" + this.categoryId + "/activity/delete/" + activityId
     );
   }
 
   onCategoryActivityAdd() {
     console.log("add click:");
 
-    this.ngZone.run(() =>
-      this.router.navigateByUrl(
-        "/category/" + this.categoryId + "/activity/create"
-      )
-    );
+    this.helper.redirect("/category/" + this.categoryId + "/activity/create");
   }
 }

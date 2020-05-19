@@ -1,25 +1,18 @@
 import { HelperService } from "./../services/helper.service";
-import { OnDestroy, NgZone } from "@angular/core";
+import { OnDestroy } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
-import {
-  Checklist,
-  ChecklistStatus,
-  ChecklistStatusInfoItem,
-  ChecklistStatusInfo,
-} from "../models/checklist.model";
+import { Checklist, ChecklistStatus } from "../models/checklist.model";
 import { Crud, DocRef, UserRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistService } from "../services/checklist.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { Team } from "../models/team.model";
 import { TeamService } from "../services/team.service";
 import { Category } from "../models/category.model";
 import { CategoryService } from "../services/category.service";
 import { Resource } from "../models/resource.model";
-import { ResourceService } from "../services/resource.service";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { MatDialog } from "@angular/material/dialog";
 
@@ -46,9 +39,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router,
     private auth: AuthService,
     public dialog: MatDialog,
     public helper: HelperService
@@ -147,17 +137,12 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
       .create(this.checklist)
       .then((newDoc) => {
         this.crudAction = Crud.Update;
-        this.snackBar.open(
-          "Checklist '" + this.checklist.name + "' created.",
-          "",
-          {
-            duration: 2000,
-          }
-        );
         this.checklist.id = newDoc.id;
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/checklistdesign/" + this.checklist.id)
+        this.helper.snackbar(
+          "Checklist '" + this.checklist.name + "' created.",
+          2000
         );
+        this.helper.redirect("/checklistdesign/" + this.checklist.id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", this.checklist.name, error);

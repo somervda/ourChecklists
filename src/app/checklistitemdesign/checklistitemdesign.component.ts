@@ -1,19 +1,18 @@
 import {
   Checklistitem,
-  ChecklistitemResultValue,
   ChecklistitemResultType,
 } from "./../models/checklistitem.model";
-import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Crud, DocRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { Checklist } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
 import * as firebase from "firebase";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-checklistitemdesign",
@@ -38,11 +37,9 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     private checklistitemService: ChecklistitemService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router,
     private auth: AuthService,
-    private checklistService: ChecklistService
+    private checklistService: ChecklistService,
+    private helper: HelperService
   ) {}
 
   async ngOnInit() {
@@ -150,17 +147,12 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
       .create(this.cid, this.checklistitem)
       .then((newDoc) => {
         this.crudAction = Crud.Update;
-        this.snackBar.open(
-          "Checklistitem '" + this.checklistitem.name + "' created.",
-          "",
-          {
-            duration: 2000,
-          }
-        );
         this.checklistitem.id = newDoc.id;
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/checklistdesign/" + this.cid)
+        this.helper.snackbar(
+          "Checklistitem '" + this.checklistitem.name + "' created.",
+          2000
         );
+        this.helper.redirect("/checklistdesign/" + this.cid);
       })
       .catch(function (error) {
         console.error(
@@ -178,12 +170,8 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     this.checklistitemService
       .delete(this.cid, this.clid)
       .then(() => {
-        this.snackBar.open("Checklistitem '" + name + "' deleted!", "", {
-          duration: 2000,
-        });
-        this.ngZone.run(() =>
-          this.router.navigateByUrl("/checklistdesign/" + this.cid)
-        );
+        this.helper.snackbar("Checklistitem '" + name + "' deleted!", 2000);
+        this.helper.redirect("/checklistdesign/" + this.cid);
       })
       .catch(function (error) {
         console.error("Error deleting checklistitem: ", error);

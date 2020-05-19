@@ -1,5 +1,4 @@
-import { catchError } from "rxjs/operators";
-import { Component, OnInit, NgZone } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   Resource,
   ResourceType,
@@ -9,8 +8,7 @@ import {
 import { Crud, DocRef, UserRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ResourceService } from "../services/resource.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { Subscription, Observable, timer } from "rxjs";
 import { AngularFireStorage } from "@angular/fire/storage";
@@ -46,9 +44,6 @@ export class ResourceComponent implements OnInit {
     private resourceService: ResourceService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private ngZone: NgZone,
-    private router: Router,
     private auth: AuthService,
     private storage: AngularFireStorage,
     public dialog: MatDialog,
@@ -84,12 +79,9 @@ export class ResourceComponent implements OnInit {
       console.log("this.route.snapshot", this.route.snapshot);
       this.resource = this.route.snapshot.data["resource"];
       if (this.resource.status == ResourceStatus.superseded) {
-        this.snackBar.open(
+        this.helper.snackbar(
           "This resource has been superseded. Updates not allowed.",
-          "",
-          {
-            duration: 3000,
-          }
+          3000
         );
       }
       if (
@@ -220,14 +212,6 @@ export class ResourceComponent implements OnInit {
     this.resourceService
       .create(this.resource)
       .then((newDoc) => {
-        // this.crudAction = Crud.Update;
-        // this.snackBar.open(
-        //   "Resource '" + this.resource.name + "' created.",
-        //   "",
-        //   {
-        //     duration: 2000,
-        //   }
-        // );
         this.resource.id = newDoc.id;
         if (
           this.resource.resourceType == ResourceType.file ||
@@ -237,12 +221,11 @@ export class ResourceComponent implements OnInit {
         }
         this.showSpinner = false;
 
-        // this.ngZone.run(() => this.router.navigateByUrl("/resources"));
-        this.helper.snackBarRedirect(
+        this.helper.snackbar(
           "Resource '" + this.resource.name + "' created.",
-          2000,
-          "/resources"
+          2000
         );
+        this.helper.redirect("/resources");
       })
       .catch(function (error) {
         this.showSpinner = false;
@@ -334,17 +317,13 @@ export class ResourceComponent implements OnInit {
           ResourceStatus.superseded
         );
 
-        this.snackBar.open(
-          "Superseding Resource '" + this.resource.name + "' created.",
-          "",
-          {
-            duration: 2000,
-          }
-        );
-
         this.showSpinner = false;
 
-        this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+        this.helper.snackbar(
+          "Superseding Resource '" + this.resource.name + "' created.",
+          2000
+        );
+        this.helper.redirect("/resources");
       })
       .catch(function (error) {
         this.showSpinner = false;
@@ -465,10 +444,8 @@ export class ResourceComponent implements OnInit {
     this.resourceService
       .delete(this.resource.id)
       .then(() => {
-        this.snackBar.open("Resource '" + name + "' deleted!", "", {
-          duration: 2000,
-        });
-        this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+        this.helper.snackbar("Resource '" + name + "' deleted!", 2000);
+        this.helper.redirect("/resources");
       })
       .catch(function (error) {
         console.error("Error deleting resource: ", error);

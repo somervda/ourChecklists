@@ -67,6 +67,6 @@ export class HelperService {
    * @param url Optional: URL to a new route
    */
   redirect(url: string) {
-    this.ngZone.run(() => this.router.navigateByUrl("/resources"));
+    this.ngZone.run(() => this.router.navigateByUrl(url));
   }
 }

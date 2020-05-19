@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ResourceService } from "../services/resource.service";
 import { MatDialog } from "@angular/material/dialog";
-import { Checklist } from "../models/checklist.model";
+import { Checklist, ChecklistStatus } from "../models/checklist.model";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { Checklistitem } from "../models/checklistitem.model";
@@ -21,6 +21,7 @@ export class ChecklistComponent implements OnInit {
   resources$: Observable<Resource[]>;
   checklistitems$: Observable<Checklistitem[]>;
   displayedColumns: string[] = ["name", "resultType"];
+  ChecklistStatus = ChecklistStatus;
 
   constructor(
     private route: ActivatedRoute,

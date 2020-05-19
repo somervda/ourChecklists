@@ -11,7 +11,7 @@ import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialo
 import { UserselectordialogComponent } from "../../dialogs/userselectordialog/userselectordialog.component";
 import { UserRef } from "../../models/helper.model";
 import { MatTable } from "@angular/material/table";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-userlistedit",
@@ -26,7 +26,7 @@ export class UserlisteditComponent implements OnInit {
 
   displayedColumns: string[] = ["displayName", "uid"];
 
-  constructor(public dialog: MatDialog, private snackBar: MatSnackBar) {}
+  constructor(public dialog: MatDialog, private helper: HelperService) {}
 
   ngOnInit(): void {
     console.log("UserlisteditComponent:", this.users);
@@ -52,12 +52,9 @@ export class UserlisteditComponent implements OnInit {
 
   addUser() {
     if (this.users.length >= 10) {
-      this.snackBar.open(
+      this.helper.snackbar(
         "No more users can be added (10 max), remove an existing user before adding another.",
-        "",
-        {
-          duration: 5000,
-        }
+        5000
       );
     } else {
       const dialogRef = this.dialog.open(UserselectordialogComponent, {

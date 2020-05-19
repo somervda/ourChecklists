@@ -9,7 +9,6 @@ import {
 import { MatTable } from "@angular/material/table";
 import { DocRef } from "../../models/helper.model";
 import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialog.component";
 import { Observable } from "rxjs";
 import {
@@ -22,6 +21,7 @@ import {
 import { ResourceService } from "../../services/resource.service";
 import { ResourcefinderdialogComponent } from "../../dialogs/resourcefinderdialog/resourcefinderdialog.component";
 import { ResourceviewdialogComponent } from "../../dialogs/resourceviewdialog/resourceviewdialog.component";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-resourcelistedit",
@@ -41,8 +41,8 @@ export class ResourcelisteditComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private helper: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -74,12 +74,9 @@ export class ResourcelisteditComponent implements OnInit {
 
   addResource() {
     if (this.resources && this.resources.length >= 10) {
-      this.snackBar.open(
+      this.helper.snackbar(
         "No more resources can be added (10 max), remove an existing resource before adding another.",
-        "",
-        {
-          duration: 5000,
-        }
+        5000
       );
     } else {
       const dialogRef = this.dialog.open(ResourcefinderdialogComponent, {

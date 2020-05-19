@@ -8,15 +8,14 @@ import {
   ResourceTypeInfoItem,
 } from "../models/resource.model";
 import { ResourceService } from "../services/resource.service";
-import { AuthService } from "../services/auth.service";
 import { map } from "rxjs/operators";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { TeamService } from "../services/team.service";
 import { Team } from "../models/team.model";
 import { CategoryService } from "../services/category.service";
 import { Category } from "../models/category.model";
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-resources",
@@ -48,11 +47,10 @@ export class ResourcesComponent implements OnInit {
 
   constructor(
     private resourceService: ResourceService,
-    private auth: AuthService,
-    private snackBar: MatSnackBar,
     private teamService: TeamService,
     private categoryService: CategoryService,
-    private userService: UserService
+    private userService: UserService,
+    private helper: HelperService
   ) {}
   ngOnInit() {
     this.teams$ = this.teamService.findAll(100);
@@ -88,12 +86,9 @@ export class ResourcesComponent implements OnInit {
         map((r) => {
           // Show message if it looks like we hit the max retrieval limit
           if (r.length == this.maxToRetrieve) {
-            this.snackBar.open(
+            this.helper.snackbar(
               `More than the limit of ${this.maxToRetrieve} resources found. Try adding filters to keep within the data retrieval limit. `,
-              "",
-              {
-                duration: 5000,
-              }
+              5000
             );
           }
           return r.filter((ri) => this.showResource(ri));
