@@ -51,18 +51,22 @@ export class HelperService {
   }
 
   /**
-   * Helper function to display both a snackbar and optionally
-   * route the user to another component.
+   * Simplified version of snackbar
    * @param msg Message to display in the snackBar
    * @param ms Number of milliseconds to display the snackbar
-   * @param url Optional: URL to a new route
    */
-  snackBarRedirect(msg: string, ms: number, url?: string) {
+  snackbar(msg: string, ms: number, url?: string) {
     this.snackBar.open(msg, "", {
       duration: ms,
     });
-    if (url) {
-      this.ngZone.run(() => this.router.navigateByUrl("/resources"));
-    }
+  }
+
+  /**
+   * Helper function to display both a snackbar and optionally
+   * route the user to another component.
+   * @param url Optional: URL to a new route
+   */
+  redirect(url: string) {
+    this.ngZone.run(() => this.router.navigateByUrl("/resources"));
   }
 }
