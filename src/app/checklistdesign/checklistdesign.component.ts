@@ -15,6 +15,8 @@ import { CategoryService } from "../services/category.service";
 import { Resource } from "../models/resource.model";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { User } from "../models/user.model";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-checklistdesign",
@@ -44,13 +46,15 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     public helper: HelperService
   ) {}
 
-  async ngOnInit() {
-    await this.waitForCurrentUser();
-    console.log(
-      "this.route.snapshot.paramMap.get('id')",
-      this.route.snapshot.paramMap.get("id")
-    );
-    if (this.auth.currentUser.isAdmin) {
+  ngOnInit() {
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => this.initProcesses(u));
+  }
+
+  initProcesses(user: User) {
+    if (user.isAdmin) {
       this.myteams$ = this.teamService.findAll(100);
     } else {
       this.myteams$ = this.teamService.findMyMemberManagerOfTeams();
@@ -72,8 +76,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         team: { id: "", name: "" },
         assignee: [
           {
-            uid: this.auth.currentUser.uid,
-            displayName: this.auth.currentUser.displayName,
+            uid: user.uid,
+            displayName: user.displayName,
           },
         ],
         category: { id: "", name: "" },
@@ -225,19 +229,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
       data: { checklist: this.checklist },
       autoFocus: false,
     });
-  }
-
-  async waitForCurrentUser() {
-    let waitMS = 5000;
-    while (!this.auth.currentUser && waitMS > 0) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-      waitMS -= 200;
-    }
-  }
-
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   ngOnDestroy() {

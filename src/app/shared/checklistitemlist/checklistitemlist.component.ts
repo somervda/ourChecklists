@@ -18,8 +18,7 @@ export class ChecklistitemlistComponent implements OnInit {
 
   constructor(private checklistitemService: ChecklistitemService) {}
 
-  async ngOnInit() {
-    // await this.waitForCurrentUser();
+  ngOnInit() {
     this.checklistitems$ = this.checklistitemService.findAll(this.checklist.id);
   }
 
@@ -53,17 +52,4 @@ export class ChecklistitemlistComponent implements OnInit {
 
     return linkAction;
   }
-
-  // async waitForCurrentUser() {
-  //   let waitMS = 5000;
-  //   while (!this.auth.currentUser && waitMS > 0) {
-  //     console.log("Waiting for user to show up!");
-  //     await this.sleep(200);
-  //     waitMS -= 200;
-  //   }
-  // }
-
-  // sleep(ms) {
-  //   return new Promise((resolve) => setTimeout(resolve, ms));
-  // }
 }

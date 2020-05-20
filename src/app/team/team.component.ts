@@ -7,6 +7,8 @@ import { TeamService } from "../services/team.service";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { HelperService } from "../services/helper.service";
+import { first } from "rxjs/operators";
+import { User } from "../models/user.model";
 
 @Component({
   selector: "app-team",
@@ -32,10 +34,14 @@ export class TeamComponent implements OnInit, OnDestroy {
     private helper: HelperService
   ) {}
 
-  async ngOnInit() {
-    while (!this.auth.currentUser) {
-      await this.sleep(200);
-    }
+  ngOnInit() {
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => this.initProcesses(u));
+  }
+
+  initProcesses(user: User) {
     this.crudAction = Crud.Update;
     if (this.route.routeConfig.path == "team/delete/:id")
       this.crudAction = Crud.Delete;
@@ -94,10 +100,9 @@ export class TeamComponent implements OnInit, OnDestroy {
     // update the app-teamuserlist to show or hide the user add/remove buttons
     // and allow team data updates if user is admin or the team manager
     if (
-      this.auth.currentUser &&
-      (this.auth.currentUser.isAdmin ||
-        (this.auth.currentUser.managerOfTeams &&
-          this.auth.currentUser.managerOfTeams.includes(this.team.id)))
+      user &&
+      (user.isAdmin ||
+        (user.managerOfTeams && user.managerOfTeams.includes(this.team.id)))
     ) {
       this.hideAddRemove = false;
       this.readOnly = false;

@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { Checklist } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
 import { AuthService } from "../services/auth.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-mychecklists",
@@ -16,21 +17,13 @@ export class MychecklistsComponent implements OnInit {
     private checklistService: ChecklistService,
     private auth: AuthService
   ) {}
-  async ngOnInit() {
-    await this.waitForCurrentUser();
-    this.checklists$ = this.checklistService.findMyChecklists(100);
-  }
-
-  async waitForCurrentUser() {
-    let waitMS = 5000;
-    while (!this.auth.currentUser && waitMS > 0) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-      waitMS -= 200;
-    }
-  }
-
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  ngOnInit() {
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => {
+        // Make sure we have the user resolved before getting their checklists
+        this.checklists$ = this.checklistService.findMyChecklists(100);
+      });
   }
 }

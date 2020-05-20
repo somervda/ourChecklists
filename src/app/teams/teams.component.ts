@@ -2,8 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { Observable, timer } from "rxjs";
 import { Team } from "../models/team.model";
 import { TeamService } from "../services/team.service";
-import { map } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
+import { User } from "../models/user.model";
 
 @Component({
   selector: "app-teams",
@@ -17,9 +18,15 @@ export class TeamsComponent implements OnInit {
 
   constructor(private teamservice: TeamService, private auth: AuthService) {}
 
-  async ngOnInit() {
-    await this.waitForCurrentUser();
-    if (this.auth.currentUser.isAdmin || this.auth.currentUser.canCreateTeams) {
+  ngOnInit() {
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => this.initProcesses(u));
+  }
+
+  initProcesses(user: User) {
+    if (user.isAdmin || user.canCreateTeams) {
       this.canCreateTeams = true;
     }
     // get a observable of all teams then use a pipe/map
@@ -27,33 +34,17 @@ export class TeamsComponent implements OnInit {
     this.teams$ = this.teamservice.findAll(100).pipe(
       map((teams) => {
         // Admins can see all teams
-        if (this.auth.currentUser && this.auth.currentUser.isAdmin) {
+        if (this.auth.currentUser && user.isAdmin) {
           return teams;
         }
         return teams.filter(
           (team) =>
             // otherwise people only see teams in their teamLists
-            (this.auth.currentUser.memberOfTeams &&
-              this.auth.currentUser.memberOfTeams.includes(team.id)) ||
-            (this.auth.currentUser.managerOfTeams &&
-              this.auth.currentUser.managerOfTeams.includes(team.id)) ||
-            (this.auth.currentUser.reviewerOfTeams &&
-              this.auth.currentUser.reviewerOfTeams.includes(team.id))
+            (user.memberOfTeams && user.memberOfTeams.includes(team.id)) ||
+            (user.managerOfTeams && user.managerOfTeams.includes(team.id)) ||
+            (user.reviewerOfTeams && user.reviewerOfTeams.includes(team.id))
         );
       })
     );
-  }
-
-  async waitForCurrentUser() {
-    let waitMS = 5000;
-    while (!this.auth.currentUser && waitMS > 0) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-      waitMS -= 200;
-    }
-  }
-
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

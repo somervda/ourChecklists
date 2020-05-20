@@ -12,6 +12,8 @@ import {
 } from "../models/checklistitem.model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { User } from "../models/user.model";
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: "root",
@@ -20,7 +22,8 @@ export class HelperService {
   constructor(
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {}
 
   userRefToDocRef(userRef: UserRef[]): DocRef[] {

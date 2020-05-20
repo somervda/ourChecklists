@@ -10,6 +10,7 @@ import { ChecklistitemService } from "../services/checklistitem.service";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { AuthService } from "../services/auth.service";
 import { HelperService } from "../services/helper.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-checklist",
@@ -22,6 +23,7 @@ export class ChecklistComponent implements OnInit {
   checklistitems$: Observable<Checklistitem[]>;
   displayedColumns: string[] = ["name", "resultType"];
   ChecklistStatus = ChecklistStatus;
+  isTeamManagerOrAdmin: Boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,8 +34,7 @@ export class ChecklistComponent implements OnInit {
     public helper: HelperService
   ) {}
 
-  async ngOnInit() {
-    await this.waitForCurrentUser();
+  ngOnInit() {
     this.checklist = this.route.snapshot.data["checklist"];
     this.checklistitems$ = this.checklistitemService.findAll(this.checklist.id);
     if (this.checklist.resources) {
@@ -41,6 +42,13 @@ export class ChecklistComponent implements OnInit {
         this.checklist.resources.map((r) => r.id)
       );
     }
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => {
+        this.isTeamManagerOrAdmin =
+          u.isAdmin || u.managerOfTeams?.includes(this.checklist.team.id);
+      });
   }
 
   statusDialog() {
@@ -54,13 +62,6 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  isTeamManagerOrAdmin(): Boolean {
-    return (
-      this.auth.currentUser.isAdmin ||
-      this.auth.currentUser.managerOfTeams?.includes(this.checklist.team.id)
-    );
-  }
-
   iconAction(value) {
     // console.log("iconAction:", value, ":");
     switch (value) {
@@ -68,41 +69,5 @@ export class ChecklistComponent implements OnInit {
         window.print();
         break;
     }
-  }
-
-  // getResultValueName(value: ChecklistitemResultValue): string {
-  //   switch (value) {
-  //     case undefined:
-  //       return "...";
-  //     case ChecklistitemResultValue.NA:
-  //       return "N/A";
-  //     case ChecklistitemResultValue.false:
-  //       return "No";
-  //     case ChecklistitemResultValue.true:
-  //       return "Yes";
-  //     case ChecklistitemResultValue.low:
-  //       return "1: Low";
-  //     case ChecklistitemResultValue.mediumLow:
-  //       return "2: Medium Low";
-  //     case ChecklistitemResultValue.medium:
-  //       return "3: Medium";
-  //     case ChecklistitemResultValue.mediumHigh:
-  //       return "4: Medium High";
-  //     case ChecklistitemResultValue.high:
-  //       return "5: High";
-  //   }
-  // }
-
-  async waitForCurrentUser() {
-    let waitMS = 5000;
-    while (!this.auth.currentUser && waitMS > 0) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-      waitMS -= 200;
-    }
-  }
-
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

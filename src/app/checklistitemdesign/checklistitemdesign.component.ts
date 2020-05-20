@@ -8,7 +8,6 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { ActivatedRoute } from "@angular/router";
-import { AuthService } from "../services/auth.service";
 import { Checklist } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
 import * as firebase from "firebase";
@@ -37,13 +36,11 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     private checklistitemService: ChecklistitemService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private auth: AuthService,
     private checklistService: ChecklistService,
     private helper: HelperService
   ) {}
 
-  async ngOnInit() {
-    await this.waitForCurrentUser();
+  ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get("cid");
     this.checklist$ = this.checklistService.findById(this.cid);
 
@@ -273,18 +270,5 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     if (this.maxSeq$$) {
       this.maxSeq$$.unsubscribe();
     }
-  }
-
-  async waitForCurrentUser() {
-    let waitMS = 5000;
-    while (!this.auth.currentUser && waitMS > 0) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-      waitMS -= 200;
-    }
-  }
-
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

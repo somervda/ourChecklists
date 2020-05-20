@@ -27,7 +27,7 @@ export class ResourcelistsimpleComponent implements OnInit {
 
   constructor(public dialog: MatDialog) {}
 
-  async ngOnInit() {}
+  ngOnInit() {}
 
   getResourceTypeInfoItem(type: ResourceType): ResourceTypeInfoItem {
     return this.resourceTypeInfo.find((info) => info.resourceType == type);
