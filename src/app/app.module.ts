@@ -89,6 +89,7 @@ import { ChecklistitemresultComponent } from "./shared/checklistitemresult/check
 import { ResourcelistsimpleComponent } from "./shared/resourcelistsimple/resourcelistsimple.component";
 import { CheckliststatusdialogComponent } from "./dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { CheckliststatusComponent } from './shared/checkliststatus/checkliststatus.component';
+import { StoragelistComponent } from './shared/storagelist/storagelist.component';
 
 @NgModule({
   declarations: [
@@ -141,6 +142,7 @@ import { CheckliststatusComponent } from './shared/checkliststatus/checkliststat
     ResourcelistsimpleComponent,
     CheckliststatusdialogComponent,
     CheckliststatusComponent,
+    StoragelistComponent,
   ],
   imports: [
     BrowserModule,
