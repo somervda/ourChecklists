@@ -66,13 +66,10 @@
         Status:
       </div>
       <div style="margin-bottom: 5px;">
-        <button
-          mat-raised-button
-          matTooltip="Update Status"
-          (click)="statusDialog()"
-        >
-          {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
-        </button>
+        <app-checkliststatus
+          [checklist]="checklist"
+          [showAction]="true"
+        ></app-checkliststatus>
       </div>
 
       <mat-form-field class="half-width">

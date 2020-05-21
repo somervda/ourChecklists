@@ -22,13 +22,10 @@
 
   <div class="prompt">Status</div>
   <div>
-    <button
-      mat-raised-button
-      matTooltip="Update Status"
-      (click)="statusDialog()"
-    >
-      {{ helper.getChecklistStatusInfoItem(checklist?.status)?.name }}
-    </button>
+    <app-checkliststatus
+      [checklist]="checklist"
+      [showAction]="true"
+    ></app-checkliststatus>
   </div>
 
   <div class="prompt">

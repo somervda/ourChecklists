@@ -1,1 +1,12 @@
-*Checkliststatus*
+<button
+  mat-raised-button
+  matTooltip="Update Status"
+  (click)="statusDialog()"
+  *ngIf="showAction"
+>
+  {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
+  <!-- Only functionality available that is not a view -->
+</button>
+<ng-container *ngIf="!showAction">
+  {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
+</ng-container>

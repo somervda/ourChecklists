@@ -45,18 +45,10 @@
 
   <div class="prompt">Status</div>
   <div>
-    <button
-      mat-raised-button
-      matTooltip="Update Status"
-      (click)="statusDialog()"
-      *ngIf="isTeamManagerOrAdmin"
-    >
-      {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
-      <!-- Only functionality available that is not a view -->
-    </button>
-    <ng-container *ngIf="!isTeamManagerOrAdmin">
-      {{ helper.getChecklistStatusInfoItem(checklist.status).name }}
-    </ng-container>
+    <app-checkliststatus
+      [checklist]="checklist"
+      [showAction]="isTeamManagerOrAdmin"
+    ></app-checkliststatus>
   </div>
 
   <div class="prompt">
