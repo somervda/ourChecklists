@@ -141,8 +141,20 @@
               '../../assets/images/' +
               helper.getResultValueInfo(checklistitem.resultValue).image
             "
-            width="30px"
+            [style.width]="
+              (helper.getResultValueInfo(checklistitem.resultValue).relSize *
+                30) /
+                100 +
+              'px'
+            "
           />
+          <ng-container *ngIf="itemdetails.checked"
+            ><span class="item-detail">
+              <br />{{
+                helper.getResultValueInfo(checklistitem.resultValue).name
+              }}</span
+            ></ng-container
+          >
         </td>
       </ng-container>
 

@@ -12,7 +12,6 @@ import {
 } from "../models/checklistitem.model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { User } from "../models/user.model";
 import { AuthService } from "./auth.service";
 
 @Injectable({
@@ -49,9 +48,10 @@ export class HelperService {
     if (value == undefined) {
       return {
         value: null,
-        name: "...",
-        description: "Not Set",
+        name: "Unknown",
+        description: "Not Set/Not Touched",
         image: "unknown.png",
+        relSize: 70,
       };
     } else {
       console.log(

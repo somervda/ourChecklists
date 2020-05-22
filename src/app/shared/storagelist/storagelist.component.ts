@@ -26,25 +26,30 @@ export class StoragelistComponent implements OnInit {
   constructor(private storage: AngularFireStorage, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    // Get a list of files already in the docId fold
-    const storageRef = firebase
-      .storage()
-      .ref(`/docs/${this.docId}/${this.docType}`);
+    if (this.docId && this.docType) {
+      // Get a list of files already in the docId fold
+      const storageRef = firebase
+        .storage()
+        .ref(`/docs/${this.docId}/${this.docType}`);
 
-    // Find all the items.
-    const files = storageRef.listAll().then(
-      (r) =>
-        // r.items.forEach((element) => {
-        //   console.log("element", element.name);
-        // })
-        (this.files = r.items.map((i) => {
-          return { name: i.name, url$: this.getStorageUrl(i.name) };
-        }))
-    );
+      // Find all the items.
+      const files = storageRef.listAll().then(
+        (r) =>
+          // r.items.forEach((element) => {
+          //   console.log("element", element.name);
+          // })
+          (this.files = r.items.map((i) => {
+            return { name: i.name, url$: this.getStorageUrl(i.name) };
+          }))
+      );
+    } else {
+      console.error("docId or docType are not set, both are required.");
+      this.readOnly = true;
+    }
   }
 
   onUploadFile(event) {
-    console.log("onUploadFile", event);
+    // console.log("onUploadFile", event);
     const fileToUpload = event.target.files[0];
     this.showSpinner = true;
     const task = this.storage
@@ -63,14 +68,15 @@ export class StoragelistComponent implements OnInit {
   }
 
   getStorageUrl(filename: string): Observable<any> {
-    console.log("getStorageUrl", filename);
+    // console.log("getStorageUrl", filename);
     return this.storage
       .ref(`docs/${this.docId}/${this.docType}/${filename}`)
       .getDownloadURL();
   }
 
   onDeleteFile(fileName: string) {
-    console.log("onDeleteFile", fileName);
+    // console.log("onDeleteFile", fileName);
+
     const prompt = "Are you sure you want to delete this file: " + fileName;
     const dialogRef = this.dialog.open(ConfirmdialogComponent, {
       width: "300px",
@@ -79,19 +85,22 @@ export class StoragelistComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((choice) => {
       if (choice) {
+        this.showSpinner = true;
         this.storage
           .ref(`docs/${this.docId}/${this.docType}/${fileName}`)
           .delete()
           .toPromise()
           .then(() => {
             // clean up files array
-            console.log("filedeleted");
+            // console.log("filedeleted");
             const filesIndex = this.files.findIndex((f) => f.name == fileName);
-            console.log("filesIndex", filesIndex);
+            // console.log("filesIndex", filesIndex);
             this.files.splice(filesIndex, 1);
+            this.showSpinner = false;
           })
           .catch(function (error) {
             console.error("File delete error:", error);
+            this.showSpinner = false;
           });
       }
     });
