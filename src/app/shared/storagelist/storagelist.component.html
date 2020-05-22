@@ -1,18 +1,27 @@
-<p>storagelist works!</p>
+<mat-spinner *ngIf="showSpinner" class="spinner_container"></mat-spinner>
 <div class="colgrid2">
   <div>
     <span class="file_item" *ngFor="let file of files">
-      <a href="">{{ file }}</a
+      <a [href]="file.url$ | async" target="_blank">{{ file.name }}</a
       ><mat-icon
         class="align-bottom delete-icon"
-        [matTooltip]="'Delete: ' + file"
+        (click)="onDeleteFile(file.name)"
+        [matTooltip]="'Delete: ' + file.name"
         >clear</mat-icon
       >
     </span>
   </div>
   <div>
-    <button class="add-button" mat-button-raised>
+    <button class="add-button" mat-button-raised (click)="fileUpload.click()">
       <mat-icon class="align-bottom">add</mat-icon>Add&nbsp;File
     </button>
+
+    <input
+      type="file"
+      #fileUpload
+      hidden="true"
+      (change)="onUploadFile($event)"
+      multiple="false"
+    />
   </div>
 </div>

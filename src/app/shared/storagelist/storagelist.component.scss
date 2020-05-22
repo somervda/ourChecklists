@@ -19,3 +19,15 @@
   float: right;
   white-space: nowrap;
 }
+
+.spinner_container {
+  border-radius: 10px;
+  height: 70px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  z-index: 3;
+  opacity: 0.5;
+}
