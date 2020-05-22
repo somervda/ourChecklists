@@ -1,8 +1,21 @@
-.delete_icon {
-  vertical-align: bottom;
+.delete-icon {
   cursor: pointer;
 }
 
 .file_item {
   margin-right: 10px;
+}
+
+.colgrid2 {
+  display: grid;
+  grid-template-columns: 9fr 1fr;
+}
+
+.align-bottom {
+  vertical-align: bottom;
+}
+
+.add-button {
+  float: right;
+  white-space: nowrap;
 }
