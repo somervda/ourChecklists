@@ -112,6 +112,13 @@
               <span class="item-prompt">Evidence </span>
               <span class="item-detail">{{ checklistitem.evidence }}</span>
             </div>
+            <span class="item-detail">
+              <app-storagelist
+                [docId]="checklistitem.id"
+                docType="evidence"
+                [readOnly]="true"
+              ></app-storagelist>
+            </span>
             <div>
               <span class="item-prompt">Sequence Number </span>
               <span class="item-detail">{{ checklistitem.sequence }}</span>
@@ -126,10 +133,16 @@
           mat-cell
           *matCellDef="let checklistitem"
           [matTooltip]="
-            helper.getResultValueName(checklistitem.resultValue).description
+            helper.getResultValueInfo(checklistitem.resultValue).description
           "
         >
-          {{ helper.getResultValueName(checklistitem.resultValue).name }}
+          <img
+            [src]="
+              '../../assets/images/' +
+              helper.getResultValueInfo(checklistitem.resultValue).image
+            "
+            width="30px"
+          />
         </td>
       </ng-container>
 

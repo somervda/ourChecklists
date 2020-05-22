@@ -7,12 +7,18 @@
         class="align-bottom delete-icon"
         (click)="onDeleteFile(file.name)"
         [matTooltip]="'Delete: ' + file.name"
+        [hidden]="readOnly"
         >clear</mat-icon
       >
     </span>
   </div>
   <div>
-    <button class="add-button" mat-button-raised (click)="fileUpload.click()">
+    <button
+      class="add-button"
+      mat-button-raised
+      (click)="fileUpload.click()"
+      [hidden]="readOnly"
+    >
       <mat-icon class="align-bottom">add</mat-icon>Add&nbsp;File
     </button>
 

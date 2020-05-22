@@ -18,6 +18,8 @@ import { MatDialog } from "@angular/material/dialog";
  */
 export class StoragelistComponent implements OnInit {
   @Input() docId: string;
+  @Input() docType: string;
+  @Input() readOnly: boolean;
   files: { name: string; url$: Observable<any> }[];
   showSpinner = false;
 
@@ -25,7 +27,9 @@ export class StoragelistComponent implements OnInit {
 
   ngOnInit(): void {
     // Get a list of files already in the docId fold
-    const storageRef = firebase.storage().ref(`/docs/${this.docId}`);
+    const storageRef = firebase
+      .storage()
+      .ref(`/docs/${this.docId}/${this.docType}`);
 
     // Find all the items.
     const files = storageRef.listAll().then(
@@ -44,7 +48,10 @@ export class StoragelistComponent implements OnInit {
     const fileToUpload = event.target.files[0];
     this.showSpinner = true;
     const task = this.storage
-      .upload(`docs/${this.docId}/${fileToUpload.name}`, fileToUpload)
+      .upload(
+        `docs/${this.docId}/${this.docType}/${fileToUpload.name}`,
+        fileToUpload
+      )
       .then((t) => {
         this.showSpinner = false;
         this.files.push({
@@ -57,7 +64,9 @@ export class StoragelistComponent implements OnInit {
 
   getStorageUrl(filename: string): Observable<any> {
     console.log("getStorageUrl", filename);
-    return this.storage.ref(`docs/${this.docId}/${filename}`).getDownloadURL();
+    return this.storage
+      .ref(`docs/${this.docId}/${this.docType}/${filename}`)
+      .getDownloadURL();
   }
 
   onDeleteFile(fileName: string) {
@@ -70,9 +79,8 @@ export class StoragelistComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((choice) => {
       if (choice) {
-        console.log("we said yes");
         this.storage
-          .ref(`docs/${this.docId}/${fileName}`)
+          .ref(`docs/${this.docId}/${this.docType}/${fileName}`)
           .delete()
           .toPromise()
           .then(() => {

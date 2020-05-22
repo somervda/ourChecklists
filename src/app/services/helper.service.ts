@@ -45,10 +45,19 @@ export class HelperService {
     return ChecklistStatusInfo.find((clsii) => clsii.status == status);
   }
 
-  getResultValueName(value: ChecklistitemResultValue): ChecklistitemResultItem {
+  getResultValueInfo(value: ChecklistitemResultValue): ChecklistitemResultItem {
     if (value == undefined) {
-      return { value: null, name: "...", description: "Not Set" };
+      return {
+        value: null,
+        name: "...",
+        description: "Not Set",
+        image: "unknown.png",
+      };
     } else {
+      console.log(
+        "info",
+        ChecklistitemResultInfo.find((cmirv) => cmirv.value == value)
+      );
       return ChecklistitemResultInfo.find((cmirv) => cmirv.value == value);
     }
   }

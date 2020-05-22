@@ -62,6 +62,15 @@
       </fieldset>
     </div>
   </form>
+  <div class="prompt">Evidence Files</div>
+  <div>
+    <app-storagelist
+      [docId]="checklistitem.id"
+      docType="evidence"
+      [readOnly]="false"
+    ></app-storagelist>
+  </div>
+
   <div class="prompt">Result</div>
   <div class="result">
     <app-checklistitemresult
