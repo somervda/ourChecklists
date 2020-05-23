@@ -11,6 +11,8 @@ import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog
 import { AuthService } from "../services/auth.service";
 import { HelperService } from "../services/helper.service";
 import { first } from "rxjs/operators";
+import { IconAction } from "../models/helper.model";
+import { TemplategeneratordialogComponent } from "../dialogs/templategeneratordialog/templategeneratordialog.component";
 
 @Component({
   selector: "app-checklist",
@@ -24,6 +26,13 @@ export class ChecklistComponent implements OnInit {
   displayedColumns: string[] = ["name", "resultType"];
   ChecklistStatus = ChecklistStatus;
   isTeamManagerOrAdmin: Boolean;
+  iconActions: IconAction[] = [
+    {
+      icon: "print",
+      toolTip: "Print",
+      emitValue: "print",
+    },
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +57,13 @@ export class ChecklistComponent implements OnInit {
       .then((u) => {
         this.isTeamManagerOrAdmin =
           u.isAdmin || u.managerOfTeams?.includes(this.checklist.team.id);
+        if (u.isAdmin || u.isTemplateCreator) {
+          this.iconActions.push({
+            icon: "dynamic_feed",
+            toolTip: "Create template from this checklist",
+            emitValue: "template",
+          });
+        }
       });
   }
 
@@ -68,6 +84,20 @@ export class ChecklistComponent implements OnInit {
       case "print":
         window.print();
         break;
+      case "template":
+        this.createTemplate();
+        break;
     }
+  }
+
+  createTemplate() {
+    console.log("createTemplate");
+    const dialogRef = this.dialog.open(TemplategeneratordialogComponent, {
+      minWidth: "380px",
+      maxWidth: "700px",
+      width: "80%",
+      data: { checklist: this.checklist },
+      autoFocus: false,
+    });
   }
 }

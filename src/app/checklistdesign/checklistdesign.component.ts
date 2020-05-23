@@ -17,6 +17,7 @@ import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog
 import { MatDialog } from "@angular/material/dialog";
 import { User } from "../models/user.model";
 import { first } from "rxjs/operators";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-checklistdesign",
@@ -81,6 +82,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
           },
         ],
         category: { id: "", name: "" },
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
     } else {
       this.checklist = this.route.snapshot.data["checklist"];

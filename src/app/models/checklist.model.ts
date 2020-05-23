@@ -8,10 +8,10 @@ export interface Checklist {
   description: string;
   comments?: string;
   status: ChecklistStatus;
-  dateCreated?: Date;
-  dateUpdated?: Date;
+  dateCreated?: Date | firebase.firestore.FieldValue;
+  dateUpdated?: Date | firebase.firestore.FieldValue;
   dateTargeted?: Date;
-  dateCompleted?: Date;
+  dateCompleted?: Date | firebase.firestore.FieldValue;
   team: DocRef;
   assignee: UserRef[];
   category: DocRef;
@@ -37,7 +37,7 @@ export const ChecklistStatusInfo: ChecklistStatusInfoItem[] = [
   {
     status: 2,
     name: "Active",
-    icon: "check_box",
+    icon: "ballot",
     description:
       "Checklist is in use, checklist item results (Checkboxes, Ratings etc) can be entered.",
   },

@@ -54,10 +54,10 @@ export class HelperService {
         relSize: 70,
       };
     } else {
-      console.log(
-        "info",
-        ChecklistitemResultInfo.find((cmirv) => cmirv.value == value)
-      );
+      // console.log(
+      //   "info",
+      //   ChecklistitemResultInfo.find((cmirv) => cmirv.value == value)
+      // );
       return ChecklistitemResultInfo.find((cmirv) => cmirv.value == value);
     }
   }

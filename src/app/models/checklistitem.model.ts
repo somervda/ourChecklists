@@ -6,8 +6,8 @@ export interface Checklistitem {
   sequence: number;
   description: string;
   activities?: DocRef[];
-  dateCreated?: Date | any;
-  dateResultSet?: Date | any;
+  dateCreated?: Date | firebase.firestore.FieldValue;
+  dateResultSet?: Date | firebase.firestore.FieldValue;
   evidence?: string;
   allowNA: boolean;
   requireEvidence: boolean;

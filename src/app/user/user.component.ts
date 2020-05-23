@@ -52,6 +52,7 @@ export class UserComponent implements OnInit, OnDestroy {
     const canCreateTeams = this.user.canCreateTeams ? "Yes" : "No";
     const isCategoryManager = this.user.isCategoryManager ? "Yes" : "No";
     const isResourceManager = this.user.isResourceManager ? "Yes" : "No";
+    const isTemplateCreator = this.user.isTemplateCreator ? "Yes" : "No";
 
     this.userInitSub = this.auth.user$.subscribe((currentUser) => {
       // The user page is read only for non-administrators
@@ -134,6 +135,14 @@ export class UserComponent implements OnInit, OnDestroy {
       this.user.uid,
       "isResourceManager",
       !this.user.isResourceManager
+    );
+  }
+
+  updateIsTemplateCreator() {
+    this.userservice.dbFieldUpdate(
+      this.user.uid,
+      "isTemplateCreator",
+      !this.user.isTemplateCreator
     );
   }
 

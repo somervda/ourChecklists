@@ -88,8 +88,9 @@ import { ChecklistitemeditlistComponent } from "./shared/checklistitemeditlist/c
 import { ChecklistitemresultComponent } from "./shared/checklistitemresult/checklistitemresult.component";
 import { ResourcelistsimpleComponent } from "./shared/resourcelistsimple/resourcelistsimple.component";
 import { CheckliststatusdialogComponent } from "./dialogs/checkliststatusdialog/checkliststatusdialog.component";
-import { CheckliststatusComponent } from './shared/checkliststatus/checkliststatus.component';
-import { StoragelistComponent } from './shared/storagelist/storagelist.component';
+import { CheckliststatusComponent } from "./shared/checkliststatus/checkliststatus.component";
+import { StoragelistComponent } from "./shared/storagelist/storagelist.component";
+import { TemplategeneratordialogComponent } from "./dialogs/templategeneratordialog/templategeneratordialog.component";
 
 @NgModule({
   declarations: [
@@ -143,6 +144,7 @@ import { StoragelistComponent } from './shared/storagelist/storagelist.component
     CheckliststatusdialogComponent,
     CheckliststatusComponent,
     StoragelistComponent,
+    TemplategeneratordialogComponent,
   ],
   imports: [
     BrowserModule,
