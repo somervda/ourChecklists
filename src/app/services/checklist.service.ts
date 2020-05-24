@@ -13,6 +13,7 @@ import {
 import { AuthService } from "./auth.service";
 import { UserRef } from "../models/helper.model";
 import { ChecklistitemService } from "./checklistitem.service";
+import { Checklistitem } from "../models/checklistitem.model";
 
 @Injectable({
   providedIn: "root",
@@ -130,11 +131,70 @@ export class ChecklistService {
    * @param checklist : The checklist document used for the basis of the new template
    * Note: the name and description in the document is the new values to be used in the template.
    */
+  // createTemplate(checklist: Checklist) {
+  //   console.log("createTemplate", checklist);
+  //   // First get the checklistitems for the checklist to copy to
+  //   // the template
+  //   return this.checklistitemService
+  //     .findAll(checklist.id)
+  //     .pipe(first())
+  //     .toPromise()
+  //     .then((clis) => {
+  //       console.log("createTemplate items:", clis);
+  //       // Wrap all the document creations in a transaction so they all
+  //       // work or all fail.
+  //       this.afs.firestore
+  //         .runTransaction((t) => {
+  //           // Modify the checklist , remove the fields not needed for a template
+  //           const id = checklist.id;
+  //           delete checklist.id;
+  //           checklist.status = ChecklistStatus.Active;
+  //           checklist.isTemplate = true;
+  //           checklist.comments = "";
+  //           checklist.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+  //           checklist.assignee = [];
+  //           // Get a new document Id to use when creating the template
+  //           const tid = this.afs.createId();
+  //           console.log("createTemplate Service", checklist);
+  //           var clRef = this.afs.collection("checklists").doc(tid).ref;
+  //           t.set(clRef, checklist);
+  //           // Create the checklistitems for the template
+  //           clis.forEach((cli) => {
+  //             const tiid = this.afs.createId();
+  //             var cliRef = this.afs
+  //               .collection(`checklists/${tid}/checklistitems/`)
+  //               .doc(tiid).ref;
+  //             delete cli.id;
+  //             delete cli.evidence;
+  //             delete cli.comment;
+  //             delete cli.dateResultSet;
+  //             delete cli.resultValue;
+  //             cli.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+  //             cli.tagId = tiid;
+  //             console.log("createTemplateItem Service", cli);
+  //             t.set(cliRef, cli);
+  //           });
+
+  //           return Promise.resolve(tid);
+  //         })
+  //         .then((x) => {
+  //           console.log("t1", x);
+  //           return Promise.resolve(x);
+  //           // return x;
+  //         });
+  //     })
+  //     .then((x) => {
+  //       console.log("t2", x);
+  //       return x;
+  //     });
+  // }
+
   createTemplate(checklist: Checklist) {
     console.log("createTemplate", checklist);
     // First get the checklistitems for the checklist to copy to
     // the template
-    return this.checklistitemService
+
+    this.checklistitemService
       .findAll(checklist.id)
       .pipe(first())
       .toPromise()
@@ -142,46 +202,57 @@ export class ChecklistService {
         console.log("createTemplate items:", clis);
         // Wrap all the document creations in a transaction so they all
         // work or all fail.
-        this.afs.firestore
-          .runTransaction((t) => {
-            // Modify the checklist , remove the fields not needed for a template
-            const id = checklist.id;
-            delete checklist.id;
-            checklist.status = ChecklistStatus.Active;
-            checklist.isTemplate = true;
-            checklist.comments = "";
-            checklist.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
-            checklist.assignee = [];
-            // Get a new document Id to use when creating the template
-            const tid = this.afs.createId();
-            console.log("createTemplate Service", checklist);
-            var clRef = this.afs.collection("checklists").doc(tid).ref;
-            t.set(clRef, checklist);
-            // Create the checklistitems for the template
-            clis.forEach((cli) => {
-              const tiid = this.afs.createId();
-              var cliRef = this.afs
-                .collection(`checklists/${tid}/checklistitems/`)
-                .doc(tiid).ref;
-              delete cli.id;
-              delete cli.evidence;
-              delete cli.comment;
-              delete cli.dateResultSet;
-              delete cli.resultValue;
-              cli.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
-              cli.tagId = tiid;
-              console.log("createTemplateItem Service", cli);
-              t.set(cliRef, cli);
-            });
+        // Modify the checklist , remove the fields not needed for a template
+        const id = checklist.id;
+        delete checklist.id;
+        checklist.status = ChecklistStatus.Active;
+        checklist.isTemplate = true;
+        checklist.comments = "";
+        checklist.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+        checklist.assignee = [];
+        // Get a new document Id to use when creating the template
+        const tid = this.afs.createId();
+        // console.log("createTemplate Service", checklist);
 
-            return Promise.resolve(tid);
+        // Create the checklistitems for the template
+        clis.forEach((cli) => {
+          const tiid = this.afs.createId();
+          var cliRef = this.afs
+            .collection(`checklists/${tid}/checklistitems/`)
+            .doc(tiid).ref;
+          delete cli.id;
+          delete cli.evidence;
+          delete cli.comment;
+          delete cli.dateResultSet;
+          delete cli.resultValue;
+          cli.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+          cli.tagId = tiid;
+        });
+
+        this.createTemplateT(checklist, clis)
+          .then((c) => {
+            console.log("c:", c);
+            return c;
           })
-          .then((x) => {
-            return x;
+          .then((r) => {
+            Promise.resolve(r);
           });
+      });
+  }
+
+  createTemplateT(template: Checklist, templateItems: Checklistitem[]) {
+    console.log("createTemplateT", template, templateItems);
+    return this.afs.firestore
+      .runTransaction((t) => {
+        return Promise.resolve("From T");
       })
-      .then((x) => {
-        return x;
+      .then((result) => {
+        console.log("Transaction success", result);
+        return Promise.resolve(result);
+      })
+      .catch((err) => {
+        console.log("Transaction failure:", err);
+        return Promise.reject(err);
       });
   }
 }

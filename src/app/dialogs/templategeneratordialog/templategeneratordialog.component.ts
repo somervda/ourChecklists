@@ -58,8 +58,8 @@ export class TemplategeneratordialogComponent implements OnInit {
     }
     this.checklistService
       .createTemplate(this.checklist)
-      .then((r) => console.log("generateTemplate then", r))
-      .catch((e) => console.error("generateTemplate catch", e));
+      .then((x) => console.log("xxx", x));
+
     this.dialogRef.close();
   }
 
