@@ -1,0 +1,58 @@
+.prompt {
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+  padding-right: 8px;
+  min-width: 350px;
+}
+
+table {
+  width: 100%;
+  min-width: 340px;
+  margin-top: 10px;
+}
+
+.mat-column-name {
+  //   vertical-align: top;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.mat-column-resultType {
+  //   vertical-align: top;
+  white-space: nowrap;
+  text-align: right;
+}
+
+span.item-prompt {
+  font-weight: 600;
+  font-size: x-small;
+}
+
+span.item-detail {
+  font-weight: 200;
+  font-size: x-small;
+}
+
+div.item-details {
+  margin-left: 5px;
+}
+
+.checklistitem-slide {
+  float: right;
+}
+
+.checklistitem-frame {
+  border: 2px solid lightgrey;
+  border-radius: 7px;
+  padding: 10px;
+  border-style: solid;
+  background-color: lightgray;
+}

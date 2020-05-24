@@ -31,6 +31,8 @@ import { ChecklistitemeditComponent } from "./checklistitemedit/checklistitemedi
 import { ChecklistComponent } from "./checklist/checklist.component";
 import { CheckliststatusGuard } from "./guards/checkliststatus.guard";
 import { ChecklistStatus } from "./models/checklist.model";
+import { TemplatesComponent } from "./templates/templates.component";
+import { TemplateComponent } from "./template/template.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -114,6 +116,23 @@ const routes: Routes = [
     canActivate: [permissionGuard],
     data: {
       permissions: ["isAdmin", "isActivated"],
+    },
+  },
+
+  // Templates
+  {
+    path: "templates",
+    component: TemplatesComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
+  {
+    path: "template/:id",
+    component: TemplateComponent,
+    resolve: { checklist: ChecklistResolver },
+    canActivate: [permissionGuard],
+    data: {
+      permissions: ["isActivated"],
     },
   },
 

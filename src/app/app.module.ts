@@ -91,6 +91,9 @@ import { CheckliststatusdialogComponent } from "./dialogs/checkliststatusdialog/
 import { CheckliststatusComponent } from "./shared/checkliststatus/checkliststatus.component";
 import { StoragelistComponent } from "./shared/storagelist/storagelist.component";
 import { TemplategeneratordialogComponent } from "./dialogs/templategeneratordialog/templategeneratordialog.component";
+import { TemplatesComponent } from './templates/templates.component';
+import { TemplateComponent } from './template/template.component';
+import { TemplatelistComponent } from './shared/templatelist/templatelist.component';
 
 @NgModule({
   declarations: [
@@ -145,6 +148,9 @@ import { TemplategeneratordialogComponent } from "./dialogs/templategeneratordia
     CheckliststatusComponent,
     StoragelistComponent,
     TemplategeneratordialogComponent,
+    TemplatesComponent,
+    TemplateComponent,
+    TemplatelistComponent,
   ],
   imports: [
     BrowserModule,
