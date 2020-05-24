@@ -14,6 +14,7 @@ import { AuthService } from "./auth.service";
 import { UserRef } from "../models/helper.model";
 import { ChecklistitemService } from "./checklistitem.service";
 import { Checklistitem } from "../models/checklistitem.model";
+import { User } from "../models/user.model";
 
 @Injectable({
   providedIn: "root",
@@ -198,7 +199,7 @@ export class ChecklistService {
     template: Checklist,
     templateItems: Checklistitem[]
   ): Promise<string> {
-    console.log("createTemplateT", template, templateItems);
+    console.log("createTemplateTransaction", template, templateItems);
     return this.afs.firestore
       .runTransaction((t) => {
         // Get document ids and write new documents
@@ -230,6 +231,89 @@ export class ChecklistService {
       })
       .catch((err) => {
         console.error("createTemplateTransaction failure:", err);
+        return Promise.reject(err);
+      });
+  }
+
+  // Create a checklist from a template
+
+  createFromTemplate(template: Checklist, user: User): Promise<string> {
+    console.log("createFromTemplate", template);
+
+    return this.checklistitemService
+      .findAll(template.id)
+      .pipe(first())
+      .toPromise()
+      .then((templateItems) => {
+        console.log("createTemplate items:", templateItems);
+        // Modify the checklist , remove the fields not needed for a template
+        template.fromTemplate = { id: template.id, name: template.name };
+        const dateNow = new Date();
+        template.name += `: ${dateNow.valueOf()}`;
+        template.description += `Created from template: ${dateNow.toISOString()}`;
+        delete template.id;
+        template.status = ChecklistStatus.Active;
+        template.isTemplate = false;
+        template.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+        template.assignee = [{ uid: user.uid, displayName: user.displayName }];
+        // Clean up templateItems for use in the checklist
+        templateItems.forEach((templateItem) => {
+          delete templateItem.id;
+          templateItem.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
+        });
+
+        return this.createFromTemplateTransaction(template, templateItems);
+      })
+      .then((result) => {
+        console.log("createFromTemplate:", result);
+        return Promise.resolve(result);
+      })
+      .catch((err) => {
+        console.error("createFromTemplate failure:", err);
+        return Promise.reject(err);
+      });
+  }
+
+  /**
+   * Perform the transactional part of creating a checklist from a template,
+   * all document writes are wrapped in one transaction so
+   * either it creates the checklist and checklist items or
+   * all fails
+   * @param checklist The checklist document to be created
+   * @param checklistItems All the checklist items
+   */
+  createFromTemplateTransaction(
+    checklist: Checklist,
+    checklistItems: Checklistitem[]
+  ): Promise<string> {
+    console.log("createFromTemplateTransaction", checklist, checklistItems);
+    return this.afs.firestore
+      .runTransaction((t) => {
+        // Get document ids and write new documents
+
+        // Main template document
+        const checklistId = this.afs.createId();
+        var checklistRef = this.afs.collection("checklists").doc(checklistId)
+          .ref;
+        t.set(checklistRef, checklist);
+
+        // template items documents
+        checklistItems.forEach((item) => {
+          const checklistitemId = this.afs.createId();
+          var checklistitemRef = this.afs
+            .collection(`checklists/${checklistId}/checklistitems/`)
+            .doc(checklistitemId).ref;
+          t.set(checklistitemRef, item);
+        });
+
+        return Promise.resolve(checklistId);
+      })
+      .then((templateId) => {
+        console.log("createFromTemplateTransaction", templateId);
+        return Promise.resolve(templateId);
+      })
+      .catch((err) => {
+        console.error("createFromTemplateTransaction failure:", err);
         return Promise.reject(err);
       });
   }

@@ -1,3 +1,5 @@
+import { AuthService } from "./../services/auth.service";
+import { ChecklistService } from "src/app/services/checklist.service";
 import { Component, OnInit } from "@angular/core";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
 import { Observable } from "rxjs";
@@ -37,7 +39,9 @@ export class TemplateComponent implements OnInit {
     private route: ActivatedRoute,
     private checklistitemService: ChecklistitemService,
     private resourceService: ResourceService,
-    private helper: HelperService
+    private helper: HelperService,
+    private checklistService: ChecklistService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -64,12 +68,13 @@ export class TemplateComponent implements OnInit {
 
   createChecklist() {
     console.log("createChecklist");
-    // const dialogRef = this.dialog.open(TemplategeneratordialogComponent, {
-    //   minWidth: "380px",
-    //   maxWidth: "700px",
-    //   width: "80%",
-    //   data: { checklist: this.checklist },
-    //   autoFocus: false,
-    // });
+    this.checklistService
+      .createFromTemplate(this.checklist, this.auth.currentUser)
+      .then((checklistId) => {
+        console.log("checklistId", checklistId);
+        this.helper.snackbar("Checklist created from template", 2000);
+        this.helper.redirect(`/checklist/${checklistId}`);
+      })
+      .catch((err) => console.error("createFromTemplate failed:", err));
   }
 }
