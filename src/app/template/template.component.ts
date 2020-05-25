@@ -72,7 +72,7 @@ export class TemplateComponent implements OnInit {
       .createFromTemplate(this.checklist, this.auth.currentUser)
       .then((checklistId) => {
         console.log("checklistId", checklistId);
-        this.helper.snackbar("Checklist created from template", 2000);
+        this.helper.snackbar("Checklist created from template", 3000);
         this.helper.redirect(`/checklist/${checklistId}`);
       })
       .catch((err) => console.error("createFromTemplate failed:", err));
