@@ -13,14 +13,14 @@ table {
   // min-width: 120px;
 }
 
-.mat-column-viewprint {
-  text-align: right;
-  justify-content: flex-end;
-}
-
 .mat-column-status {
   white-space: nowrap;
   padding-right: 5px;
+}
+
+.mat-column-delete {
+  text-align: right;
+  justify-content: flex-end;
 }
 
 .delete_checklist {

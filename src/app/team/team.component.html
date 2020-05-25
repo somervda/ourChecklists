@@ -68,37 +68,23 @@
       </mat-form-field>
     </fieldset>
     <br />
-    <mat-expansion-panel
+
+    <div class="prompt">Team Members</div>
+    <app-teamuserlist
+      [teamId]="team.id"
+      [hideAddRemove]="hideAddRemove"
       *ngIf="crudAction != Crud.Create"
       [disabled]="crudAction == Crud.Delete"
-      hideToggle
-      [expanded]="true"
-    >
-      <mat-expansion-panel-header>
-        Team Members
-        <mat-icon style="margin-left: auto;">edit</mat-icon>
-      </mat-expansion-panel-header>
+    ></app-teamuserlist>
 
-      <ng-template matExpansionPanelContent>
-        <app-teamuserlist
-          [teamId]="team.id"
-          [hideAddRemove]="hideAddRemove"
-        ></app-teamuserlist>
-      </ng-template>
-    </mat-expansion-panel>
     <br />
-    <mat-expansion-panel
+    <div class="prompt">Checklists</div>
+    <app-teamchecklists
+      [teamId]="team.id"
       *ngIf="crudAction != Crud.Create"
       [disabled]="crudAction == Crud.Delete"
-    >
-      <mat-expansion-panel-header>
-        Checklists
-      </mat-expansion-panel-header>
+    ></app-teamchecklists>
 
-      <ng-template matExpansionPanelContent>
-        <app-teamchecklists [teamId]="team.id"></app-teamchecklists>
-      </ng-template>
-    </mat-expansion-panel>
     <br />
     <button
       mat-raised-button

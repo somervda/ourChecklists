@@ -21,12 +21,12 @@
 
       <div class="prompt">Description</div>
       <div>{{ checklist?.description }}</div>
-      <div class="prompt">Status</div>
-      <div>{{ helper.getChecklistStatusInfoItem(checklist.status).name }}</div>
       <div class="prompt">Comments</div>
       <div>
         {{ checklist.comments }}
       </div>
+      <div class="prompt">Status</div>
+      <div>{{ helper.getChecklistStatusInfoItem(checklist.status).name }}</div>
     </ng-container>
 
     <ng-container *ngIf="enhanced">
@@ -83,13 +83,7 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
-      <div class="prompt">Status</div>
-      <div>
-        <app-checkliststatus
-          [checklist]="checklist"
-          [showAction]="true"
-        ></app-checkliststatus>
-      </div>
+
       <div class="prompt">Comments</div>
       <div>
         <mat-form-field class="full-width">
@@ -108,6 +102,13 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <div class="prompt">Status</div>
+      <div>
+        <app-checkliststatus
+          [checklist]="checklist"
+          [showAction]="true"
+        ></app-checkliststatus>
+      </div>
     </ng-container>
 
     <div class="prompt">
@@ -120,33 +121,30 @@
     </div>
   </form>
 
-  <div [hidden]="!enhanced">
-    <div class="prompt">Additional Information...</div>
-    <div class="page-container">
-      <div class="prompt">Team</div>
-      <div>{{ checklist.team.name }}</div>
+  <ng-container *ngIf="enhanced">
+    <div class="prompt">Team</div>
+    <div>{{ checklist.team.name }}</div>
 
-      <div class="prompt">Category</div>
-      <div>{{ checklist.category.name }}</div>
-      <ng-container
-        *ngIf="checklist.fromTemplate && checklist.fromTemplate.id.length > 0"
-      >
-        <div class="prompt">Based on Template</div>
-        <div>{{ checklist.fromTemplate.name }}</div>
-      </ng-container>
-      <div class="prompt">Date Created</div>
-      <div *ngIf="checklist.dateCreated">
-        {{ checklist.dateCreated.toDate() }}
-      </div>
-
-      <div class="prompt">Assignees</div>
-      <div>
-        {{
-          helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee))
-        }}
-      </div>
+    <div class="prompt">Category</div>
+    <div>{{ checklist.category.name }}</div>
+    <ng-container
+      *ngIf="checklist.fromTemplate && checklist.fromTemplate.id.length > 0"
+    >
+      <div class="prompt">Based on Template</div>
+      <div>{{ checklist.fromTemplate.name }}</div>
+    </ng-container>
+    <div class="prompt">Date Created</div>
+    <div *ngIf="checklist.dateCreated">
+      {{ checklist.dateCreated.toDate() }}
     </div>
-  </div>
+
+    <div class="prompt">Assignees</div>
+    <div>
+      {{
+        helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee))
+      }}
+    </div>
+  </ng-container>
 
   <div class="prompt">Checklist Items</div>
   <div>
