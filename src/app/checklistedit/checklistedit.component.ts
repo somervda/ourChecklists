@@ -12,7 +12,6 @@ import { ResourceService } from "../services/resource.service";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { MatDialog } from "@angular/material/dialog";
-import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 
 @Component({
@@ -23,7 +22,7 @@ import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 export class ChecklisteditComponent implements OnInit {
   checklist: Checklist;
   resources$: Observable<Resource[]>;
-  hideDetails = true;
+  enhanced = false;
   showResources = false;
   checklistForm: FormGroup;
 
@@ -46,23 +45,36 @@ export class ChecklisteditComponent implements OnInit {
 
     // Create validators
     this.checklistForm = this.fb.group({
+      name: [
+        this.checklist.name,
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(70),
+        ],
+      ],
+      description: [
+        this.checklist.description,
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(500),
+        ],
+      ],
       comments: [this.checklist?.comments, [Validators.maxLength(5000)]],
     });
   }
 
-  onShowAllChange(checked) {
+  onEnhanced(checked) {
     // console.log("onshowallchange", checked);
-    this.hideDetails = !checked;
+    this.enhanced = checked;
   }
 
-  updateComments() {
-    // console.log("updateComments");
-    if (this.checklistForm.get("comments").valid) {
-      this.checklistService.fieldUpdate(
-        this.checklist.id,
-        "comments",
-        this.checklist.comments
-      );
+  onFieldUpdate(fieldName: string, toType?: string) {
+    if (this.checklistForm.get(fieldName).valid) {
+      let newValue = this.checklistForm.get(fieldName).value;
+      this.checklistService.fieldUpdate(this.checklist.id, fieldName, newValue);
+      this.checklist[fieldName] = newValue;
     }
   }
 }

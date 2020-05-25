@@ -4,6 +4,9 @@ import { Observable } from "rxjs";
 import { Checklist, ChecklistStatus } from "../../models/checklist.model";
 import { AuthService } from "../../services/auth.service";
 import { first } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmdialogComponent } from "src/app/dialogs/confirmdialog/confirmdialog.component";
+import { ChecklistService } from "src/app/services/checklist.service";
 
 @Component({
   selector: "app-checklistlist",
@@ -13,17 +16,16 @@ import { first } from "rxjs/operators";
 export class ChecklistlistComponent implements OnInit {
   @Input() checklists$: Observable<Checklist[]>;
   @Input() hideCreate: boolean;
-  displayedColumns: string[] = [
-    "name",
-    "status",
-    "description",
-    "team",
-    "viewprint",
-  ];
+  displayedColumns: string[] = ["name", "status", "description", "delete"];
   isAdmin: Boolean;
   uid: String;
 
-  constructor(private auth: AuthService, public helper: HelperService) {}
+  constructor(
+    private auth: AuthService,
+    public helper: HelperService,
+    private dialog: MatDialog,
+    private checklistService: ChecklistService
+  ) {}
 
   ngOnInit() {
     this.auth.user$
@@ -71,5 +73,26 @@ export class ChecklistlistComponent implements OnInit {
     }
 
     return linkAction;
+  }
+
+  deleteChecklist(checklist: Checklist) {
+    console.log("deleteChecklist", checklist);
+
+    const prompt =
+      "Are you sure you want to delete this checklist? Note: The checklist is logically deleted and can be restored by an administrator.";
+    const dialogRef = this.dialog.open(ConfirmdialogComponent, {
+      width: "390px",
+      data: { heading: "Confirm", prompt: prompt },
+    });
+    dialogRef.afterClosed().subscribe((choice) => {
+      if (choice) {
+        console.log("deleteChecklist Yes");
+        this.checklistService.fieldUpdate(
+          checklist.id,
+          "status",
+          ChecklistStatus.Deleted
+        );
+      }
+    });
   }
 }

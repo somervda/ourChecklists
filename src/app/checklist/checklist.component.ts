@@ -57,7 +57,7 @@ export class ChecklistComponent implements OnInit {
       .then((u) => {
         this.isTeamManagerOrAdmin =
           u.isAdmin || u.managerOfTeams?.includes(this.checklist.team.id);
-        if (u.isAdmin || u.isTemplateCreator) {
+        if (u.isAdmin || u.isTemplateManager) {
           this.iconActions.push({
             icon: "dynamic_feed",
             toolTip: "Create template from this checklist",

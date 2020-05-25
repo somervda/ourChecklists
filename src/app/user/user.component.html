@@ -77,13 +77,13 @@
       </tr>
       <tr>
         <td class="nowrap">
-          <b>Can Create Templates?</b>
+          <b>Can Manage Templates?</b>
         </td>
         <td>
           <mat-checkbox
-            [(ngModel)]="user.isTemplateCreator"
-            (click)="updateIsTemplateCreator()"
-            matTooltip="User can create templates based on existing checklists"
+            [(ngModel)]="user.isTemplateManager"
+            (click)="updateIsTemplateManager()"
+            matTooltip="User can create and delete templates"
           ></mat-checkbox>
         </td>
       </tr>

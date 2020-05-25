@@ -45,19 +45,23 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="team">
+  <!-- <ng-container matColumnDef="team">
     <th mat-header-cell *matHeaderCellDef>Team</th>
     <td mat-cell *matCellDef="let checklist">
       {{ checklist.team.name }}
     </td>
-  </ng-container>
+  </ng-container> -->
 
-  <ng-container matColumnDef="viewprint">
+  <ng-container matColumnDef="delete">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let checklist">
-      <a [routerLink]="'/checklist/' + checklist.id" matTooltip="ViewPrint"
-        ><mat-icon>print</mat-icon></a
+      <div
+        (click)="deleteChecklist(checklist)"
+        matTooltip="Delete Checklist"
+        class="delete_checklist"
       >
+        <mat-icon>clear</mat-icon>
+      </div>
     </td>
   </ng-container>
 

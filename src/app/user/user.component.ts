@@ -52,7 +52,7 @@ export class UserComponent implements OnInit, OnDestroy {
     const canCreateTeams = this.user.canCreateTeams ? "Yes" : "No";
     const isCategoryManager = this.user.isCategoryManager ? "Yes" : "No";
     const isResourceManager = this.user.isResourceManager ? "Yes" : "No";
-    const isTemplateCreator = this.user.isTemplateCreator ? "Yes" : "No";
+    const isTemplateManager = this.user.isTemplateManager ? "Yes" : "No";
 
     this.userInitSub = this.auth.user$.subscribe((currentUser) => {
       // The user page is read only for non-administrators
@@ -88,6 +88,10 @@ export class UserComponent implements OnInit, OnDestroy {
         this.kvps.push({
           key: "Is Resource Manager?",
           value: isResourceManager,
+        });
+        this.kvps.push({
+          key: "Is Template Manager?",
+          value: isTemplateManager,
         });
       }
       // for admins updating other users profile isAdmin and isActivated displayed
@@ -138,11 +142,11 @@ export class UserComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateIsTemplateCreator() {
+  updateIsTemplateManager() {
     this.userservice.dbFieldUpdate(
       this.user.uid,
-      "isTemplateCreator",
-      !this.user.isTemplateCreator
+      "isTemplateManager",
+      !this.user.isTemplateManager
     );
   }
 

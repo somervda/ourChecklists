@@ -9,18 +9,20 @@ import { IconAction } from "src/app/models/helper.model";
 export class SubheadingComponent implements OnInit {
   @Input() prompt: string;
   @Input() matIcon: string;
-  @Input() showAll: boolean;
-  @Output() showAllChange = new EventEmitter();
+  @Input() enhanced: boolean;
+  @Output() enhanceClick = new EventEmitter();
   @Input() iconActions: IconAction[];
   @Output() iconAction = new EventEmitter();
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("SubheadingComponent", this.enhanced);
+  }
 
-  onShowAll(event) {
+  enhancedChange(event) {
     // console.log("onShowAll", event);
-    this.showAllChange.emit(event.checked);
+    this.enhanceClick.emit(event.checked);
   }
 
   iconActionClick(value: string) {

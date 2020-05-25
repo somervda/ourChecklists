@@ -20,7 +20,7 @@ export interface User {
   canCreateTeams?: boolean;
   isCategoryManager?: boolean;
   isResourceManager?: boolean;
-  isTemplateCreator?: boolean;
+  isTemplateManager?: boolean;
 }
 
 // export enum TeamRole {

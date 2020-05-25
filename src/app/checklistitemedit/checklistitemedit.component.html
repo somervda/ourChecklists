@@ -21,45 +21,41 @@
   <form class="standard-form" [formGroup]="checklistitemForm">
     <div class="prompt">Comment</div>
     <div>
-      <fieldset>
+      <mat-form-field class="full-width">
         <textarea
           matInput
-          class="full-width"
           formControlName="comment"
           [(ngModel)]="checklistitem.comment"
           (change)="updateComment()"
           matAutosizeMinRows="3"
           matAutosizeMaxRows="10"
           matTextareaAutosize
-          placeholder="Comment"
         ></textarea>
         <mat-error
           *ngIf="checklistitemForm.controls['comment'].hasError('maxlength')"
         >
           Comment can not be more than 5000 characters long.
         </mat-error>
-      </fieldset>
+      </mat-form-field>
     </div>
     <div class="prompt">Evidence</div>
     <div>
-      <fieldset>
+      <mat-form-field class="full-width">
         <textarea
           matInput
-          class="full-width"
           formControlName="evidence"
           [(ngModel)]="checklistitem.evidence"
           (change)="updateEvidence()"
           matAutosizeMinRows="3"
           matAutosizeMaxRows="10"
           matTextareaAutosize
-          placeholder="Evidence"
         ></textarea>
         <mat-error
           *ngIf="checklistitemForm.controls['evidence'].hasError('maxlength')"
         >
           Evidence can not be more than 5000 characters long.
         </mat-error>
-      </fieldset>
+      </mat-form-field>
     </div>
   </form>
   <div class="prompt">Evidence Files</div>

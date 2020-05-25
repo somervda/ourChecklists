@@ -1,64 +1,126 @@
 <app-subheading
   prompt="Checklist"
   [matIcon]="helper.getChecklistStatusInfoItem(checklist?.status)?.icon"
-  [showAll]="true"
-  (showAllChange)="onShowAllChange($event)"
+  [enhanced]="true"
+  (enhanceClick)="onEnhanced($event)"
 ></app-subheading>
 
 <div class="page-container">
-  <div class="prompt">
-    Name
-  </div>
-  <div>
-    <a
-      [routerLink]="'/checklist/' + checklist.id"
-      matTooltip="View Checklist"
-      >{{ checklist?.name }}</a
-    >
-  </div>
+  <form class="standard-form" [formGroup]="checklistForm">
+    <ng-container *ngIf="!enhanced">
+      <div class="prompt">
+        Name
+      </div>
+      <div>
+        <a
+          [routerLink]="'/checklist/' + checklist.id"
+          matTooltip="View Checklist"
+          >{{ checklist?.name }}</a
+        >
+      </div>
 
-  <div class="prompt">Description</div>
-  <div>{{ checklist?.description }}</div>
+      <div class="prompt">Description</div>
+      <div>{{ checklist?.description }}</div>
+      <div class="prompt">Status</div>
+      <div>{{ helper.getChecklistStatusInfoItem(checklist.status).name }}</div>
+      <div class="prompt">Comments</div>
+      <div>
+        {{ checklist.comments }}
+      </div>
+    </ng-container>
 
-  <div class="prompt">Status</div>
-  <div>
-    <app-checkliststatus
-      [checklist]="checklist"
-      [showAction]="true"
-    ></app-checkliststatus>
-  </div>
+    <ng-container *ngIf="enhanced">
+      <div class="prompt">Name</div>
+      <div>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            formControlName="name"
+            (change)="onFieldUpdate('name')"
+            required
+          />
+          <mat-error
+            *ngIf="checklistForm.controls['name'].hasError('required')"
+          >
+            Name is required.
+          </mat-error>
+          <mat-error
+            *ngIf="checklistForm.controls['name'].hasError('minlength')"
+          >
+            Name must be at least 3 characters long.
+          </mat-error>
+          <mat-error
+            *ngIf="checklistForm.controls['name'].hasError('maxlength')"
+          >
+            Name must be no more than 70 characters long.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="prompt">Description</div>
 
-  <div class="prompt">
-    Resources
-  </div>
-  <div>
-    <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
-  </div>
-
-  <div class="prompt">Comments</div>
-  <div>
-    <form class="standard-form" [formGroup]="checklistForm">
-      <fieldset>
+      <mat-form-field class="full-width">
         <textarea
           matInput
-          formControlName="comments"
-          class="full-width"
-          (change)="updateComments()"
+          formControlName="description"
+          (change)="onFieldUpdate('description')"
           matAutosizeMinRows="3"
           matAutosizeMaxRows="10"
           matTextareaAutosize
-          placeholder="Comments"
         ></textarea>
         <mat-error
-          *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
+          *ngIf="checklistForm.controls['description'].hasError('required')"
         >
-          Comments can not be more than 5000 characters long.
+          Description is required.
         </mat-error>
-      </fieldset>
-    </form>
-  </div>
+        <mat-error
+          *ngIf="checklistForm.controls['description'].hasError('minlength')"
+        >
+          Description must be at least 10 characters long.
+        </mat-error>
+        <mat-error
+          *ngIf="checklistForm.controls['description'].hasError('maxlength')"
+        >
+          Description must be no more than 500 characters long.
+        </mat-error>
+      </mat-form-field>
+      <div class="prompt">Status</div>
+      <div>
+        <app-checkliststatus
+          [checklist]="checklist"
+          [showAction]="true"
+        ></app-checkliststatus>
+      </div>
+      <div class="prompt">Comments</div>
+      <div>
+        <mat-form-field class="full-width">
+          <textarea
+            matInput
+            formControlName="comments"
+            (change)="onFieldUpdate('comments')"
+            matAutosizeMinRows="3"
+            matAutosizeMaxRows="10"
+            matTextareaAutosize
+          ></textarea>
+          <mat-error
+            *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
+          >
+            Comments can not be more than 5000 characters long.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </ng-container>
 
-  <div [hidden]="hideDetails">
+    <div class="prompt">
+      Resources
+    </div>
+    <div>
+      <app-resourcelistsimple
+        [resources$]="resources$"
+      ></app-resourcelistsimple>
+    </div>
+  </form>
+
+  <div [hidden]="!enhanced">
     <div class="prompt">Additional Information...</div>
     <div class="page-container">
       <div class="prompt">Team</div>

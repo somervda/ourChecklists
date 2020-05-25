@@ -4,9 +4,9 @@
   {{ prompt }}
   <span style="width: 100%;"> </span>
   <mat-slide-toggle
-    (change)="onShowAll($event)"
-    matTooltip="See more details?"
-    [hidden]="!showAll"
+    (change)="enhancedChange($event)"
+    matTooltip="Enhanced Functionality?"
+    [hidden]="!enhanced"
   ></mat-slide-toggle>
   <button
     mat-button
