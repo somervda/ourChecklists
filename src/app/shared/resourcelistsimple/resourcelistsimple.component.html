@@ -3,8 +3,8 @@
   <span
     (click)="openResourceView(resource)"
     class="resource_item"
-    [matTooltip]="'Open ' + resource.name + ' view'"
-    >{{ resource.name }}</span
+    [matTooltip]="'Open &quot;' + resource.name + '&quot; in viewer'"
+    >[{{ resource.name }}]</span
   ></ng-container
 >
 <ng-container *ngIf="!(resources$ | async) || (resources$ | async)?.length == 0"

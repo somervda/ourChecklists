@@ -25,8 +25,6 @@
       <div>
         {{ checklist.comments }}
       </div>
-      <div class="prompt">Status</div>
-      <div>{{ helper.getChecklistStatusInfoItem(checklist.status).name }}</div>
     </ng-container>
 
     <ng-container *ngIf="enhanced">
@@ -102,14 +100,15 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="prompt">Status</div>
-      <div>
-        <app-checkliststatus
-          [checklist]="checklist"
-          [showAction]="true"
-        ></app-checkliststatus>
-      </div>
     </ng-container>
+
+    <div class="prompt">Status</div>
+    <div>
+      <app-checkliststatus
+        [checklist]="checklist"
+        [showAction]="true"
+      ></app-checkliststatus>
+    </div>
 
     <div class="prompt">
       Resources
