@@ -61,7 +61,7 @@ import { CategoryactivitylistComponent } from "./shared/categoryactivitylist/cat
 import { ActivityComponent } from "./activity/activity.component";
 import { ResourcesComponent } from "./resources/resources.component";
 import { ResourceComponent } from "./resource/resource.component";
-import { MarkedPipe } from "./marked.pipe";
+import { MarkedPipe } from "./pipes/marked.pipe";
 import { YoutubeviewerComponent } from "./shared/youtubeviewer/youtubeviewer.component";
 import { UserselectordialogComponent } from "./dialogs/userselectordialog/userselectordialog.component";
 import { TeamselectordialogComponent } from "./dialogs/teamselectordialog/teamselectordialog.component";
@@ -91,9 +91,10 @@ import { CheckliststatusdialogComponent } from "./dialogs/checkliststatusdialog/
 import { CheckliststatusComponent } from "./shared/checkliststatus/checkliststatus.component";
 import { StoragelistComponent } from "./shared/storagelist/storagelist.component";
 import { TemplategeneratordialogComponent } from "./dialogs/templategeneratordialog/templategeneratordialog.component";
-import { TemplatesComponent } from './templates/templates.component';
-import { TemplateComponent } from './template/template.component';
-import { TemplatelistComponent } from './shared/templatelist/templatelist.component';
+import { TemplatesComponent } from "./templates/templates.component";
+import { TemplateComponent } from "./template/template.component";
+import { TemplatelistComponent } from "./shared/templatelist/templatelist.component";
+import { DocPipe } from "./pipes/doc.pipe";
 
 @NgModule({
   declarations: [
@@ -151,6 +152,7 @@ import { TemplatelistComponent } from './shared/templatelist/templatelist.compon
     TemplatesComponent,
     TemplateComponent,
     TemplatelistComponent,
+    DocPipe,
   ],
   imports: [
     BrowserModule,

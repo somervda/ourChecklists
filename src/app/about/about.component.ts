@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { AngularFirestore } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-about",
@@ -6,7 +7,11 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./about.component.scss"],
 })
 export class AboutComponent implements OnInit {
-  constructor() {}
+  docRef: any;
+  constructor(private afs: AngularFirestore) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.docRef = this.afs.doc("categories/5WKWyqynskw7xMLgdtXq").ref;
+    console.log("about", this.docRef);
+  }
 }
