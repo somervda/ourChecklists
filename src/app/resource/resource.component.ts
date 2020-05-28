@@ -339,7 +339,6 @@ export class ResourceComponent implements OnInit {
     if (this.helper.getDocRefId(this.resource?.owner)) {
       uidHide = [this.helper.getDocRefId(this.resource?.owner)];
     }
-    console.log("onUpdateOwner :", this.resource?.owner, " : ", uidHide);
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
       data: { uidHide: uidHide },
@@ -380,17 +379,22 @@ export class ResourceComponent implements OnInit {
 
   onUpdateTeam() {
     console.log("onUpdateTeam");
+    let idHide = "";
+    if (this.helper.getDocRefId(this.resource?.team)) {
+      idHide = this.helper.getDocRefId(this.resource?.team);
+    }
     const dialogRef = this.dialog.open(TeamselectordialogComponent, {
       width: "380px",
-      data: { id: this.resource?.team?.id },
+      data: { id: idHide },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Team", result);
-        const teamRef: DocRef = {
-          id: result.id,
-          name: result.name,
-        };
+        // const teamRef: DocRef = {
+        //   id: result.id,
+        //   name: result.name,
+        // };
+        const teamRef = this.helper.docRef("teams/" + result.id);
         this.resourceService.fieldUpdate(this.resource.id, "team", teamRef);
         this.resource.team = teamRef;
       }
@@ -399,9 +403,13 @@ export class ResourceComponent implements OnInit {
 
   onUpdateCategory() {
     console.log("onUpdateCategory");
+    let idHide = "";
+    if (this.helper.getDocRefId(this.resource?.category)) {
+      idHide = this.helper.getDocRefId(this.resource?.category);
+    }
     const dialogRef = this.dialog.open(CategoryselectordialogComponent, {
       width: "380px",
-      data: { id: this.resource?.category?.id },
+      data: { id: idHide },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

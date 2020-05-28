@@ -3,6 +3,7 @@ import { Team } from "../../models/team.model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { TeamService } from "../../services/team.service";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-teamselectordialog",
@@ -20,7 +21,10 @@ export class TeamselectordialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.teams$ = this.teamService.findByPartialName("");
+    const idHide = this.data["id"];
+    this.teams$ = this.teamService
+      .findByPartialName("")
+      .pipe(map((teams) => teams.filter((t) => t.id != idHide)));
   }
 
   returnTeam() {

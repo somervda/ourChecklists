@@ -127,10 +127,14 @@
               matTooltip="Update Team"
               (click)="onUpdateTeam()"
             >
-              {{ resource?.team?.name ? resource?.team?.name : "[...]" }}
+              {{
+                resource.team && resource.team.path
+                  ? (resource.team | doc | async)?.name
+                  : "[...]"
+              }}
             </div>
             <div *ngIf="!isUpdater()">
-              {{ resource?.team?.name }}
+              {{ (resource.team | doc | async)?.name }}
             </div>
           </td>
         </tr>

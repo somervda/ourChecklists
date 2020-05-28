@@ -11,7 +11,7 @@ export interface Resource {
   status: ResourceStatus;
   supersedes?: DocRef;
   dateReviewed?: Date;
-  team?: DocRef;
+  team?: DocumentReference;
   reviewer?: DocumentReference;
   dateCreated?: Date;
   dateUpdated?: Date;

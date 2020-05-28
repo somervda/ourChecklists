@@ -3,6 +3,7 @@ import { Category } from "../../models/category.model";
 import { Observable } from "rxjs";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { CategoryService } from "../../services/category.service";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-categoryselectordialog",
@@ -20,7 +21,10 @@ export class CategoryselectordialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.categories$ = this.categoryService.findByPartialName("");
+    const idHide = this.data["id"];
+    this.categories$ = this.categoryService
+      .findByPartialName("")
+      .pipe(map((categories) => categories.filter((c) => c.id != idHide)));
   }
 
   returnCategory() {
