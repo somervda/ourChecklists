@@ -11,7 +11,7 @@ export class AboutComponent implements OnInit {
   constructor(private afs: AngularFirestore) {}
 
   ngOnInit() {
-    this.docRef = this.afs.doc("categories/5WKWyqynskw7xMLgdtXq").ref;
+    this.docRef = this.afs.doc("categories/5WKWyqynskw7xMLgdtX").ref;
     console.log("about", this.docRef);
   }
 }

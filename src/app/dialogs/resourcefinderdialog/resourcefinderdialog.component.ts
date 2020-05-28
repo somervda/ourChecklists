@@ -54,17 +54,18 @@ export class ResourcefinderdialogComponent implements OnInit {
     this.selectedResource = resource;
   }
 
-  resourceTitle(resource: Resource) {
-    let title = "";
-    if (resource.category && resource.category.name) {
-      title += resource.category.name + ": ";
-    }
-    if (resource.description.length < 40) {
-      title += resource.description;
+  shortDescription(resource: Resource, maxLength: number = 40) {
+    let desc = "";
+    // if (resource.category && resource.category.name) {
+    //   title += resource.category.name + ": ";
+    // }
+
+    if (resource.description.length < maxLength) {
+      desc += resource.description;
     } else {
-      title += resource.description.substr(0, 40) + "...";
+      desc += resource.description.substr(0, maxLength) + "...";
     }
-    return title;
+    return desc;
   }
 
   returnResource() {

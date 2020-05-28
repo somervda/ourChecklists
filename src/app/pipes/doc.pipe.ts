@@ -16,13 +16,17 @@ export class DocPipe implements PipeTransform {
   constructor(private afs: AngularFirestore) {}
 
   transform<T>(value: firestore.DocumentReference<T>): Observable<T> {
-    return this.afs
-      .doc(value.path)
-      .snapshotChanges()
-      .pipe(
-        map((snap) => {
-          return convertSnap<T>(snap);
-        })
-      );
+    // console.log("transform:", value);
+    if (value && value != null && value.path && value.path != null) {
+      return this.afs
+        .doc(value.path)
+        .snapshotChanges()
+        .pipe(
+          map((snap) => {
+            // console.log("transform snap", snap);
+            return convertSnap<T>(snap);
+          })
+        );
+    }
   }
 }

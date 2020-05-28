@@ -1,4 +1,5 @@
 import { DocRef, UserRef } from "./helper.model";
+import { DocumentReference } from "@angular/fire/firestore";
 
 export interface Resource {
   id?: string;
@@ -14,7 +15,7 @@ export interface Resource {
   reviewer?: UserRef;
   dateCreated?: Date;
   dateUpdated?: Date;
-  category?: DocRef;
+  category?: DocumentReference;
 }
 
 export enum ResourceType {

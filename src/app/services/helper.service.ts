@@ -13,6 +13,7 @@ import {
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { AuthService } from "./auth.service";
+import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 
 @Injectable({
   providedIn: "root",
@@ -22,7 +23,8 @@ export class HelperService {
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private afs: AngularFirestore
   ) {}
 
   userRefToDocRef(userRef: UserRef[]): DocRef[] {
@@ -80,5 +82,9 @@ export class HelperService {
    */
   redirect(url: string) {
     this.ngZone.run(() => this.router.navigateByUrl(url));
+  }
+
+  docRef(path: string) {
+    return this.afs.doc(path).ref;
   }
 }

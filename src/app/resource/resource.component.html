@@ -144,11 +144,13 @@
               (click)="onUpdateCategory()"
             >
               {{
-                resource?.category?.name ? resource?.category?.name : "[...]"
+                resource?.category
+                  ? (resource.category | doc | async)?.name
+                  : "[...]"
               }}
             </div>
             <div *ngIf="!isUpdater()">
-              {{ resource?.category?.name }}
+              {{ (resource.category | doc | async)?.name }}
             </div>
           </td>
         </tr>

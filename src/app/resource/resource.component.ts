@@ -401,10 +401,11 @@ export class ResourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Category", result);
-        const categoryRef: DocRef = {
-          id: result.id,
-          name: result.name,
-        };
+        // const categoryRef: DocRef = {
+        //   id: result.id,
+        //   name: result.name,
+        // };
+        const categoryRef = this.helper.docRef("categories/" + result.id);
         this.resourceService.fieldUpdate(
           this.resource.id,
           "category",

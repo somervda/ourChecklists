@@ -15,7 +15,11 @@
     "
     (click)="onResourceSelected(resource)"
     [hidden]="isHidden(resource)"
-    [title]="resourceTitle(resource)"
+    [matTooltip]="
+      ((resource?.category | doc | async)?.name
+        ? (resource?.category | doc | async)?.name + ': '
+        : '') + shortDescription(resource)
+    "
   >
     {{ resource.name }}
   </div>
