@@ -4,7 +4,7 @@ import { DocumentReference } from "@angular/fire/firestore";
 export interface Resource {
   id?: string;
   name: string;
-  owner: UserRef;
+  owner: DocumentReference;
   description: string;
   resourceType: ResourceType;
   content: string;

@@ -88,13 +88,13 @@
               (click)="onUpdateOwner()"
             >
               {{
-                resource?.owner?.displayName
-                  ? resource?.owner?.displayName
+                resource.owner && resource.owner.path
+                  ? (resource.owner | doc | async)?.displayName
                   : "[...]"
               }}
             </div>
             <div *ngIf="!isUpdater()">
-              {{ resource?.owner?.displayName }}
+              {{ (resource.owner | doc | async)?.displayName }}
             </div>
           </td>
         </tr>

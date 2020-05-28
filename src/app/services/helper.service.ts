@@ -93,6 +93,8 @@ export class HelperService {
     if (docRef && docRef.path) {
       id = /[^/]*$/.exec(docRef.path)[0];
     }
+    console.log("getDocRefId", docRef, docRef.path, " id:", id);
+
     return id;
   }
 }

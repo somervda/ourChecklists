@@ -65,10 +65,7 @@ export class ResourceComponent implements OnInit {
       this.resource = {
         name: "",
         description: "",
-        owner: {
-          uid: this.auth.currentUser.uid,
-          displayName: this.auth.currentUser.displayName,
-        },
+        owner: this.helper.docRef("users/" + this.auth.currentUser.uid),
         resourceType: ResourceType.url,
         content: "",
         status: ResourceStatus.active,
@@ -249,7 +246,8 @@ export class ResourceComponent implements OnInit {
     // And we must be in update mode & resource is not superseded
     if (
       this.auth.currentUser.isAdmin ||
-      this.auth.currentUser.uid == this.resource?.owner?.uid ||
+      this.auth.currentUser.uid ==
+        this.helper.getDocRefId(this.resource?.owner) ||
       (this.auth.currentUser.managerOfTeams &&
         this.auth.currentUser.managerOfTeams.includes(this.resource?.team?.id))
     ) {
@@ -337,17 +335,23 @@ export class ResourceComponent implements OnInit {
 
   onUpdateOwner() {
     console.log("onUpdateOwner");
+    let uidHide = [""];
+    if (this.helper.getDocRefId(this.resource?.owner)) {
+      uidHide = [this.helper.getDocRefId(this.resource?.owner)];
+    }
+    console.log("onUpdateOwner :", this.resource?.owner, " : ", uidHide);
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
-      data: { uidHide: [this.resource?.owner?.uid] },
+      data: { uidHide: uidHide },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Owner", result);
-        const userRef: UserRef = {
-          uid: result.uid,
-          displayName: result.displayName,
-        };
+        // const userRef: UserRef = {
+        //   uid: result.uid,
+        //   displayName: result.displayName,
+        // };
+        const userRef = this.helper.docRef("users/" + result.id);
         this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
         this.resource.owner = userRef;
       }
@@ -358,7 +362,7 @@ export class ResourceComponent implements OnInit {
     console.log("onUpdateReviewer");
     let uidHide = [""];
     if (this.helper.getDocRefId(this.resource?.reviewer)) {
-      let uidHide = [this.helper.getDocRefId(this.resource?.reviewer)];
+      uidHide = [this.helper.getDocRefId(this.resource?.reviewer)];
     }
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
