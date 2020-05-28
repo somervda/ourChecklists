@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from "@angular/core";
+import { Injectable, NgZone, Inject, LOCALE_ID } from "@angular/core";
 import { UserRef, DocRef } from "../models/helper.model";
 import {
   ChecklistStatus,
@@ -12,8 +12,9 @@ import {
 } from "../models/checklistitem.model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { AuthService } from "./auth.service";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
+import { identifierModuleUrl } from "@angular/compiler";
+import { stringify } from "querystring";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +24,6 @@ export class HelperService {
     private snackBar: MatSnackBar,
     private ngZone: NgZone,
     private router: Router,
-    private auth: AuthService,
     private afs: AngularFirestore
   ) {}
 
@@ -86,5 +86,13 @@ export class HelperService {
 
   docRef(path: string) {
     return this.afs.doc(path).ref;
+  }
+
+  getDocRefId(docRef: DocumentReference): string {
+    let id = undefined;
+    if (docRef && docRef.path) {
+      id = /[^/]*$/.exec(docRef.path)[0];
+    }
+    return id;
   }
 }

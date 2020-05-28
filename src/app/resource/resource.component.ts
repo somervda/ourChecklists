@@ -18,6 +18,8 @@ import { TeamselectordialogComponent } from "../dialogs/teamselectordialog/teams
 import { CategoryselectordialogComponent } from "../dialogs/categoryselectordialog/categoryselectordialog.component";
 import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.component";
 import { HelperService } from "../services/helper.service";
+import { first } from "rxjs/operators";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-resource",
@@ -47,7 +49,8 @@ export class ResourceComponent implements OnInit {
     private auth: AuthService,
     private storage: AngularFireStorage,
     public dialog: MatDialog,
-    private helper: HelperService
+    private helper: HelperService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -69,10 +72,7 @@ export class ResourceComponent implements OnInit {
         resourceType: ResourceType.url,
         content: "",
         status: ResourceStatus.active,
-        reviewer: {
-          uid: this.auth.currentUser.uid,
-          displayName: this.auth.currentUser.displayName,
-        },
+        reviewer: this.helper.docRef("users/" + this.auth.currentUser.uid),
       };
       console.log("resource:", this.resource);
     } else {
@@ -354,19 +354,20 @@ export class ResourceComponent implements OnInit {
     });
   }
 
-  onUpdateReviewer() {
+  onUpdateReviewer(currentUid: string) {
     console.log("onUpdateReviewer");
+    let uidHide = [""];
+    if (this.helper.getDocRefId(this.resource?.reviewer)) {
+      let uidHide = [this.helper.getDocRefId(this.resource?.reviewer)];
+    }
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
-      data: { uidHide: [this.resource?.reviewer?.uid] },
+      data: { uidHide: uidHide },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Reviewer", result);
-        const userRef: UserRef = {
-          uid: result.uid,
-          displayName: result.displayName,
-        };
+        const userRef = this.helper.docRef("users/" + result.id);
         this.resourceService.fieldUpdate(this.resource.id, "reviewer", userRef);
         this.resource.reviewer = userRef;
       }

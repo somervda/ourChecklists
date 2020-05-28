@@ -12,7 +12,7 @@ export interface Resource {
   supersedes?: DocRef;
   dateReviewed?: Date;
   team?: DocRef;
-  reviewer?: UserRef;
+  reviewer?: DocumentReference;
   dateCreated?: Date;
   dateUpdated?: Date;
   category?: DocumentReference;

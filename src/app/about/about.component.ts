@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-about",
@@ -8,10 +9,11 @@ import { AngularFirestore } from "@angular/fire/firestore";
 })
 export class AboutComponent implements OnInit {
   docRef: any;
-  constructor(private afs: AngularFirestore) {}
+  constructor(private afs: AngularFirestore, private helper: HelperService) {}
 
   ngOnInit() {
-    this.docRef = this.afs.doc("categories/5WKWyqynskw7xMLgdtX").ref;
+    this.docRef = this.afs.doc("categories/5WKWyqynskw7xMLgdtXq").ref;
+    console.log(this.helper.getDocRefId(this.docRef));
     console.log("about", this.docRef);
   }
 }

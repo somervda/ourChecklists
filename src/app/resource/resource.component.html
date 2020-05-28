@@ -108,13 +108,13 @@
               (click)="onUpdateReviewer()"
             >
               {{
-                resource?.reviewer?.displayName
-                  ? resource?.reviewer?.displayName
+                resource.reviewer && resource.reviewer.path
+                  ? (resource.reviewer | doc | async)?.displayName
                   : "[...]"
               }}
             </div>
             <div *ngIf="!isUpdater()">
-              {{ resource?.reviewer?.displayName }}
+              {{ (resource.reviewer | doc | async)?.displayName }}
             </div>
           </td>
         </tr>
@@ -144,7 +144,7 @@
               (click)="onUpdateCategory()"
             >
               {{
-                resource?.category
+                resource.category && resource.category.path
                   ? (resource.category | doc | async)?.name
                   : "[...]"
               }}
