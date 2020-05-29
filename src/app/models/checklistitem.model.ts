@@ -1,11 +1,12 @@
 import { DocRef, UserRef } from "./helper.model";
+import { DocumentReference } from "@angular/fire/firestore";
 
 export interface Checklistitem {
   id?: string;
   name: string;
   sequence: number;
   description: string;
-  activities?: DocRef[];
+  activities?: DocumentReference[];
   dateCreated?: Date | firebase.firestore.FieldValue;
   dateResultSet?: Date | firebase.firestore.FieldValue;
   evidence?: string;

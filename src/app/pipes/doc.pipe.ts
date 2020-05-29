@@ -23,7 +23,7 @@ export class DocPipe implements PipeTransform {
         .snapshotChanges()
         .pipe(
           map((snap) => {
-            // console.log("transform snap", snap);
+            // console.log("transform snap", convertSnap<T>(snap));
             return convertSnap<T>(snap);
           })
         );

@@ -93,27 +93,47 @@
       </mat-form-field>
     </fieldset>
 
-    <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
+    <br />
+
+    <!-- <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Activity Tags: {{ flatDocRefArray(checklistitem.activities) }}
+          Activity Tags:
+          <ng-container
+            *ngIf="
+              checklistitem.activities && checklistitem.activities.length > 0;
+              else no_activities
+            "
+          >
+            <span
+              *ngFor="let activity of checklistitem.activities; let i = index"
+            >
+              <span *ngIf="i > 0">,</span>
+              <span style="margin-left: 5px;">{{
+                (activity | doc | async)?.name
+              }}</span>
+            </span>
+          </ng-container>
+          <ng-template #no_activites>
+            None
+          </ng-template>
         </mat-panel-title>
         <mat-panel-description>
           <mat-icon style="margin-left: auto;">edit</mat-icon>
         </mat-panel-description>
-      </mat-expansion-panel-header>
+      </mat-expansion-panel-header> -->
 
-      <ng-template matExpansionPanelContent>
-        <app-activitylistedit
-          [activities]="checklistitem.activities"
-          [categoryRef]="(checklist$ | async).category"
-          (change)="onActivitiesChange($event)"
-        >
-        </app-activitylistedit>
-      </ng-template>
-    </mat-expansion-panel>
+    <!-- <ng-template matExpansionPanelContent> -->
+    <app-activitylistedit
+      [activities]="checklistitem.activities"
+      [category]="(checklist$ | async).category | doc | async"
+      (change)="onActivitiesChange($event)"
+    >
+    </app-activitylistedit>
+    <!-- </ng-template>
+    </mat-expansion-panel> -->
     <br />
-    <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
+    <!-- <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Resources: {{ flatDocRefArray(checklistitem.resources) }}
@@ -122,13 +142,13 @@
           <mat-icon style="margin-left: auto;">edit</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <ng-template matExpansionPanelContent>
-        <app-resourcelistedit
-          [resources]="checklistitem.resources"
-          (change)="onResourcesChange($event)"
-        ></app-resourcelistedit>
-      </ng-template>
-    </mat-expansion-panel>
+      <ng-template matExpansionPanelContent> -->
+    <app-resourcelistedit
+      [resources]="checklistitem.resources"
+      (change)="onResourcesChange($event)"
+    ></app-resourcelistedit>
+    <!-- </ng-template>
+    </mat-expansion-panel> -->
     <br />
     <mat-card>
       <h6>Checklist Result Options</h6>
@@ -166,6 +186,7 @@
         >
       </div>
     </mat-card>
+
     <br />
     <button
       mat-raised-button

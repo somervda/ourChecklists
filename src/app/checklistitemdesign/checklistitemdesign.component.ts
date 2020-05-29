@@ -12,6 +12,7 @@ import { Checklist } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
 import * as firebase from "firebase";
 import { HelperService } from "../services/helper.service";
+import { DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-checklistitemdesign",
@@ -193,7 +194,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  onActivitiesChange(activities: DocRef[]) {
+  onActivitiesChange(activities: DocumentReference[]) {
     console.log("onActivitiesChange", activities);
     this.checklistitem.activities = activities;
     if (this.crudAction == Crud.Update) {

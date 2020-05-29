@@ -17,7 +17,24 @@
   <div class="prompt">Resources</div>
   <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
   <div class="prompt">Activities</div>
-  <div>{{ helper.getFlatDocRefArray(checklistitem.activities) }}</div>
+  <div>
+    <ng-container
+      *ngIf="
+        checklistitem.activities && checklistitem.activities.length > 0;
+        else noActivites
+      "
+    >
+      <span *ngFor="let activity of checklistitem.activities; let i = index">
+        <span *ngIf="i > 0">,</span>
+        <span style="margin-left: 5px;">{{
+          (activity | doc | async)?.name
+        }}</span>
+      </span>
+    </ng-container>
+    <ng-template #noActivites>
+      None
+    </ng-template>
+  </div>
   <form class="standard-form" [formGroup]="checklistitemForm">
     <div class="prompt">Comment</div>
     <div>

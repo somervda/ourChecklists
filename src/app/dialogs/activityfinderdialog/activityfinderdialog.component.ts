@@ -3,7 +3,9 @@ import { ActivityService } from "../../services/activity.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { Activity } from "../../models/activity.model";
-import { DocRef } from "../../models/helper.model";
+import { DocumentReference } from "@angular/fire/firestore";
+import { Category } from "src/app/models/category.model";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-activityfinderdialog",
@@ -13,34 +15,43 @@ import { DocRef } from "../../models/helper.model";
 export class ActivityfinderdialogComponent implements OnInit {
   activities$: Observable<Activity[]>;
   selectedActivity: Activity;
-  idHide: string[] = [];
-  categoryRef: DocRef = { id: "", name: "" };
+  refHide: DocumentReference[] = [];
+  category: Category;
 
   constructor(
     private activityService: ActivityService,
     private dialogRef: MatDialogRef<ActivityfinderdialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private helper: HelperService
   ) {}
 
   ngOnInit(): void {
     if (this.data) {
       console.log("ActivityfinderdialogComponent", this.data);
     }
-    if (this.data.idHide) {
-      this.idHide = this.data.idHide;
+    if (this.data.refHide) {
+      this.refHide = this.data.refHide;
     }
-    if (this.data.categoryRef) {
-      this.categoryRef = this.data["categoryRef"];
+    if (this.data.category) {
+      this.category = this.data["category"];
     }
     this.activities$ = this.activityService.findAllByCategory(
-      this.data["categoryRef"]?.id,
+      this.category.id,
       100
     );
   }
 
   isHidden(activity: Activity) {
-    if (this.idHide) {
-      return this.idHide.includes(activity.id);
+    // console.log("isHidden", activity);
+    if (this.refHide) {
+      return (
+        this.refHide.findIndex(
+          (p) =>
+            this.helper.docRef(
+              `categories/${this.category.id}/activities/${activity.id}`
+            ).path == p.path
+        ) > -1
+      );
     }
     return false;
   }

@@ -13,6 +13,8 @@ import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialo
 import { Activity } from "../../models/activity.model";
 import { ActivityfinderdialogComponent } from "../../dialogs/activityfinderdialog/activityfinderdialog.component";
 import { HelperService } from "src/app/services/helper.service";
+import { DocumentReference } from "@angular/fire/firestore";
+import { Category } from "src/app/models/category.model";
 
 @Component({
   selector: "app-activitylistedit",
@@ -20,8 +22,8 @@ import { HelperService } from "src/app/services/helper.service";
   styleUrls: ["./activitylistedit.component.scss"],
 })
 export class ActivitylisteditComponent implements OnInit {
-  @Input() activities: DocRef[];
-  @Input() categoryRef: DocRef;
+  @Input() activities: DocumentReference[];
+  @Input() category: Category;
   @Input() hideCreate: boolean;
   @ViewChild(MatTable) table: MatTable<any>;
   @Output() change = new EventEmitter();
@@ -31,11 +33,7 @@ export class ActivitylisteditComponent implements OnInit {
   constructor(public dialog: MatDialog, private helper: HelperService) {}
 
   ngOnInit(): void {
-    console.log(
-      "ActivitylisteditComponent:",
-      this.activities,
-      this.categoryRef
-    );
+    console.log("ActivitylisteditComponent:", this.activities, this.category);
     if (!this.activities) {
       this.activities = [];
     }
@@ -60,7 +58,7 @@ export class ActivitylisteditComponent implements OnInit {
   }
 
   addActivity() {
-    if (this.activities.length >= 10) {
+    if (this.activities && this.activities.length >= 10) {
       this.helper.snackbar(
         "No more activities can be added (10 max), remove an existing activity before adding another.",
         5000
@@ -69,17 +67,16 @@ export class ActivitylisteditComponent implements OnInit {
       const dialogRef = this.dialog.open(ActivityfinderdialogComponent, {
         width: "380px",
         data: {
-          idHide: this.activities.map((r) => r.id),
-          categoryRef: this.categoryRef,
+          refHide: this.activities,
+          category: this.category,
         },
       });
       dialogRef.afterClosed().subscribe((activity) => {
         if (activity) {
           console.log("addActivity", activity);
-          const newActivity: DocRef = {
-            id: activity.id,
-            name: activity.name,
-          };
+          const newActivity = this.helper.docRef(
+            `categories/${this.category.id}/activities/${activity.id}`
+          );
           this.activities.push(newActivity);
 
           this.refresh();
