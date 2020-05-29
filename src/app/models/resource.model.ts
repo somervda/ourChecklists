@@ -9,7 +9,7 @@ export interface Resource {
   resourceType: ResourceType;
   content: string;
   status: ResourceStatus;
-  supersedes?: DocRef;
+  supersedes?: DocumentReference;
   dateReviewed?: Date;
   team?: DocumentReference;
   reviewer?: DocumentReference;

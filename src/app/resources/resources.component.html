@@ -55,12 +55,12 @@
                   [(ngModel)]="teamFilter"
                   (selectionChange)="filterType = 'Team'; getResourceList()"
                 >
-                  <mat-option value="">
+                  <mat-option [value]="null">
                     All
                   </mat-option>
                   <mat-option
                     *ngFor="let team of teams$ | async"
-                    [value]="team.id"
+                    [value]="helper.docRef('teams/' + team.id)"
                   >
                     {{ team.name }}
                   </mat-option>
@@ -72,12 +72,12 @@
                   [(ngModel)]="categoryFilter"
                   (selectionChange)="filterType = 'Category'; getResourceList()"
                 >
-                  <mat-option value="">
+                  <mat-option [value]="null">
                     All
                   </mat-option>
                   <mat-option
                     *ngFor="let category of categories$ | async"
-                    [value]="category.id"
+                    [value]="helper.docRef('categories/' + category.id)"
                   >
                     {{ category.name }}
                   </mat-option>
@@ -89,12 +89,12 @@
                   [(ngModel)]="ownerFilter"
                   (selectionChange)="filterType = 'Owner'; getResourceList()"
                 >
-                  <mat-option value="">
+                  <mat-option [value]="null">
                     All
                   </mat-option>
                   <mat-option
                     *ngFor="let user of users$ | async"
-                    [value]="user.uid"
+                    [value]="helper.docRef('users/' + user.uid)"
                   >
                     {{ user.displayName }}
                   </mat-option>
@@ -106,12 +106,12 @@
                   [(ngModel)]="reviewerFilter"
                   (selectionChange)="filterType = 'Reviewer'; getResourceList()"
                 >
-                  <mat-option value="">
+                  <mat-option [value]="null">
                     All
                   </mat-option>
                   <mat-option
                     *ngFor="let user of users$ | async"
-                    [value]="user.uid"
+                    [value]="helper.docRef('users/' + user.uid)"
                   >
                     {{ user.displayName }}
                   </mat-option>

@@ -5,7 +5,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "team.id",
+          "fieldPath": "team",
           "order": "ASCENDING"
         },
         {
@@ -19,7 +19,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "category.id",
+          "fieldPath": "category",
           "order": "ASCENDING"
         },
         {
@@ -33,7 +33,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "owner.uid",
+          "fieldPath": "owner",
           "order": "ASCENDING"
         },
         {
@@ -47,7 +47,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "reviewer.uid",
+          "fieldPath": "reviewer",
           "order": "ASCENDING"
         },
         {

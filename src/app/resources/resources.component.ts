@@ -16,6 +16,7 @@ import { Category } from "../models/category.model";
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
 import { HelperService } from "../services/helper.service";
+import { DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-resources",
@@ -33,10 +34,10 @@ export class ResourcesComponent implements OnInit {
   showImage = true;
   maxToRetrieve = 100;
   nameFilter = "";
-  teamFilter = "";
-  categoryFilter = "";
-  ownerFilter = "";
-  reviewerFilter = "";
+  teamFilter: DocumentReference = null;
+  categoryFilter: DocumentReference = null;
+  ownerFilter: DocumentReference = null;
+  reviewerFilter: DocumentReference = null;
   filterType = "Team";
   teams$: Observable<Team[]>;
   categories$: Observable<Category[]>;
@@ -50,7 +51,7 @@ export class ResourcesComponent implements OnInit {
     private teamService: TeamService,
     private categoryService: CategoryService,
     private userService: UserService,
-    private helper: HelperService
+    public helper: HelperService
   ) {}
   ngOnInit() {
     this.teams$ = this.teamService.findAll(100);
@@ -60,7 +61,8 @@ export class ResourcesComponent implements OnInit {
   }
 
   getResourceList() {
-    let filter = "";
+    let filter = null;
+    console.log("getResourceList", this.categoryFilter);
     switch (this.filterType) {
       case "Team":
         filter = this.teamFilter;
@@ -75,6 +77,7 @@ export class ResourcesComponent implements OnInit {
         filter = this.reviewerFilter;
         break;
     }
+    console.log("getResourceList2", filter);
     this.resources$ = this.resourceService
       .findAllFiltered(
         this.nameFilter,

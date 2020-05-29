@@ -62,7 +62,7 @@ export class ResourceService {
   findAllFiltered(
     name: string,
     filterType: string,
-    filter: string,
+    filter: DocumentReference,
     pageSize: number
   ): Observable<Resource[]> {
     // console.log(
@@ -75,6 +75,7 @@ export class ResourceService {
     //   " pagesize:",
     //   pageSize
     // );
+    console.log("hi cl");
     return this.afs
       .collection("resources", (ref) => {
         let refVal = ref as any;
@@ -85,22 +86,22 @@ export class ResourceService {
             .where("name", ">=", name)
             .where("name", "<=", name + "~");
         }
-        if (filterType == "Team" && filter != "") {
-          refVal = refVal.where("team.id", "==", filter);
+        if (filterType == "Team" && filter != null) {
+          refVal = refVal.where("team", "==", filter);
         }
-        if (filterType == "Category" && filter != "") {
-          refVal = refVal.where("category.id", "==", filter);
+        if (filterType == "Category" && filter != null) {
+          refVal = refVal.where("category", "==", filter);
         }
-        if (filterType == "Owner" && filter != "") {
+        if (filterType == "Owner" && filter != null) {
           // console.log("owner", filter);
-          refVal = refVal.where("owner.uid", "==", filter);
+          refVal = refVal.where("owner", "==", filter);
         }
-        if (filterType == "Reviewer" && filter != "") {
-          refVal = refVal.where("reviewer.uid", "==", filter);
+        if (filterType == "Reviewer" && filter != null) {
+          refVal = refVal.where("reviewer", "==", filter);
         }
 
         refVal = refVal.orderBy("name", "asc").limit(pageSize);
-
+        console.log("cl ref", refVal);
         return refVal;
       })
       .snapshotChanges()

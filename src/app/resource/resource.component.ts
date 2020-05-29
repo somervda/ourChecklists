@@ -285,10 +285,9 @@ export class ResourceComponent implements OnInit {
     this.showSpinner = true;
     let newResource = { ...this.resource };
     delete newResource.id;
-    newResource.supersedes = <DocRef>{
-      id: this.resource.id,
-      name: this.resource.name,
-    };
+    newResource.supersedes = this.helper.docRef(
+      "resources/" + this.resource.id
+    );
 
     this.resourceService
       .create(newResource)
