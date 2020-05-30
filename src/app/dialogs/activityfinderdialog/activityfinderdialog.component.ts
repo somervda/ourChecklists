@@ -12,6 +12,12 @@ import { HelperService } from "src/app/services/helper.service";
   templateUrl: "./activityfinderdialog.component.html",
   styleUrls: ["./activityfinderdialog.component.scss"],
 })
+
+/**
+ * Used to select a activity, activity selected gets returned as
+ * a activity object. The list of activities displayed can be modified
+ * to show activities that don't match the refHide array of resource DocumentReferences
+ */
 export class ActivityfinderdialogComponent implements OnInit {
   activities$: Observable<Activity[]>;
   selectedActivity: Activity;

@@ -207,7 +207,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  onResourcesChange(resources: DocRef[]) {
+  onResourcesChange(resources: DocumentReference[]) {
     console.log("onResourcesChange", resources);
     this.checklistitem.resources = resources;
     if (this.crudAction == Crud.Update) {

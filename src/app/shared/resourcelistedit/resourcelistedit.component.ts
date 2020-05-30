@@ -7,7 +7,6 @@ import {
   EventEmitter,
 } from "@angular/core";
 import { MatTable } from "@angular/material/table";
-import { DocRef } from "../../models/helper.model";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialog.component";
 import { Observable } from "rxjs";
@@ -22,6 +21,8 @@ import { ResourceService } from "../../services/resource.service";
 import { ResourcefinderdialogComponent } from "../../dialogs/resourcefinderdialog/resourcefinderdialog.component";
 import { ResourceviewdialogComponent } from "../../dialogs/resourceviewdialog/resourceviewdialog.component";
 import { HelperService } from "src/app/services/helper.service";
+import { DocumentReference } from "@angular/fire/firestore";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-resourcelistedit",
@@ -29,7 +30,7 @@ import { HelperService } from "src/app/services/helper.service";
   styleUrls: ["./resourcelistedit.component.scss"],
 })
 export class ResourcelisteditComponent implements OnInit {
-  @Input() resources: DocRef[];
+  @Input() resources: DocumentReference[];
   @Input() hideCreate: boolean;
   @ViewChild(MatTable) table: MatTable<any>;
   @Output() change = new EventEmitter();
@@ -49,30 +50,40 @@ export class ResourcelisteditComponent implements OnInit {
     if (!this.resources) {
       this.resources = [];
     }
-    this.resources$ = this.resourceService.findAllIn(
-      this.resources.map((r) => r.id)
-    );
+    // this.resources$ = this.resourceService.findAllIn(
+    //   this.resources.map((r) => r.id)
+    // );
   }
 
-  removeResource(resource: Resource) {
-    const prompt = `Are you sure you want to remove "${resource.name}" resource from the list?`;
-    const dialogRef = this.dialog.open(ConfirmdialogComponent, {
-      width: "300px",
-      data: { heading: "Confirm", prompt: prompt },
-    });
-    dialogRef.afterClosed().subscribe((choice) => {
-      if (choice) {
-        this.resources.splice(
-          this.resources.findIndex((r) => r.id == resource.id),
-          1
-        );
-        this.refresh();
-        this.change.emit(this.resources);
-      }
-    });
+  removeResource(resource: DocumentReference) {
+    this.helper
+      .getDocRef(resource)
+      .pipe(first())
+      .toPromise()
+      .then((r) => {
+        const prompt = `Are you sure you want to remove "${r.name}" resource from the list?`;
+        const dialogRef = this.dialog.open(ConfirmdialogComponent, {
+          width: "300px",
+          data: { heading: "Confirm", prompt: prompt },
+        });
+        dialogRef.afterClosed().subscribe((choice) => {
+          if (choice) {
+            this.resources.splice(
+              this.resources.findIndex((r) => r.path == resource.path),
+              1
+            );
+            this.refresh();
+            this.change.emit(this.resources);
+          }
+        });
+      });
   }
 
   addResource() {
+    let refHide = [];
+    if (this.resources) {
+      refHide = this.resources;
+    }
     if (this.resources && this.resources.length >= 10) {
       this.helper.snackbar(
         "No more resources can be added (10 max), remove an existing resource before adding another.",
@@ -81,17 +92,17 @@ export class ResourcelisteditComponent implements OnInit {
     } else {
       const dialogRef = this.dialog.open(ResourcefinderdialogComponent, {
         width: "380px",
-        data: { idHide: this.resources.map((r) => r.id) },
+        data: { refHide: refHide },
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           console.log("addResource", result);
-          const newResource: DocRef = {
-            id: result.id,
-            name: result.name,
-          };
-          this.resources.push(newResource);
-
+          const newResource = this.helper.docRef("resources/" + result.id);
+          if (this.resources) {
+            this.resources.push(newResource);
+          } else {
+            this.resources = [newResource];
+          }
           this.refresh();
           this.change.emit(this.resources);
         }
@@ -103,7 +114,8 @@ export class ResourcelisteditComponent implements OnInit {
     return this.resourceTypeInfo.find((info) => info.resourceType == type);
   }
 
-  openResourceView(resource) {
+  openResourceView(resource: DocumentReference) {
+    console.log("openResourceView", resource);
     const dialogRef = this.dialog.open(ResourceviewdialogComponent, {
       width: "95%",
       maxWidth: "800px",

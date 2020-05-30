@@ -7,7 +7,9 @@
       ? 'Update'
       : 'Delete')
   "
-  [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
+  [matIcon]="
+    helper.getChecklistStatusInfoItem(ChecklistStatus.UnderConstruction).icon
+  "
 >
   ></app-subheading
 >

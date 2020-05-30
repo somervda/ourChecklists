@@ -13,8 +13,10 @@ import {
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
-import { identifierModuleUrl } from "@angular/compiler";
-import { stringify } from "querystring";
+import { map } from "rxjs/operators";
+import { convertSnap } from "./db-utils";
+import { Observable } from "rxjs";
+import { firestore } from "firebase";
 
 @Injectable({
   providedIn: "root",
@@ -84,7 +86,7 @@ export class HelperService {
     this.ngZone.run(() => this.router.navigateByUrl(url));
   }
 
-  docRef(path: string) {
+  docRef(path: string): DocumentReference {
     return this.afs.doc(path).ref;
   }
 
@@ -96,5 +98,19 @@ export class HelperService {
     // console.log("getDocRefId", docRef, docRef.path, " id:", id);
 
     return id;
+  }
+
+  getDocRef<T>(value: firestore.DocumentReference<T>): Observable<T> {
+    if (value && value != null && value.path && value.path != null) {
+      return this.afs
+        .doc(value.path)
+        .snapshotChanges()
+        .pipe(
+          map((snap) => {
+            // console.log("transform snap", convertSnap<T>(snap));
+            return convertSnap<T>(snap);
+          })
+        );
+    }
   }
 }

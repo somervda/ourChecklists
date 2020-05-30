@@ -126,7 +126,7 @@
     <!-- <ng-template matExpansionPanelContent> -->
     <app-activitylistedit
       [activities]="checklistitem.activities"
-      [category]="(checklist$ | async).category | doc | async"
+      [category]="(checklist$ | async)?.category | doc | async"
       (change)="onActivitiesChange($event)"
     >
     </app-activitylistedit>

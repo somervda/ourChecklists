@@ -3,6 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Resource, ResourceType } from "../../models/resource.model";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
+import { HelperService } from "src/app/services/helper.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-resourceviewdialog",
@@ -17,25 +19,33 @@ export class ResourceviewdialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<ResourceviewdialogComponent>,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private helper: HelperService
   ) {}
 
   ngOnInit(): void {
     if (this.data.resource) {
-      this.resource = this.data.resource;
-      if (
-        this.resource.resourceType == ResourceType.file ||
-        this.resource.resourceType == ResourceType.image
-      ) {
-        // get downloadUrl
-        console.log(
-          "getref:",
-          `resources/${this.resource.id}/${this.resource.content}`
-        );
-        this.downloadUrl$ = this.storage
-          .ref(`resources/${this.resource.id}/${this.resource.content}`)
-          .getDownloadURL();
-      }
+      this.helper
+        .getDocRef(this.data.resource)
+        .pipe(first())
+        .toPromise()
+        .then((r) => {
+          this.resource = r as Resource;
+          console.log("ResourceviewdialogComponent", r);
+          if (
+            this.resource.resourceType == ResourceType.file ||
+            this.resource.resourceType == ResourceType.image
+          ) {
+            // get downloadUrl
+            console.log(
+              "getref:",
+              `resources/${this.resource.id}/${this.resource.content}`
+            );
+            this.downloadUrl$ = this.storage
+              .ref(`resources/${this.resource.id}/${this.resource.content}`)
+              .getDownloadURL();
+          }
+        });
     }
   }
 

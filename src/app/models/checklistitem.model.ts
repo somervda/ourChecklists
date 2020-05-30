@@ -15,7 +15,7 @@ export interface Checklistitem {
   resultValue?: ChecklistitemResultValue;
   resultType: ChecklistitemResultType;
   comment?: string;
-  resources?: DocRef[];
+  resources?: DocumentReference[];
   tagId?: string;
 }
 
