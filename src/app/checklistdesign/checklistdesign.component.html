@@ -25,7 +25,7 @@
           placeholder="Name"
           required
         />
-        <mat-error *ngIf="checklistForm.controls['name'].hasError('required')">
+        <mat-error *ngIf="checklistForm.controls['name']?.hasError('required')">
           Name is required.
         </mat-error>
         <mat-error *ngIf="checklistForm.controls['name'].hasError('minlength')">
@@ -98,10 +98,10 @@
           [compareWith]="objectComparisonFunction"
         >
           <mat-option
-            *ngFor="let c of categories$ | async"
-            [value]="{ id: c.id, name: c.name }"
+            *ngFor="let category of categories$ | async"
+            [value]="helper.docRef('/categories/' + category.id)"
           >
-            {{ c.name }}
+            {{ category.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>

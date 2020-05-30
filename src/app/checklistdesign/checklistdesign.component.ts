@@ -12,8 +12,6 @@ import { Team } from "../models/team.model";
 import { TeamService } from "../services/team.service";
 import { Category } from "../models/category.model";
 import { CategoryService } from "../services/category.service";
-import { Resource } from "../models/resource.model";
-import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { User } from "../models/user.model";
 import { first } from "rxjs/operators";
@@ -82,7 +80,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
             displayName: user.displayName,
           },
         ],
-        category: { id: "", name: "" },
+        category: null,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
     } else {
@@ -121,9 +119,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
       ],
       comments: [this.checklist.comments, [Validators.maxLength(500)]],
       team: [{ id: this.checklist.team.id, name: this.checklist.team.name }],
-      category: [
-        { id: this.checklist.category.id, name: this.checklist.category.name },
-      ],
+      category: [this.checklist.category],
     });
 
     // Mark all fields as touched to trigger validation on initial entry to the fields
@@ -190,10 +186,12 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  objectComparisonFunction = function (option, value): boolean {
+  objectComparisonFunction = function (
+    option: DocumentReference,
+    value: DocumentReference
+  ): boolean {
     // Needed to compare objects in select drop downs
-    // console.log("objectComparisonFunction", option, value);
-    return option.id === value.id;
+    return option.path == value.path;
   };
 
   onTeamChange(teamRef: DocRef) {
@@ -209,9 +207,9 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCategoryChange(categoryRef: DocRef) {
+  onCategoryChange(event) {
     console.log("onCategoryChange: ", event);
-    this.checklist.category = categoryRef;
+    this.checklist.category = event.value;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
         this.checklist.id,

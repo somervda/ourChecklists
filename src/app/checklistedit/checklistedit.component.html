@@ -125,7 +125,7 @@
     <div>{{ checklist.team.name }}</div>
 
     <div class="prompt">Category</div>
-    <div>{{ checklist.category.name }}</div>
+    <div>{{ (checklist.category | doc | async)?.name }}</div>
     <ng-container
       *ngIf="checklist.fromTemplate && checklist.fromTemplate.id.length > 0"
     >

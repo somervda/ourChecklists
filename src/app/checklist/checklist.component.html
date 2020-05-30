@@ -63,7 +63,7 @@
   <div>{{ checklist.team.name }}</div>
 
   <div class="prompt">Category</div>
-  <div>{{ checklist.category.name }}</div>
+  <div>{{ (checklist.category | doc | async)?.name }}</div>
 
   <div class="prompt">Assignees</div>
   <div>
