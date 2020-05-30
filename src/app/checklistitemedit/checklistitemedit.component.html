@@ -15,13 +15,15 @@
   <div class="prompt">Description</div>
   <div>{{ checklistitem.description }}</div>
   <div class="prompt">Resources</div>
-  <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
+  <app-resourcelistsimple
+    [resources]="checklistitem.resources"
+  ></app-resourcelistsimple>
   <div class="prompt">Activities</div>
   <div>
     <ng-container
       *ngIf="
         checklistitem.activities && checklistitem.activities.length > 0;
-        else noActivites
+        else noActivities
       "
     >
       <span *ngFor="let activity of checklistitem.activities; let i = index">
@@ -31,7 +33,7 @@
         }}</span>
       </span>
     </ng-container>
-    <ng-template #noActivites>
+    <ng-template #noActivities>
       None
     </ng-template>
   </div>

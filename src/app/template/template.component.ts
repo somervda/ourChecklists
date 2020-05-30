@@ -3,11 +3,9 @@ import { ChecklistService } from "src/app/services/checklist.service";
 import { Component, OnInit } from "@angular/core";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
 import { Observable } from "rxjs";
-import { Resource } from "../models/resource.model";
 import { Checklistitem } from "../models/checklistitem.model";
 import { ActivatedRoute } from "@angular/router";
 import { ChecklistitemService } from "../services/checklistitem.service";
-import { ResourceService } from "../services/resource.service";
 import { HelperService } from "../services/helper.service";
 import { IconAction } from "../models/helper.model";
 
@@ -18,7 +16,6 @@ import { IconAction } from "../models/helper.model";
 })
 export class TemplateComponent implements OnInit {
   checklist: Checklist;
-  resources$: Observable<Resource[]>;
   checklistitems$: Observable<Checklistitem[]>;
   displayedColumns: string[] = ["name"];
   ChecklistStatus = ChecklistStatus;
@@ -38,7 +35,6 @@ export class TemplateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private checklistitemService: ChecklistitemService,
-    private resourceService: ResourceService,
     private helper: HelperService,
     private checklistService: ChecklistService,
     private auth: AuthService
@@ -47,11 +43,6 @@ export class TemplateComponent implements OnInit {
   ngOnInit() {
     this.checklist = this.route.snapshot.data["checklist"];
     this.checklistitems$ = this.checklistitemService.findAll(this.checklist.id);
-    if (this.checklist.resources) {
-      this.resources$ = this.resourceService.findAllIn(
-        this.checklist.resources.map((r) => r.id)
-      );
-    }
   }
 
   iconAction(value) {

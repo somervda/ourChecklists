@@ -126,7 +126,25 @@
     <br />
     <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
-        Resources: {{ helper.getFlatDocRefArray(checklist.resources) }}
+        <mat-panel-title>
+          Resources:
+          <ng-container
+            *ngIf="
+              checklist.resources && checklist.resources.length > 0;
+              else noResources
+            "
+          >
+            <span *ngFor="let resource of checklist.resources; let i = index">
+              <span *ngIf="i > 0">,</span>
+              <span style="margin-left: 5px;">{{
+                (resource | doc | async)?.name
+              }}</span>
+            </span>
+          </ng-container>
+          <ng-template #noResources>
+            None
+          </ng-template>
+        </mat-panel-title>
         <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 

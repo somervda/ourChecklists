@@ -100,10 +100,15 @@ export class HelperService {
     return id;
   }
 
-  getDocRef<T>(value: firestore.DocumentReference<T>): Observable<T> {
-    if (value && value != null && value.path && value.path != null) {
+  /**
+   * Returns an observable of the document represented by the
+   * docRef. Note: Used by the doc pipe.
+   * @param docRef a firestore.DocumentReference
+   */
+  getDocRef<T>(docRef: firestore.DocumentReference<T>): Observable<T> {
+    if (docRef && docRef != null && docRef.path && docRef.path != null) {
       return this.afs
-        .doc(value.path)
+        .doc(docRef.path)
         .snapshotChanges()
         .pipe(
           map((snap) => {

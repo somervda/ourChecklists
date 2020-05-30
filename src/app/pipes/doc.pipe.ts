@@ -13,7 +13,7 @@ import { HelperService } from "../services/helper.service";
 export class DocPipe implements PipeTransform {
   constructor(private helper: HelperService) {}
 
-  transform<T>(value: firestore.DocumentReference<T>): Observable<T> {
-    return this.helper.getDocRef(value);
+  transform<T>(docRef: firestore.DocumentReference<T>): Observable<T> {
+    return this.helper.getDocRef(docRef);
   }
 }

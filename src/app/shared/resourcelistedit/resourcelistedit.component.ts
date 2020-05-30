@@ -29,6 +29,13 @@ import { first } from "rxjs/operators";
   templateUrl: "./resourcelistedit.component.html",
   styleUrls: ["./resourcelistedit.component.scss"],
 })
+
+/**
+ * Displays a table of resources based on an array of resource DocumentReferences
+ * being passed to the component.
+ * OnChange: a change event is generated that contains the current array of resource
+ * documentreferences
+ */
 export class ResourcelisteditComponent implements OnInit {
   @Input() resources: DocumentReference[];
   @Input() hideCreate: boolean;

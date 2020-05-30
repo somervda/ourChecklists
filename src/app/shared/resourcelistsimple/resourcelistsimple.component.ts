@@ -9,6 +9,7 @@ import {
 } from "src/app/models/resource.model";
 import { ResourceviewdialogComponent } from "src/app/dialogs/resourceviewdialog/resourceviewdialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-resourcelistsimple",
@@ -21,7 +22,7 @@ import { MatDialog } from "@angular/material/dialog";
  * where you can click on the name to see a popup dialog with resource details
  */
 export class ResourcelistsimpleComponent implements OnInit {
-  @Input() resources$: Observable<Resource[]>;
+  @Input() resources: DocumentReference[];
   resourceTypeInfo = ResourceTypeInfo;
   ResourceStatus = ResourceStatus;
 
@@ -33,7 +34,7 @@ export class ResourcelistsimpleComponent implements OnInit {
     return this.resourceTypeInfo.find((info) => info.resourceType == type);
   }
 
-  openResourceView(resource) {
+  openResourceView(resource: DocumentReference) {
     console.log("openResourceView", resource);
     const dialogRef = this.dialog.open(ResourceviewdialogComponent, {
       width: "95%",

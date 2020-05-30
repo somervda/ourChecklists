@@ -18,6 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { User } from "../models/user.model";
 import { first } from "rxjs/operators";
 import * as firebase from "firebase";
+import { DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-checklistdesign",
@@ -177,11 +178,9 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  onResourcesChange(resources: Resource[]) {
+  onResourcesChange(resources: DocumentReference[]) {
     console.log("onResourcesChange", resources);
-    this.checklist.resources = resources.map((r) => {
-      return { id: r.id, name: r.name };
-    });
+    this.checklist.resources = resources;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
         this.checklist.id,
@@ -192,7 +191,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   }
 
   objectComparisonFunction = function (option, value): boolean {
-    // Needed to compare objects in select dropdowns
+    // Needed to compare objects in select drop downs
     // console.log("objectComparisonFunction", option, value);
     return option.id === value.id;
   };

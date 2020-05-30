@@ -1,4 +1,5 @@
 import { DocRef, UserRef } from "./helper.model";
+import { DocumentReference } from "@angular/fire/firestore";
 
 export interface Checklist {
   id?: string;
@@ -15,7 +16,7 @@ export interface Checklist {
   team: DocRef;
   assignee: UserRef[];
   category: DocRef;
-  resources?: DocRef[];
+  resources?: DocumentReference[];
 }
 
 export enum ChecklistStatus {

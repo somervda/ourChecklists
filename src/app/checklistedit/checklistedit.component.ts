@@ -8,7 +8,6 @@ import {
 } from "../models/checklist.model";
 import { ChecklistService } from "../services/checklist.service";
 import { ActivatedRoute } from "@angular/router";
-import { ResourceService } from "../services/resource.service";
 import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { MatDialog } from "@angular/material/dialog";
@@ -21,7 +20,6 @@ import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 })
 export class ChecklisteditComponent implements OnInit {
   checklist: Checklist;
-  resources$: Observable<Resource[]>;
   enhanced = false;
   showResources = false;
   checklistForm: FormGroup;
@@ -29,7 +27,6 @@ export class ChecklisteditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private checklistService: ChecklistService,
-    private resourceService: ResourceService,
     public dialog: MatDialog,
     public helper: HelperService,
     private fb: FormBuilder
@@ -37,11 +34,11 @@ export class ChecklisteditComponent implements OnInit {
 
   ngOnInit() {
     this.checklist = this.route.snapshot.data["checklist"];
-    if (this.checklist.resources) {
-      this.resources$ = this.resourceService.findAllIn(
-        this.checklist.resources.map((r) => r.id)
-      );
-    }
+    // if (this.checklist.resources) {
+    //   this.resources$ = this.resourceService.findAllIn(
+    //     this.checklist.resources.map((r) => r.id)
+    //   );
+    // }
 
     // Create validators
     this.checklistForm = this.fb.group({

@@ -1,10 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ResourceService } from "../services/resource.service";
 import { MatDialog } from "@angular/material/dialog";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
 import { Observable } from "rxjs";
-import { Resource } from "../models/resource.model";
 import { Checklistitem } from "../models/checklistitem.model";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { CheckliststatusdialogComponent } from "../dialogs/checkliststatusdialog/checkliststatusdialog.component";
@@ -21,7 +19,6 @@ import { TemplategeneratordialogComponent } from "../dialogs/templategeneratordi
 })
 export class ChecklistComponent implements OnInit {
   checklist: Checklist;
-  resources$: Observable<Resource[]>;
   checklistitems$: Observable<Checklistitem[]>;
   displayedColumns: string[] = ["name", "resultType"];
   ChecklistStatus = ChecklistStatus;
@@ -37,7 +34,6 @@ export class ChecklistComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private checklistitemService: ChecklistitemService,
-    private resourceService: ResourceService,
     public dialog: MatDialog,
     private auth: AuthService,
     public helper: HelperService
@@ -46,11 +42,6 @@ export class ChecklistComponent implements OnInit {
   ngOnInit() {
     this.checklist = this.route.snapshot.data["checklist"];
     this.checklistitems$ = this.checklistitemService.findAll(this.checklist.id);
-    if (this.checklist.resources) {
-      this.resources$ = this.resourceService.findAllIn(
-        this.checklist.resources.map((r) => r.id)
-      );
-    }
     this.auth.user$
       .pipe(first())
       .toPromise()

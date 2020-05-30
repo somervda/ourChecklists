@@ -49,7 +49,9 @@
     Resources
   </div>
   <div>
-    <app-resourcelistsimple [resources$]="resources$"></app-resourcelistsimple>
+    <app-resourcelistsimple
+      [resources]="checklist.resources"
+    ></app-resourcelistsimple>
   </div>
 
   <div class="prompt">Comments</div>

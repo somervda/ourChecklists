@@ -1,12 +1,12 @@
-<ng-container *ngFor="let resource of resources$ | async; let i = index">
+<ng-container *ngFor="let resource of resources; let i = index">
   <ng-container *ngIf="i > 0">, </ng-container>
   <span
     (click)="openResourceView(resource)"
     class="resource_item"
-    [matTooltip]="'Open &quot;' + resource.name + '&quot; in viewer'"
-    >[{{ resource.name }}]</span
+    [matTooltip]="
+      'Open &quot;' + (resource | doc | async)?.name + '&quot; in viewer'
+    "
+    >[{{ (resource | doc | async)?.name }}]</span
   ></ng-container
 >
-<ng-container *ngIf="!(resources$ | async) || (resources$ | async)?.length == 0"
-  >None</ng-container
->
+<ng-container *ngIf="!resources || resources.length == 0">None</ng-container>
