@@ -126,11 +126,9 @@
 
     <div class="prompt">Category</div>
     <div>{{ (checklist.category | doc | async)?.name }}</div>
-    <ng-container
-      *ngIf="checklist.fromTemplate && checklist.fromTemplate.id.length > 0"
-    >
+    <ng-container *ngIf="checklist.fromTemplate">
       <div class="prompt">Based on Template</div>
-      <div>{{ checklist.fromTemplate.name }}</div>
+      <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
     </ng-container>
     <div class="prompt">Date Created</div>
     <div *ngIf="checklist.dateCreated">

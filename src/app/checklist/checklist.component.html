@@ -64,7 +64,10 @@
 
   <div class="prompt">Category</div>
   <div>{{ (checklist.category | doc | async)?.name }}</div>
-
+  <ng-container *ngIf="checklist.fromTemplate">
+    <div class="prompt">Based on Template</div>
+    <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
+  </ng-container>
   <div class="prompt">Assignees</div>
   <div>
     {{ helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee)) }}

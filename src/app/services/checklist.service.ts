@@ -15,6 +15,7 @@ import { UserRef } from "../models/helper.model";
 import { ChecklistitemService } from "./checklistitem.service";
 import { Checklistitem } from "../models/checklistitem.model";
 import { User } from "../models/user.model";
+import { HelperService } from "./helper.service";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +24,8 @@ export class ChecklistService {
   constructor(
     private afs: AngularFirestore,
     private auth: AuthService,
-    private checklistitemService: ChecklistitemService
+    private checklistitemService: ChecklistitemService,
+    private helper: HelperService
   ) {}
 
   findById(id: string): Observable<Checklist> {
@@ -247,7 +249,7 @@ export class ChecklistService {
       .then((templateItems) => {
         console.log("createTemplate items:", templateItems);
         // Modify the checklist , remove the fields not needed for a template
-        template.fromTemplate = { id: template.id, name: template.name };
+        template.fromTemplate = this.helper.docRef(`checklists/${template.id}`);
         const dateNow = new Date();
         template.name += `: ${dateNow.valueOf()}`;
         template.description += `Created from template: ${dateNow.toISOString()}`;

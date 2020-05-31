@@ -5,7 +5,7 @@ export interface Checklist {
   id?: string;
   name: string;
   isTemplate: boolean;
-  fromTemplate?: DocRef;
+  fromTemplate?: DocumentReference;
   description: string;
   comments?: string;
   status: ChecklistStatus;
