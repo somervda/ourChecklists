@@ -82,10 +82,10 @@
           [compareWith]="objectComparisonFunction"
         >
           <mat-option
-            *ngFor="let t of myteams$ | async"
-            [value]="{ id: t.id, name: t.name }"
+            *ngFor="let team of myteams$ | async"
+            [value]="helper.docRef('/teams/' + team.id)"
           >
-            {{ t.name }}
+            {{ team.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>

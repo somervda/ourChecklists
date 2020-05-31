@@ -73,7 +73,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         description: "",
         isTemplate: false,
         status: ChecklistStatus.UnderConstruction,
-        team: { id: "", name: "" },
+        team: null,
         assignee: [
           {
             uid: user.uid,
@@ -118,7 +118,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         ],
       ],
       comments: [this.checklist.comments, [Validators.maxLength(500)]],
-      team: [{ id: this.checklist.team.id, name: this.checklist.team.name }],
+      team: [this.checklist.team],
       category: [this.checklist.category],
     });
 
@@ -191,13 +191,13 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     value: DocumentReference
   ): boolean {
     // Needed to compare objects in select drop downs
+    console.log("compare", option, value);
     return option.path == value.path;
   };
 
-  onTeamChange(teamRef: DocRef) {
+  onTeamChange(event) {
     console.log("onTeamChange: ", event);
-    this.checklist.team = teamRef;
-    // console.log("onTeamChange form:", this.checklistForm);
+    this.checklist.team = event.value;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
         this.checklist.id,

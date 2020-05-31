@@ -122,7 +122,7 @@
 
   <ng-container *ngIf="enhanced">
     <div class="prompt">Team</div>
-    <div>{{ checklist.team.name }}</div>
+    <div>{{ (checklist.team | doc | async)?.name }}</div>
 
     <div class="prompt">Category</div>
     <div>{{ (checklist.category | doc | async)?.name }}</div>
