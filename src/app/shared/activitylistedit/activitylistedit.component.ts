@@ -6,11 +6,9 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
-import { DocRef } from "../../models/helper.model";
 import { MatTable } from "@angular/material/table";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmdialogComponent } from "../../dialogs/confirmdialog/confirmdialog.component";
-import { Activity } from "../../models/activity.model";
 import { ActivityfinderdialogComponent } from "../../dialogs/activityfinderdialog/activityfinderdialog.component";
 import { HelperService } from "src/app/services/helper.service";
 import { DocumentReference } from "@angular/fire/firestore";

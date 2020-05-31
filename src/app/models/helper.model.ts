@@ -4,16 +4,6 @@ export interface Kvp {
   value: any;
 }
 
-export interface DocRef {
-  id: string;
-  name: string;
-}
-
-export interface UserRef {
-  uid: string;
-  displayName?: string;
-}
-
 export enum Crud {
   "Create" = "C",
   "Read" = "R",

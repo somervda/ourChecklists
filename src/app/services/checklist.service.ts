@@ -11,7 +11,6 @@ import {
   dbFieldUpdateAsPromise,
 } from "./db-utils";
 import { AuthService } from "./auth.service";
-import { UserRef } from "../models/helper.model";
 import { ChecklistitemService } from "./checklistitem.service";
 import { Checklistitem } from "../models/checklistitem.model";
 import { User } from "../models/user.model";
@@ -66,10 +65,6 @@ export class ChecklistService {
   }
 
   findMyChecklists(pageSize: number): Observable<Checklist[]> {
-    // const myUserRef: UserRef = {
-    //   uid: this.auth.currentUser.uid,
-    //   displayName: this.auth.currentUser.displayName,
-    // };
     const myUserRef = this.helper.docRef(`users/${this.auth.currentUser.uid}`);
     // console.log( "checklist findByUid", myUserRef,  pageSize  );
     return this.afs

@@ -6,7 +6,6 @@ import { Resource } from "../models/resource.model";
 import { ActivatedRoute } from "@angular/router";
 import { ResourceService } from "../services/resource.service";
 import { ChecklistitemService } from "../services/checklistitem.service";
-import { DocRef } from "../models/helper.model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({

@@ -5,7 +5,7 @@ import {
   ResourceStatus,
   ResourceTypeInfo,
 } from "../models/resource.model";
-import { Crud, DocRef, UserRef } from "../models/helper.model";
+import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ResourceService } from "../services/resource.service";
 import { ActivatedRoute } from "@angular/router";
@@ -345,10 +345,6 @@ export class ResourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Owner", result);
-        // const userRef: UserRef = {
-        //   uid: result.uid,
-        //   displayName: result.displayName,
-        // };
         const userRef = this.helper.docRef("users/" + result.id);
         this.resourceService.fieldUpdate(this.resource.id, "owner", userRef);
         this.resource.owner = userRef;
@@ -389,10 +385,6 @@ export class ResourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Team", result);
-        // const teamRef: DocRef = {
-        //   id: result.id,
-        //   name: result.name,
-        // };
         const teamRef = this.helper.docRef("teams/" + result.id);
         this.resourceService.fieldUpdate(this.resource.id, "team", teamRef);
         this.resource.team = teamRef;
@@ -413,10 +405,6 @@ export class ResourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log("New Category", result);
-        // const categoryRef: DocRef = {
-        //   id: result.id,
-        //   name: result.name,
-        // };
         const categoryRef = this.helper.docRef("categories/" + result.id);
         this.resourceService.fieldUpdate(
           this.resource.id,

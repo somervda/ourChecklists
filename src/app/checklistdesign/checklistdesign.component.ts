@@ -2,7 +2,7 @@ import { HelperService } from "./../services/helper.service";
 import { OnDestroy } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
-import { Crud, UserRef } from "../models/helper.model";
+import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistService } from "../services/checklist.service";

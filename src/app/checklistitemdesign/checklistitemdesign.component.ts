@@ -3,7 +3,7 @@ import {
   ChecklistitemResultType,
 } from "./../models/checklistitem.model";
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Crud, DocRef } from "../models/helper.model";
+import { Crud } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
@@ -218,15 +218,6 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         resources
       );
     }
-  }
-
-  flatDocRefArray(docRefArray: DocRef[]): string {
-    if (docRefArray) {
-      return docRefArray.reduce((accumulator, docRef, index) => {
-        return (accumulator += (index == 0 ? "" : ", ") + docRef.name);
-      }, "");
-    }
-    return "None";
   }
 
   updateResultType() {

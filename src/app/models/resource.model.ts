@@ -1,4 +1,3 @@
-import { DocRef, UserRef } from "./helper.model";
 import { DocumentReference } from "@angular/fire/firestore";
 
 export interface Resource {

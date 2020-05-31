@@ -137,9 +137,22 @@
 
     <div class="prompt">Assignees</div>
     <div>
-      {{
-        helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee))
-      }}
+      <ng-container
+        *ngIf="
+          checklist.assignee && checklist.assignee.length > 0;
+          else noAssignee
+        "
+      >
+        <span *ngFor="let assignee of checklist.assignee; let i = index">
+          <span *ngIf="i > 0">,</span>
+          <span style="margin-left: 5px;">{{
+            (assignee | doc | async)?.displayName
+          }}</span>
+        </span>
+      </ng-container>
+      <ng-template #noAssignee>
+        None
+      </ng-template>
     </div>
   </ng-container>
 
