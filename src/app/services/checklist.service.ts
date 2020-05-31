@@ -66,10 +66,11 @@ export class ChecklistService {
   }
 
   findMyChecklists(pageSize: number): Observable<Checklist[]> {
-    const myUserRef: UserRef = {
-      uid: this.auth.currentUser.uid,
-      displayName: this.auth.currentUser.displayName,
-    };
+    // const myUserRef: UserRef = {
+    //   uid: this.auth.currentUser.uid,
+    //   displayName: this.auth.currentUser.displayName,
+    // };
+    const myUserRef = this.helper.docRef(`users/${this.auth.currentUser.uid}`);
     // console.log( "checklist findByUid", myUserRef,  pageSize  );
     return this.afs
       .collection("checklists", (ref) =>
@@ -257,7 +258,7 @@ export class ChecklistService {
         template.status = ChecklistStatus.Active;
         template.isTemplate = false;
         template.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
-        template.assignee = [{ uid: user.uid, displayName: user.displayName }];
+        template.assignee = [this.helper.docRef(`users/${user.uid}`)];
         // Clean up templateItems for use in the checklist
         templateItems.forEach((templateItem) => {
           delete templateItem.id;

@@ -109,10 +109,25 @@
 
     <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
-        Assignees:
-        {{
-          helper.getFlatDocRefArray(helper.userRefToDocRef(checklist.assignee))
-        }}
+        <mat-panel-title>
+          Assignees:
+          <ng-container
+            *ngIf="
+              checklist.assignee && checklist.assignee.length > 0;
+              else noAssignee
+            "
+          >
+            <span *ngFor="let assignee of checklist.assignee; let i = index">
+              <span *ngIf="i > 0">,</span>
+              <span style="margin-left: 5px;">{{
+                (assignee | doc | async)?.displayName
+              }}</span>
+            </span>
+          </ng-container>
+          <ng-template #noAssignee>
+            None
+          </ng-template>
+        </mat-panel-title>
         <mat-icon style="margin-left: auto;">edit</mat-icon>
       </mat-expansion-panel-header>
 

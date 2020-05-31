@@ -10,9 +10,11 @@
 <div class="user-list">
   <div
     *ngFor="let user of users$ | async"
-    [style.backgroundColor]="user.uid == selectedUid ? 'lightgrey' : 'white'"
-    (click)="onUserSelected(user.id)"
-    [hidden]="isHidden(user.id)"
+    [style.backgroundColor]="
+      user.uid == helper.getDocRefId(selectedUser) ? 'lightgrey' : 'white'
+    "
+    (click)="onUserSelected(helper.docRef('users/' + user.uid))"
+    [hidden]="isHidden(helper.docRef('users/' + user.uid))"
   >
     {{ user.displayName }}
   </div>

@@ -2,7 +2,7 @@ import { HelperService } from "./../services/helper.service";
 import { OnDestroy } from "@angular/core";
 import { Component, OnInit } from "@angular/core";
 import { Checklist, ChecklistStatus } from "../models/checklist.model";
-import { Crud, DocRef, UserRef } from "../models/helper.model";
+import { Crud, UserRef } from "../models/helper.model";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Subscription, Observable } from "rxjs";
 import { ChecklistService } from "../services/checklist.service";
@@ -74,12 +74,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         isTemplate: false,
         status: ChecklistStatus.UnderConstruction,
         team: null,
-        assignee: [
-          {
-            uid: user.uid,
-            displayName: user.displayName,
-          },
-        ],
+        assignee: [this.helper.docRef(`users\${user.uid}`)],
         category: null,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
@@ -95,11 +90,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         });
     }
 
-    // this.resources$ = this.resourceService.findAllIn(
-    //   this.checklist.resources.map((r) => r.id)
-    // );
-
     // Create form group and initialize with probe values
+    console.log("update checklist name:", this.checklist.name);
     this.checklistForm = this.fb.group({
       name: [
         this.checklist.name,
@@ -162,8 +154,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAssigneeChange(assignee: UserRef[]) {
-    console.log("onAssigneeChange", assignee);
+  onAssigneeChange(assignee: DocumentReference[]) {
+    console.log("onAssigneeChange assignee:", assignee);
     this.checklist.assignee = assignee;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(

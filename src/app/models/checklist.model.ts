@@ -14,7 +14,7 @@ export interface Checklist {
   dateTargeted?: Date;
   dateCompleted?: Date | firebase.firestore.FieldValue;
   team: DocumentReference;
-  assignee: UserRef[];
+  assignee: DocumentReference[];
   category: DocumentReference;
   resources?: DocumentReference[];
 }

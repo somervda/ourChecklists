@@ -42,7 +42,10 @@ export class ChecklistlistComponent implements OnInit {
   ): { link: string; tooltip: string } {
     let linkAction = { link: "", tooltip: "" };
     // console.log("getChecklistLinkAction", checklist);
-    if (this.isAdmin || checklist.assignee.find((u) => this.uid == u.uid)) {
+    if (
+      this.isAdmin ||
+      checklist.assignee.find((u) => this.uid == this.helper.getDocRefId(u))
+    ) {
       switch (checklist.status) {
         case ChecklistStatus.UnderConstruction:
           // Design only option in underconstruction

@@ -3,16 +3,22 @@ import { Observable, Subscription } from "rxjs";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { UserService } from "../../services/user.service";
 import { User } from "../../models/user.model";
+import { DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-userselectordialog",
   templateUrl: "./userselectordialog.component.html",
   styleUrls: ["./userselectordialog.component.scss"],
 })
+
+/**
+ * Will display a list of users, except users who are in the refHide array
+ * passed as part of the dialog data. Returns the selected user as a DocumentReference
+ */
 export class UserselectordialogComponent implements OnInit {
-  user: User;
-  // uidHide is a list of UIDs not to show in the userfinder selection
-  uidHide: string[] = [];
+  user: DocumentReference = null;
+  // refHide is a list of users not to show in the userfinder selection
+  refHide: DocumentReference[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -21,21 +27,18 @@ export class UserselectordialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log("userselectordialog this.data.uidHide:", this.data.uidHide);
-    if (this.data.uidHide) {
-      this.uidHide = this.data.uidHide;
+    if (this.data.refHide) {
+      this.refHide = this.data.refHide;
     }
+    console.log("userselectordialog this.data.uidHide:", this.refHide);
   }
 
   returnUser() {
     this.dialogRef.close(this.user);
   }
 
-  onUserSelected(uid) {
-    console.log("onUserSelected:", uid);
-    this.userService
-      .findUserByUid(uid)
-      .toPromise()
-      .then((user) => (this.user = user));
+  onUserSelected(user: DocumentReference) {
+    console.log("onUserSelected:", user);
+    this.user = user;
   }
 }
