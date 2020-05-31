@@ -21,7 +21,11 @@
 <div class="prompt">You can change the Status to...</div>
 <div>
   <mat-radio-group [(ngModel)]="newStatus">
-    <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
+    <ng-container
+      *ngIf="
+        checklist.status == ChecklistStatus.Active && !checklist.fromTemplate
+      "
+    >
       <mat-radio-button [value]="ChecklistStatus.UnderConstruction">
         Under Construction
       </mat-radio-button>

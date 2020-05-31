@@ -17,6 +17,7 @@ import { User } from "../models/user.model";
 import { first } from "rxjs/operators";
 import * as firebase from "firebase";
 import { DocumentReference } from "@angular/fire/firestore";
+import { ChecklistitemService } from "../services/checklistitem.service";
 
 @Component({
   selector: "app-checklistdesign",
@@ -47,10 +48,16 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.auth.user$
-      .pipe(first())
-      .toPromise()
-      .then((u) => this.initProcesses(u));
+    // Need to wait for auth.user to complete for create, otherwise
+    // can dive straight in.
+    if (this.route.routeConfig.path == "checklistdesign/create") {
+      this.auth.user$
+        .pipe(first())
+        .toPromise()
+        .then((u) => this.initProcesses(u));
+    } else {
+      this.initProcesses(this.auth.currentUser);
+    }
   }
 
   initProcesses(user: User) {
@@ -91,7 +98,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
 
     // Create form group and initialize with probe values
-    console.log("update checklist name:", this.checklist.name);
     this.checklistForm = this.fb.group({
       name: [
         this.checklist.name,
@@ -183,8 +189,8 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     value: DocumentReference
   ): boolean {
     // Needed to compare objects in select drop downs
-    console.log("compare", option, value);
-    return option.path == value.path;
+    // console.log("compare", option, value);
+    return option?.path == value?.path;
   };
 
   onTeamChange(event) {

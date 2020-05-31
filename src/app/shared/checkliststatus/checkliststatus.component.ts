@@ -22,12 +22,12 @@ export class CheckliststatusComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.user$
-      .pipe(first())
-      .toPromise()
-      .then((u) => {
-        console.log("CheckliststatusComponent", u);
-      });
+    // this.auth.user$
+    //   .pipe(first())
+    //   .toPromise()
+    //   .then((u) => {
+    //     console.log("CheckliststatusComponent", u);
+    //   });
   }
 
   statusDialog() {

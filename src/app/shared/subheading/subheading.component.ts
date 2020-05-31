@@ -17,7 +17,7 @@ export class SubheadingComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    console.log("SubheadingComponent", this.enhanced);
+    // console.log("SubheadingComponent", this.enhanced);
   }
 
   enhancedChange(event) {

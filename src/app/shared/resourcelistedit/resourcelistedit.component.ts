@@ -63,6 +63,7 @@ export class ResourcelisteditComponent implements OnInit {
   }
 
   removeResource(resource: DocumentReference) {
+    console.log("removeResource", resource);
     this.helper
       .getDocRef(resource)
       .pipe(first())

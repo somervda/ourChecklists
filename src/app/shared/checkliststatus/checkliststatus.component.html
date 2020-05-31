@@ -9,7 +9,7 @@
 <ng-container *ngIf="showAction">
   <div (click)="statusDialog()" class="status">
     <span matTooltip="Click to Update Status"
-      >[{{ helper.getChecklistStatusInfoItem(checklist.status).name }}]</span
+      >[{{ helper.getChecklistStatusInfoItem(checklist?.status).name }}]</span
     >
   </div>
 </ng-container>
