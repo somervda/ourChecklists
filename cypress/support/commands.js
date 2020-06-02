@@ -55,7 +55,7 @@ Cypress.Commands.add("openMyTeamsComponent", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuTeams").click();
   // Verify component was rendered
-  cy.get("app-subheading > .mat-toolbar").contains("Team List");
+  cy.get("app-subheading > .mat-toolbar").contains("My Teams");
 });
 
 Cypress.Commands.add("verifyTeamComponent", () => {
@@ -72,13 +72,13 @@ Cypress.Commands.add("verifyCategoriesComponent", () => {
   cy.get("app-subheading > .mat-toolbar").contains("Categories List");
   cy.get(".mat-button-wrapper > span").should("contain", "Create");
   cy.get(".page-container").contains("e2eCategory").click();
-  cy.get("app-subheading > .mat-toolbar").contains("e2eCategory [Update]");
+  cy.get("app-subheading > .mat-toolbar").contains("Category - Update");
   cy.get(".add-button > .mat-button-wrapper").should(
     "contain",
     "Add new activity"
   );
   cy.get(".page-container").contains("e2eActivity").click();
-  cy.get("app-subheading > .mat-toolbar").contains("e2eActivity [Update]");
+  cy.get("app-subheading > .mat-toolbar").contains("Activity - Update");
 });
 
 Cypress.Commands.add("verifyResourcesComponent", () => {
@@ -88,7 +88,7 @@ Cypress.Commands.add("verifyResourcesComponent", () => {
   cy.get("app-subheading > .mat-toolbar").contains("Resource List");
   cy.get(".mat-button-wrapper > span").should("contain", "Create");
   cy.get(".page-container").contains("e2eResource").click();
-  cy.get("app-subheading > .mat-toolbar").contains("e2eResource");
+  cy.get("app-subheading > .mat-toolbar").contains("Resource - Update");
 });
 
 Cypress.Commands.add("verifyAdminComponent", () => {

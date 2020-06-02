@@ -3,7 +3,7 @@
 
 /// <reference types="Cypress" />
 
-context("Basic user login", () => {
+context("Member user login", () => {
   it("Site opens", () => {
     cy.visit("", {
       onBeforeLoad: (win) => {
@@ -32,9 +32,13 @@ context("Basic user login", () => {
   });
   it("Verify My Team", () => {
     cy.get(".cdk-column-name > a").contains("Angular").click();
-    cy.get("app-subheading > .mat-toolbar").contains("Angular [Update]");
-    cy.get("tbody > :nth-child(1) > .cdk-column-displayName").should(
-      "contain",
+    cy.get("app-subheading > .mat-toolbar").contains("Team - Update");
+    // cy.wait(1000);
+    // cy.get("tbody > :nth-child(1) > .cdk-column-displayName").should(
+    //   "contain",
+    //   "normal user"
+    // );
+    cy.get("tbody > :nth-child(1) > .cdk-column-displayName").contains(
       "normal user"
     );
     cy.get(".add-button").should("not.contain", "Add");

@@ -48,19 +48,14 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Need to wait for auth.user to complete for create, otherwise
-    // can dive straight in.
-    if (this.route.routeConfig.path == "checklistdesign/create") {
-      this.auth.user$
-        .pipe(first())
-        .toPromise()
-        .then((u) => this.initProcesses(u));
-    } else {
-      this.initProcesses(this.auth.currentUser);
-    }
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => this.initProcesses(u));
   }
 
   initProcesses(user: User) {
+    console.log("initProcesses", user);
     if (user.isAdmin) {
       this.myteams$ = this.teamService.findAll(100);
     } else {
@@ -75,13 +70,14 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
 
     // console.log("category onInit", this.crudAction);
     if (this.crudAction == Crud.Create) {
+      console.log("Checklistdesign create");
       this.checklist = {
         name: "",
         description: "",
         isTemplate: false,
         status: ChecklistStatus.UnderConstruction,
         team: null,
-        assignee: [this.helper.docRef(`users\${user.uid}`)],
+        assignee: [this.helper.docRef(`users/${user.uid}`)],
         category: null,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
@@ -98,6 +94,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
 
     // Create form group and initialize with probe values
+    console.log("this.checklist", this.checklist);
     this.checklistForm = this.fb.group({
       name: [
         this.checklist.name,
@@ -215,6 +212,20 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         this.checklist.category
       );
     }
+  }
+
+  async waitForCurrentUser() {
+    let waitMS = 5000;
+    console.log("waitForCurrentUser");
+    while (!this.auth.currentUser && waitMS > 0) {
+      console.log("Waiting for user to show up!");
+      await this.sleep(200);
+      waitMS -= 200;
+    }
+  }
+
+  sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   ngOnDestroy() {

@@ -35,10 +35,14 @@ export class TeamComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.auth.user$
-      .pipe(first())
-      .toPromise()
-      .then((u) => this.initProcesses(u));
+    if (this.route.routeConfig.path == "team/create") {
+      this.auth.user$
+        .pipe(first())
+        .toPromise()
+        .then((u) => this.initProcesses(u));
+    } else {
+      this.initProcesses(this.auth.currentUser);
+    }
   }
 
   initProcesses(user: User) {

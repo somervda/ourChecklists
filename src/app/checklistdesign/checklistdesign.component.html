@@ -13,8 +13,8 @@
 >
   ></app-subheading
 >
-
-<div class="page-container">
+<!-- Need to wait until checklistForm exists or we have all sores of trouble and errors -->
+<div class="page-container" *ngIf="checklistForm">
   <form class="standard-form" [formGroup]="checklistForm">
     <fieldset [disabled]="crudAction == Crud.Delete">
       <mat-form-field class="full-width">
