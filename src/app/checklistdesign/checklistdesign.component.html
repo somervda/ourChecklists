@@ -10,6 +10,17 @@
   [matIcon]="
     helper.getChecklistStatusInfoItem(ChecklistStatus.UnderConstruction).icon
   "
+  [iconActions]="
+    crudAction == Crud.Create
+      ? ''
+      : [
+          {
+            icon: 'visibility',
+            toolTip: 'View/Print Checklist',
+            routerLink: '/checklist/' + checklist.id
+          }
+        ]
+  "
 >
   ></app-subheading
 >
@@ -176,8 +187,8 @@
         ></app-resourcelistedit>
       </ng-template>
     </mat-expansion-panel>
-    <br />
 
+    <br />
     <mat-expansion-panel
       [expanded]="crudAction == Crud.Update"
       [disabled]="crudAction == Crud.Delete"

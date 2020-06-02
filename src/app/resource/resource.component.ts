@@ -334,13 +334,13 @@ export class ResourceComponent implements OnInit {
 
   onUpdateOwner() {
     console.log("onUpdateOwner");
-    let uidHide = [""];
+    let refHide = [];
     if (this.helper.getDocRefId(this.resource?.owner)) {
-      uidHide = [this.helper.getDocRefId(this.resource?.owner)];
+      refHide = [this.resource?.owner];
     }
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
-      data: { uidHide: uidHide },
+      data: { refHide: refHide },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -354,13 +354,13 @@ export class ResourceComponent implements OnInit {
 
   onUpdateReviewer(currentUid: string) {
     console.log("onUpdateReviewer");
-    let uidHide = [""];
+    let refHide = [];
     if (this.helper.getDocRefId(this.resource?.reviewer)) {
-      uidHide = [this.helper.getDocRefId(this.resource?.reviewer)];
+      refHide = [this.resource?.reviewer];
     }
     const dialogRef = this.dialog.open(UserselectordialogComponent, {
       width: "380px",
-      data: { uidHide: uidHide },
+      data: { refHide: refHide },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

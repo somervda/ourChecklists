@@ -214,20 +214,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  async waitForCurrentUser() {
-    let waitMS = 5000;
-    console.log("waitForCurrentUser");
-    while (!this.auth.currentUser && waitMS > 0) {
-      console.log("Waiting for user to show up!");
-      await this.sleep(200);
-      waitMS -= 200;
-    }
-  }
-
-  sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   ngOnDestroy() {
     if (this.checklistSubscription$$)
       this.checklistSubscription$$.unsubscribe();
