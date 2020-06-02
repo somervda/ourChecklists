@@ -17,7 +17,7 @@
   matIcon="supervisor_account"
 ></app-subheading>
 
-<div class="page-container">
+<div class="page-container" *ngIf="teamForm">
   <form class="standard-form" [formGroup]="teamForm">
     <fieldset [disabled]="crudAction == Crud.Delete || readOnly">
       <mat-form-field class="full-width">
