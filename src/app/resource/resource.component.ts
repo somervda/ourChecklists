@@ -20,6 +20,7 @@ import { ConfirmdialogComponent } from "../dialogs/confirmdialog/confirmdialog.c
 import { HelperService } from "../services/helper.service";
 import { first } from "rxjs/operators";
 import { UserService } from "../services/user.service";
+import { ResourcecontentviewdialogComponent } from "../dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
 
 @Component({
   selector: "app-resource",
@@ -467,6 +468,21 @@ export class ResourceComponent implements OnInit {
     if (this.crudAction == Crud.Create) {
       this.resource[fieldName] = this.resourceForm.get(fieldName).value;
     }
+  }
+
+  contentViewer() {
+    const data = {
+      name: this.resource.name,
+      description: this.resource.description,
+      content: this.resource.content,
+      resourceType: this.resource.resourceType,
+    };
+    console.log("contentViewer", data);
+    const dialogRef = this.dialog.open(ResourcecontentviewdialogComponent, {
+      width: "380px",
+      data: data,
+      autoFocus: false,
+    });
   }
 
   ngOnDestroy() {

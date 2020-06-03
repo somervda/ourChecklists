@@ -95,6 +95,7 @@ import { TemplatesComponent } from "./templates/templates.component";
 import { TemplateComponent } from "./template/template.component";
 import { TemplatelistComponent } from "./shared/templatelist/templatelist.component";
 import { DocPipe } from "./pipes/doc.pipe";
+import { ResourcecontentviewdialogComponent } from './dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component';
 
 @NgModule({
   declarations: [
@@ -153,6 +154,7 @@ import { DocPipe } from "./pipes/doc.pipe";
     TemplateComponent,
     TemplatelistComponent,
     DocPipe,
+    ResourcecontentviewdialogComponent,
   ],
   imports: [
     BrowserModule,

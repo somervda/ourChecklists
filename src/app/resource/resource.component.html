@@ -77,263 +77,215 @@
 
       <!-- **** Owner, Reviewer, Team, category and status info ***** -->
 
-      <table>
-        <tr>
-          <td class="row-prompt">Owner</td>
-          <td>
-            <div
-              class="update-field"
-              *ngIf="isUpdater()"
-              matTooltip="Update Owner"
-              (click)="onUpdateOwner()"
-            >
-              {{
-                resource.owner && resource.owner.path
-                  ? (resource.owner | doc | async)?.displayName
-                  : "[...]"
-              }}
-            </div>
-            <div *ngIf="!isUpdater()">
-              {{ (resource.owner | doc | async)?.displayName }}
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="row-prompt">Reviewer</td>
-          <td>
-            <div
-              class="update-field"
-              *ngIf="isUpdater()"
-              matTooltip="Update Reviewer"
-              (click)="onUpdateReviewer()"
-            >
-              {{
-                resource.reviewer && resource.reviewer.path
-                  ? (resource.reviewer | doc | async)?.displayName
-                  : "[...]"
-              }}
-            </div>
-            <div *ngIf="!isUpdater()">
-              {{ (resource.reviewer | doc | async)?.displayName }}
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="row-prompt">Team</td>
-          <td>
-            <div
-              class="update-field"
-              *ngIf="isUpdater()"
-              matTooltip="Update Team"
-              (click)="onUpdateTeam()"
-            >
-              {{
-                resource.team && resource.team.path
-                  ? (resource.team | doc | async)?.name
-                  : "[...]"
-              }}
-            </div>
-            <div *ngIf="!isUpdater()">
-              {{ (resource.team | doc | async)?.name }}
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="row-prompt">Category</td>
-          <td>
-            <div
-              class="update-field"
-              *ngIf="isUpdater()"
-              matTooltip="Update Category"
-              (click)="onUpdateCategory()"
-            >
-              {{
-                resource.category && resource.category.path
-                  ? (resource.category | doc | async)?.name
-                  : "[...]"
-              }}
-            </div>
-            <div *ngIf="!isUpdater()">
-              {{ (resource.category | doc | async)?.name }}
-            </div>
-          </td>
-        </tr>
+      <div class="row-prompt">Owner</div>
 
-        <tr>
-          <td class="row-prompt">Status</td>
-          <td>
-            {{ ResourceStatus[resource?.status] | titlecase }}
-          </td>
-        </tr>
-        <tr>
-          <ng-container *ngIf="resource.supersedes | doc | async">
-            <td class="row-prompt">Supersedes</td>
-            <td>
-              <a
-                routerLink="/redirect/resource/{{
-                  (resource.supersedes | doc | async)?.id
-                }}"
-              >
-                {{ (resource.supersedes | doc | async)?.name }}</a
-              >
-            </td>
-          </ng-container>
-        </tr>
-      </table>
-
-      <!-- **********  Content Card *******-->
-
-      <div class="content-card">
-        <!-- <div class="card-header">Resource Content</div> -->
-        <div class="rb-group">
-          <mat-radio-group
-            formControlName="resourceType"
-            (change)="
-              onFieldUpdate('resourceType'); setContentValidators($event.value)
-            "
-          >
-            <mat-radio-button
-              *ngFor="let info of ResourceTypeInfo"
-              [value]="info.resourceType"
-              >{{ info.name }}</mat-radio-button
-            >
-          </mat-radio-group>
-        </div>
-        <div class="type-container">
-          <ng-container *ngIf="resource.resourceType == ResourceType.url">
-            <mat-form-field class="full-width">
-              <input
-                matInput
-                formControlName="content"
-                (change)="onFieldUpdate('content')"
-                placeholder="URL"
-                required
-              />
-              <mat-error
-                *ngIf="resourceForm.controls['content'].hasError('required')"
-              >
-                URL is required.
-              </mat-error>
-              <mat-error
-                *ngIf="resourceForm.controls['content'].hasError('pattern')"
-              >
-                Must be a valid URL.
-              </mat-error>
-            </mat-form-field>
-          </ng-container>
-
-          <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
-            <mat-tab-group>
-              <mat-tab label="Edit">
-                <ng-template matTabContent>
-                  <mat-form-field class="full-width">
-                    <input
-                      matInput
-                      formControlName="content"
-                      (change)="onFieldUpdate('content')"
-                      placeholder="YouTube ID"
-                      required
-                    />
-                    <mat-error
-                      *ngIf="
-                        resourceForm.controls['content'].hasError('required')
-                      "
-                    >
-                      YouTubeId is required.
-                    </mat-error>
-                    <mat-error
-                      *ngIf="
-                        resourceForm.controls['content'].hasError('pattern')
-                      "
-                    >
-                      Must be valid 11 character unique youtube video ID i.e.
-                      ZCMGzo1D2_M
-                    </mat-error>
-                  </mat-form-field>
-                </ng-template>
-              </mat-tab>
-              <mat-tab label="View">
-                <ng-template matTabContent>
-                  <app-youtubeviewer
-                    [youtubeId]="resource.content"
-                  ></app-youtubeviewer
-                ></ng-template>
-              </mat-tab>
-            </mat-tab-group>
-          </ng-container>
-
-          <ng-container
-            *ngIf="
-              resource.resourceType == ResourceType.file ||
-              resource.resourceType == ResourceType.image
-            "
-          >
-            <div *ngIf="crudAction != Crud.Create" class="file-name">
-              File Name:
-              <a [href]="downloadUrl$ | async" target="_blank">{{
-                resource.content
-              }}</a>
-            </div>
-            <div
-              *ngIf="crudAction == Crud.Create && fileToUpload"
-              class="file-name"
-            >
-              File To Upload: {{ fileToUpload.name }}
-            </div>
-            <!-- Use hidden file input button to have more control over button formatting -->
-            <button mat-raised-button (click)="fileUpload.click()">
-              {{ crudAction == Crud.Create ? "Select File" : "Update File" }}
-            </button>
-            <input
-              type="file"
-              #fileUpload
-              hidden="true"
-              (change)="onUploadFile($event)"
-              multiple="false"
-              [attr.accept]="
-                resource.resourceType == ResourceType.image ? 'image/*' : null
-              "
-            />
-          </ng-container>
-
-          <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
-            <mat-tab-group>
-              <mat-tab label="Edit">
-                <mat-form-field class="full-width">
-                  <textarea
-                    matInput
-                    matAutosizeMinRows="10"
-                    matAutosizeMaxRows="15"
-                    matTextareaAutosize
-                    formControlName="content"
-                    (change)="onFieldUpdate('content')"
-                    placeholder="MarkDown"
-                    required
-                  ></textarea>
-                  <mat-hint>Enter text using Markdown syntax</mat-hint>
-                  <mat-error
-                    *ngIf="
-                      resourceForm.controls['content'].hasError('required')
-                    "
-                  >
-                    Markdown text is required.
-                  </mat-error>
-                  <mat-error
-                    *ngIf="
-                      resourceForm.controls['content'].hasError('maxlength')
-                    "
-                  >
-                    Markdown must be no more than 10,000 characters long.
-                  </mat-error>
-                </mat-form-field>
-              </mat-tab>
-              <mat-tab label="View">
-                <div [innerHTML]="resource.content | marked"></div>
-              </mat-tab>
-            </mat-tab-group>
-          </ng-container>
-        </div>
+      <div
+        class="update-field"
+        *ngIf="isUpdater()"
+        matTooltip="Update Owner"
+        (click)="onUpdateOwner()"
+      >
+        {{
+          resource.owner && resource.owner.path
+            ? (resource.owner | doc | async)?.displayName
+            : "[...]"
+        }}
       </div>
+      <div *ngIf="!isUpdater()">
+        {{ (resource.owner | doc | async)?.displayName }}
+      </div>
+
+      <div class="row-prompt">Reviewer</div>
+      <div
+        class="update-field"
+        *ngIf="isUpdater()"
+        matTooltip="Update Reviewer"
+        (click)="onUpdateReviewer()"
+      >
+        {{
+          resource.reviewer && resource.reviewer.path
+            ? (resource.reviewer | doc | async)?.displayName
+            : "[...]"
+        }}
+      </div>
+      <div *ngIf="!isUpdater()">
+        {{ (resource.reviewer | doc | async)?.displayName }}
+      </div>
+
+      <div class="row-prompt">Team</div>
+      <div
+        class="update-field"
+        *ngIf="isUpdater()"
+        matTooltip="Update Team"
+        (click)="onUpdateTeam()"
+      >
+        {{
+          resource.team && resource.team.path
+            ? (resource.team | doc | async)?.name
+            : "[...]"
+        }}
+      </div>
+      <div *ngIf="!isUpdater()">
+        {{ (resource.team | doc | async)?.name }}
+      </div>
+
+      <div class="row-prompt">Category</div>
+      <div
+        class="update-field"
+        *ngIf="isUpdater()"
+        matTooltip="Update Category"
+        (click)="onUpdateCategory()"
+      >
+        {{
+          resource.category && resource.category.path
+            ? (resource.category | doc | async)?.name
+            : "[...]"
+        }}
+      </div>
+      <div *ngIf="!isUpdater()">
+        {{ (resource.category | doc | async)?.name }}
+      </div>
+
+      <div class="row-prompt">Status</div>
+      <div>
+        {{ ResourceStatus[resource?.status] | titlecase }}
+      </div>
+
+      <ng-container *ngIf="resource.supersedes | doc | async">
+        <div class="row-prompt">Supersedes</div>
+        <div>
+          <a
+            routerLink="/redirect/resource/{{
+              (resource.supersedes | doc | async)?.id
+            }}"
+          >
+            {{ (resource.supersedes | doc | async)?.name }}</a
+          >
+        </div>
+      </ng-container>
+
+      <!-- Edit Resource type and Content -->
+
+      <div class="row-prompt">Resource Content</div>
+      <div class="rb-group">
+        <mat-radio-group
+          formControlName="resourceType"
+          (change)="
+            onFieldUpdate('resourceType'); setContentValidators($event.value)
+          "
+        >
+          <mat-radio-button
+            *ngFor="let info of ResourceTypeInfo"
+            [value]="info.resourceType"
+            >{{ info.name }}</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+      <mat-icon (click)="contentViewer()">preview</mat-icon>
+
+      <ng-container *ngIf="resource.resourceType == ResourceType.url">
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            formControlName="content"
+            (change)="onFieldUpdate('content')"
+            placeholder="URL"
+            required
+          />
+          <mat-error
+            *ngIf="resourceForm.controls['content'].hasError('required')"
+          >
+            URL is required.
+          </mat-error>
+          <mat-error
+            *ngIf="resourceForm.controls['content'].hasError('pattern')"
+          >
+            Must be a valid URL.
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            formControlName="content"
+            (change)="onFieldUpdate('content')"
+            placeholder="YouTube ID"
+            required
+          />
+          <mat-error
+            *ngIf="resourceForm.controls['content'].hasError('required')"
+          >
+            YouTubeId is required.
+          </mat-error>
+          <mat-error
+            *ngIf="resourceForm.controls['content'].hasError('pattern')"
+          >
+            Must be valid 11 character unique youtube video ID i.e. ZCMGzo1D2_M
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container
+        *ngIf="
+          resource.resourceType == ResourceType.file ||
+          resource.resourceType == ResourceType.image
+        "
+      >
+        <div *ngIf="crudAction != Crud.Create" class="file-name">
+          File Name:
+          <a [href]="downloadUrl$ | async" target="_blank">{{
+            resource.content
+          }}</a>
+        </div>
+        <div
+          *ngIf="crudAction == Crud.Create && fileToUpload"
+          class="file-name"
+        >
+          File To Upload: {{ fileToUpload.name }}
+        </div>
+        <!-- Use hidden file input button to have more control over button formatting -->
+        <button mat-raised-button (click)="fileUpload.click()">
+          {{ crudAction == Crud.Create ? "Select File" : "Update File" }}
+        </button>
+        <input
+          type="file"
+          #fileUpload
+          hidden="true"
+          (change)="onUploadFile($event)"
+          multiple="false"
+          [attr.accept]="
+            resource.resourceType == ResourceType.image ? 'image/*' : null
+          "
+        />
+      </ng-container>
+
+      <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
+        <mat-form-field class="full-width">
+          <textarea
+            matInput
+            matAutosizeMinRows="10"
+            matAutosizeMaxRows="15"
+            matTextareaAutosize
+            formControlName="content"
+            (change)="onFieldUpdate('content')"
+            placeholder="MarkDown"
+            required
+          ></textarea>
+          <mat-hint>Enter text using Markdown syntax</mat-hint>
+          <mat-error
+            *ngIf="resourceForm.controls['content'].hasError('required')"
+          >
+            Markdown text is required.
+          </mat-error>
+          <mat-error
+            *ngIf="resourceForm.controls['content'].hasError('maxlength')"
+          >
+            Markdown must be no more than 10,000 characters long.
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
     </fieldset>
 
     <button

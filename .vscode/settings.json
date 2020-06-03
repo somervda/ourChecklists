@@ -16,6 +16,7 @@
     "Notauthorized",
     "Paginator",
     "Realtime",
+    "Resourcecontentviewdialog",
     "Resourcefinderdialog",
     "Resourceviewdialog",
     "Snackbar",

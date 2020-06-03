@@ -1,0 +1,38 @@
+<app-subheading
+  [prompt]="name"
+  [iconActions]="[
+    {
+      icon: 'close',
+      toolTip: 'Close',
+      emitValue: 'close'
+    }
+  ]"
+  (iconAction)="iconAction($event)"
+></app-subheading>
+<br />
+
+<ng-container *ngIf="resourceType == ResourceType.url">
+  URL : {{ content }}
+
+  <br /><br />
+  <div>{{ description }}</div>
+</ng-container>
+
+<ng-container *ngIf="resourceType == ResourceType.youtubeId">
+  <app-youtubeviewer [youtubeId]="content"></app-youtubeviewer>
+  <div>{{ description }}</div>
+</ng-container>
+
+<ng-container *ngIf="resourceType == ResourceType.file">
+  File Name : {{ content }} <br /><br />
+
+  <div>{{ description }}</div>
+</ng-container>
+<ng-container *ngIf="resourceType == ResourceType.image">
+  <div>{{ content }}</div>
+  <div>{{ description }}</div>
+</ng-container>
+
+<ng-container *ngIf="resourceType == ResourceType.markdown">
+  <div [innerHTML]="content | marked"></div>
+</ng-container>
