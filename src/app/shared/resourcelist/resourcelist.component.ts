@@ -9,6 +9,7 @@ import {
 } from "../../models/resource.model";
 import { ResourceviewdialogComponent } from "src/app/dialogs/resourceviewdialog/resourceviewdialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-resourcelist",
@@ -21,7 +22,7 @@ export class ResourcelistComponent implements OnInit {
   resourceTypeInfo = ResourceTypeInfo;
   ResourceStatus = ResourceStatus;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private helper: HelperService) {}
 
   ngOnInit() {}
 
@@ -34,7 +35,7 @@ export class ResourcelistComponent implements OnInit {
       width: "95%",
       maxWidth: "800px",
       maxHeight: "90%",
-      data: { resource: resource },
+      data: { resource: this.helper.docRef(`resources/${resource.id}`) },
       autoFocus: false,
     });
   }

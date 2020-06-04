@@ -28,6 +28,15 @@ import { ResourceviewdialogComponent } from "../dialogs/resourceviewdialog/resou
   templateUrl: "./resource.component.html",
   styleUrls: ["./resource.component.scss"],
 })
+
+/**
+ * Does most of th updating of resources
+ * Resources are stored and displayed in different ways depending on ResourceType:
+ * url - The url is stored as a string in the content property
+ * youtubeId - Is the 11 character id given by youtube to any videos hosted by youtube. The ID string is stored in the content property
+ * file/image - The actual file is stored in firebase storage in the resources/<resources.id>/<file Name> and the file name is stored in the content property
+ * markdown - the markdown text is stored in the content property.
+ */
 export class ResourceComponent implements OnInit {
   resource: Resource;
   crudAction: Crud;
@@ -152,6 +161,11 @@ export class ResourceComponent implements OnInit {
           this.updateContentValidator(resourceType);
           // Reset content value if changing content type
           this.resourceService.fieldUpdate(this.resource.id, "content", "");
+          this.resourceService.fieldUpdate(
+            this.resource.id,
+            "resourceType",
+            resourceType
+          );
         } else {
           this.resourceForm.controls["resourceType"].setValue(
             this.resource.resourceType
@@ -191,6 +205,7 @@ export class ResourceComponent implements OnInit {
         break;
     }
     this.resourceForm.controls["content"].setValue("");
+    this.resource.content = "";
     this.resource.resourceType = resourceType;
     this.resourceForm.controls["content"].updateValueAndValidity();
   }

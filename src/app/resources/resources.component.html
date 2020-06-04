@@ -164,12 +164,11 @@
   <button
     mat-raised-button
     routerLink="/resource/create"
-    style="float: right; margin-bottom: 10px;"
+    style="float: right; margin-bottom: 5px;"
   >
     <i class="material-icons-outlined">add</i>&nbsp;
     <span>Create a New Resource</span>
   </button>
-  <br />
 
   <table mat-table [dataSource]="resources$ | async" class="mat-elevation-z8">
     <ng-container matColumnDef="name" sticky>

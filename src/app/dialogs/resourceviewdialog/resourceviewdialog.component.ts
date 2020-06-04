@@ -11,6 +11,11 @@ import { first } from "rxjs/operators";
   templateUrl: "./resourceviewdialog.component.html",
   styleUrls: ["./resourceviewdialog.component.scss"],
 })
+
+/**
+ * Displayed the resource content based on a DocumentReference to the resource being
+ *
+ */
 export class ResourceviewdialogComponent implements OnInit {
   resource: Resource;
   ResourceType = ResourceType;
