@@ -24,6 +24,7 @@ export class ResourceviewdialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log("ResourceviewdialogComponent", this.data.resource);
     if (this.data.resource) {
       this.helper
         .getDocRef(this.data.resource)

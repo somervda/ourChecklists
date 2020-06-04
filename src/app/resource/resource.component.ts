@@ -21,6 +21,7 @@ import { HelperService } from "../services/helper.service";
 import { first } from "rxjs/operators";
 import { UserService } from "../services/user.service";
 import { ResourcecontentviewdialogComponent } from "../dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
+import { ResourceviewdialogComponent } from "../dialogs/resourceviewdialog/resourceviewdialog.component";
 
 @Component({
   selector: "app-resource",
@@ -477,12 +478,25 @@ export class ResourceComponent implements OnInit {
       content: this.resource.content,
       resourceType: this.resource.resourceType,
     };
-    console.log("contentViewer", data);
-    const dialogRef = this.dialog.open(ResourcecontentviewdialogComponent, {
-      width: "380px",
-      data: data,
-      autoFocus: false,
-    });
+    if (this.crudAction == Crud.Create) {
+      console.log("contentViewer", data);
+      const dialogRef = this.dialog.open(ResourcecontentviewdialogComponent, {
+        width: "95%",
+        maxWidth: "800px",
+        maxHeight: "90%",
+        data: data,
+        autoFocus: false,
+      });
+    } else {
+      console.log("resourceView", this.resource);
+      const dialogRef = this.dialog.open(ResourceviewdialogComponent, {
+        width: "95%",
+        maxWidth: "800px",
+        maxHeight: "90%",
+        data: { resource: this.helper.docRef(`resources/${this.resource.id}`) },
+        autoFocus: false,
+      });
+    }
   }
 
   ngOnDestroy() {

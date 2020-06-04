@@ -166,7 +166,16 @@
 
       <!-- Edit Resource type and Content -->
 
-      <div class="row-prompt">Resource Content</div>
+      <div class="row-prompt">
+        Content
+        <mat-icon
+          (click)="contentViewer()"
+          *ngIf="resourceForm.valid"
+          matTooltip="View resource content"
+          class="content-viewer"
+          >preview</mat-icon
+        >
+      </div>
       <div class="rb-group">
         <mat-radio-group
           formControlName="resourceType"
@@ -181,7 +190,6 @@
           >
         </mat-radio-group>
       </div>
-      <mat-icon (click)="contentViewer()">preview</mat-icon>
 
       <ng-container *ngIf="resource.resourceType == ResourceType.url">
         <mat-form-field class="full-width">
