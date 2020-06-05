@@ -11,6 +11,7 @@
 
 <div class="category-list">
   <div
+    class="list-item"
     *ngFor="let c of categories$ | async"
     [style.backgroundColor]="category?.id == c.id ? 'lightgrey' : 'white'"
     (click)="onCategorySelected(c.id)"

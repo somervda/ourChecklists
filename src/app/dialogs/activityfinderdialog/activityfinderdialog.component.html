@@ -1,6 +1,7 @@
 <div class="dialog-heading">Select Activity</div>
 <div class="activity-list">
   <div
+    class="list-item"
     *ngFor="let activity of activities$ | async"
     [style.backgroundColor]="
       activity.id == selectedActivity?.id ? 'lightgrey' : 'white'

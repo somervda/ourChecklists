@@ -10,6 +10,7 @@
 <div class="user-list">
   <div
     *ngFor="let user of users$ | async"
+    class="list-item"
     [style.backgroundColor]="
       user.uid == helper.getDocRefId(selectedUser) ? 'lightgrey' : 'white'
     "

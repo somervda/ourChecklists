@@ -11,6 +11,7 @@
 
 <div class="team-list">
   <div
+    class="list-item"
     *ngFor="let t of teams$ | async"
     [style.backgroundColor]="team?.id == t.id ? 'lightgrey' : 'white'"
     (click)="onTeamSelected(t.id)"
