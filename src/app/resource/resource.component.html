@@ -78,92 +78,103 @@
       <!-- **** Owner, Reviewer, Team, category and status info ***** -->
 
       <ng-container *ngIf="crudAction != Crud.Create">
-        <div class="row-prompt">Owner</div>
-
-        <div
-          class="update-field"
-          *ngIf="isUpdater()"
-          matTooltip="Update Owner"
-          (click)="onUpdateOwner()"
-        >
-          {{
-            resource.owner && resource.owner.path
-              ? "[" + (resource.owner | doc | async)?.displayName + "]"
-              : "[...]"
-          }}
-        </div>
-        <div *ngIf="!isUpdater()">
-          {{ (resource.owner | doc | async)?.displayName }}
-        </div>
-
-        <div class="row-prompt">Reviewer</div>
-        <div
-          class="update-field"
-          *ngIf="isUpdater()"
-          matTooltip="Update Reviewer"
-          (click)="onUpdateReviewer()"
-        >
-          {{
-            resource.reviewer && resource.reviewer.path
-              ? "[" + (resource.reviewer | doc | async)?.displayName + "]"
-              : "[...]"
-          }}
-        </div>
-        <div *ngIf="!isUpdater()">
-          {{ (resource.reviewer | doc | async)?.displayName }}
-        </div>
-
-        <div class="row-prompt">Team</div>
-        <div
-          class="update-field"
-          *ngIf="isUpdater()"
-          matTooltip="Update Team"
-          (click)="onUpdateTeam()"
-        >
-          {{
-            resource.team && resource.team.path
-              ? "[" + (resource.team | doc | async)?.name + "]"
-              : "[...]"
-          }}
-        </div>
-        <div *ngIf="!isUpdater()">
-          {{ (resource.team | doc | async)?.name }}
-        </div>
-
-        <div class="row-prompt">Category</div>
-        <div
-          class="update-field"
-          *ngIf="isUpdater()"
-          matTooltip="Update Category"
-          (click)="onUpdateCategory()"
-        >
-          {{
-            resource.category && resource.category.path
-              ? "[" + (resource.category | doc | async)?.name + "]"
-              : "[...]"
-          }}
-        </div>
-        <div *ngIf="!isUpdater()">
-          {{ (resource.category | doc | async)?.name }}
-        </div>
-
-        <div class="row-prompt">Status</div>
-        <div>
-          {{ ResourceStatus[resource?.status] | titlecase }}
-        </div>
-
-        <ng-container *ngIf="resource.supersedes | doc | async">
-          <div class="row-prompt">Supersedes</div>
+        <div class="gridwrapper">
           <div>
-            <a
-              routerLink="/redirect/resource/{{
-                (resource.supersedes | doc | async)?.id
-              }}"
+            <div class="row-prompt">Owner</div>
+
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
+              matTooltip="Update Owner"
+              (click)="onUpdateOwner()"
             >
-              {{ (resource.supersedes | doc | async)?.name }}</a
-            >
+              {{
+                resource.owner && resource.owner.path
+                  ? "[" + (resource.owner | doc | async)?.displayName + "]"
+                  : "[...]"
+              }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ (resource.owner | doc | async)?.displayName }}
+            </div>
           </div>
-        </ng-container>
+
+          <div>
+            <div class="row-prompt">Reviewer</div>
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
+              matTooltip="Update Reviewer"
+              (click)="onUpdateReviewer()"
+            >
+              {{
+                resource.reviewer && resource.reviewer.path
+                  ? "[" + (resource.reviewer | doc | async)?.displayName + "]"
+                  : "[...]"
+              }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ (resource.reviewer | doc | async)?.displayName }}
+            </div>
+          </div>
+          <div>
+            <div class="row-prompt">Team</div>
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
+              matTooltip="Update Team"
+              (click)="onUpdateTeam()"
+            >
+              {{
+                resource.team && resource.team.path
+                  ? "[" + (resource.team | doc | async)?.name + "]"
+                  : "[...]"
+              }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ (resource.team | doc | async)?.name }}
+            </div>
+          </div>
+
+          <div>
+            <div class="row-prompt">Category</div>
+            <div
+              class="update-field"
+              *ngIf="isUpdater()"
+              matTooltip="Update Category"
+              (click)="onUpdateCategory()"
+            >
+              {{
+                resource.category && resource.category.path
+                  ? "[" + (resource.category | doc | async)?.name + "]"
+                  : "[...]"
+              }}
+            </div>
+            <div *ngIf="!isUpdater()">
+              {{ (resource.category | doc | async)?.name }}
+            </div>
+          </div>
+
+          <div>
+            <div class="row-prompt">Status</div>
+            <div>
+              {{ ResourceStatus[resource?.status] | titlecase }}
+            </div>
+
+            <ng-container *ngIf="resource.supersedes | doc | async">
+              <div class="row-prompt">Supersedes</div>
+              <div>
+                <a
+                  routerLink="/redirect/resource/{{
+                    (resource.supersedes | doc | async)?.id
+                  }}"
+                >
+                  {{ (resource.supersedes | doc | async)?.name }}</a
+                >
+              </div>
+            </ng-container>
+          </div>
+        </div>
       </ng-container>
       <!-- Edit Resource type and Content -->
 

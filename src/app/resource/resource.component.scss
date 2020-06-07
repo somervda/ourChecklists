@@ -23,21 +23,8 @@ mat-radio-button {
 }
 
 .rb-group {
-  // border-bottom-style: solid;
-  // border-color: black;
-  // border-bottom-width: thin;
   margin-bottom: 5px;
   margin-top: 10px;
-}
-
-.card-header {
-  width: 100%;
-  background-color: whitesmoke;
-  font-weight: 600;
-  margin-bottom: 5px;
-  white-space: nowrap;
-  padding-left: 0px;
-  border-style: none;
 }
 
 .spinner_container {
@@ -57,46 +44,14 @@ mat-radio-button {
   margin-bottom: 7px;
 }
 
-// .type-container {
-//   padding: 5px;
-//   border-width: thin;
-//   border-style: solid;
-//   border-color: whitesmoke;
-//   border-radius: 3px;
-// }
-
-// table {
-//   width: auto;
-//   margin-bottom: 7px;
-// }
-
-// td {
-//   padding: 3px;
-//   vertical-align: text-top;
-// }
-
 .row-prompt {
   font-weight: 600;
 }
 
-.update-field-icon {
-  margin: 10px;
-  border-style: solid;
-  border-color: white;
-  border-width: thin;
-  border-radius: 2px;
-}
-.update-field-icon:hover {
-  border-style: solid;
-  border-color: lightgrey;
-  border-width: thin;
-  border-radius: 2px;
-}
-
 .update-field {
-  // color: #007bff;
   cursor: pointer;
 }
+
 .update-field:hover {
   text-decoration: underline;
 }
@@ -116,6 +71,11 @@ mat-radio-button {
   font-weight: 400;
 }
 
-// .content-card {
-//   min-height: 200px;
-// }
+// Create a 2 column layout when screen is more than 500px wide
+@media (min-width: 500px) {
+  .gridwrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+  }
+}
