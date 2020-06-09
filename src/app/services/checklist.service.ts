@@ -69,7 +69,32 @@ export class ChecklistService {
     // console.log( "checklist findByUid", myUserRef,  pageSize  );
     return this.afs
       .collection("checklists", (ref) =>
-        ref.where("assignee", "array-contains", myUserRef).limit(pageSize)
+        ref
+          .where("assignee", "array-contains", myUserRef)
+          .where("status", "<", ChecklistStatus.Deleted)
+          .orderBy("status", "asc")
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Checklist>(snaps);
+        })
+      );
+  }
+
+  findMyChecklistsByStatus(
+    status: ChecklistStatus,
+    pageSize: number
+  ): Observable<Checklist[]> {
+    const myUserRef = this.helper.docRef(`users/${this.auth.currentUser.uid}`);
+    // console.log( "checklist findByUid", myUserRef,  pageSize  );
+    return this.afs
+      .collection("checklists", (ref) =>
+        ref
+          .where("assignee", "array-contains", myUserRef)
+          .where("status", "==", status)
+          .limit(pageSize)
       )
       .snapshotChanges()
       .pipe(
@@ -84,7 +109,10 @@ export class ChecklistService {
     console.log("checklist findMyTeamChecklists", myTeams, pageSize);
     return this.afs
       .collection("checklists", (ref) =>
-        ref.where("team.id", "in", myTeams).limit(pageSize)
+        ref
+          .where("team.id", "in", myTeams)
+          .where("status", "<", ChecklistStatus.Deleted)
+          .limit(pageSize)
       )
       .snapshotChanges()
       .pipe(
@@ -98,7 +126,10 @@ export class ChecklistService {
     console.log("checklist findByTeam", id, pageSize);
     return this.afs
       .collection("checklists", (ref) =>
-        ref.where("team.id", "==", id).limit(pageSize)
+        ref
+          .where("team.id", "==", id)
+          .where("status", "<", ChecklistStatus.Deleted)
+          .limit(pageSize)
       )
       .snapshotChanges()
       .pipe(

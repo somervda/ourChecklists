@@ -55,6 +55,20 @@
           "order": "ASCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "checklists",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "assignee",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []

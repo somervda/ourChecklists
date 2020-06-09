@@ -23,11 +23,7 @@ export class MychecklistsComponent implements OnInit {
       .toPromise()
       .then((u) => {
         // Make sure we have the user resolved before getting their checklists
-        this.checklists$ = this.checklistService.findMyChecklists(100).pipe(
-          map((c) => {
-            return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
-          })
-        );
+        this.checklists$ = this.checklistService.findMyChecklists(100);
       });
   }
 }
