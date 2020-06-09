@@ -64,6 +64,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     // console.log("Firebase UI result:", result);
     this.auth.updateUserData(result);
     this.helper.snackbar("Logon successful for " + result.user.email, 5000);
-    this.helper.redirect("/");
+    this.helper.redirect("/mychecklists");
   }
 }
