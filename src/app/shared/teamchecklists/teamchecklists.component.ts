@@ -4,6 +4,7 @@ import { Checklist, ChecklistStatus } from "../../models/checklist.model";
 import { ChecklistService } from "../../services/checklist.service";
 import { Team } from "../../models/team.model";
 import { map } from "rxjs/operators";
+import { HelperService } from "src/app/services/helper.service";
 
 @Component({
   selector: "app-teamchecklists",
@@ -11,17 +12,19 @@ import { map } from "rxjs/operators";
   styleUrls: ["./teamchecklists.component.scss"],
 })
 export class TeamchecklistsComponent implements OnInit {
-  @Input() teamId: string;
+  @Input() team: Team;
   checklists$: Observable<Checklist[]>;
   team$: Observable<Team>;
 
-  constructor(private checklistService: ChecklistService) {}
+  constructor(
+    private checklistService: ChecklistService,
+    private helper: HelperService
+  ) {}
 
   ngOnInit() {
-    this.checklists$ = this.checklistService.findByTeam(this.teamId, 100).pipe(
-      map((c) => {
-        return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
-      })
+    this.checklists$ = this.checklistService.findByTeam(
+      this.helper.docRef(`teams/${this.team.id}`),
+      100
     );
   }
 }

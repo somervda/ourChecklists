@@ -104,30 +104,33 @@ export class ChecklistService {
       );
   }
 
-  findMyTeamChecklists(pageSize: number): Observable<Checklist[]> {
-    const myTeams: string[] = this.auth.currentUser.managerOfTeams;
-    console.log("checklist findMyTeamChecklists", myTeams, pageSize);
-    return this.afs
-      .collection("checklists", (ref) =>
-        ref
-          .where("team.id", "in", myTeams)
-          .where("status", "<", ChecklistStatus.Deleted)
-          .limit(pageSize)
-      )
-      .snapshotChanges()
-      .pipe(
-        map((snaps) => {
-          return convertSnaps<Checklist>(snaps);
-        })
-      );
-  }
+  // findMyTeamChecklists(pageSize: number): Observable<Checklist[]> {
+  //   const myTeams: string[] = this.auth.currentUser.managerOfTeams;
+  //   console.log("checklist findMyTeamChecklists", myTeams, pageSize);
+  //   return this.afs
+  //     .collection("checklists", (ref) =>
+  //       ref
+  //         .where("team.id", "in", myTeams)
+  //         .where("status", "<", ChecklistStatus.Deleted)
+  //         .limit(pageSize)
+  //     )
+  //     .snapshotChanges()
+  //     .pipe(
+  //       map((snaps) => {
+  //         return convertSnaps<Checklist>(snaps);
+  //       })
+  //     );
+  // }
 
-  findByTeam(id: string, pageSize: number): Observable<Checklist[]> {
-    console.log("checklist findByTeam", id, pageSize);
+  findByTeam(
+    teamRef: DocumentReference,
+    pageSize: number
+  ): Observable<Checklist[]> {
+    console.log("checklist findByTeam", teamRef, pageSize);
     return this.afs
       .collection("checklists", (ref) =>
         ref
-          .where("team.id", "==", id)
+          .where("team", "==", teamRef)
           .where("status", "<", ChecklistStatus.Deleted)
           .limit(pageSize)
       )

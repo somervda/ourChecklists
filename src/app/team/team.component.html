@@ -80,7 +80,7 @@
     <br />
     <div class="prompt">Checklists</div>
     <app-teamchecklists
-      [teamId]="team.id"
+      [team]="team"
       *ngIf="crudAction != Crud.Create"
       [disabled]="crudAction == Crud.Delete"
     ></app-teamchecklists>

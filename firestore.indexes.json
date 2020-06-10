@@ -69,6 +69,20 @@
           "order": "ASCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "checklists",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "team",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []
