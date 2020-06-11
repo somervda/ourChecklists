@@ -96,6 +96,7 @@ import { TemplateComponent } from "./template/template.component";
 import { TemplatelistComponent } from "./shared/templatelist/templatelist.component";
 import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from './dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component';
+import { ChecklistsearchComponent } from './checklistsearch/checklistsearch.component';
 
 @NgModule({
   declarations: [
@@ -155,6 +156,7 @@ import { ResourcecontentviewdialogComponent } from './dialogs/resourcecontentvie
     TemplatelistComponent,
     DocPipe,
     ResourcecontentviewdialogComponent,
+    ChecklistsearchComponent,
   ],
   imports: [
     BrowserModule,

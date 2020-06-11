@@ -1,9 +1,9 @@
 import { HelperService } from "./../../services/helper.service";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
 import { Checklist, ChecklistStatus } from "../../models/checklist.model";
 import { AuthService } from "../../services/auth.service";
-import { first } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmdialogComponent } from "src/app/dialogs/confirmdialog/confirmdialog.component";
 import { ChecklistService } from "src/app/services/checklist.service";
@@ -16,6 +16,9 @@ import { ChecklistService } from "src/app/services/checklist.service";
 export class ChecklistlistComponent implements OnInit {
   @Input() checklists$: Observable<Checklist[]>;
   @Input() hideCreate: boolean;
+  @Input() showCompletedOption: boolean;
+  @Output() showCompletedChange = new EventEmitter();
+  includeCompleted = false;
   displayedColumns: string[] = ["name", "status", "description", "delete"];
   isAdmin: Boolean;
   uid: String;
@@ -35,6 +38,11 @@ export class ChecklistlistComponent implements OnInit {
         this.isAdmin = u.isAdmin;
         this.uid = u.uid;
       });
+  }
+
+  toggleIncludeComplete() {
+    console.log("toggleIncludeComplete", this.includeCompleted);
+    this.showCompletedChange.emit(this.includeCompleted);
   }
 
   getChecklistLinkAction(

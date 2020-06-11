@@ -64,14 +64,23 @@ export class ChecklistService {
       );
   }
 
-  findMyChecklists(pageSize: number): Observable<Checklist[]> {
+  /**
+   * Get checklists for which the user is an assignee
+   * @param maxStatus The maximum status to display , for filtering Deleted or Completed status
+   * @param pageSize Maximum number of rows to retrieve
+   */
+  findMyChecklists(
+    maxStatus: ChecklistStatus,
+    pageSize: number
+  ): Observable<Checklist[]> {
     const myUserRef = this.helper.docRef(`users/${this.auth.currentUser.uid}`);
     // console.log( "checklist findByUid", myUserRef,  pageSize  );
     return this.afs
       .collection("checklists", (ref) =>
         ref
           .where("assignee", "array-contains", myUserRef)
-          .where("status", "<", ChecklistStatus.Deleted)
+          .where("status", "<=", maxStatus)
+          .where("isTemplate", "==", false)
           .orderBy("status", "asc")
           .limit(pageSize)
       )
@@ -94,6 +103,7 @@ export class ChecklistService {
         ref
           .where("assignee", "array-contains", myUserRef)
           .where("status", "==", status)
+          .where("isTemplate", "==", false)
           .limit(pageSize)
       )
       .snapshotChanges()
@@ -103,24 +113,6 @@ export class ChecklistService {
         })
       );
   }
-
-  // findMyTeamChecklists(pageSize: number): Observable<Checklist[]> {
-  //   const myTeams: string[] = this.auth.currentUser.managerOfTeams;
-  //   console.log("checklist findMyTeamChecklists", myTeams, pageSize);
-  //   return this.afs
-  //     .collection("checklists", (ref) =>
-  //       ref
-  //         .where("team.id", "in", myTeams)
-  //         .where("status", "<", ChecklistStatus.Deleted)
-  //         .limit(pageSize)
-  //     )
-  //     .snapshotChanges()
-  //     .pipe(
-  //       map((snaps) => {
-  //         return convertSnaps<Checklist>(snaps);
-  //       })
-  //     );
-  // }
 
   findByTeam(
     teamRef: DocumentReference,
@@ -132,6 +124,7 @@ export class ChecklistService {
         ref
           .where("team", "==", teamRef)
           .where("status", "<", ChecklistStatus.Deleted)
+          .where("isTemplate", "==", false)
           .limit(pageSize)
       )
       .snapshotChanges()

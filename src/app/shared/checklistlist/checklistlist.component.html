@@ -1,3 +1,12 @@
+<ng-container *ngIf="showCompletedOption">
+  <mat-slide-toggle
+    [(ngModel)]="includeCompleted"
+    (change)="toggleIncludeComplete()"
+  >
+    Show Completed?
+  </mat-slide-toggle>
+</ng-container>
+
 <button
   mat-raised-button
   routerLink="/checklistdesign/create"

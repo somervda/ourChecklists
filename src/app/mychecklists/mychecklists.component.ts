@@ -23,7 +23,25 @@ export class MychecklistsComponent implements OnInit {
       .toPromise()
       .then((u) => {
         // Make sure we have the user resolved before getting their checklists
-        this.checklists$ = this.checklistService.findMyChecklists(100);
+        this.checklists$ = this.checklistService.findMyChecklists(
+          ChecklistStatus.Done,
+          100
+        );
       });
+  }
+
+  showCompletedChange(event) {
+    console.log("showCompletedChange", event);
+    if (event) {
+      this.checklists$ = this.checklistService.findMyChecklists(
+        ChecklistStatus.Complete,
+        100
+      );
+    } else {
+      this.checklists$ = this.checklistService.findMyChecklists(
+        ChecklistStatus.Done,
+        100
+      );
+    }
   }
 }

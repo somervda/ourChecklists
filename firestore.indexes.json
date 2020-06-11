@@ -65,6 +65,10 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "isTemplate",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "status",
           "order": "ASCENDING"
         }
@@ -76,6 +80,10 @@
       "fields": [
         {
           "fieldPath": "team",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isTemplate",
           "order": "ASCENDING"
         },
         {
