@@ -155,43 +155,6 @@ export class TeamComponent implements OnInit, OnDestroy {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  // disableSelectedUpdatesIfProbeIsInUse(probeId: string) {
-  //   // See if any measurements have been taken with the probe
-  //   // or if the probe has been assigned to a device
-
-  //   console.log("IsProbeUsed", probeId);
-  //   let usedOnDevice = "";
-
-  //   if (this.teamSubscription$$) this.teamSubscription$$.unsubscribe();
-
-  //   this.devices$$ = this.devices$.subscribe((devices) => {
-  //     devices.map((device) => {
-  //       const probeItemIndex = device.probeList.findIndex(
-  //         (p) => p.id == probeId
-  //       );
-
-  //       if (probeItemIndex != -1) {
-  //         this.probeForm.get("target").disable();
-  //         this.probeForm.get("type").disable();
-  //         usedOnDevice += device.id + " ";
-  //       }
-  //     });
-
-  //     if (usedOnDevice) {
-  //       this.snackBar.open(
-  //         "Probe's target and type properties can not be updated because the probe is in use on device(s): " +
-  //           usedOnDevice +
-  //           "  Recommendation: Delete and create another probe rather than change it.",
-  //         "",
-  //         {
-  //           duration: 7000,
-  //         }
-  //       );
-  //     }
-  //   });
-
-  // }
-
   onFieldUpdate(fieldName: string, toType?: string) {
     if (
       this.teamForm.get(fieldName).valid &&

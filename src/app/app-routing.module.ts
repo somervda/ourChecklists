@@ -50,8 +50,6 @@ const routes: Routes = [
   {
     path: "mychecklists",
     component: MychecklistsComponent,
-    canActivate: [permissionGuard],
-    data: { permissions: ["isActivated"] },
   },
   {
     path: "checklistdesign/create",
