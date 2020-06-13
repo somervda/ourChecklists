@@ -94,19 +94,66 @@ export class TeamService {
       );
   }
 
-  findMyMemberManagerOfTeams(): Observable<Team[]> {
-    console.log("team findMyMemberManagerOfTeams");
+  findMyReviewerOfTeams(pageSize: number): Observable<Team[]> {
+    console.log(
+      "checklist findMyReviewerOfTeams",
+      this.auth.currentUser.reviewerOfTeams,
+      pageSize
+    );
+    if (
+      !this.auth.currentUser.reviewerOfTeams ||
+      this.auth.currentUser.reviewerOfTeams.length == 0
+    ) {
+      return of<Team[]>([]);
+    }
+    const myTeams: string[] = this.auth.currentUser.reviewerOfTeams;
+    return this.afs
+      .collection("teams", (ref) =>
+        ref
+          .where(firebase.firestore.FieldPath.documentId(), "in", myTeams)
+          .limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Team>(snaps);
+        })
+      );
+  }
 
-    const teamMembers$ = this.findMyMemberOfTeams(10);
+  /**
+   * Returns all teams were the users might be a member, manager or reviewer. Parameters are used to include
+   * the different collections of team relationships
+   * @param member if true result will include teams were the user is a member
+   * @param manager if true result will include teams were the user is a manager
+   * @param reviewer if true result will include teams were the user is a reviewer
+   */
+  findMyMemberManagerReviewerOfTeams(
+    member: boolean,
+    manager: boolean,
+    reviewer: boolean
+  ): Observable<Team[]> {
+    console.log("team findMyMemberManagerReviewerOfTeams");
+    // Get individual observables of each team relationship, return an empty observable if the particular
+    // relationship is not to be included. Max of 10 teams for each relationship based on a restriction
+    // placed on user arrays (only 10 team allowed in each array)
 
-    const teamManagers$ = this.findMyManagerOfTeams(10);
+    const teamMembers$ = member ? this.findMyMemberOfTeams(10) : of<Team[]>([]);
+    const teamManagers$ = manager
+      ? this.findMyManagerOfTeams(10)
+      : of<Team[]>([]);
+    const teamReviewer$ = reviewer
+      ? this.findMyReviewerOfTeams(10)
+      : of<Team[]>([]);
 
-    return combineLatest([teamMembers$, teamManagers$]).pipe(
-      map(([members, managers]) => {
-        console.log("members,managers", members, managers);
+    return combineLatest([teamMembers$, teamManagers$, teamReviewer$]).pipe(
+      map(([members, managers, reviewers]) => {
+        console.log("members,managers,reviewers", members, managers, reviewers);
         // return members.concat(managers);
         // Use spread and Set to return only unique values
-        const mergedTeams = [...new Set([...members, ...managers])];
+        const mergedTeams = [
+          ...new Set([...members, ...managers, ...reviewers]),
+        ];
         return mergedTeams.sort((a, b) => {
           var x = a.name.toLowerCase();
           var y = b.name.toLowerCase();

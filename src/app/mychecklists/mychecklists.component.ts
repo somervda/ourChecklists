@@ -17,6 +17,7 @@ export class MychecklistsComponent implements OnInit {
     private checklistService: ChecklistService,
     private auth: AuthService
   ) {}
+
   ngOnInit() {
     this.auth.user$
       .pipe(first())

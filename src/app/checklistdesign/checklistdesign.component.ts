@@ -26,7 +26,8 @@ import { ChecklistitemService } from "../services/checklistitem.service";
 })
 export class ChecklistdesignComponent implements OnInit, OnDestroy {
   checklist: Checklist;
-  crudAction: Crud;
+  // Default crudAction to create to stop initial page load trying to look for a checklist.id
+  crudAction: Crud = Crud.Create;
   // Declare an instance of crud enum to use for checking crudAction value
   Crud = Crud;
 
@@ -59,7 +60,12 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     if (user.isAdmin) {
       this.myteams$ = this.teamService.findAll(100);
     } else {
-      this.myteams$ = this.teamService.findMyMemberManagerOfTeams();
+      // Can assign to a team the user is a manager or member but not a reviewer
+      this.myteams$ = this.teamService.findMyMemberManagerReviewerOfTeams(
+        true,
+        true,
+        false
+      );
     }
     this.categories$ = this.categoryService.findAll(100);
     this.crudAction = Crud.Update;

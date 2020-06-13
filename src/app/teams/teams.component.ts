@@ -31,20 +31,30 @@ export class TeamsComponent implements OnInit {
     }
     // get a observable of all teams then use a pipe/map
     // to filter on just what the user is allowed to see
-    this.teams$ = this.teamservice.findAll(100).pipe(
-      map((teams) => {
-        // Admins can see all teams
-        if (this.auth.currentUser && user.isAdmin) {
-          return teams;
-        }
-        return teams.filter(
-          (team) =>
-            // otherwise people only see teams in their teamLists
-            (user.memberOfTeams && user.memberOfTeams.includes(team.id)) ||
-            (user.managerOfTeams && user.managerOfTeams.includes(team.id)) ||
-            (user.reviewerOfTeams && user.reviewerOfTeams.includes(team.id))
-        );
-      })
-    );
+
+    if (user.isAdmin) {
+      this.teams$ = this.teamservice.findAll(100);
+    } else {
+      this.teams$ = this.teamservice.findMyMemberManagerReviewerOfTeams(
+        true,
+        true,
+        true
+      );
+    }
+    // this.teams$ = this.teamservice.findAll(100).pipe(
+    //   map((teams) => {
+    //     // Admins can see all teams
+    //     if (this.auth.currentUser && user.isAdmin) {
+    //       return teams;
+    //     }
+    //     return teams.filter(
+    //       (team) =>
+    //         // otherwise people only see teams in their teamLists
+    //         (user.memberOfTeams && user.memberOfTeams.includes(team.id)) ||
+    //         (user.managerOfTeams && user.managerOfTeams.includes(team.id)) ||
+    //         (user.reviewerOfTeams && user.reviewerOfTeams.includes(team.id))
+    //     );
+    //   })
+    // );
   }
 }
