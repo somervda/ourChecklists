@@ -116,6 +116,7 @@ export class ChecklistService {
 
   findByTeam(
     teamRef: DocumentReference,
+    maxStatus: ChecklistStatus,
     pageSize: number
   ): Observable<Checklist[]> {
     console.log("checklist findByTeam", teamRef, pageSize);
@@ -123,7 +124,7 @@ export class ChecklistService {
       .collection("checklists", (ref) =>
         ref
           .where("team", "==", teamRef)
-          .where("status", "<", ChecklistStatus.Deleted)
+          .where("status", "<=", maxStatus)
           .where("isTemplate", "==", false)
           .limit(pageSize)
       )

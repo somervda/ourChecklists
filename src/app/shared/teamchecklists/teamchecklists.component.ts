@@ -3,7 +3,6 @@ import { Observable } from "rxjs";
 import { Checklist, ChecklistStatus } from "../../models/checklist.model";
 import { ChecklistService } from "../../services/checklist.service";
 import { Team } from "../../models/team.model";
-import { map } from "rxjs/operators";
 import { HelperService } from "src/app/services/helper.service";
 
 @Component({
@@ -24,7 +23,25 @@ export class TeamchecklistsComponent implements OnInit {
   ngOnInit() {
     this.checklists$ = this.checklistService.findByTeam(
       this.helper.docRef(`teams/${this.team.id}`),
+      ChecklistStatus.Done,
       100
     );
+  }
+
+  showCompletedChange(event) {
+    console.log("showCompletedChange", event);
+    if (event) {
+      this.checklists$ = this.checklistService.findByTeam(
+        this.helper.docRef(`teams/${this.team.id}`),
+        ChecklistStatus.Complete,
+        100
+      );
+    } else {
+      this.checklists$ = this.checklistService.findByTeam(
+        this.helper.docRef(`teams/${this.team.id}`),
+        ChecklistStatus.Done,
+        100
+      );
+    }
   }
 }

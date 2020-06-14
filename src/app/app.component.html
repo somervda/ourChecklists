@@ -17,13 +17,6 @@
           <span id="mainMenuMyChecklists">&nbsp;My Checklists</span>
         </a>
 
-        <!-- Templates  -->
-
-        <a mat-list-item routerLink="templates">
-          <mat-icon>dynamic_feed</mat-icon>
-          <span id="mainMenuTemplates">&nbsp;Templates</span>
-        </a>
-
         <!-- Teams  -->
         <ng-container>
           <a
@@ -37,18 +30,14 @@
             <mat-icon>supervisor_account</mat-icon>
             <span id="mainMenuTeams">&nbsp;My Teams</span>
           </a>
-
-          <!-- <a
-          mat-list-item
-          routerLink="teamchecklists"
-          *ngIf="
-            (auth.user$ | async)?.isAdmin || hasCrossTeamRole(auth.user$ | async)
-          "
-        >
-          <mat-icon>home_work</mat-icon>
-          <span id="mainMenuTeamChecklists">&nbsp;Team Checklists</span>
-        </a> -->
         </ng-container>
+
+        <!-- Templates  -->
+
+        <a mat-list-item routerLink="templates">
+          <mat-icon>dynamic_feed</mat-icon>
+          <span id="mainMenuTemplates">&nbsp;Templates</span>
+        </a>
 
         <!-- Administrator Functions -->
         <mat-divider

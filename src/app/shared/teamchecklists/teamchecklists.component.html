@@ -1,4 +1,6 @@
 <app-checklistlist
   [checklists$]="checklists$"
   hideCreate="true"
+  [showCompletedOption]="true"
+  (showCompletedChange)="showCompletedChange($event)"
 ></app-checklistlist>

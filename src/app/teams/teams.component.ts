@@ -14,7 +14,7 @@ import { User } from "../models/user.model";
 export class TeamsComponent implements OnInit {
   teams$: Observable<Team[]>;
   canCreateTeams = false;
-  displayedColumns: string[] = ["name", "description", "id"];
+  displayedColumns: string[] = ["name", "description", "role", "id"];
 
   constructor(private teamservice: TeamService, private auth: AuthService) {}
 
@@ -41,20 +41,28 @@ export class TeamsComponent implements OnInit {
         true
       );
     }
-    // this.teams$ = this.teamservice.findAll(100).pipe(
-    //   map((teams) => {
-    //     // Admins can see all teams
-    //     if (this.auth.currentUser && user.isAdmin) {
-    //       return teams;
-    //     }
-    //     return teams.filter(
-    //       (team) =>
-    //         // otherwise people only see teams in their teamLists
-    //         (user.memberOfTeams && user.memberOfTeams.includes(team.id)) ||
-    //         (user.managerOfTeams && user.managerOfTeams.includes(team.id)) ||
-    //         (user.reviewerOfTeams && user.reviewerOfTeams.includes(team.id))
-    //     );
-    //   })
-    // );
+  }
+
+  getRole(team: Team): string {
+    let role = "";
+    if (
+      this.auth.currentUser.memberOfTeams &&
+      this.auth.currentUser.memberOfTeams.includes(team.id)
+    ) {
+      role += "Member ";
+    }
+    if (
+      this.auth.currentUser.managerOfTeams &&
+      this.auth.currentUser.managerOfTeams.includes(team.id)
+    ) {
+      role += "Manager ";
+    }
+    if (
+      this.auth.currentUser.reviewerOfTeams &&
+      this.auth.currentUser.reviewerOfTeams.includes(team.id)
+    ) {
+      role += "Reviewer ";
+    }
+    return role;
   }
 }
