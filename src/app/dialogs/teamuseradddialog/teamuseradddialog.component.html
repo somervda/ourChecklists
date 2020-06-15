@@ -9,7 +9,10 @@
   </mat-select>
 </mat-form-field>
 
-<app-userfinder (userSelected)="onUserSelected($event)"></app-userfinder>
+<app-userfinder
+  (userSelected)="onUserSelected($event)"
+  [refHide]="refHide"
+></app-userfinder>
 <div class="add-error">{{ addError }}</div>
 <br /><br />
 <button

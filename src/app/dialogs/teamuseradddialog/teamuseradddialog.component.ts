@@ -1,3 +1,4 @@
+import { DocumentReference } from "@angular/fire/firestore";
 import { Component, OnInit, Inject } from "@angular/core";
 import { TeamService } from "../../services/team.service";
 import { Observable } from "rxjs";
@@ -17,6 +18,7 @@ export class TeamuseradddialogComponent implements OnInit {
   selectedUid = "";
   selectedRole = "";
   addError = "";
+  refHide = [] as DocumentReference[];
 
   constructor(
     private teamService: TeamService,
@@ -27,6 +29,9 @@ export class TeamuseradddialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.team$ = this.teamService.findById(this.data.teamId);
+    if (this.data.refHide) {
+      this.refHide = this.data.refHide;
+    }
   }
 
   async addUser() {
@@ -48,6 +53,6 @@ export class TeamuseradddialogComponent implements OnInit {
 
   onUserSelected(event) {
     console.log("onUserSelected:", event);
-    this.selectedUid = event;
+    this.selectedUid = event.id;
   }
 }
