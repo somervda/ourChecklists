@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { Observable } from "rxjs";
+import { HelperService } from "src/app/services/helper.service";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { Observable, Subscription } from "rxjs";
 import { UserService } from "../../services/user.service";
 import { User } from "../../models/user.model";
 import { MatDialog } from "@angular/material/dialog";
@@ -11,18 +12,24 @@ import { TeamuseradddialogComponent } from "../../dialogs/teamuseradddialog/team
   templateUrl: "./teamuserlist.component.html",
   styleUrls: ["./teamuserlist.component.scss"],
 })
-export class TeamuserlistComponent implements OnInit {
+export class TeamuserlistComponent implements OnInit, OnDestroy {
   @Input() teamId: string;
   @Input() hideAddRemove: boolean = true;
+  users: User[];
   users$: Observable<User[]>;
+  users$$: Subscription;
   displayedColumns: string[] = ["displayName", "role", "email", "uid"];
 
-  constructor(private userservice: UserService, public dialog: MatDialog) {}
+  constructor(
+    private userservice: UserService,
+    public dialog: MatDialog,
+    private helper: HelperService
+  ) {}
   ngOnInit() {
     // get a observable of all probes
     // console.log("teamuserlist teamId", this.teamId);
     this.users$ = this.userservice.findByTeamId(this.teamId);
-    // this.users$.subscribe((u) => console.log("users", u));
+    this.users$$ = this.users$.subscribe((u) => (this.users = u));
   }
 
   openTeamUserRemoveDialog(uid, displayName, teamId, role) {
@@ -37,7 +44,18 @@ export class TeamuserlistComponent implements OnInit {
     console.log("add click:", teamId);
     const dialogRef = this.dialog.open(TeamuseradddialogComponent, {
       width: "380px",
-      data: { teamId: teamId },
+      data: {
+        teamId: teamId,
+        refHide: this.users.map((u) => this.helper.docRef(`users/${u.uid}`)),
+      },
     });
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (!this.users$$.closed) {
+      this.users$$.unsubscribe();
+    }
   }
 }

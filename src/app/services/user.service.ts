@@ -148,11 +148,11 @@ export class UserService {
   async addUserToTeam(uid: string, teamId: string, role: string) {
     // Note: Use a few async awaits on promisees to bubble up results to calling code
     //
-    // console.log("addUserToTeam", uid, teamId, role);
+    console.log("addUserToTeam uid:", uid, " teamid:", teamId, " role:", role);
     let addResult = await this.findUserByUid(uid)
       .toPromise()
       .then((user) => {
-        // console.log("addUserToTeam user", user);
+        console.log("addUserToTeam user", user);
         let fieldName = TeamRoles.find((teamRole) => teamRole.name === role)
           .arrayName;
         // console.log("addUserToTeam fieldName", fieldName);
