@@ -1,3 +1,4 @@
+<mat-spinner *ngIf="showSpinner" class="spinner_container"></mat-spinner>
 <app-subheading prompt="User Profile" matIcon="person"></app-subheading>
 <div class="page-container">
   <!-- Use an array of keyValuePairs to display most of the user properties -->
@@ -14,6 +15,31 @@
       </td>
       <td><img src="{{ user.photoURL }}" height="48px" /></td>
     </tr>
+    <tr>
+      <td></td>
+      <td>
+        <div>
+          <button
+            class="add-button"
+            mat-button-raised
+            (click)="fileUpload.click()"
+          >
+            <mat-icon class="align-bottom">add</mat-icon>Upload Photo
+          </button>
+          <div class="fileUploadMsg">{{ fileUploadMsg }}</div>
+
+          <input
+            type="file"
+            #fileUpload
+            hidden="true"
+            (change)="onUploadFile($event)"
+            multiple="false"
+            accept="image/*"
+          />
+        </div>
+      </td>
+    </tr>
+
     <ng-container *ngIf="updatableProfile">
       <tr>
         <td class="nowrap">

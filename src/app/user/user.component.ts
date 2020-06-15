@@ -4,8 +4,9 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { User } from "../models/user.model";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { Kvp } from "../models/helper.model";
+import { AngularFireStorage } from "@angular/fire/storage";
 
 @Component({
   selector: "app-user",
@@ -18,13 +19,16 @@ export class UserComponent implements OnInit, OnDestroy {
   updatableProfile: boolean = false;
   userInitSub: Subscription;
   navigationSubscription: Subscription;
+  showSpinner = false;
+  fileUploadMsg = "";
 
   constructor(
     private route: ActivatedRoute,
     private afAuth: AngularFireAuth,
     private userservice: UserService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private storage: AngularFireStorage
   ) {}
 
   ngOnInit() {
@@ -148,6 +152,40 @@ export class UserComponent implements OnInit, OnDestroy {
       "isTemplateManager",
       !this.user.isTemplateManager
     );
+  }
+
+  getStorageUrl(filename: string): Observable<any> {
+    // console.log("getStorageUrl", filename);
+    return this.storage
+      .ref(`userphotos/${this.user.uid}/${filename}`)
+      .getDownloadURL();
+  }
+
+  onUploadFile(event) {
+    console.log("onUploadFile", event);
+    const fileToUpload = event.target.files[0];
+    console.log("fileToUpload", fileToUpload.size);
+    if (fileToUpload.size > 150000) {
+      this.fileUploadMsg =
+        " File is too large to upload. Must be less than 150KB";
+    } else {
+      this.showSpinner = true;
+      this.fileUploadMsg = "";
+      const task = this.storage
+        .upload(
+          `userphotos/${this.user.uid}/${fileToUpload.name}`,
+          fileToUpload
+        )
+        .then((t) => {
+          this.getStorageUrl(fileToUpload.name)
+            .toPromise()
+            .then((url) =>
+              this.userservice.dbFieldUpdate(this.user.uid, "photoURL", url)
+            );
+          this.showSpinner = false;
+        })
+        .catch((e) => (this.showSpinner = false));
+    }
   }
 
   ngOnDestroy() {
