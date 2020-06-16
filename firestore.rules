@@ -89,7 +89,13 @@ service cloud.firestore {
                               user==request.auth.uid &&
                               !updatingField("isAdmin") &&
                               !updatingField("canCreateTeams") &&
-                              !updatingField("isActivated") 
+                              !updatingField("isCategoryManager") &&
+                              !updatingField("isResourceManager") &&
+                              !updatingField("isTempleteManager") &&
+                              !updatingField("isActivated") &&
+                              !updatingField("managerOfTeams") &&
+                              !updatingField("memberOfTeams") &&
+                              !updatingField("reviewerOfTeams") &&
                             ) 
                           ||
                             (

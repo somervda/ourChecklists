@@ -63,15 +63,12 @@ export class AuthService {
       `users/${result.user.uid}`
     );
 
-    const data = {
+    let data = {
       uid: result.user.uid,
       email: result.user.email,
       displayName: result.user.displayName,
       dateLastLogon: firebase.firestore.FieldValue.serverTimestamp(),
     };
-
-    // Create a generic photoURL if auth. photoURL is null
-    console.log("updateUserData", data);
 
     if (result.additionalUserInfo.isNewUser) {
       // Placeholder to initialize app specific user fields
