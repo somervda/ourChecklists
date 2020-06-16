@@ -7,6 +7,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { Subscription, Observable } from "rxjs";
 import { Kvp } from "../models/helper.model";
 import { AngularFireStorage } from "@angular/fire/storage";
+import { HelperService } from "../services/helper.service";
 
 @Component({
   selector: "app-user",
@@ -15,99 +16,104 @@ import { AngularFireStorage } from "@angular/fire/storage";
 })
 export class UserComponent implements OnInit, OnDestroy {
   user: User;
-  kvps: Kvp[];
-  updatableProfile: boolean = false;
-  userInitSub: Subscription;
-  navigationSubscription: Subscription;
+  user$$: Subscription;
+
+  // If only the photo can be updated unless the user has fullAccess
+  fullAccess: boolean = false;
+
   showSpinner = false;
   fileUploadMsg = "";
 
   constructor(
     private route: ActivatedRoute,
     private afAuth: AngularFireAuth,
-    private userservice: UserService,
+    private userService: UserService,
     private auth: AuthService,
-    private router: Router,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private helper: HelperService
   ) {}
 
   ngOnInit() {
-    // subscribe to the router events - storing the subscription so
-    // we can unsubscribe later.
-    this.navigationSubscription = this.router.events.subscribe((e: any) => {
-      // If it is a NavigationEnd event re-initalise the component
-      if (e instanceof NavigationEnd) {
-        this.loadDisplayUser();
-      }
-    });
-
-    //Initial load
-    this.loadDisplayUser();
+    this.user$$ = this.userService
+      .findUserByUid(this.route.snapshot.paramMap.get("uid"))
+      .subscribe((u) => this.renderPage(u));
   }
 
-  loadDisplayUser() {
-    console.log("initialiseInvites");
+  renderPage(user: User) {
+    console.log("renderPage", user, this.auth.currentUser);
+    // Check access: Admin can update all users except their own profile
+    // otherwise non-admins can only access their own profiles
+    if (
+      this.auth.currentUser.isAdmin &&
+      this.auth.currentUser.uid != user.uid
+    ) {
+      this.fullAccess = true;
+    }
+    if (
+      !this.auth.currentUser.isAdmin &&
+      this.auth.currentUser.uid != user.uid
+    ) {
+      this.helper.redirect("/notAuthorized");
+    }
+    this.user = user;
 
-    //console.log("this.user", this.user);
-    this.user = this.route.snapshot.data["user"];
-    //console.log("this.user", this.user);
-    const isAdmin = this.user.isAdmin ? "Yes" : "No";
-    const isActivated = this.user.isActivated ? "Yes" : "No";
-    const canCreateTeams = this.user.canCreateTeams ? "Yes" : "No";
-    const isCategoryManager = this.user.isCategoryManager ? "Yes" : "No";
-    const isResourceManager = this.user.isResourceManager ? "Yes" : "No";
-    const isTemplateManager = this.user.isTemplateManager ? "Yes" : "No";
+    // const isAdmin = this.user.isAdmin ? "Yes" : "No";
+    // const isActivated = this.user.isActivated ? "Yes" : "No";
+    // const canCreateTeams = this.user.canCreateTeams ? "Yes" : "No";
+    // const isCategoryManager = this.user.isCategoryManager ? "Yes" : "No";
+    // const isResourceManager = this.user.isResourceManager ? "Yes" : "No";
+    // const isTemplateManager = this.user.isTemplateManager ? "Yes" : "No";
 
-    this.userInitSub = this.auth.user$.subscribe((currentUser) => {
-      // The user page is read only for non-administrators
-      // or where the uid = the logged on user UID)
-      // if the user is and administrator and looking at other peoples profiles then updates
-      // functionality is available
-      // Note: firestore rules will still control the updates on the backend
+    // this.userInitSub = this.auth.user$.subscribe((currentUser) => {
+    //   // The user page is read only for non-administrators
+    //   // or where the uid = the logged on user UID)
+    //   // if the user is and administrator and looking at other peoples profiles then updates
+    //   // functionality is available
+    //   // Note: firestore rules will still control the updates on the backend
 
-      if (
-        this.user.uid != this.afAuth.auth.currentUser.uid &&
-        currentUser.isAdmin
-      )
-        this.updatableProfile = true;
+    //   if (
+    //     this.user.uid != this.afAuth.auth.currentUser.uid &&
+    //     currentUser.isAdmin
+    //   )
+    //     this.updatableProfile = true;
 
-      this.kvps = [
-        { key: "Display Name", value: this.user.displayName },
-        { key: "User Id", value: this.user.uid },
-        { key: "eMail", value: this.user.email },
-        {
-          key: "Photo URL",
-          value: this.user.photoURL,
-        },
-      ];
+    //   this.kvps = [
+    //     { key: "Display Name", value: this.user.displayName },
+    //     { key: "User Id", value: this.user.uid },
+    //     { key: "eMail", value: this.user.email },
+    //     {
+    //       key: "Photo URL",
+    //       value: this.user.photoURL,
+    //     },
+    //   ];
 
-      if (!this.updatableProfile) {
-        this.kvps.push({ key: "Is Administrator?", value: isAdmin });
-        this.kvps.push({ key: "Is Activated?", value: isActivated });
-        this.kvps.push({ key: "Can Create Teams?", value: canCreateTeams });
-        this.kvps.push({
-          key: "Is Category Manager?",
-          value: isCategoryManager,
-        });
-        this.kvps.push({
-          key: "Is Resource Manager?",
-          value: isResourceManager,
-        });
-        this.kvps.push({
-          key: "Is Template Manager?",
-          value: isTemplateManager,
-        });
-      }
-      // for admins updating other users profile isAdmin and isActivated displayed
-      // as updatable controls in the HTML template
-    });
+    //   if (!this.updatableProfile) {
+    //     this.kvps.push({ key: "Is Administrator?", value: isAdmin });
+    //     this.kvps.push({ key: "Is Activated?", value: isActivated });
+    //     this.kvps.push({ key: "Can Create Teams?", value: canCreateTeams });
+    //     this.kvps.push({
+    //       key: "Is Category Manager?",
+    //       value: isCategoryManager,
+    //     });
+    //     this.kvps.push({
+    //       key: "Is Resource Manager?",
+    //       value: isResourceManager,
+    //     });
+    //     this.kvps.push({
+    //       key: "Is Template Manager?",
+    //       value: isTemplateManager,
+    //     });
+    //   }
+    //   // for admins updating other users profile isAdmin and isActivated displayed
+    //   // as updatable controls in the HTML template
+    // });
   }
 
   updateIsAdmin() {
     // Note: click is processed before the this.user.isAdmin is updated with the
     // ngModel binding.
 
-    this.userservice.dbFieldUpdate(
+    this.userService.dbFieldUpdate(
       this.user.uid,
       "isAdmin",
       !this.user.isAdmin
@@ -115,7 +121,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   updateIsActivated() {
-    this.userservice.dbFieldUpdate(
+    this.userService.dbFieldUpdate(
       this.user.uid,
       "isActivated",
       !this.user.isActivated
@@ -123,7 +129,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   updateCanCreateTeams() {
-    this.userservice.dbFieldUpdate(
+    this.userService.dbFieldUpdate(
       this.user.uid,
       "canCreateTeams",
       !this.user.canCreateTeams
@@ -131,7 +137,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   updateIsCategoryManager() {
-    this.userservice.dbFieldUpdate(
+    this.userService.dbFieldUpdate(
       this.user.uid,
       "isCategoryManager",
       !this.user.isCategoryManager
@@ -139,7 +145,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   updateIsResourceManager() {
-    this.userservice.dbFieldUpdate(
+    this.userService.dbFieldUpdate(
       this.user.uid,
       "isResourceManager",
       !this.user.isResourceManager
@@ -147,7 +153,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   updateIsTemplateManager() {
-    this.userservice.dbFieldUpdate(
+    this.userService.dbFieldUpdate(
       this.user.uid,
       "isTemplateManager",
       !this.user.isTemplateManager
@@ -180,7 +186,7 @@ export class UserComponent implements OnInit, OnDestroy {
           this.getStorageUrl(fileToUpload.name)
             .toPromise()
             .then((url) =>
-              this.userservice.dbFieldUpdate(this.user.uid, "photoURL", url)
+              this.userService.dbFieldUpdate(this.user.uid, "photoURL", url)
             );
           this.showSpinner = false;
         })
@@ -189,7 +195,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.userInitSub) this.userInitSub.unsubscribe();
-    if (this.navigationSubscription) this.navigationSubscription.unsubscribe();
+    if (this.user$$) this.user$$.unsubscribe();
   }
 }

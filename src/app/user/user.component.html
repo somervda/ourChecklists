@@ -2,117 +2,99 @@
 <app-subheading prompt="User Profile" matIcon="person"></app-subheading>
 <div class="page-container">
   <!-- Use an array of keyValuePairs to display most of the user properties -->
-  <table>
-    <tr *ngFor="let kvp of kvps">
-      <td>
-        <b>{{ kvp.key }}</b>
-      </td>
-      <td class="break-all">{{ kvp.value }}</td>
-    </tr>
-    <tr>
-      <td>
-        <b>Photo</b>
-      </td>
-      <td><img src="{{ user.photoURL }}" height="48px" /></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <div>
-          <button
-            class="add-button"
-            mat-button-raised
-            (click)="fileUpload.click()"
-          >
-            <mat-icon class="align-bottom">add</mat-icon>Upload Photo
-          </button>
-          <div class="fileUploadMsg">{{ fileUploadMsg }}</div>
+  <div class="gridwrapper">
+    <div class="prompt">DisplayName</div>
+    <div>{{ user.displayName }}</div>
+    <div class="prompt">eMail</div>
+    <div>{{ user.email }}</div>
+    <div class="prompt">Created</div>
+    <div>{{ user.dateCreated }}</div>
+    <div class="prompt">Last Logon</div>
+    <div>{{ user.dateLastLogon }}</div>
 
-          <input
-            type="file"
-            #fileUpload
-            hidden="true"
-            (change)="onUploadFile($event)"
-            multiple="false"
-            accept="image/*"
-          />
-        </div>
-      </td>
-    </tr>
+    <div class="prompt">Photo</div>
+    <div>
+      <img src="{{ user.photoURL }}" height="48px" />
 
-    <ng-container *ngIf="updatableProfile">
-      <tr>
-        <td class="nowrap">
-          <b>Is Administrator?</b>
-        </td>
-        <td>
-          <mat-checkbox
-            [(ngModel)]="user.isAdmin"
-            (click)="updateIsAdmin()"
-            matTooltip="Administrators have open access to all functions in the system, and can manage other users"
-          ></mat-checkbox>
-        </td>
-      </tr>
-      <tr>
-        <td class="nowrap">
-          <b>Is Activated?</b>
-        </td>
-        <td>
-          <mat-checkbox
-            [(ngModel)]="user.isActivated"
-            (click)="updateIsActivated()"
-            matTooltip="Users must be activated before any access is provided to the system"
-          ></mat-checkbox>
-        </td>
-      </tr>
-      <tr>
-        <td class="nowrap">
-          <b>Can Create Teams?</b>
-        </td>
-        <td>
-          <mat-checkbox
-            [(ngModel)]="user.canCreateTeams"
-            (click)="updateCanCreateTeams()"
-            matTooltip="User can create and manage teams"
-          ></mat-checkbox>
-        </td>
-      </tr>
-      <tr>
-        <td class="nowrap">
-          <b>Can Manage Categories?</b>
-        </td>
-        <td>
-          <mat-checkbox
-            [(ngModel)]="user.isCategoryManager"
-            (click)="updateIsCategoryManager()"
-            matTooltip="User can access and manage categories and related actions"
-          ></mat-checkbox>
-        </td>
-      </tr>
-      <tr>
-        <td class="nowrap">
-          <b>Can Manage Resources?</b>
-        </td>
-        <td>
-          <mat-checkbox
-            [(ngModel)]="user.isResourceManager"
-            (click)="updateIsResourceManager()"
-            matTooltip="User can create and manage resources"
-          ></mat-checkbox>
-        </td>
-      </tr>
-      <tr>
-        <td class="nowrap">
-          <b>Can Manage Templates?</b>
-        </td>
-        <td>
-          <mat-checkbox
-            [(ngModel)]="user.isTemplateManager"
-            (click)="updateIsTemplateManager()"
-            matTooltip="User can create and delete templates"
-          ></mat-checkbox>
-        </td>
-      </tr>
-    </ng-container>
-  </table>
+      <div>
+        <button
+          class="add-button"
+          mat-button-raised
+          (click)="fileUpload.click()"
+        >
+          <mat-icon class="align-bottom">add</mat-icon>Upload Photo
+        </button>
+        <div class="fileUploadMsg">{{ fileUploadMsg }}</div>
+
+        <input
+          type="file"
+          #fileUpload
+          hidden="true"
+          (change)="onUploadFile($event)"
+          multiple="false"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
+    <div class="prompt">Is Administrator?</div>
+    <div>
+      <mat-checkbox
+        [(ngModel)]="user.isAdmin"
+        (click)="updateIsAdmin()"
+        [disabled]="!fullAccess"
+        matTooltip="Administrators have open access to all functions in the system, and can manage other users"
+      ></mat-checkbox>
+    </div>
+
+    <div class="prompt">Is Activated?</div>
+    <div>
+      <mat-checkbox
+        [(ngModel)]="user.isActivated"
+        (click)="updateIsActivated()"
+        [disabled]="!fullAccess"
+        matTooltip="Users must be activated before any access is provided to the system"
+      ></mat-checkbox>
+    </div>
+
+    <div class="prompt">Can Create Teams?</div>
+    <div>
+      <mat-checkbox
+        [(ngModel)]="user.canCreateTeams"
+        (click)="updateCanCreateTeams()"
+        [disabled]="!fullAccess"
+        matTooltip="User can create and manage teams"
+      ></mat-checkbox>
+    </div>
+
+    <div class="prompt">Can Manage Categories?</div>
+    <div>
+      <mat-checkbox
+        [(ngModel)]="user.isCategoryManager"
+        (click)="updateIsCategoryManager()"
+        [disabled]="!fullAccess"
+        matTooltip="User can access and manage categories and related actions"
+      ></mat-checkbox>
+    </div>
+
+    <div class="prompt">Can Manage Resources?</div>
+    <div>
+      <mat-checkbox
+        [(ngModel)]="user.isResourceManager"
+        (click)="updateIsResourceManager()"
+        [disabled]="!fullAccess"
+        matTooltip="User can create and manage resources"
+      ></mat-checkbox>
+    </div>
+
+    <div class="prompt">Can Manage Templates?</div>
+    <div>
+      <mat-checkbox
+        [(ngModel)]="user.isTemplateManager"
+        (click)="updateIsTemplateManager()"
+        [disabled]="!fullAccess"
+        matTooltip="User can create and delete templates"
+      ></mat-checkbox>
+    </div>
+  </div>
 </div>

@@ -95,7 +95,7 @@
         <!-- User functions , if we have too many then add a navigation page  -->
         <a
           mat-list-item
-          [routerLink]="['user/', (auth.user$ | async)?.uid || '']"
+          [routerLink]="['myprofile/', (auth.user$ | async)?.uid || '']"
         >
           <mat-icon>person</mat-icon>
           <span id="mainMenuMyProfile">&nbsp;My Profile</span>

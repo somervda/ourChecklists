@@ -255,6 +255,14 @@ const routes: Routes = [
     data: { permissions: ["isActivated"] },
     runGuardsAndResolvers: "always",
   },
+  {
+    path: "myprofile/:uid",
+    component: UserComponent,
+    resolve: { user: UserResolver },
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+    runGuardsAndResolvers: "always",
+  },
   // Other
   { path: "notfound", component: NotfoundComponent },
   { path: "**", component: NotfoundComponent },
