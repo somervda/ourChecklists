@@ -4,7 +4,7 @@ export interface User {
   photoURL?: string;
   displayName?: string;
   // Date and time the user first logged into the application (used for aging)
-  dateCreated?: Date;
+  dateCreated?: Date | firebase.firestore.FieldValue;
 
   // Simple Authorization scheme
   isAdmin?: Boolean;
@@ -13,7 +13,7 @@ export interface User {
   isActivated?: Boolean;
   // Indicates the user can use the application , by default
   // a user is inactive until an administrator activates them
-  dateLastLogon?: any;
+  dateLastLogon?: Date | firebase.firestore.FieldValue;
   managerOfTeams?: string[];
   memberOfTeams?: string[];
   reviewerOfTeams?: string[];

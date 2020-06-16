@@ -20,8 +20,7 @@ export class UserService {
         map((snaps) => {
           const users = convertSnaps<User>(snaps);
           return users.length == 1 ? users[0] : undefined;
-        }),
-        first()
+        })
       );
   }
 
@@ -133,6 +132,7 @@ export class UserService {
   removeUserFromTeam(uid: string, teamId: string, role: string) {
     // console.log("removeUserFromTeam", uid, teamId, role);
     this.findUserByUid(uid)
+      .pipe(first())
       .toPromise()
       .then((user) => {
         // console.log("removeUserFromTeam user", user);
@@ -150,6 +150,7 @@ export class UserService {
     //
     console.log("addUserToTeam uid:", uid, " teamid:", teamId, " role:", role);
     let addResult = await this.findUserByUid(uid)
+      .pipe(first())
       .toPromise()
       .then((user) => {
         console.log("addUserToTeam user", user);
@@ -181,7 +182,7 @@ export class UserService {
   dbFieldUpdate(docId: string, fieldName: string, newValue: any) {
     if (docId && fieldName) {
       const updateObject = {};
-      // console.log("dbFieldUpdate", docId, fieldName, newValue);
+      console.log("dbFieldUpdate", docId, fieldName, newValue);
       updateObject[fieldName] = newValue;
       this.afs
         .doc("/users/" + docId) // Update to firestore collection

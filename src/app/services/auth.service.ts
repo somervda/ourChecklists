@@ -1,24 +1,19 @@
 //import { AuthService } from "./auth.service";
-import { auth } from "firebase/app";
 // see https://fireship.io/lessons/angularfire-google-oauth/ for
 // a detailed walk through of this authentication approach that is
 // used to extend the firebase authentication information with
 // custom user data (i.e. roles, app specific attributes)
-
 import { Injectable } from "@angular/core";
-
-import { Router } from "@angular/router";
-import { User } from "../models/user.model"; // optional
-
 import { AngularFireAuth } from "@angular/fire/auth";
 import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from "@angular/fire/firestore";
-
-import { Observable, of } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { Router } from "@angular/router";
 import * as firebase from "firebase";
+import { Observable, of } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
+import { User } from "../models/user.model"; // optional
 
 @Injectable({
   providedIn: "root",
@@ -72,19 +67,24 @@ export class AuthService {
       uid: result.user.uid,
       email: result.user.email,
       displayName: result.user.displayName,
-      photoURL: result.user.photoURL,
       dateLastLogon: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
     // Create a generic photoURL if auth. photoURL is null
-    if (!data.photoURL) {
-      data.photoURL = "https://ui-avatars.com/api/?name=" + data.displayName;
-    }
+    console.log("updateUserData", data);
 
     if (result.additionalUserInfo.isNewUser) {
       // Placeholder to initialize app specific user fields
       console.log("Is new user:", result);
-      // data["latitude"] = 0;
+      data["dateCreated"] = firebase.firestore.FieldValue.serverTimestamp();
+      // If the result does not provide a photoURL from the authentication provider
+      // and its a new user then create a stand-in url
+      if (result.user.photoURL) {
+        data["photoURL"] = result.user.photoURL;
+      } else {
+        data["photoURL"] =
+          "https://ui-avatars.com/api/?name=" + data.displayName;
+      }
     }
     userRef.set(data, { merge: true });
 

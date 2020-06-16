@@ -4,17 +4,24 @@
   <!-- Use an array of keyValuePairs to display most of the user properties -->
   <div class="gridwrapper">
     <div class="prompt">DisplayName</div>
-    <div>{{ user.displayName }}</div>
+    <div>{{ (user$ | async)?.displayName }}</div>
+    <div class="prompt">UID</div>
+    <div>{{ (user$ | async)?.uid }}</div>
     <div class="prompt">eMail</div>
-    <div>{{ user.email }}</div>
+    <div>{{ (user$ | async)?.email }}</div>
     <div class="prompt">Created</div>
-    <div>{{ user.dateCreated }}</div>
+    <div>
+      {{ getDate((user$ | async)?.dateCreated) }}
+    </div>
     <div class="prompt">Last Logon</div>
-    <div>{{ user.dateLastLogon }}</div>
+    <div>
+      {{ getDate((user$ | async)?.dateLastLogon) }}
+    </div>
 
     <div class="prompt">Photo</div>
     <div>
-      <img src="{{ user.photoURL }}" height="48px" />
+      <img class="photoURL" src="{{ (user$ | async)?.photoURL }}" />
+      <!-- {{ (user$ | async)?.photoURL }} -->
 
       <div>
         <button
@@ -22,7 +29,7 @@
           mat-button-raised
           (click)="fileUpload.click()"
         >
-          <mat-icon class="align-bottom">add</mat-icon>Upload Photo
+          <mat-icon class="align-bottom nowrap">add</mat-icon>Upload New Photo
         </button>
         <div class="fileUploadMsg">{{ fileUploadMsg }}</div>
 
@@ -40,8 +47,9 @@
     <div class="prompt">Is Administrator?</div>
     <div>
       <mat-checkbox
-        [(ngModel)]="user.isAdmin"
-        (click)="updateIsAdmin()"
+        #isAdmin
+        [ngModel]="(user$ | async)?.isAdmin"
+        (click)="updateField('isAdmin', !isAdmin.checked)"
         [disabled]="!fullAccess"
         matTooltip="Administrators have open access to all functions in the system, and can manage other users"
       ></mat-checkbox>
@@ -50,8 +58,9 @@
     <div class="prompt">Is Activated?</div>
     <div>
       <mat-checkbox
-        [(ngModel)]="user.isActivated"
-        (click)="updateIsActivated()"
+        #isActivated
+        [ngModel]="(user$ | async)?.isActivated"
+        (click)="updateField('isActivated', !isActivated.checked)"
         [disabled]="!fullAccess"
         matTooltip="Users must be activated before any access is provided to the system"
       ></mat-checkbox>
@@ -60,8 +69,9 @@
     <div class="prompt">Can Create Teams?</div>
     <div>
       <mat-checkbox
-        [(ngModel)]="user.canCreateTeams"
-        (click)="updateCanCreateTeams()"
+        #canCreateTeams
+        [ngModel]="(user$ | async)?.canCreateTeams"
+        (click)="updateField('canCreateTeams', !canCreateTeams.checked)"
         [disabled]="!fullAccess"
         matTooltip="User can create and manage teams"
       ></mat-checkbox>
@@ -70,8 +80,9 @@
     <div class="prompt">Can Manage Categories?</div>
     <div>
       <mat-checkbox
-        [(ngModel)]="user.isCategoryManager"
-        (click)="updateIsCategoryManager()"
+        #isCategoryManager
+        [ngModel]="(user$ | async)?.isCategoryManager"
+        (click)="updateField('isCategoryManager', !isCategoryManager.checked)"
         [disabled]="!fullAccess"
         matTooltip="User can access and manage categories and related actions"
       ></mat-checkbox>
@@ -80,8 +91,9 @@
     <div class="prompt">Can Manage Resources?</div>
     <div>
       <mat-checkbox
-        [(ngModel)]="user.isResourceManager"
-        (click)="updateIsResourceManager()"
+        #isResourceManager
+        [ngModel]="(user$ | async)?.isResourceManager"
+        (click)="updateField('isResourceManager', !isResourceManager.checked)"
         [disabled]="!fullAccess"
         matTooltip="User can create and manage resources"
       ></mat-checkbox>
@@ -90,8 +102,9 @@
     <div class="prompt">Can Manage Templates?</div>
     <div>
       <mat-checkbox
-        [(ngModel)]="user.isTemplateManager"
-        (click)="updateIsTemplateManager()"
+        #isTemplateManager
+        [ngModel]="(user$ | async)?.isTemplateManager"
+        (click)="updateField('isTemplateManager', !isTemplateManager.checked)"
         [disabled]="!fullAccess"
         matTooltip="User can create and delete templates"
       ></mat-checkbox>
