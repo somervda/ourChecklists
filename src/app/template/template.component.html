@@ -16,6 +16,13 @@
   <div class="prompt">Description</div>
   <div>{{ checklist.description }}</div>
 
+  <div class="prompt">Extract</div>
+  <div>
+    <a *ngIf="downLoadReady" [href]="fileUrl" [download]="extractName"
+      >Template as JSON
+    </a>
+  </div>
+
   <div class="prompt">
     Resources
   </div>

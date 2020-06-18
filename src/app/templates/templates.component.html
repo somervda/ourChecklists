@@ -1,4 +1,24 @@
 <app-subheading prompt="Templates" matIcon="dynamic_feed"></app-subheading>
+
 <div class="page-container">
+  <ng-container
+    *ngIf="(user$ | async)?.isAdmin || (user$ | async)?.isTemplateManager"
+    ><button
+      mat-raised-button
+      class="import"
+      (click)="fileUpload.click()"
+      matTooltip="Import template from file"
+    >
+      Import
+    </button>
+    <input
+      type="file"
+      #fileUpload
+      hidden="true"
+      (change)="doImport($event.target.files)"
+      multiple="false"
+      accept=".json"
+    />
+  </ng-container>
   <app-templatelist [checklists$]="checklists$"></app-templatelist>
 </div>
