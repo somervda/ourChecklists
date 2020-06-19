@@ -6,6 +6,15 @@
 ></app-subheading>
 
 <div class="page-container">
+  <ng-container *ngIf="(user$ | async).isAdmin">
+    <button
+      mat-raised-button
+      (click)="go()"
+      matTooltip="Warning, only do this if you know what you are doing."
+    >
+      Designer
+    </button></ng-container
+  >
   <div class="prompt">
     Name
   </div>

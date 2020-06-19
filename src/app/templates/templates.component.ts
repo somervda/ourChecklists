@@ -83,26 +83,49 @@ export class TemplatesComponent implements OnInit {
     // console.log("templateToChecklist:", template);
     let checklist = {} as Checklist;
     let now = new Date();
-    checklist.name = template.name + `: Import(${now.toISOString()})`;
-    checklist.description = template.description;
+    if (template.name) {
+      checklist.name = template.name;
+    }
+    checklist.name += `: Import(${now.toISOString()})`;
+    if (template.description) {
+      checklist.description = template.description;
+    } else {
+      checklist.description = "";
+    }
     checklist.isTemplate = true;
-    checklist.category = this.helper.docRef(template.category);
+    if (template.category) {
+      checklist.category = this.helper.docRef(template.category);
+    }
     if (template.resources) {
       checklist.resources = template.resources?.map((r) =>
         this.helper.docRef(r)
       );
     }
     checklist.status = template.status;
-    checklist.team = this.helper.docRef(template.team);
+    if (template.team) {
+      checklist.team = this.helper.docRef(template.team);
+    }
     return checklist;
   }
 
   templateitemToChecklistitem(templateitem): Checklistitem {
     // console.log("templateToChecklist:", templateitem);
     let checklistitem = {} as Checklistitem;
-    checklistitem.name = templateitem.name;
-    checklistitem.description = templateitem.description;
-    checklistitem.sequence = templateitem.sequence;
+    if (templateitem.name) {
+      checklistitem.name = templateitem.name;
+    } else {
+      checklistitem.name = "[Missing Name!]";
+    }
+    if (templateitem.description) {
+      checklistitem.description = templateitem.description;
+    } else {
+      checklistitem.description = "";
+    }
+    if (templateitem.sequence) {
+      checklistitem.sequence = templateitem.sequence;
+    } else {
+      checklistitem.sequence = 100;
+    }
     if (templateitem.activities) {
       checklistitem.activities = templateitem.activities?.map((a) =>
         this.helper.docRef(a)
@@ -121,7 +144,11 @@ export class TemplatesComponent implements OnInit {
         this.helper.docRef(r)
       );
     }
-    checklistitem.tagId = templateitem.tagId;
+    if (templateitem.tagId) {
+      checklistitem.tagId = templateitem.tagId;
+    } else {
+      checklistitem.tagId = "";
+    }
     return checklistitem;
   }
 }

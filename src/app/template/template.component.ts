@@ -22,6 +22,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   checklistItems: Checklistitem[];
   displayedColumns: string[] = ["name"];
   ChecklistStatus = ChecklistStatus;
+  user$;
   iconActions: IconAction[] = [
     {
       icon: "print",
@@ -53,6 +54,11 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.checklistitems$$ = this.checklistitems$.subscribe((ci) =>
       this.createDownload(this.checklist, ci)
     );
+    this.user$ = this.auth.user$;
+  }
+
+  go() {
+    this.helper.redirect("/checklistdesign/" + this.checklist.id);
   }
 
   iconAction(value) {

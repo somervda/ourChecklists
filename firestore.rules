@@ -95,7 +95,7 @@ service cloud.firestore {
                               !updatingField("isActivated") &&
                               !updatingField("managerOfTeams") &&
                               !updatingField("memberOfTeams") &&
-                              !updatingField("reviewerOfTeams") &&
+                              !updatingField("reviewerOfTeams")
                             ) 
                           ||
                             (
