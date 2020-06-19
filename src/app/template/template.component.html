@@ -6,10 +6,12 @@
 ></app-subheading>
 
 <div class="page-container">
-  <ng-container *ngIf="(user$ | async).isAdmin">
+  <ng-container
+    *ngIf="(user$ | async)?.isAdmin || (user$ | async)?.isTemplateManager"
+  >
     <button
       mat-raised-button
-      (click)="go()"
+      (click)="goToDesigner()"
       matTooltip="Warning, only do this if you know what you are doing."
     >
       Designer

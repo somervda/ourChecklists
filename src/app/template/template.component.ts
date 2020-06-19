@@ -57,7 +57,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.user$ = this.auth.user$;
   }
 
-  go() {
+  goToDesigner() {
     this.helper.redirect("/checklistdesign/" + this.checklist.id);
   }
 

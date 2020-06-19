@@ -24,6 +24,33 @@
 >
   ></app-subheading
 >
+<ng-container *ngIf="checklist?.isTemplate">
+  <mat-expansion-panel [expanded]="false" class="light-highlight">
+    <mat-expansion-panel-header class="highlight">
+      <mat-panel-title>
+        Template - Be Careful!
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>
+      You are editing a Template. Only some of the content of the Template can
+      be changed to ensure any checklists derived from a template maintain their
+      syntactic consistency. Fields that can be updated are:
+    </p>
+    <ul>
+      <li>Name</li>
+      <li>Description</li>
+      <li>Category/Team</li>
+      <li>Resources</li>
+    </ul>
+    <p>The following properties can not be updated:</p>
+    <ul>
+      <li>Assignees (Template do not have assignees)</li>
+      <li>Status (Templates do not have a status)</li>
+      <li>Template Items properties other than the resources</li>
+    </ul>
+  </mat-expansion-panel>
+</ng-container>
 <!-- Need to wait until checklistForm exists or we have all sores of trouble and errors -->
 <div class="page-container" *ngIf="checklistForm">
   <form class="standard-form" [formGroup]="checklistForm">
@@ -81,15 +108,17 @@
         </mat-error>
       </mat-form-field>
 
-      <div class="prompt">
-        Status:
-      </div>
-      <div style="margin-bottom: 5px;">
-        <app-checkliststatus
-          [checklist]="checklist"
-          [showAction]="true"
-        ></app-checkliststatus>
-      </div>
+      <ng-container *ngIf="!checklist?.isTemplate">
+        <div class="prompt">
+          Status:
+        </div>
+        <div style="margin-bottom: 5px;">
+          <app-checkliststatus
+            [checklist]="checklist"
+            [showAction]="true"
+          ></app-checkliststatus>
+        </div>
+      </ng-container>
 
       <mat-form-field class="half-width">
         <mat-label>Team</mat-label>
@@ -124,38 +153,40 @@
       </mat-form-field>
     </fieldset>
 
-    <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Assignees:
-          <ng-container
-            *ngIf="
-              checklist?.assignee && checklist?.assignee.length > 0;
-              else noAssignee
-            "
-          >
-            <span *ngFor="let assignee of checklist.assignee; let i = index">
-              <span *ngIf="i > 0">,</span>
-              <span style="margin-left: 5px;">{{
-                (assignee | doc | async)?.displayName
-              }}</span>
-            </span>
-          </ng-container>
-          <ng-template #noAssignee>
-            None
-          </ng-template>
-        </mat-panel-title>
-        <mat-icon style="margin-left: auto;">edit</mat-icon>
-      </mat-expansion-panel-header>
+    <ng-container *ngIf="!checklist?.isTemplate">
+      <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Assignees:
+            <ng-container
+              *ngIf="
+                checklist?.assignee && checklist?.assignee.length > 0;
+                else noAssignee
+              "
+            >
+              <span *ngFor="let assignee of checklist.assignee; let i = index">
+                <span *ngIf="i > 0">,</span>
+                <span style="margin-left: 5px;">{{
+                  (assignee | doc | async)?.displayName
+                }}</span>
+              </span>
+            </ng-container>
+            <ng-template #noAssignee>
+              None
+            </ng-template>
+          </mat-panel-title>
+          <mat-icon style="margin-left: auto;">edit</mat-icon>
+        </mat-expansion-panel-header>
 
-      <ng-template matExpansionPanelContent>
-        <app-userlistedit
-          [users]="checklist.assignee"
-          (change)="onAssigneeChange($event)"
-        ></app-userlistedit>
-      </ng-template>
-    </mat-expansion-panel>
-    <br />
+        <ng-template matExpansionPanelContent>
+          <app-userlistedit
+            [users]="checklist.assignee"
+            (change)="onAssigneeChange($event)"
+          ></app-userlistedit>
+        </ng-template>
+      </mat-expansion-panel>
+      <br />
+    </ng-container>
     <mat-expansion-panel [disabled]="crudAction == Crud.Delete" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -203,7 +234,10 @@
       <ng-template matExpansionPanelContent>
         <app-checklistitemlist
           [checklist]="checklist"
-          [hideCreate]="checklist.status != ChecklistStatus.UnderConstruction"
+          [hideCreate]="
+            checklist.status != ChecklistStatus.UnderConstruction ||
+            checklist?.isTemplate
+          "
         ></app-checklistitemlist>
       </ng-template>
     </mat-expansion-panel>

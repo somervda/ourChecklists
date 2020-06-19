@@ -17,6 +17,21 @@
   matIcon="check_box"
 ></app-subheading>
 
+<ng-container *ngIf="(checklist$ | async)?.isTemplate">
+  <mat-expansion-panel [expanded]="false" class="light-highlight">
+    <mat-expansion-panel-header class="highlight">
+      <mat-panel-title>
+        Template Item- Be Careful!
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>
+      You are editing a Template Item. Only the sequence and resources can be
+      updated.
+    </p>
+  </mat-expansion-panel>
+</ng-container>
+
 <div class="page-container">
   <form class="standard-form" [formGroup]="checklistitemForm">
     <fieldset [disabled]="crudAction == Crud.Delete">
@@ -26,6 +41,7 @@
           formControlName="name"
           (change)="onFieldUpdate('name')"
           placeholder="Name"
+          [readonly]="(checklist$ | async)?.isTemplate"
           required
         />
         <mat-error
@@ -54,6 +70,7 @@
           matAutosizeMaxRows="10"
           matTextareaAutosize
           placeholder="Description"
+          [readonly]="(checklist$ | async)?.isTemplate"
           required
         ></textarea>
         <mat-error
@@ -95,60 +112,20 @@
 
     <br />
 
-    <!-- <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Activity Tags:
-          <ng-container
-            *ngIf="
-              checklistitem.activities && checklistitem.activities.length > 0;
-              else no_activities
-            "
-          >
-            <span
-              *ngFor="let activity of checklistitem.activities; let i = index"
-            >
-              <span *ngIf="i > 0">,</span>
-              <span style="margin-left: 5px;">{{
-                (activity | doc | async)?.name
-              }}</span>
-            </span>
-          </ng-container>
-          <ng-template #no_activites>
-            None
-          </ng-template>
-        </mat-panel-title>
-        <mat-panel-description>
-          <mat-icon style="margin-left: auto;">edit</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header> -->
+    <ng-container *ngIf="!(checklist$ | async)?.isTemplate">
+      <app-activitylistedit
+        [activities]="checklistitem.activities"
+        [category]="(checklist$ | async)?.category | doc | async"
+        (change)="onActivitiesChange($event)"
+      >
+      </app-activitylistedit>
+      <br />
+    </ng-container>
 
-    <!-- <ng-template matExpansionPanelContent> -->
-    <app-activitylistedit
-      [activities]="checklistitem.activities"
-      [category]="(checklist$ | async)?.category | doc | async"
-      (change)="onActivitiesChange($event)"
-    >
-    </app-activitylistedit>
-    <!-- </ng-template>
-    </mat-expansion-panel> -->
-    <br />
-    <!-- <mat-expansion-panel hideToggle [disabled]="crudAction == Crud.Delete">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Resources: {{ flatDocRefArray(checklistitem.resources) }}
-        </mat-panel-title>
-        <mat-panel-description>
-          <mat-icon style="margin-left: auto;">edit</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <ng-template matExpansionPanelContent> -->
     <app-resourcelistedit
       [resources]="checklistitem.resources"
       (change)="onResourcesChange($event)"
     ></app-resourcelistedit>
-    <!-- </ng-template>
-    </mat-expansion-panel> -->
     <br />
     <mat-card>
       <h6>Checklist Result Options</h6>
@@ -156,7 +133,9 @@
         [(ngModel)]="checklistitem.resultType"
         [ngModelOptions]="{ standalone: true }"
         (change)="updateResultType()"
-        [disabled]="crudAction == Crud.Delete"
+        [disabled]="
+          crudAction == Crud.Delete || (checklist$ | async)?.isTemplate
+        "
       >
         <mat-radio-button [value]="ChecklistitemResultType.checkbox">
           Checkbox
@@ -171,7 +150,9 @@
           (change)="updateAllowNA()"
           [(ngModel)]="checklistitem.allowNA"
           [ngModelOptions]="{ standalone: true }"
-          [disabled]="crudAction == Crud.Delete"
+          [disabled]="
+            crudAction == Crud.Delete || (checklist$ | async)?.isTemplate
+          "
           >Allow users to enter NA ?</mat-checkbox
         >
       </div>
@@ -181,7 +162,9 @@
           (change)="updateRequireEvidence()"
           [(ngModel)]="checklistitem.requireEvidence"
           [ngModelOptions]="{ standalone: true }"
-          [disabled]="crudAction == Crud.Delete"
+          [disabled]="
+            crudAction == Crud.Delete || (checklist$ | async)?.isTemplate
+          "
           >User must provide evidence?</mat-checkbox
         >
       </div>

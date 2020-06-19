@@ -67,6 +67,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         false
       );
     }
+
     this.categories$ = this.categoryService.findAll(100);
     this.crudAction = Crud.Update;
     // if (this.route.routeConfig.path == "category/delete/:id")
@@ -89,6 +90,16 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
       };
     } else {
       this.checklist = this.route.snapshot.data["checklist"];
+
+      // Redirect if the checklist is a template but the user is not allowed to edit templates
+      if (
+        this.checklist?.isTemplate &&
+        !(user.isAdmin || user.isTemplateManager)
+      ) {
+        console.log("Redirect");
+        this.helper.redirect("/notAuthorized");
+      }
+
       console.log("update checklist:", this.checklist);
       this.checklistSubscription$$ = this.checklistService
         .findById(this.checklist.id)
