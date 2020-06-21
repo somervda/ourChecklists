@@ -41,6 +41,7 @@
     "clid",
     "codelyzer",
     "datasource",
+    "denormalized",
     "devkit",
     "documentreferences",
     "firebaseapp",
