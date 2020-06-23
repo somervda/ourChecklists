@@ -114,7 +114,7 @@ service cloud.firestore {
       allow write:  if isAdmin() || isCategoryManager();
     }
 
-    match /{path=**}/categories/{cid}/activities/{aid} {
+    match /{path=**}/activities/{aid} {
       allow read:  if isActivated();
       allow write:  if isAdmin() || isCategoryManager();
     }

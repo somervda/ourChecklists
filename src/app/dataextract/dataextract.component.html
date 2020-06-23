@@ -1,0 +1,15 @@
+<app-subheading
+  prompt="Data Extract
+  "
+  matIcon="folder_open"
+></app-subheading>
+
+<div class="page-container">
+  <mat-spinner
+    *ngIf="
+      categorySpinner || teamSpinner || activitySpinner || checklistSpinner
+    "
+    class="spinner_container"
+  ></mat-spinner>
+  <button mat-button (click)="clicker()">click-me</button>
+</div>

@@ -8,7 +8,7 @@ import {
  * Denormalized (Flattened) version the a checklist that includes the checklistitems (also denormalized)
  * DocumentReference properties are denormalized to DocInfo and UserInfo data
  */
-export interface Checklist_ {
+export interface Checklistextract {
   id: string;
   name: string;
   isTemplate: boolean;
@@ -21,13 +21,13 @@ export interface Checklist_ {
   dateTargeted?: Date;
   dateCompleted?: Date;
   team: DocInfo;
-  assignee: UserInfo[];
+  assignee: UserInfo[]; // dont resolve displayname
   category: DocInfo;
-  resources?: DocInfo[];
-  checklistitems: Checklistitem_[];
+  resources?: DocInfo[]; // don't resolve name
+  checklistitems: Checklistitemextract[];
 }
 
-export interface Checklistitem_ {
+export interface Checklistitemextract {
   id: string;
   name: string;
   sequence: number;
@@ -41,18 +41,17 @@ export interface Checklistitem_ {
   resultValue?: ChecklistitemResultValue;
   resultType: ChecklistitemResultType;
   comment?: string;
-  resources?: DocInfo[];
+  resources?: DocInfo[]; // Don't resolve names
   tagId?: string;
 }
 
 export interface DocInfo {
   id: string;
-  name: string;
-  description?: string;
+  name?: string;
 }
 
 export interface UserInfo {
   uid: string;
-  displayName: string;
+  displayName?: string;
   email?: string;
 }

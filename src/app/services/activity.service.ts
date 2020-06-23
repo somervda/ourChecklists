@@ -23,6 +23,18 @@ export class ActivityService {
       );
   }
 
+  findAll(pageSize: number): Observable<Activity[]> {
+    return this.afs
+      .collectionGroup("activities", (ref) => ref.limit(pageSize))
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          console.log("findAll activities", convertSnaps<Activity>(snaps));
+          return convertSnaps<Activity>(snaps);
+        })
+      );
+  }
+
   findAllByCategory(cid: string, pageSize: number): Observable<Activity[]> {
     // console.log( "team findAll",  pageSize  );
     return this.afs

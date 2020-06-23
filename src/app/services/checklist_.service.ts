@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import {
-  Checklist_,
+  Checklistextract,
   DocInfo,
   UserInfo,
-  Checklistitem_,
-} from "../models/checklist_.model";
+  Checklistitemextract,
+} from "../models/checklistextract.model";
 import { Checklist } from "../models/checklist.model";
 import { DocumentReference } from "@angular/fire/firestore";
+import { HelperService } from "./helper.service";
 
 @Injectable({
   providedIn: "root",
@@ -15,23 +16,28 @@ import { DocumentReference } from "@angular/fire/firestore";
  * Special service used for managing denormalized versions of checklists and checklistitems
  */
 export class Checklist_Service {
-  constructor() {}
+  constructor(private helper: HelperService) {}
 
-  denormalizeChecklist(checklist: Checklist): Checklist_ {
+  denormalizeChecklist(checklist: Checklist): Checklistextract {
     let categoryDR = checklist.category.get();
-    let checklist_: Checklist_ = {
+    let checklistextract: Checklistextract = {
       id: checklist.id,
       isTemplate: checklist.isTemplate,
       name: checklist.name,
       description: checklist.description,
       status: checklist.status,
-      team: {} as DocInfo,
-      assignee: [] as UserInfo[],
-      checklistitems: [] as Checklistitem_[],
-      category: {} as DocInfo,
+      team: { id: this.helper.getDocRefId(checklist.team) } as DocInfo,
+      assignee: checklist.assignee.map((userref) => {
+        return { uid: this.helper.getDocRefId(userref) };
+      }),
+      resources: checklist.assignee.map((docref) => {
+        return { id: this.helper.getDocRefId(docref) };
+      }),
+      checklistitems: [] as Checklistitemextract[],
+      category: { id: this.helper.getDocRefId(checklist.category) } as DocInfo,
     };
 
-    return checklist_;
+    return checklistextract;
   }
 
   //  refToDocInfo(ref: DocumentReference): DocInfo {

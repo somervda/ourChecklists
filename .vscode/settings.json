@@ -43,6 +43,7 @@
     "datasource",
     "denormalized",
     "devkit",
+    "docref",
     "documentreferences",
     "firebaseapp",
     "firebaseui",
@@ -67,6 +68,7 @@
     "theming",
     "tslib",
     "userlistedit",
+    "userref",
     "userservice"
   ],
   "cSpell.ignoreWords": ["actioned"]

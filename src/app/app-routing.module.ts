@@ -33,12 +33,14 @@ import { CheckliststatusGuard } from "./guards/checkliststatus.guard";
 import { ChecklistStatus } from "./models/checklist.model";
 import { TemplatesComponent } from "./templates/templates.component";
 import { TemplateComponent } from "./template/template.component";
+import { DataextractComponent } from "./dataextract/dataextract.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
   { path: "notAuthorized", component: NotauthorizedComponent },
+  { path: "dataExtract", component: DataextractComponent },
   {
     path: "redirect/:component/:id",
     component: RedirectComponent,
