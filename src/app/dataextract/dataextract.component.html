@@ -12,4 +12,7 @@
     class="spinner_container"
   ></mat-spinner>
   <button mat-button (click)="clicker()">click-me</button>
+  <a *ngIf="downLoadReady" [href]="fileUrl" [download]="extractName"
+    >Checklists as JSON
+  </a>
 </div>

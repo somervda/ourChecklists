@@ -40,7 +40,12 @@ const routes: Routes = [
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
   { path: "notAuthorized", component: NotauthorizedComponent },
-  { path: "dataExtract", component: DataextractComponent },
+  {
+    path: "dataExtract",
+    component: DataextractComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
   {
     path: "redirect/:component/:id",
     component: RedirectComponent,

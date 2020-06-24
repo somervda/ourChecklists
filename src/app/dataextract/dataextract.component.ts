@@ -15,7 +15,7 @@ import { HelperService } from "../services/helper.service";
 import { ChecklistService } from "../services/checklist.service";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { Checklistitem } from "../models/checklistitem.model";
-import { createUrlResolverWithoutPackagePrefix } from "@angular/compiler";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-dataextract",
@@ -42,13 +42,18 @@ export class DataextractComponent implements OnInit, OnDestroy {
   checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
 
+  fileUrl;
+  downLoadReady = false;
+  extractName = "checklists-extract.json";
+
   constructor(
     private categoryService: CategoryService,
     private teamService: TeamService,
     private activityService: ActivityService,
     private helper: HelperService,
     private checklistService: ChecklistService,
-    private checklistitemService: ChecklistitemService
+    private checklistitemService: ChecklistitemService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -103,79 +108,52 @@ export class DataextractComponent implements OnInit, OnDestroy {
   }
 
   async clicker() {
-    console.log("ckicker");
+    // For the extract I use a lot of awaits to resolve promises so the end result
+    // is to have all the selected checklists ready to write as json to a file
+    // and have denomalized most of the document references. Not all the properties
+    // of the checklists or checklist items get extracted
     this.checklistSpinner = true;
-    // const x = await this.checklists$
-    //   .pipe(first())
-    //   .toPromise()
-    //   .then((cs) => {
-    //     cs.map((c) => {
-    //       // Also resolve all the checklist items for the checklist
-    //       const checklistitem$$ = this.checklistitemService
-    //         .findAll(c.id)
-    //         .pipe(first())
-    //         .toPromise()
-    //         .then((cis) => {
-    //           // Process the cs and cis items to build the denormalized extract
-    //           console.log("c:", c, " csi:", cis);
-    //           this.checklistsExtract.push(this.denormalizeChecklist(c, cis));
-    //           // console.log("this.checklistsExtract", this.checklistsExtract);
-    //         });
-    //     });
-    //   });
+    let checklists = await (
+      await this.getChecklists(this.checklists$)
+    ).map((c) => this.denormalizeChecklist(c));
 
-    let cl = await (await this.getChecklists(this.checklists$)).map((c) =>
-      this.denormalizeChecklist(c)
-    );
-    let y = JSON.parse(JSON.stringify(cl));
-    console.log("y", y);
-    // async (cl.map(async (c) => {
-    //   let checklistitems$ = this.checklistitemService.findAll(c.id);
-    //   let cx = await (
-    //     await this.getChecklistitems(checklistitems$)
-    //   ).map((cli) => this.denormalizeChecklistitem(cli));
-    //   let cy = JSON.parse(JSON.stringify(cx));
-    //   c["checklistitems"] = cy;
-    // }));
-    // let cl2 = await cl.map(async (cl) => {
-    //   let checklistitems$ = this.checklistitemService.findAll(cl.id);
-    //   let ci = (await this.getChecklistitems(checklistitems$)).map((c) =>
-    //     this.denormalizeChecklistitem(c)
-    //   );
-    //   console.log("ci", ci);
-    //   // let x = JSON.parse(JSON.stringify(ci));
-    //   // console.log("x", x);
-    //   cl["checklistitems"] = ci;
-    //   return cl;
-    // });
-    // see https://flaviocopes.com/javascript-async-await-array-map/
-    let ci = await this.getChecklistitems(
-      this.checklistitemService.findAll(cl[0].id)
-    );
-    let x = JSON.parse(JSON.stringify(ci));
-
-    let cl2 = await Promise.all(
-      cl.map(async (c) => {
-        let ci = await (
+    let checklistsAndItems = await Promise.all(
+      checklists.map(async (c) => {
+        let checklistitems = await (
           await this.getChecklistitems(this.checklistitemService.findAll(c.id))
-        ).map((cii) => this.denormalizeChecklistitem(cii));
-        c["checklistitems"] = ci;
+        ).map((cli) => this.denormalizeChecklistitem(cli));
+        c["checklistitems"] = checklistitems;
         return c;
       })
     );
 
-    console.log("end", cl2);
+    // console.log("end", checklistsAndItems);
+
+    console.log("createDownload:", checklistsAndItems);
+    const extractBlob = new Blob([JSON.stringify(checklistsAndItems)], {
+      type: "application/json",
+    });
+
+    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      window.URL.createObjectURL(extractBlob)
+    );
+    this.extractName =
+      "checklists-extract-" + new Date().toISOString() + ".json";
+    this.downLoadReady = true;
     this.checklistSpinner = false;
   }
 
-  // async getChecklistitems(id) {
-  //   let checklistitems$ = this.checklistitemService.findAll(id);
-  //   let ci = await (await this.getChecklistitems(checklistitems$)).map((c) =>
-  //     this.denormalizeChecklistitem(c)
-  //   );
-  //   return ci;
+  async getChecklists(checklists$: Observable<Checklist[]>) {
+    // console.log("getChecklistitems");
+    let checklists = await checklists$.pipe(first()).toPromise();
+    return checklists;
+  }
 
-  // }
+  async getChecklistitems(checklistitems$: Observable<Checklistitem[]>) {
+    // console.log("getChecklistitems");
+    let checklistitems = await checklistitems$.pipe(first()).toPromise();
+    return checklistitems;
+  }
 
   denormalizeChecklist(checklist: Checklist): Checklistextract {
     // console.log("denormalizeChecklist", checklist);
@@ -221,20 +199,6 @@ export class DataextractComponent implements OnInit, OnDestroy {
         : [],
     };
     return checklistitemextract;
-  }
-
-  async getChecklists(checklists$: Observable<Checklist[]>) {
-    // console.log("getChecklistitems");
-    let x = await checklists$.pipe(first()).toPromise();
-    console.log("getChecklists x", x);
-    return x;
-  }
-
-  async getChecklistitems(checklistitems$: Observable<Checklistitem[]>) {
-    // console.log("getChecklistitems");
-    let x = await checklistitems$.pipe(first()).toPromise();
-    console.log("getChecklistitems x", x);
-    return x;
   }
 
   ngOnDestroy() {
