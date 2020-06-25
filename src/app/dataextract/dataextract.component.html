@@ -4,15 +4,110 @@
   matIcon="folder_open"
 ></app-subheading>
 
-<div class="page-container">
+<div class="page-container min-page">
   <mat-spinner
     *ngIf="
-      categorySpinner || teamSpinner || activitySpinner || checklistSpinner
+      categorySpinner ||
+      teamSpinner ||
+      activitySpinner ||
+      userSpinner ||
+      checklistSpinner
     "
     class="spinner_container"
   ></mat-spinner>
-  <button mat-button (click)="clicker()">click-me</button>
-  <a *ngIf="downLoadReady" [href]="fileUrl" [download]="extractName"
-    >Checklists as JSON
-  </a>
+  <mat-card>
+    <div class="grid50percent">
+      <!-- Status -->
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus">
+            <mat-option [value]="'0'">All</mat-option>
+            <mat-option
+              *ngFor="let statusInfo of checklistStatusInfo"
+              [value]="statusInfo.status"
+            >
+              {{ statusInfo.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Category -->
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="selectedCategory">
+            <mat-option [value]="'0'">All</mat-option>
+            <mat-option
+              *ngFor="let category of categoryInfo"
+              [value]="category.id"
+            >
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Team -->
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Team</mat-label>
+          <mat-select [(ngModel)]="selectedTeam">
+            <mat-option [value]="'0'">All</mat-option>
+            <mat-option *ngFor="let team of teamInfo" [value]="team.id">
+              {{ team.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Template -->
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Template</mat-label>
+          <mat-select [(ngModel)]="selectedTemplate">
+            <mat-option [value]="'0'">All</mat-option>
+            <mat-option
+              *ngFor="let template of templates$ | async"
+              [value]="template.id"
+            >
+              {{ template.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- From-date -->
+      <div>
+        <mat-form-field appearance="standard" class="full-width">
+          <mat-label>From Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="selectedFromDate"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+  <br />
+  <div class="grid2wrapper">
+    <div>
+      <button mat-button-outline (click)="createExtractFile()">
+        Create Extract
+      </button>
+    </div>
+    <div>
+      <a
+        [hidden]="!downLoadReady"
+        [href]="fileUrl"
+        [download]="extractName"
+        #fileExtract
+        >Checklists Extract (Click to download)
+      </a>
+    </div>
+  </div>
 </div>

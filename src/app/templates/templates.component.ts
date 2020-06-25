@@ -27,10 +27,7 @@ export class TemplatesComponent implements OnInit {
 
     this.checklists$ = this.checklistService.findAllTemplates(100).pipe(
       map((c) => {
-        // console.log(c);
         return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
-        // console.log(x);
-        // return x;
       })
     );
   }

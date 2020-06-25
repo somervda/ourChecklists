@@ -21,9 +21,8 @@ export interface Checklistextract {
   dateTargeted?: Date;
   dateCompleted?: Date;
   team: DocInfo;
-  assignee: UserInfo[]; // dont resolve displayname
+  assignee: UserInfo[];
   category: DocInfo;
-  resources?: DocInfo[]; // don't resolve name
   checklistitems: Checklistitemextract[];
 }
 
@@ -41,7 +40,6 @@ export interface Checklistitemextract {
   resultValue?: ChecklistitemResultValue;
   resultType: ChecklistitemResultType;
   comment?: string;
-  resources?: DocInfo[]; // Don't resolve names
   tagId?: string;
 }
 

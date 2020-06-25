@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { CategoryService } from "../services/category.service";
 import { Observable, Subscription } from "rxjs";
 import { Category } from "../models/category.model";
@@ -6,16 +13,22 @@ import {
   DocInfo,
   Checklistextract,
   Checklistitemextract,
+  UserInfo,
 } from "../models/checklistextract.model";
 import { map, first } from "rxjs/operators";
 import { TeamService } from "../services/team.service";
 import { ActivityService } from "../services/activity.service";
-import { Checklist } from "../models/checklist.model";
+import {
+  Checklist,
+  ChecklistStatusInfo,
+  ChecklistStatus,
+} from "../models/checklist.model";
 import { HelperService } from "../services/helper.service";
 import { ChecklistService } from "../services/checklist.service";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { Checklistitem } from "../models/checklistitem.model";
 import { DomSanitizer } from "@angular/platform-browser";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-dataextract",
@@ -38,6 +51,11 @@ export class DataextractComponent implements OnInit, OnDestroy {
   activityInfo$$: Subscription;
   activitySpinner = false;
 
+  userInfo: UserInfo[];
+  userInfo$: Observable<UserInfo[]>;
+  userInfo$$: Subscription;
+  userSpinner = false;
+
   checklistSpinner = false;
   checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
@@ -45,6 +63,17 @@ export class DataextractComponent implements OnInit, OnDestroy {
   fileUrl;
   downLoadReady = false;
   extractName = "checklists-extract.json";
+  @ViewChild("fileExtract") fileExtract: ElementRef<HTMLElement>;
+
+  checklistStatusInfo = ChecklistStatusInfo;
+
+  selectedStatus = "0";
+  selectedCategory = "0";
+  selectedTeam = "0";
+  selectedTemplate = "0";
+  selectedFromDate: any;
+
+  templates$: Observable<Checklist[]>;
 
   constructor(
     private categoryService: CategoryService,
@@ -53,7 +82,9 @@ export class DataextractComponent implements OnInit, OnDestroy {
     private helper: HelperService,
     private checklistService: ChecklistService,
     private checklistitemService: ChecklistitemService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +120,24 @@ export class DataextractComponent implements OnInit, OnDestroy {
       this.teamSpinner = false;
     });
 
+    // Get userInfo
+    this.userSpinner = true;
+    this.userInfo$ = this.userService.findAll(1000).pipe(
+      map(
+        (users) =>
+          (this.userInfo = users.map((user) => {
+            return {
+              uid: user.uid,
+              displayName: user.displayName,
+              email: user.email,
+            };
+          }))
+      )
+    );
+    this.userInfo$$ = this.userInfo$.subscribe(() => {
+      this.userSpinner = false;
+    });
+
     // Get activityInfo
     this.activitySpinner = true;
     this.activityInfo$ = this.activityService.findAll(1000).pipe(
@@ -104,10 +153,35 @@ export class DataextractComponent implements OnInit, OnDestroy {
       console.log("activityInfo:", this.activityInfo);
     });
 
-    this.checklists$ = this.checklistService.findAll(3);
+    this.templates$ = this.checklistService.findAllTemplates(1000).pipe(
+      map((c) => {
+        return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
+      })
+    );
+
+    this.checklists$ = this.checklistService.findAll(20);
   }
 
-  async clicker() {
+  getDocInfo(id: string, collection: DocInfo[]): DocInfo {
+    let foundDoc = collection.find((d) => d.id == id);
+    if (foundDoc) {
+      return foundDoc;
+    } else {
+      return { id: id };
+    }
+  }
+
+  getUserInfo(uid: string): UserInfo {
+    let foundUser = this.userInfo.find((u) => u.uid == uid);
+    if (foundUser) {
+      return foundUser;
+    } else {
+      return { uid: uid };
+    }
+  }
+
+  async createExtractFile() {
+    console.log("Selected:", this.selectedFromDate);
     // For the extract I use a lot of awaits to resolve promises so the end result
     // is to have all the selected checklists ready to write as json to a file
     // and have denomalized most of the document references. Not all the properties
@@ -140,7 +214,13 @@ export class DataextractComponent implements OnInit, OnDestroy {
     this.extractName =
       "checklists-extract-" + new Date().toISOString() + ".json";
     this.downLoadReady = true;
+
     this.checklistSpinner = false;
+    this.cdr.detectChanges();
+
+    // let el: HTMLElement = this.fileExtract.nativeElement;
+
+    // el.click();
   }
 
   async getChecklists(checklists$: Observable<Checklist[]>) {
@@ -163,19 +243,20 @@ export class DataextractComponent implements OnInit, OnDestroy {
       name: checklist.name,
       description: checklist.description,
       status: checklist.status,
-      team: { id: this.helper.getDocRefId(checklist.team) } as DocInfo,
+      team: this.getDocInfo(
+        this.helper.getDocRefId(checklist.team),
+        this.teamInfo
+      ),
       assignee: checklist.assignee
         ? checklist.assignee.map((userref) => {
-            return { uid: this.helper.getDocRefId(userref) };
-          })
-        : [],
-      resources: checklist.resources
-        ? checklist.resources.map((docref) => {
-            return { id: this.helper.getDocRefId(docref) };
+            return this.getUserInfo(this.helper.getDocRefId(userref));
           })
         : [],
       checklistitems: [],
-      category: { id: this.helper.getDocRefId(checklist.category) } as DocInfo,
+      category: this.getDocInfo(
+        this.helper.getDocRefId(checklist.category),
+        this.categoryInfo
+      ),
     };
 
     return checklistextract;
@@ -194,7 +275,10 @@ export class DataextractComponent implements OnInit, OnDestroy {
       tagId: checklistitem.tagId,
       activities: checklistitem.activities
         ? checklistitem.activities.map((docref) => {
-            return { id: this.helper.getDocRefId(docref) };
+            return this.getDocInfo(
+              this.helper.getDocRefId(docref),
+              this.activityInfo
+            );
           })
         : [],
     };

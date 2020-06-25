@@ -27,6 +27,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatRadioModule } from "@angular/material/radio";
@@ -96,7 +98,7 @@ import { TemplateComponent } from "./template/template.component";
 import { TemplatelistComponent } from "./shared/templatelist/templatelist.component";
 import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from "./dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
-import { DataextractComponent } from './dataextract/dataextract.component';
+import { DataextractComponent } from "./dataextract/dataextract.component";
 
 @NgModule({
   declarations: [
@@ -166,6 +168,9 @@ import { DataextractComponent } from './dataextract/dataextract.component';
     AppRoutingModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
     MatExpansionModule,
     MatIconModule,
     MatCardModule,

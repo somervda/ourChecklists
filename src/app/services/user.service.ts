@@ -24,6 +24,19 @@ export class UserService {
       );
   }
 
+  findAll(pageSize: number): Observable<User[]> {
+    // console.log( "user findAll",  pageSize  );
+    return this.afs
+      .collection("users", (ref) => ref.limit(pageSize))
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          // console.log("findDevices", convertSnaps<Device>(snaps));
+          return convertSnaps<User>(snaps);
+        })
+      );
+  }
+
   findUsers(
     filter = "",
     sortField,
