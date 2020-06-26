@@ -83,8 +83,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
     private checklistService: ChecklistService,
     private checklistitemService: ChecklistitemService,
     private sanitizer: DomSanitizer,
-    private userService: UserService,
-    private cdr: ChangeDetectorRef
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -158,8 +157,6 @@ export class DataextractComponent implements OnInit, OnDestroy {
         return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
       })
     );
-
-    this.checklists$ = this.checklistService.findAll(20);
   }
 
   getDocInfo(id: string, collection: DocInfo[]): DocInfo {
@@ -181,7 +178,9 @@ export class DataextractComponent implements OnInit, OnDestroy {
   }
 
   async createExtractFile() {
-    console.log("Selected:", this.selectedFromDate);
+    let dr = this.helper.docRef(`/categories/0`);
+    console.log("Selected:", this.selectedCategory, dr);
+    this.checklists$ = this.checklistService.findSearch(dr, 20);
     // For the extract I use a lot of awaits to resolve promises so the end result
     // is to have all the selected checklists ready to write as json to a file
     // and have denomalized most of the document references. Not all the properties
@@ -216,11 +215,6 @@ export class DataextractComponent implements OnInit, OnDestroy {
     this.downLoadReady = true;
 
     this.checklistSpinner = false;
-    this.cdr.detectChanges();
-
-    // let el: HTMLElement = this.fileExtract.nativeElement;
-
-    // el.click();
   }
 
   async getChecklists(checklists$: Observable<Checklist[]>) {
@@ -236,7 +230,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
   }
 
   denormalizeChecklist(checklist: Checklist): Checklistextract {
-    // console.log("denormalizeChecklist", checklist);
+    console.log("denormalizeChecklist", checklist);
     let checklistextract: Checklistextract = {
       id: checklist.id,
       isTemplate: checklist.isTemplate,

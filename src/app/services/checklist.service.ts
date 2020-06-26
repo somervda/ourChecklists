@@ -50,6 +50,23 @@ export class ChecklistService {
       );
   }
 
+  findSearch(
+    category: DocumentReference,
+    pageSize: number
+  ): Observable<Checklist[]> {
+    // console.log( "checklist findAll",  pageSize  );
+    return this.afs
+      .collection("checklists", (ref) =>
+        ref.where("category", ">=", category).limit(pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnaps<Checklist>(snaps);
+        })
+      );
+  }
+
   findAllTemplates(pageSize: number): Observable<Checklist[]> {
     // console.log( "checklist findAll",  pageSize  );
     return this.afs
