@@ -29,6 +29,7 @@ import { ChecklistitemService } from "../services/checklistitem.service";
 import { Checklistitem } from "../models/checklistitem.model";
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../services/user.service";
+import { CssSelector } from "@angular/compiler";
 
 @Component({
   selector: "app-dataextract",
@@ -59,6 +60,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
   checklistSpinner = false;
   checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
+  rows: number;
 
   fileUrl;
   downLoadReady = false;
@@ -71,7 +73,8 @@ export class DataextractComponent implements OnInit, OnDestroy {
   selectedCategory = "0";
   selectedTeam = "0";
   selectedTemplate = "0";
-  selectedFromDate: any;
+  selectedFromDate: Date;
+  selectedToDate: Date;
 
   templates$: Observable<Checklist[]>;
 
@@ -178,17 +181,56 @@ export class DataextractComponent implements OnInit, OnDestroy {
   }
 
   async createExtractFile() {
-    let dr = this.helper.docRef(`/categories/0`);
-    console.log("Selected:", this.selectedCategory, dr);
-    this.checklists$ = this.checklistService.findSearch(dr, 20);
+    console.log("Selected:", this.selectedFromDate);
+    this.checklistSpinner = true;
+    const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
+    const team = this.helper.docRef(`/teams/${this.selectedTeam}`);
+    const template = this.helper.docRef(`/checklists/${this.selectedTemplate}`);
+    this.checklists$ = this.checklistService.search(
+      parseInt(this.selectedStatus),
+      category,
+      team,
+      template,
+      1000
+    );
+    // Date range filters are implemented as a client side pipe rather
+    // than as firestore queries that would require managements of a bunch of indexes
+    // until perform on the client is impacted this should be OK
+    if (this.selectedFromDate) {
+      this.checklists$ = this.checklists$.pipe(
+        map((cs) => {
+          return cs.filter(
+            (c) =>
+              c.dateCompleted &&
+              (c.dateCompleted as firebase.firestore.Timestamp).toDate() >=
+                this.selectedFromDate
+          );
+        })
+      );
+    }
+
+    if (this.selectedToDate) {
+      this.checklists$ = this.checklists$.pipe(
+        map((cs) => {
+          return cs.filter(
+            (c) =>
+              c.dateCompleted &&
+              (c.dateCompleted as firebase.firestore.Timestamp).toDate() <=
+                this.selectedToDate
+          );
+        })
+      );
+    }
+
     // For the extract I use a lot of awaits to resolve promises so the end result
     // is to have all the selected checklists ready to write as json to a file
-    // and have denomalized most of the document references. Not all the properties
+    // and have denormalized most of the document references. Not all the properties
     // of the checklists or checklist items get extracted
-    this.checklistSpinner = true;
     let checklists = await (
       await this.getChecklists(this.checklists$)
     ).map((c) => this.denormalizeChecklist(c));
+
+    this.rows = checklists.length;
 
     let checklistsAndItems = await Promise.all(
       checklists.map(async (c) => {
@@ -230,13 +272,22 @@ export class DataextractComponent implements OnInit, OnDestroy {
   }
 
   denormalizeChecklist(checklist: Checklist): Checklistextract {
-    console.log("denormalizeChecklist", checklist);
+    // console.log("denormalizeChecklist", checklist);
     let checklistextract: Checklistextract = {
       id: checklist.id,
       isTemplate: checklist.isTemplate,
       name: checklist.name,
       description: checklist.description,
       status: checklist.status,
+      dateCreated: checklist.dateCreated
+        ? (checklist.dateCreated as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateCompleted: checklist.dateCompleted
+        ? (checklist.dateCompleted as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateUpdated: checklist.dateUpdated
+        ? (checklist.dateUpdated as firebase.firestore.Timestamp).toDate()
+        : undefined,
       team: this.getDocInfo(
         this.helper.getDocRefId(checklist.team),
         this.teamInfo
@@ -267,6 +318,12 @@ export class DataextractComponent implements OnInit, OnDestroy {
       resultType: checklistitem.resultType,
       resultValue: checklistitem.resultValue,
       tagId: checklistitem.tagId,
+      dateCreated: checklistitem.dateCreated
+        ? (checklistitem.dateCreated as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateResultSet: checklistitem.dateResultSet
+        ? (checklistitem.dateResultSet as firebase.firestore.Timestamp).toDate()
+        : undefined,
       activities: checklistitem.activities
         ? checklistitem.activities.map((docref) => {
             return this.getDocInfo(

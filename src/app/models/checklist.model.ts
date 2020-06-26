@@ -8,10 +8,10 @@ export interface Checklist {
   description: string;
   comments?: string;
   status: ChecklistStatus;
-  dateCreated?: Date | firebase.firestore.FieldValue;
-  dateUpdated?: Date | firebase.firestore.FieldValue;
-  dateTargeted?: Date;
-  dateCompleted?: Date | firebase.firestore.FieldValue;
+  dateCreated?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  dateUpdated?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  dateTargeted?: firebase.firestore.Timestamp;
+  dateCompleted?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   team: DocumentReference;
   assignee: DocumentReference[];
   category: DocumentReference;

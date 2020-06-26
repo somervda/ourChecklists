@@ -6,6 +6,7 @@ import { Crud } from "../models/helper.model";
 import { Activity } from "../models/activity.model";
 import { ActivityService } from "../services/activity.service";
 import { HelperService } from "../services/helper.service";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-activity",
@@ -42,6 +43,7 @@ export class ActivityComponent implements OnInit {
     this.activity = {
       name: "",
       description: "",
+      dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
     };
     if (this.crudAction != Crud.Create) {
       const aid = this.route.snapshot.paramMap.get("aid");

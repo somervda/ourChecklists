@@ -22,6 +22,7 @@ import { first } from "rxjs/operators";
 import { UserService } from "../services/user.service";
 import { ResourcecontentviewdialogComponent } from "../dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
 import { ResourceviewdialogComponent } from "../dialogs/resourceviewdialog/resourceviewdialog.component";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-resource",
@@ -81,6 +82,7 @@ export class ResourceComponent implements OnInit {
         content: "",
         status: ResourceStatus.active,
         reviewer: this.helper.docRef("users/" + this.auth.currentUser.uid),
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
       console.log("resource:", this.resource);
     } else {

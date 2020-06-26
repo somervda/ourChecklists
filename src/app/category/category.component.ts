@@ -6,6 +6,7 @@ import { CategoryService } from "../services/category.service";
 import { ActivatedRoute } from "@angular/router";
 import { Category } from "../models/category.model";
 import { HelperService } from "../services/helper.service";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-category",
@@ -44,6 +45,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       this.category = {
         name: "",
         description: "",
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
     } else {
       this.category = this.route.snapshot.data["category"];

@@ -12,7 +12,11 @@ import {
 } from "./db-utils";
 import { AuthService } from "./auth.service";
 import { ChecklistitemService } from "./checklistitem.service";
-import { Checklistitem } from "../models/checklistitem.model";
+import {
+  Checklistitem,
+  ChecklistitemResultType,
+  ChecklistitemResultValue,
+} from "../models/checklistitem.model";
 import { User } from "../models/user.model";
 import { HelperService } from "./helper.service";
 
@@ -50,15 +54,48 @@ export class ChecklistService {
       );
   }
 
-  findSearch(
+  /**
+   * Spoecial version of find to do more complicated searches with multiple
+   * filters, uses a special case to find all
+   * @param category
+   * @param pageSize
+   */
+  search(
+    status: number,
     category: DocumentReference,
+    team: DocumentReference,
+    template: DocumentReference,
+    // fromDateCompleted: Date,
     pageSize: number
   ): Observable<Checklist[]> {
     // console.log( "checklist findAll",  pageSize  );
     return this.afs
-      .collection("checklists", (ref) =>
-        ref.where("category", ">=", category).limit(pageSize)
-      )
+      .collection("checklists", (ref) => {
+        let retVal = ref as any;
+
+        // if (fromDateCompleted) {
+        //   retVal = retVal.where("dateCompleted", ">=", fromDateCompleted);
+        // }
+
+        if (status != 0) {
+          retVal = retVal.where("status", "==", status);
+        }
+
+        if (category.path != "categories/0") {
+          retVal = retVal.where("category", "==", category);
+        }
+
+        if (team.path != "teams/0") {
+          retVal = retVal.where("team", "==", team);
+        }
+
+        if (template.path != "checklists/0") {
+          retVal = retVal.where("fromTemplate", "==", template);
+        }
+
+        retVal = retVal.limit(pageSize);
+        return retVal;
+      })
       .snapshotChanges()
       .pipe(
         map((snaps) => {
@@ -164,15 +201,31 @@ export class ChecklistService {
     docId: string,
     fieldName: string,
     newValue: any
-  ): Promise<void> {
+  ): Promise<any> {
     console.log("checklist fieldUpdate", docId, fieldName, newValue);
     if (docId && fieldName) {
-      return dbFieldUpdateAsPromise(
-        "/checklists/" + docId,
-        fieldName,
-        newValue,
-        this.afs
+      let myPromises = [];
+      myPromises.push(
+        dbFieldUpdateAsPromise(
+          "/checklists/" + docId,
+          fieldName,
+          newValue,
+          this.afs
+        )
       );
+
+      // Special case if updating status to completed, also update dateCompleted
+      if (fieldName == "status" && newValue == ChecklistStatus.Complete) {
+        myPromises.push(
+          dbFieldUpdateAsPromise(
+            "/checklists/" + docId,
+            "dateCompleted",
+            firebase.firestore.FieldValue.serverTimestamp(),
+            this.afs
+          )
+        );
+      }
+      return Promise.all(myPromises);
     } else {
       return null;
     }

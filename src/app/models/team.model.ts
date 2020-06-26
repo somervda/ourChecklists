@@ -3,6 +3,6 @@ export interface Team {
   name: string;
   description: string;
   isActive: Boolean;
-  dateCreated?: Date;
-  dateUpdated?: Date;
+  dateCreated?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  dateUpdated?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }

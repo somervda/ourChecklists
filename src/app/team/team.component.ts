@@ -9,6 +9,7 @@ import { AuthService } from "../services/auth.service";
 import { HelperService } from "../services/helper.service";
 import { first } from "rxjs/operators";
 import { User } from "../models/user.model";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-team",
@@ -58,6 +59,7 @@ export class TeamComponent implements OnInit, OnDestroy {
         name: "",
         description: "",
         isActive: true,
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
       };
     } else {
       // console.log("team snapshotdata", this.route.snapshot);

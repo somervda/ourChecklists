@@ -9,11 +9,11 @@ export interface Resource {
   content: string;
   status: ResourceStatus;
   supersedes?: DocumentReference;
-  dateReviewed?: Date;
+  dateReviewed?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   team?: DocumentReference;
   reviewer?: DocumentReference;
-  dateCreated?: Date;
-  dateUpdated?: Date;
+  dateCreated?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  dateUpdated?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   category?: DocumentReference;
 }
 

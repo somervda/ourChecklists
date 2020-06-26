@@ -1,4 +1,5 @@
 import { AngularFirestore } from "@angular/fire/firestore";
+import * as firebase from "firebase";
 
 export function convertSnaps<T>(snaps) {
   return <T[]>snaps.map((snap) => {
@@ -8,6 +9,14 @@ export function convertSnaps<T>(snaps) {
       ...snap.payload.doc.data(),
     };
   });
+
+  // return <T[]>snaps.map((snap) => {
+  //   // console.log("snaps", snaps);
+  //   return {
+  //     id: snap.payload.doc.id,
+  //     ...snap.payload.doc.data(),
+  //   };
+  // });
 }
 
 // Convert snap converts a single documentsnapshot into a single item of type T
@@ -29,6 +38,10 @@ export function dbFieldUpdate(
     // console.log("dbFieldUpdate: ", docPath, fieldName, newValue);
     let updateObject = {};
     updateObject[fieldName] = newValue;
+    // Always update the dateUpdated field
+    updateObject[
+      "dateUpdated"
+    ] = firebase.firestore.FieldValue.serverTimestamp();
     // console.log(updateObject);
     db.doc(docPath)
       .update(updateObject)
@@ -51,6 +64,10 @@ export function dbFieldUpdateAsPromise(
     // console.log("dbFieldUpdate: ", docPath, fieldName, newValue);
     let updateObject = {};
     updateObject[fieldName] = newValue;
+    // Always update the dateUpdated
+    updateObject[
+      "dateUpdated"
+    ] = firebase.firestore.FieldValue.serverTimestamp();
     // console.log(updateObject);
     return db.doc(docPath).update(updateObject);
   } else {

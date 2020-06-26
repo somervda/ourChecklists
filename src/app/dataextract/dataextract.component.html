@@ -78,17 +78,26 @@
       <!-- From-date -->
       <div>
         <mat-form-field appearance="standard" class="full-width">
-          <mat-label>From Date</mat-label>
+          <mat-label>From Completion Date</mat-label>
           <input
             matInput
-            [matDatepicker]="picker"
+            [matDatepicker]="fromDt"
             [(ngModel)]="selectedFromDate"
           />
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"
+            [for]="fromDt"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #fromDt></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <!-- To-date -->
+      <div>
+        <mat-form-field appearance="standard" class="full-width">
+          <mat-label>To Completion Date</mat-label>
+          <input matInput [matDatepicker]="toDt" [(ngModel)]="selectedToDate" />
+          <mat-datepicker-toggle matSuffix [for]="toDt"></mat-datepicker-toggle>
+          <mat-datepicker #toDt></mat-datepicker>
         </mat-form-field>
       </div>
     </div>
@@ -105,8 +114,9 @@
         [hidden]="!downLoadReady"
         [href]="fileUrl"
         [download]="extractName"
+        [matTooltip]="'Click to download: ' + rows + ' items'"
         #fileExtract
-        >Checklists Extract (Click to download)
+        >Checklists JSON Extract
       </a>
     </div>
   </div>
