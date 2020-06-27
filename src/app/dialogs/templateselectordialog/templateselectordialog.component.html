@@ -1,0 +1,34 @@
+<div class="dialog-heading">Select Template</div>
+
+<div class="template-list">
+  <div
+    class="list-item"
+    [style.backgroundColor]="selectedTemplate.id == '0' ? 'lightgrey' : 'white'"
+    (click)="onTemplateSelected({ id: '0', name: 'All' })"
+  >
+    All
+  </div>
+  <div
+    class="list-item"
+    *ngFor="let template of templates$ | async"
+    [style.backgroundColor]="
+      selectedTemplate.id == template.id ? 'lightgrey' : 'white'
+    "
+    (click)="onTemplateSelected(template)"
+  >
+    {{ template.name }}
+  </div>
+</div>
+
+<button
+  mat-button
+  matTooltip="Select Template"
+  (click)="returnTemplateInfo()"
+  [disabled]="!selectedTemplate"
+>
+  <mat-icon>check</mat-icon>Update
+</button>
+
+<button mat-button matTooltip="Cancel" mat-dialog-close>
+  <mat-icon>close</mat-icon>Cancel
+</button>

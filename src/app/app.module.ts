@@ -99,6 +99,7 @@ import { TemplatelistComponent } from "./shared/templatelist/templatelist.compon
 import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from "./dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
 import { DataextractComponent } from "./dataextract/dataextract.component";
+import { TemplateselectordialogComponent } from "./dialogs/templateselectordialog/templateselectordialog.component";
 
 @NgModule({
   declarations: [
@@ -159,6 +160,7 @@ import { DataextractComponent } from "./dataextract/dataextract.component";
     DocPipe,
     ResourcecontentviewdialogComponent,
     DataextractComponent,
+    TemplateselectordialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -197,7 +199,7 @@ import { DataextractComponent } from "./dataextract/dataextract.component";
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirePerformanceModule,
     AngularFireAuthModule,
-    // Allow offline operations - useful when used in combination with PWA functionality
+    // Allow offline operations by selecting enable persistance - useful when used in combination with PWA functionality
     // AngularFirestoreModule,
     AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,

@@ -59,22 +59,32 @@
           </mat-select>
         </mat-form-field>
       </div>
+    </div>
 
-      <!-- Template -->
-      <div>
-        <mat-form-field class="full-width">
+    <!-- Template -->
+    <div>
+      <!-- <mat-form-field class="full-width">
           <mat-label>Template</mat-label>
           <mat-select [(ngModel)]="selectedTemplate">
             <mat-option [value]="'0'">All</mat-option>
-            <mat-option
+            mat-option
               *ngFor="let template of templates$ | async"
               [value]="template.id"
             >
               {{ template.name }}
-            </mat-option>
+            </mat-option> 
           </mat-select>
-        </mat-form-field>
-      </div>
+        </mat-form-field> -->
+      {{ selectedTemplate.name }}
+      <button
+        mat-button
+        (click)="templateDialog()"
+        matTooltip="Select Template"
+      >
+        <mat-icon>filter_list</mat-icon>
+      </button>
+    </div>
+    <div class="grid50percent">
       <!-- From-date -->
       <div>
         <mat-form-field appearance="standard" class="full-width">

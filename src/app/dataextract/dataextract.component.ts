@@ -1,35 +1,30 @@
 import {
   Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
   ElementRef,
-  ChangeDetectorRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
 } from "@angular/core";
-import { CategoryService } from "../services/category.service";
+import { MatDialog } from "@angular/material/dialog";
+import { DomSanitizer } from "@angular/platform-browser";
 import { Observable, Subscription } from "rxjs";
-import { Category } from "../models/category.model";
+import { first, map } from "rxjs/operators";
+import { TemplateselectordialogComponent } from "../dialogs/templateselectordialog/templateselectordialog.component";
+import { Checklist, ChecklistStatusInfo } from "../models/checklist.model";
 import {
-  DocInfo,
   Checklistextract,
   Checklistitemextract,
+  DocInfo,
   UserInfo,
 } from "../models/checklistextract.model";
-import { map, first } from "rxjs/operators";
-import { TeamService } from "../services/team.service";
+import { Checklistitem } from "../models/checklistitem.model";
 import { ActivityService } from "../services/activity.service";
-import {
-  Checklist,
-  ChecklistStatusInfo,
-  ChecklistStatus,
-} from "../models/checklist.model";
-import { HelperService } from "../services/helper.service";
+import { CategoryService } from "../services/category.service";
 import { ChecklistService } from "../services/checklist.service";
 import { ChecklistitemService } from "../services/checklistitem.service";
-import { Checklistitem } from "../models/checklistitem.model";
-import { DomSanitizer } from "@angular/platform-browser";
+import { HelperService } from "../services/helper.service";
+import { TeamService } from "../services/team.service";
 import { UserService } from "../services/user.service";
-import { CssSelector } from "@angular/compiler";
 
 @Component({
   selector: "app-dataextract",
@@ -60,8 +55,14 @@ export class DataextractComponent implements OnInit, OnDestroy {
   checklistSpinner = false;
   checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
-  rows: number;
 
+  templates$: Observable<Checklist[]>;
+  templateInfo: DocInfo[];
+  templateInfo$: Observable<DocInfo[]>;
+  templateInfo$$: Subscription;
+  templateSpinner = false;
+
+  rows: number;
   fileUrl;
   downLoadReady = false;
   extractName = "checklists-extract.json";
@@ -72,11 +73,9 @@ export class DataextractComponent implements OnInit, OnDestroy {
   selectedStatus = "0";
   selectedCategory = "0";
   selectedTeam = "0";
-  selectedTemplate = "0";
+  selectedTemplate = { id: "0", name: "All" };
   selectedFromDate: Date;
   selectedToDate: Date;
-
-  templates$: Observable<Checklist[]>;
 
   constructor(
     private categoryService: CategoryService,
@@ -86,7 +85,8 @@ export class DataextractComponent implements OnInit, OnDestroy {
     private checklistService: ChecklistService,
     private checklistitemService: ChecklistitemService,
     private sanitizer: DomSanitizer,
-    private userService: UserService
+    private userService: UserService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -154,12 +154,6 @@ export class DataextractComponent implements OnInit, OnDestroy {
       this.activitySpinner = false;
       console.log("activityInfo:", this.activityInfo);
     });
-
-    this.templates$ = this.checklistService.findAllTemplates(1000).pipe(
-      map((c) => {
-        return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
-      })
-    );
   }
 
   getDocInfo(id: string, collection: DocInfo[]): DocInfo {
@@ -180,12 +174,42 @@ export class DataextractComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * This is a bit of a kludge , but the angular/firestore library seems
+   * to cache the documents from the first query on a document collection, so
+   * when I was getting a list of templates in the OnInit function then
+   * the search checklists would only use the checklist in that subcollection!
+   * I raised an observation with Google and then moved getting templates
+   * out to a separate dialog componenet :(
+   */
+  templateDialog() {
+    console.log("templateDialog");
+    const dialogRef = this.dialog.open(TemplateselectordialogComponent, {
+      minWidth: "380px",
+      maxWidth: "500px",
+      width: "80%",
+      data: { selectedTemplate: this.selectedTemplate },
+      autoFocus: false,
+    });
+    dialogRef.afterClosed().subscribe((choice) => {
+      if (choice) {
+        this.selectedTemplate = choice;
+      }
+    });
+  }
+
   async createExtractFile() {
-    console.log("Selected:", this.selectedFromDate);
+    console.log(
+      "selectedFromDate ${this.selectedFromDate}, selectedCategory ${this.selectedCategory} ," +
+        " selectedTeam ${this.selectedTeam}, selectedTemplate${this.selectedTemplate}," +
+        " selectedStatus ${this.selectedStatus}, selectedToDate ${this.selectedToDate}"
+    );
     this.checklistSpinner = true;
     const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
     const team = this.helper.docRef(`/teams/${this.selectedTeam}`);
-    const template = this.helper.docRef(`/checklists/${this.selectedTemplate}`);
+    const template = this.helper.docRef(
+      `/checklists/${this.selectedTemplate.id}`
+    );
     this.checklists$ = this.checklistService.search(
       parseInt(this.selectedStatus),
       category,
@@ -345,6 +369,9 @@ export class DataextractComponent implements OnInit, OnDestroy {
     }
     if (this.activityInfo$$) {
       this.activityInfo$$.unsubscribe();
+    }
+    if (this.templateInfo$$) {
+      this.templateInfo$$.unsubscribe();
     }
   }
 }

@@ -49,13 +49,14 @@ export class ChecklistService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
+          console.log("findAll snaps:", snaps.length);
           return convertSnaps<Checklist>(snaps);
         })
       );
   }
 
   /**
-   * Spoecial version of find to do more complicated searches with multiple
+   * Special version of find to do more complicated searches with multiple
    * filters, uses a special case to find all
    * @param category
    * @param pageSize
@@ -68,7 +69,14 @@ export class ChecklistService {
     // fromDateCompleted: Date,
     pageSize: number
   ): Observable<Checklist[]> {
-    // console.log( "checklist findAll",  pageSize  );
+    console.log(
+      "checklist search : ",
+      status,
+      category,
+      team,
+      template,
+      pageSize
+    );
     return this.afs
       .collection("checklists", (ref) => {
         let retVal = ref as any;
@@ -78,27 +86,33 @@ export class ChecklistService {
         // }
 
         if (status != 0) {
+          console.log("Filter Status");
           retVal = retVal.where("status", "==", status);
         }
 
         if (category.path != "categories/0") {
+          console.log("Filter Category");
           retVal = retVal.where("category", "==", category);
         }
 
         if (team.path != "teams/0") {
+          console.log("Filter Team");
           retVal = retVal.where("team", "==", team);
         }
 
         if (template.path != "checklists/0") {
+          console.log("Filter template");
           retVal = retVal.where("fromTemplate", "==", template);
         }
 
         retVal = retVal.limit(pageSize);
+        console.log("Filter ref:", retVal, ref);
         return retVal;
       })
       .snapshotChanges()
       .pipe(
         map((snaps) => {
+          console.log("Filter snaps:", snaps.length);
           return convertSnaps<Checklist>(snaps);
         })
       );
