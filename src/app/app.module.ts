@@ -199,9 +199,12 @@ import { TemplateselectordialogComponent } from "./dialogs/templateselectordialo
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirePerformanceModule,
     AngularFireAuthModule,
-    // Allow offline operations by selecting enable persistance - useful when used in combination with PWA functionality
-    // AngularFirestoreModule,
-    AngularFirestoreModule.enablePersistence(),
+    // Allow offline data operations by selecting enable persistance - useful when used in combination with PWA functionality
+    // however messes things up when testing (May not find uncached data)
+    // https://firebase.google.com/docs/firestore/manage-data/enable-offline
+    // https://firebase.google.com/docs/reference/js/firebase.firestore.PersistenceSettings
+    AngularFirestoreModule,
+    // AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
