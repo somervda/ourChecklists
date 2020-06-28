@@ -35,3 +35,15 @@ button {
 .list-item {
   cursor: pointer;
 }
+
+.spinner_container {
+  border-radius: 10px;
+  height: 40px;
+  left: 40%;
+  position: absolute;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  z-index: 3;
+  opacity: 0.5;
+}

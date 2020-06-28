@@ -10,7 +10,11 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { Observable, Subscription } from "rxjs";
 import { first, map } from "rxjs/operators";
 import { TemplateselectordialogComponent } from "../dialogs/templateselectordialog/templateselectordialog.component";
-import { Checklist, ChecklistStatusInfo } from "../models/checklist.model";
+import {
+  Checklist,
+  ChecklistStatusInfo,
+  ChecklistStatus,
+} from "../models/checklist.model";
 import {
   Checklistextract,
   Checklistitemextract,
@@ -53,7 +57,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
   userSpinner = false;
 
   checklistSpinner = false;
-  checklists$: Observable<Checklist[]>;
+  // checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
 
   templates$: Observable<Checklist[]>;
@@ -154,6 +158,12 @@ export class DataextractComponent implements OnInit, OnDestroy {
       this.activitySpinner = false;
       console.log("activityInfo:", this.activityInfo);
     });
+
+    // this.templates$ = this.checklistService.findAllTemplates(1000).pipe(
+    //   map((c) => {
+    //     return c.filter((cf) => cf.status != ChecklistStatus.Deleted);
+    //   })
+    // );
   }
 
   getDocInfo(id: string, collection: DocInfo[]): DocInfo {
@@ -210,7 +220,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
     const template = this.helper.docRef(
       `/checklists/${this.selectedTemplate.id}`
     );
-    this.checklists$ = this.checklistService.search(
+    let checklists$ = this.checklistService.search(
       parseInt(this.selectedStatus),
       category,
       team,
@@ -221,7 +231,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
     // than as firestore queries that would require managements of a bunch of indexes
     // until perform on the client is impacted this should be OK
     if (this.selectedFromDate) {
-      this.checklists$ = this.checklists$.pipe(
+      checklists$ = checklists$.pipe(
         map((cs) => {
           return cs.filter(
             (c) =>
@@ -234,7 +244,7 @@ export class DataextractComponent implements OnInit, OnDestroy {
     }
 
     if (this.selectedToDate) {
-      this.checklists$ = this.checklists$.pipe(
+      checklists$ = checklists$.pipe(
         map((cs) => {
           return cs.filter(
             (c) =>
@@ -250,9 +260,9 @@ export class DataextractComponent implements OnInit, OnDestroy {
     // is to have all the selected checklists ready to write as json to a file
     // and have denormalized most of the document references. Not all the properties
     // of the checklists or checklist items get extracted
-    let checklists = await (
-      await this.getChecklists(this.checklists$)
-    ).map((c) => this.denormalizeChecklist(c));
+    let checklists = await (await this.getChecklists(checklists$)).map((c) =>
+      this.denormalizeChecklist(c)
+    );
 
     this.rows = checklists.length;
 

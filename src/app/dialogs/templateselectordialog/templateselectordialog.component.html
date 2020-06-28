@@ -1,3 +1,4 @@
+<mat-spinner *ngIf="templateSpinner" class="spinner_container"></mat-spinner>
 <div class="dialog-heading">Select Template</div>
 
 <div class="template-list">
@@ -10,7 +11,7 @@
   </div>
   <div
     class="list-item"
-    *ngFor="let template of templates$ | async"
+    *ngFor="let template of templates"
     [style.backgroundColor]="
       selectedTemplate.id == template.id ? 'lightgrey' : 'white'
     "
