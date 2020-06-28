@@ -1,0 +1,16 @@
+<app-subheading
+  prompt="Data Visualizations
+  "
+  matIcon="insert_chart_outlined"
+></app-subheading>
+
+<div class="page-container min-page">
+  <app-datasearch
+    (checklistExtract)="createViz($event)"
+    (startExtract)="startExtract()"
+  ></app-datasearch>
+  <br />
+  <div *ngIf="vizReady">
+    Viz ready
+  </div>
+</div>

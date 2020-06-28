@@ -34,12 +34,19 @@ import { ChecklistStatus } from "./models/checklist.model";
 import { TemplatesComponent } from "./templates/templates.component";
 import { TemplateComponent } from "./template/template.component";
 import { DataextractComponent } from "./dataextract/dataextract.component";
+import { DatavizualizationComponent } from "./datavizualization/datavizualization.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent },
   { path: "login", component: LoginComponent },
   { path: "notAuthorized", component: NotauthorizedComponent },
+  {
+    path: "dataVizualization",
+    component: DatavizualizationComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
   {
     path: "dataExtract",
     component: DataextractComponent,

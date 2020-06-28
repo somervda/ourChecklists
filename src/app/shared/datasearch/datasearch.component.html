@@ -1,0 +1,94 @@
+<mat-spinner
+  *ngIf="
+    categorySpinner ||
+    teamSpinner ||
+    activitySpinner ||
+    userSpinner ||
+    checklistSpinner
+  "
+  class="spinner_container"
+></mat-spinner>
+<mat-card>
+  <div class="grid50percent">
+    <!-- Status -->
+    <div>
+      <mat-form-field class="full-width">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus">
+          <mat-option [value]="'0'">All</mat-option>
+          <mat-option
+            *ngFor="let statusInfo of checklistStatusInfo"
+            [value]="statusInfo.status"
+          >
+            {{ statusInfo.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- Category -->
+    <div>
+      <mat-form-field class="full-width">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory">
+          <mat-option [value]="'0'">All</mat-option>
+          <mat-option
+            *ngFor="let category of categoryInfo"
+            [value]="category.id"
+          >
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- Team -->
+    <div>
+      <mat-form-field class="full-width">
+        <mat-label>Team</mat-label>
+        <mat-select [(ngModel)]="selectedTeam">
+          <mat-option [value]="'0'">All</mat-option>
+          <mat-option *ngFor="let team of teamInfo" [value]="team.id">
+            {{ team.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Template -->
+  <div>
+    {{ selectedTemplate.name }}
+    <button mat-button (click)="templateDialog()" matTooltip="Select Template">
+      <mat-icon>filter_list</mat-icon>
+    </button>
+  </div>
+
+  <div class="grid50percent">
+    <!-- From-date -->
+    <div>
+      <mat-form-field appearance="standard" class="full-width">
+        <mat-label>From Completion Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fromDt"
+          [(ngModel)]="selectedFromDate"
+        />
+        <mat-datepicker-toggle matSuffix [for]="fromDt"></mat-datepicker-toggle>
+        <mat-datepicker #fromDt></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <!-- To-date -->
+    <div>
+      <mat-form-field appearance="standard" class="full-width">
+        <mat-label>To Completion Date</mat-label>
+        <input matInput [matDatepicker]="toDt" [(ngModel)]="selectedToDate" />
+        <mat-datepicker-toggle matSuffix [for]="toDt"></mat-datepicker-toggle>
+        <mat-datepicker #toDt></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <button mat-button-outline (click)="getSelectedData()">
+      Get Data
+    </button>
+  </div>
+</mat-card>

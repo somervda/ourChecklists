@@ -100,6 +100,8 @@ import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from "./dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
 import { DataextractComponent } from "./dataextract/dataextract.component";
 import { TemplateselectordialogComponent } from "./dialogs/templateselectordialog/templateselectordialog.component";
+import { DatasearchComponent } from './shared/datasearch/datasearch.component';
+import { DatavizualizationComponent } from './datavizualization/datavizualization.component';
 
 @NgModule({
   declarations: [
@@ -161,6 +163,8 @@ import { TemplateselectordialogComponent } from "./dialogs/templateselectordialo
     ResourcecontentviewdialogComponent,
     DataextractComponent,
     TemplateselectordialogComponent,
+    DatasearchComponent,
+    DatavizualizationComponent,
   ],
   imports: [
     BrowserModule,

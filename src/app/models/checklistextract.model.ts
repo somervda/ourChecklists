@@ -23,7 +23,13 @@ export interface Checklistextract {
   team: DocInfo;
   assignee: UserInfo[];
   category: DocInfo;
+  score?: Checklistscore;
   checklistitems: Checklistitemextract[];
+}
+
+export interface Checklistscore {
+  overall: number;
+  completeness: number;
 }
 
 export interface Checklistitemextract {

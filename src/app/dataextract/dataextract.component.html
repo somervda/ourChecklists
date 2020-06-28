@@ -5,131 +5,18 @@
 ></app-subheading>
 
 <div class="page-container min-page">
-  <mat-spinner
-    *ngIf="
-      categorySpinner ||
-      teamSpinner ||
-      activitySpinner ||
-      userSpinner ||
-      checklistSpinner
-    "
-    class="spinner_container"
-  ></mat-spinner>
-  <mat-card>
-    <div class="grid50percent">
-      <!-- Status -->
-      <div>
-        <mat-form-field class="full-width">
-          <mat-label>Status</mat-label>
-          <mat-select [(ngModel)]="selectedStatus">
-            <mat-option [value]="'0'">All</mat-option>
-            <mat-option
-              *ngFor="let statusInfo of checklistStatusInfo"
-              [value]="statusInfo.status"
-            >
-              {{ statusInfo.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <!-- Category -->
-      <div>
-        <mat-form-field class="full-width">
-          <mat-label>Category</mat-label>
-          <mat-select [(ngModel)]="selectedCategory">
-            <mat-option [value]="'0'">All</mat-option>
-            <mat-option
-              *ngFor="let category of categoryInfo"
-              [value]="category.id"
-            >
-              {{ category.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <!-- Team -->
-      <div>
-        <mat-form-field class="full-width">
-          <mat-label>Team</mat-label>
-          <mat-select [(ngModel)]="selectedTeam">
-            <mat-option [value]="'0'">All</mat-option>
-            <mat-option *ngFor="let team of teamInfo" [value]="team.id">
-              {{ team.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <!-- <div>
-        <mat-form-field class="full-width">
-          <mat-label>Template</mat-label>
-          <mat-select [(ngModel)]="selectedTemplate">
-            <mat-option [value]="'0'">All</mat-option>
-            <mat-option
-              *ngFor="let template of templates$ | async"
-              [value]="template.id"
-            >
-              {{ template.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div> -->
-    </div>
-
-    <!-- Template -->
-    <div>
-      {{ selectedTemplate.name }}
-      <button
-        mat-button
-        (click)="templateDialog()"
-        matTooltip="Select Template"
-      >
-        <mat-icon>filter_list</mat-icon>
-      </button>
-    </div>
-    <div class="grid50percent">
-      <!-- From-date -->
-      <div>
-        <mat-form-field appearance="standard" class="full-width">
-          <mat-label>From Completion Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="fromDt"
-            [(ngModel)]="selectedFromDate"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="fromDt"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #fromDt></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <!-- To-date -->
-      <div>
-        <mat-form-field appearance="standard" class="full-width">
-          <mat-label>To Completion Date</mat-label>
-          <input matInput [matDatepicker]="toDt" [(ngModel)]="selectedToDate" />
-          <mat-datepicker-toggle matSuffix [for]="toDt"></mat-datepicker-toggle>
-          <mat-datepicker #toDt></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-  </mat-card>
+  <app-datasearch
+    (checklistExtract)="createDownload($event)"
+    (startExtract)="startExtract()"
+  ></app-datasearch>
   <br />
-  <div class="grid2wrapper">
-    <div>
-      <button mat-button-outline (click)="createExtractFile()">
-        Create Extract
-      </button>
-    </div>
-    <div>
-      <a
-        [hidden]="!downLoadReady"
-        [href]="fileUrl"
-        [download]="extractName"
-        [matTooltip]="'Click to download: ' + rows + ' items'"
-        #fileExtract
-        >Checklists JSON Extract
-      </a>
-    </div>
+  <div *ngIf="downLoadReady">
+    <a
+      [href]="fileUrl"
+      [download]="extractName"
+      [matTooltip]="'Click to download: ' + rows + ' checklists'"
+      #fileExtract
+      >Checklists JSON Extract
+    </a>
   </div>
 </div>
