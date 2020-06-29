@@ -10,7 +10,23 @@
     (startExtract)="startExtract()"
   ></app-datasearch>
   <br />
-  <div *ngIf="vizReady">
-    Viz ready
+  <div *ngIf="showChart">
+    <div class="chart-holder">
+      <ngx-charts-bar-horizontal
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="series"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-bar-horizontal>
+    </div>
   </div>
 </div>

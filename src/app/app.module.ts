@@ -100,8 +100,9 @@ import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from "./dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
 import { DataextractComponent } from "./dataextract/dataextract.component";
 import { TemplateselectordialogComponent } from "./dialogs/templateselectordialog/templateselectordialog.component";
-import { DatasearchComponent } from './shared/datasearch/datasearch.component';
-import { DatavizualizationComponent } from './datavizualization/datavizualization.component';
+import { DatasearchComponent } from "./shared/datasearch/datasearch.component";
+import { DatavizualizationComponent } from "./datavizualization/datavizualization.component";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 
 @NgModule({
   declarations: [
@@ -200,6 +201,7 @@ import { DatavizualizationComponent } from './datavizualization/datavizualizatio
     MatInputModule,
     AppRoutingModule,
     NgbCarouselModule,
+    NgxChartsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirePerformanceModule,
     AngularFireAuthModule,
