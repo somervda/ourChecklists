@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { HelperService } from "../services/helper.service";
-import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { Checklistextract } from "../models/checklistextract.model";
 
 @Component({
@@ -13,7 +12,7 @@ export class DatavizualizationComponent implements OnInit {
   showChart = false;
 
   series = [];
-  view: any[] = [700, 400];
+  // view: any[] = [700, 400];
 
   // options
   showXAxis: boolean = true;
@@ -38,7 +37,7 @@ export class DatavizualizationComponent implements OnInit {
   }
 
   createViz(checklistsAndItems) {
-    console.log("creatViz:", checklistsAndItems);
+    // console.log("creatViz:", checklistsAndItems);
     this.rows = checklistsAndItems.length;
     this.series = this.buildChartData(
       checklistsAndItems,
@@ -64,15 +63,11 @@ export class DatavizualizationComponent implements OnInit {
     checklistsAndItems.forEach((c) => {
       const group = traverse(c, groupingProperty);
       const value = traverse(c, scoreProperty);
-
-      console.log("foreach:", c.id, group, value);
       if (group != undefined && value != undefined) {
         if (series.find((x) => x.name == group)) {
-          console.log("update");
           series.find((x) => x.name == group).value += value;
           series.find((x) => x.name == group).count += 1;
         } else {
-          console.log("push", { name: group, value: value });
           series.push({ name: group, value: value, count: 1 });
         }
       }

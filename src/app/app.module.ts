@@ -98,7 +98,6 @@ import { TemplateComponent } from "./template/template.component";
 import { TemplatelistComponent } from "./shared/templatelist/templatelist.component";
 import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from "./dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
-import { DataextractComponent } from "./dataextract/dataextract.component";
 import { TemplateselectordialogComponent } from "./dialogs/templateselectordialog/templateselectordialog.component";
 import { DatasearchComponent } from "./shared/datasearch/datasearch.component";
 import { DatavizualizationComponent } from "./datavizualization/datavizualization.component";
@@ -162,7 +161,6 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
     TemplatelistComponent,
     DocPipe,
     ResourcecontentviewdialogComponent,
-    DataextractComponent,
     TemplateselectordialogComponent,
     DatasearchComponent,
     DatavizualizationComponent,

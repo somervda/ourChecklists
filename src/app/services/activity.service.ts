@@ -29,7 +29,6 @@ export class ActivityService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
-          console.log("findAll activities", convertSnaps<Activity>(snaps));
           return convertSnaps<Activity>(snaps);
         })
       );
