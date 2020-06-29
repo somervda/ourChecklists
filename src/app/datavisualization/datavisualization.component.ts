@@ -59,8 +59,35 @@ export class DatavisualizationComponent implements OnInit {
   drawChart() {
     // console.log("creatViz:", checklistsAndItems);
     this.rows = this.checklistsAndItems.length;
-    this.yAxisLabel = this.groupProperty;
-    this.xAxisLabel = this.valueProperty;
+    switch (this.groupProperty) {
+      case "category.name":
+        this.yAxisLabel = "Category";
+        break;
+      case "team.name":
+        this.yAxisLabel = "Team";
+        break;
+      case "status.name":
+        this.yAxisLabel = "Status";
+        break;
+      default:
+        this.yAxisLabel = "?";
+        break;
+    }
+    switch (this.valueProperty) {
+      case "score.overall":
+        this.xAxisLabel = "Checklist Score (Avg.) %";
+        break;
+      case "score.completeness":
+        this.xAxisLabel = "Checklist completeness (Avg.) %";
+        break;
+      case "counts":
+        this.xAxisLabel = "Checklist Counts";
+        break;
+      default:
+        this.xAxisLabel = "?";
+        break;
+    }
+
     this.series = this.buildChartData(
       this.checklistsAndItems,
       this.groupProperty,
