@@ -24,7 +24,29 @@ export interface Checklistextract {
   assignee: UserInfo[];
   category: DocInfo;
   score?: Checklistscore;
-  checklistitems: Checklistitemextract[];
+  checklistitems?: Checklistitemextract[];
+}
+
+export interface Checklistcsv {
+  id: string;
+  name: string;
+  isTemplate: boolean;
+  fromTemplate_id?: string;
+  fromTemplate_name?: string;
+  description: string;
+  comments?: string;
+  status: ChecklistStatus;
+  dateCreated?: Date;
+  dateUpdated?: Date;
+  dateTargeted?: Date;
+  dateCompleted?: Date;
+  assignee: string;
+  team_id: string;
+  team_name: string;
+  category_id: string;
+  category_name: string;
+  score_overall: number;
+  score_completeness: number;
 }
 
 export interface Checklistscore {
@@ -38,6 +60,25 @@ export interface Checklistitemextract {
   sequence: number;
   description: string;
   activities?: DocInfo[];
+  dateCreated?: Date;
+  dateResultSet?: Date;
+  evidence?: string;
+  allowNA: boolean;
+  requireEvidence: boolean;
+
+  resultValue?: ChecklistitemResultValue;
+  resultType: ChecklistitemResultType;
+  comment?: string;
+  tagId?: string;
+}
+
+export interface Checklistitemcsv {
+  id: string;
+  checklist_id: string;
+  name: string;
+  sequence: number;
+  description: string;
+  activities?: string;
   dateCreated?: Date;
   dateResultSet?: Date;
   evidence?: string;

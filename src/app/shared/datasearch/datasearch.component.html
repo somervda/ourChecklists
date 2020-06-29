@@ -87,8 +87,41 @@
     </div>
   </div>
   <div>
-    <button mat-button-outline (click)="getSelectedData()">
+    <button
+      mat-button-outline
+      (click)="getSelectedData()"
+      class="social-distancing"
+    >
       Get Data
     </button>
+    <ng-container *ngIf="downLoadReady">
+      <a
+        [href]="fileUrlJSON"
+        [download]="extractNameJSON"
+        [matTooltip]="
+          'Click to download: ' + rows + ' checklists and items as JSON'
+        "
+        class="social-distancing"
+        >[Checklists & Items]
+      </a>
+      <a
+        [href]="fileUrlChecklists"
+        [download]="extractNameChecklists"
+        [matTooltip]="
+          'Click to download: ' + checklistRows + ' checklists as CSV'
+        "
+        class="social-distancing"
+        >[Checklists]
+      </a>
+      <a
+        [href]="fileUrlChecklistitems"
+        [download]="extractNameChecklistitems"
+        [matTooltip]="
+          'Click to download: ' + checklistitemRows + ' checklistitems as CSV'
+        "
+        class="social-distancing"
+        >[Checklistitems]
+      </a>
+    </ng-container>
   </div>
 </mat-card>

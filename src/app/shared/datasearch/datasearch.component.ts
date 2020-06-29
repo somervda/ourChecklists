@@ -13,6 +13,8 @@ import {
   Checklistitemextract,
   UserInfo,
   Checklistscore,
+  Checklistcsv,
+  Checklistitemcsv,
 } from "src/app/models/checklistextract.model";
 import { Observable, Subscription } from "rxjs";
 import {
@@ -82,6 +84,16 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   selectedFromDate: Date;
   selectedToDate: Date;
 
+  checklistRows: number = 0;
+  checklistitemRows: number = 0;
+  fileUrlJSON;
+  extractNameJSON = "checklists-extract.json";
+  fileUrlChecklists;
+  extractNameChecklists = "checklists-extract.csv";
+  fileUrlChecklistitems;
+  extractNameChecklistitems = "checklistitems-extract.csv";
+  downLoadReady = false;
+
   constructor(
     private categoryService: CategoryService,
     private teamService: TeamService,
@@ -97,7 +109,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Set up observables to get a copy of all categories and teams for use
     // in the extract data resolution
-    console.log("ngOnInit start");
+    // console.log("ngOnInit start");
     this.checklistsExtract = [];
     // Get CategoryInfo
     this.categorySpinner = true;
@@ -157,7 +169,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     );
     this.activityInfo$$ = this.activityInfo$.subscribe(() => {
       this.activitySpinner = false;
-      console.log("activityInfo:", this.activityInfo);
+      // console.log("activityInfo:", this.activityInfo);
     });
   }
 
@@ -188,7 +200,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
    * out to a separate dialog componenet :(
    */
   templateDialog() {
-    console.log("templateDialog");
+    // console.log("templateDialog");
     const dialogRef = this.dialog.open(TemplateselectordialogComponent, {
       minWidth: "380px",
       maxWidth: "500px",
@@ -204,11 +216,11 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   }
 
   async getSelectedData() {
-    console.log(
-      "selectedFromDate ${this.selectedFromDate}, selectedCategory ${this.selectedCategory} ," +
-        " selectedTeam ${this.selectedTeam}, selectedTemplate${this.selectedTemplate}," +
-        " selectedStatus ${this.selectedStatus}, selectedToDate ${this.selectedToDate}"
-    );
+    // console.log(
+    //   "selectedFromDate ${this.selectedFromDate}, selectedCategory ${this.selectedCategory} ," +
+    //     " selectedTeam ${this.selectedTeam}, selectedTemplate${this.selectedTemplate}," +
+    //     " selectedStatus ${this.selectedStatus}, selectedToDate ${this.selectedToDate}"
+    // );
     this.checklistSpinner = true;
     this.startExtract.emit(true);
     const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
@@ -260,8 +272,6 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       await this.getChecklists(this.checklists$)
     ).map((c) => this.denormalizeChecklist(c));
 
-    // this.rows = checklists.length;
-
     const checklistsAndItems = await Promise.all(
       checklists.map(async (c) => {
         let checklistitems = await (
@@ -275,8 +285,172 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     // Update checklistscore
     checklistsAndItems.forEach((c) => (c.score = this.calculateScores(c)));
 
-    this.checklistExtract.emit(checklistsAndItems);
+    this.buildDownloads(checklistsAndItems);
+
     this.checklistSpinner = false;
+    this.checklistExtract.emit(checklistsAndItems);
+  }
+
+  /**
+   * This creates 3 downloadable files , a json file with the checklists and items
+   * and also 2 separate csv versions with the checklists in one and the checklistitems
+   * in the other
+   * @param checklistsAndItems
+   */
+  buildDownloads(checklistsAndItems: Checklistextract[]) {
+    // console.log("createDownload:", checklistsAndItems);
+
+    // Create JSON download
+    this.checklistRows = checklistsAndItems.length;
+    const extractBlobJSON = new Blob([JSON.stringify(checklistsAndItems)], {
+      type: "application/json",
+    });
+    this.fileUrlJSON = this.sanitizer.bypassSecurityTrustResourceUrl(
+      window.URL.createObjectURL(extractBlobJSON)
+    );
+    this.extractNameJSON =
+      "checklists-extract-" + new Date().toISOString() + ".json";
+
+    // Create Checklists CSV
+    const checklists = checklistsAndItems.map((c) =>
+      this.checklistExtractToCSV(c)
+    );
+    const checklistscsv = this.toCsv(checklists);
+    const extractBlobCCSV = new Blob([checklistscsv], {
+      type: "application/csv",
+    });
+    this.fileUrlChecklists = this.sanitizer.bypassSecurityTrustResourceUrl(
+      window.URL.createObjectURL(extractBlobCCSV)
+    );
+    this.extractNameChecklists =
+      "checklists-" + new Date().toISOString() + ".csv";
+
+    // Create Checklistitems CSV
+    let checklistitems = [] as Checklistitemcsv[];
+    checklistsAndItems.forEach((c) =>
+      c.checklistitems.forEach((ci) =>
+        checklistitems.push(this.checklistitemExtractToCSV(ci, c))
+      )
+    );
+    this.checklistitemRows = checklistitems.length;
+    const checklistitemscsv = this.toCsv(checklistitems);
+
+    const extractBlobCiCSV = new Blob([checklistitemscsv], {
+      type: "application/csv",
+    });
+    this.fileUrlChecklistitems = this.sanitizer.bypassSecurityTrustResourceUrl(
+      window.URL.createObjectURL(extractBlobCiCSV)
+    );
+    this.extractNameChecklistitems =
+      "checklistitems-" + new Date().toISOString() + ".csv";
+
+    // UI msg and show downloads
+
+    this.helper.snackbar(
+      `Checklists extracts ready for downloading: ${this.checklistRows} checklist and ${this.checklistitemRows} checklistitems found.`,
+      2000
+    );
+    this.downLoadReady = true;
+  }
+
+  checklistExtractToCSV(checklist: Checklistextract): Checklistcsv {
+    try {
+      const checklistscsv: Checklistcsv = {
+        id: checklist.id,
+        name: checklist.name,
+        isTemplate: checklist.isTemplate,
+        fromTemplate_id: checklist.fromTemplate
+          ? checklist.fromTemplate.id
+          : "",
+        fromTemplate_name: checklist.fromTemplate
+          ? checklist.fromTemplate.name
+          : "",
+        description: checklist.description,
+        comments: checklist.comments,
+        status: checklist.status,
+        dateCreated: checklist.dateCreated,
+        dateUpdated: checklist.dateUpdated,
+        dateTargeted: checklist.dateTargeted,
+        dateCompleted: checklist.dateCompleted,
+        assignee: checklist.assignee.reduce(
+          (assignees, a) => assignees + a.uid + " ",
+          ""
+        ),
+        team_id: checklist.team.id,
+        team_name: checklist.team.name,
+        category_id: checklist.category.id,
+        category_name: checklist.category.name,
+        score_overall: checklist.score.overall,
+        score_completeness: checklist.score.completeness,
+      };
+      return checklistscsv;
+    } catch (e) {
+      console.error("checklistExtractToCSV error:", e.msg);
+      return null;
+    }
+  }
+
+  checklistitemExtractToCSV(
+    ci: Checklistitemextract,
+    c: Checklistextract
+  ): Checklistitemcsv {
+    try {
+      const checklistitemcsv: Checklistitemcsv = {
+        id: ci.id,
+        checklist_id: c.id,
+        name: ci.name,
+        sequence: ci.sequence,
+        description: ci.description,
+        activities: ci.activities
+          ? ci.activities.reduce(
+              (activityList, a) => activityList + a.id + " ",
+              ""
+            )
+          : "",
+        dateCreated: ci.dateCreated,
+        dateResultSet: ci.dateResultSet,
+        evidence: ci.evidence,
+        allowNA: ci.allowNA,
+        requireEvidence: ci.requireEvidence,
+        resultValue: ci.resultValue,
+        resultType: ci.resultType,
+        comment: ci.comment,
+        tagId: ci.tagId,
+      };
+      return checklistitemcsv;
+    } catch (e) {
+      console.error("checklistitemExtractToCSV error:", e.msg);
+      return null;
+    }
+  }
+
+  toCsv(rows: object[]) {
+    if (!rows || !rows.length) {
+      return;
+    }
+    const separator = ",";
+    const keys = Object.keys(rows[0]);
+    const csvContent =
+      keys.join(separator) +
+      "\n" +
+      rows
+        .map((row) => {
+          return keys
+            .map((k) => {
+              let cell = row[k] === null || row[k] === undefined ? "" : row[k];
+              cell =
+                cell instanceof Date
+                  ? cell.toLocaleString()
+                  : cell.toString().replace(/"/g, '""');
+              if (cell.search(/("|,|\n)/g) >= 0) {
+                cell = `"${cell}"`;
+              }
+              return cell;
+            })
+            .join(separator);
+        })
+        .join("\n");
+    return csvContent;
   }
 
   async getChecklists(checklists$: Observable<Checklist[]>) {
@@ -443,7 +617,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         (score / (totalItemsForScore * 4)) * 100
       );
     }
-    console.log("checklistscore: ", checklistscore);
+    // console.log("checklistscore: ", checklistscore);
     return checklistscore;
   }
 
