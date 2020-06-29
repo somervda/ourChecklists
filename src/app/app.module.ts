@@ -100,7 +100,7 @@ import { DocPipe } from "./pipes/doc.pipe";
 import { ResourcecontentviewdialogComponent } from "./dialogs/resourcecontentviewdialog/resourcecontentviewdialog.component";
 import { TemplateselectordialogComponent } from "./dialogs/templateselectordialog/templateselectordialog.component";
 import { DatasearchComponent } from "./shared/datasearch/datasearch.component";
-import { DatavizualizationComponent } from "./datavizualization/datavizualization.component";
+import { DatavisualizationComponent } from "./datavisualization/datavisualization.component";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 
 @NgModule({
@@ -163,7 +163,7 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
     ResourcecontentviewdialogComponent,
     TemplateselectordialogComponent,
     DatasearchComponent,
-    DatavizualizationComponent,
+    DatavisualizationComponent,
   ],
   imports: [
     BrowserModule,

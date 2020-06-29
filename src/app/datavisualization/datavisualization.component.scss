@@ -1,0 +1,37 @@
+.min-page {
+  min-width: 350px;
+}
+
+.chart-holder {
+  min-height: 400px;
+  width: 100%;
+  // border-style: solid;
+  // border-radius: 10px;
+  // border-color: lightgrey;
+  // border-width: 1px;
+  margin-top: 10px;
+}
+
+@media (min-width: 500px) {
+  .grid2wrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 10px;
+  }
+  .grid50percent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+.half-width {
+  width: 45%;
+}
+
+.prompt {
+  font-weight: 600;
+}

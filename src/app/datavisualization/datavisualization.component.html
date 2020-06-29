@@ -1,0 +1,68 @@
+<app-subheading
+  prompt="Data Visualizations
+  "
+  matIcon="insert_chart_outlined"
+></app-subheading>
+
+<div class="page-container min-page">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Checklists Data Selector
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-datasearch
+      (checklistExtract)="initializeVisualization($event)"
+      (startExtract)="startExtract()"
+    ></app-datasearch>
+  </mat-expansion-panel>
+  <br />
+  <div *ngIf="showChart">
+    <div class="grid50percent">
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Grouping</mat-label>
+          <mat-select
+            (selectionChange)="groupChange($event.value)"
+            value="category.name"
+          >
+            <mat-option [value]="'category.name'">Category</mat-option>
+            <mat-option [value]="'team.name'">Team</mat-option>
+            <mat-option [value]="'status.name'">Status</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="full-width">
+          <mat-label>Value</mat-label>
+          <mat-select
+            (selectionChange)="valueChange($event.value)"
+            value="score.overall"
+          >
+            <mat-option [value]="'score.overall'">Overall Score %</mat-option>
+            <mat-option [value]="'score.completeness'"
+              >Completeness %</mat-option
+            >
+            <mat-option [value]="'counts'">Counts</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="chart-holder">
+      <ngx-charts-bar-horizontal
+        [scheme]="colorScheme"
+        [results]="series"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-bar-horizontal>
+    </div>
+  </div>
+</div>

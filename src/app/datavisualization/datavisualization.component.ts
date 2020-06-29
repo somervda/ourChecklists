@@ -3,13 +3,16 @@ import { HelperService } from "../services/helper.service";
 import { Checklistextract } from "../models/checklistextract.model";
 
 @Component({
-  selector: "app-datavizualization",
-  templateUrl: "./datavizualization.component.html",
-  styleUrls: ["./datavizualization.component.scss"],
+  selector: "app-datavisualization",
+  templateUrl: "./datavisualization.component.html",
+  styleUrls: ["./datavisualization.component.scss"],
 })
-export class DatavizualizationComponent implements OnInit {
+export class DatavisualizationComponent implements OnInit {
   rows: number = 0;
   showChart = false;
+  checklistsAndItems;
+  valueProperty = "score.overall";
+  groupProperty = "category.name";
 
   series = [];
   // view: any[] = [700, 400];
@@ -36,13 +39,32 @@ export class DatavizualizationComponent implements OnInit {
     this.showChart = false;
   }
 
-  createViz(checklistsAndItems) {
+  groupChange(groupProperty: string) {
+    console.log("groupChange", groupProperty);
+    this.groupProperty = groupProperty;
+    this.drawChart();
+  }
+
+  valueChange(valueProperty: string) {
+    console.log("valueChange", valueProperty);
+    this.valueProperty = valueProperty;
+    this.drawChart();
+  }
+
+  initializeVisualization(checklistsAndItems) {
+    this.checklistsAndItems = checklistsAndItems;
+    this.drawChart();
+  }
+
+  drawChart() {
     // console.log("creatViz:", checklistsAndItems);
-    this.rows = checklistsAndItems.length;
+    this.rows = this.checklistsAndItems.length;
+    this.yAxisLabel = this.groupProperty;
+    this.xAxisLabel = this.valueProperty;
     this.series = this.buildChartData(
-      checklistsAndItems,
-      "category.name",
-      "score.completeness"
+      this.checklistsAndItems,
+      this.groupProperty,
+      this.valueProperty
     );
 
     this.showChart = true;
@@ -62,7 +84,7 @@ export class DatavizualizationComponent implements OnInit {
     let series: { name: string; value: number; count: number }[] = [];
     checklistsAndItems.forEach((c) => {
       const group = traverse(c, groupingProperty);
-      const value = traverse(c, scoreProperty);
+      const value = scoreProperty == "counts" ? 1 : traverse(c, scoreProperty);
       if (group != undefined && value != undefined) {
         if (series.find((x) => x.name == group)) {
           series.find((x) => x.name == group).value += value;
@@ -74,7 +96,9 @@ export class DatavizualizationComponent implements OnInit {
     });
 
     return series.map((s) => {
-      return { name: s.name, value: Math.round(s.value / s.count) };
+      return scoreProperty == "counts"
+        ? { name: s.name, value: s.value }
+        : { name: s.name, value: Math.round(s.value / s.count) };
     });
   }
 

@@ -15,7 +15,7 @@ export interface Checklistextract {
   fromTemplate?: DocInfo;
   description: string;
   comments?: string;
-  status: ChecklistStatus;
+  status: DocInfo;
   dateCreated?: Date;
   dateUpdated?: Date;
   dateTargeted?: Date;
@@ -35,7 +35,8 @@ export interface Checklistcsv {
   fromTemplate_name?: string;
   description: string;
   comments?: string;
-  status: ChecklistStatus;
+  status: string;
+  status_name: string;
   dateCreated?: Date;
   dateUpdated?: Date;
   dateTargeted?: Date;

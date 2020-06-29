@@ -367,7 +367,8 @@ export class DatasearchComponent implements OnInit, OnDestroy {
           : "",
         description: checklist.description,
         comments: checklist.comments,
-        status: checklist.status,
+        status: checklist.status.id,
+        status_name: checklist.status.name,
         dateCreated: checklist.dateCreated,
         dateUpdated: checklist.dateUpdated,
         dateTargeted: checklist.dateTargeted,
@@ -472,7 +473,11 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       isTemplate: checklist.isTemplate,
       name: checklist.name,
       description: checklist.description,
-      status: checklist.status,
+      status: {
+        id: checklist.status.toString(),
+        name: ChecklistStatusInfo.find((s) => s.status == checklist.status)
+          .name,
+      },
       dateCreated: checklist.dateCreated
         ? (checklist.dateCreated as firebase.firestore.Timestamp).toDate()
         : undefined,
@@ -593,7 +598,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
           // target completion date or completed
           if (
             !isAfterTargetDate &&
-            checklist.status != ChecklistStatus.Complete
+            checklist.status.id != ChecklistStatus.Complete.toString()
           ) {
             totalItemsForScore -= 1;
           }

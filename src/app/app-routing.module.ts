@@ -33,7 +33,7 @@ import { CheckliststatusGuard } from "./guards/checkliststatus.guard";
 import { ChecklistStatus } from "./models/checklist.model";
 import { TemplatesComponent } from "./templates/templates.component";
 import { TemplateComponent } from "./template/template.component";
-import { DatavizualizationComponent } from "./datavizualization/datavizualization.component";
+import { DatavisualizationComponent } from "./datavisualization/datavisualization.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -41,8 +41,8 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "notAuthorized", component: NotauthorizedComponent },
   {
-    path: "dataVizualization",
-    component: DatavizualizationComponent,
+    path: "dataVisualization",
+    component: DatavisualizationComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },
   },
