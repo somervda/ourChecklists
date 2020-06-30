@@ -67,6 +67,11 @@ export class ChecklisteditComponent implements OnInit {
     this.enhanced = checked;
   }
 
+  targetDateChange(value) {
+    console.log("targetDateChange:", value);
+    this.checklistService.fieldUpdate(this.checklist.id, "dateTargeted", value);
+  }
+
   onFieldUpdate(fieldName: string, toType?: string) {
     if (this.checklistForm.get(fieldName).valid) {
       let newValue = this.checklistForm.get(fieldName).value;

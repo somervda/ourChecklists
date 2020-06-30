@@ -6,86 +6,90 @@
 ></app-subheading>
 
 <div class="page-container">
-  <div class="prompt">
-    Name
-  </div>
-  <div>
-    <ng-container
-      *ngIf="
-        checklist.status != ChecklistStatus.UnderConstruction &&
-        checklist.status != ChecklistStatus.Active
-      "
-    >
-      {{ checklist.name }}
+  <div class="grid2wrapper">
+    <div class="prompt">
+      Name
+    </div>
+    <div>
+      <ng-container
+        *ngIf="
+          checklist.status != ChecklistStatus.UnderConstruction &&
+          checklist.status != ChecklistStatus.Active
+        "
+      >
+        {{ checklist.name }}
+      </ng-container>
+      <ng-container
+        *ngIf="checklist.status == ChecklistStatus.UnderConstruction"
+      >
+        <a
+          [routerLink]="'/checklistdesign/' + checklist.id"
+          matTooltip="Design Checklist"
+          >{{ checklist?.name }}</a
+        ></ng-container
+      >
+      <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
+        <a
+          [routerLink]="'/checklistedit/' + checklist.id"
+          matTooltip="Edit Checklist"
+          >{{ checklist?.name }}</a
+        ></ng-container
+      >
+    </div>
+
+    <div class="prompt">Description</div>
+    <div>{{ checklist.description }}</div>
+
+    <div class="prompt">Status</div>
+    <div>
+      <app-checkliststatus
+        [checklist]="checklist"
+        [showAction]="isTeamManagerOrAdmin"
+      ></app-checkliststatus>
+    </div>
+
+    <div class="prompt">
+      Resources
+    </div>
+    <div>
+      <app-resourcelistsimple
+        [resources]="checklist.resources"
+      ></app-resourcelistsimple>
+    </div>
+
+    <div class="prompt">Comments</div>
+    <div>
+      {{ checklist.comments }}
+    </div>
+
+    <div class="prompt">Team</div>
+    <div>{{ (checklist.team | doc | async)?.name }}</div>
+
+    <div class="prompt">Category</div>
+    <div>{{ (checklist.category | doc | async)?.name }}</div>
+    <ng-container *ngIf="checklist.fromTemplate">
+      <div class="prompt">Based on Template</div>
+      <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
     </ng-container>
-    <ng-container *ngIf="checklist.status == ChecklistStatus.UnderConstruction">
-      <a
-        [routerLink]="'/checklistdesign/' + checklist.id"
-        matTooltip="Design Checklist"
-        >{{ checklist?.name }}</a
-      ></ng-container
-    >
-    <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
-      <a
-        [routerLink]="'/checklistedit/' + checklist.id"
-        matTooltip="Edit Checklist"
-        >{{ checklist?.name }}</a
-      ></ng-container
-    >
-  </div>
-
-  <div class="prompt">Description</div>
-  <div>{{ checklist.description }}</div>
-
-  <div class="prompt">Status</div>
-  <div>
-    <app-checkliststatus
-      [checklist]="checklist"
-      [showAction]="isTeamManagerOrAdmin"
-    ></app-checkliststatus>
-  </div>
-
-  <div class="prompt">
-    Resources
-  </div>
-  <div>
-    <app-resourcelistsimple
-      [resources]="checklist.resources"
-    ></app-resourcelistsimple>
-  </div>
-
-  <div class="prompt">Comments</div>
-  <div>
-    {{ checklist.comments }}
-  </div>
-
-  <div class="prompt">Team</div>
-  <div>{{ (checklist.team | doc | async)?.name }}</div>
-
-  <div class="prompt">Category</div>
-  <div>{{ (checklist.category | doc | async)?.name }}</div>
-  <ng-container *ngIf="checklist.fromTemplate">
-    <div class="prompt">Based on Template</div>
-    <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
-  </ng-container>
-  <div class="prompt">Assignees</div>
-  <div>
-    <ng-container
-      *ngIf="
-        checklist.assignee && checklist.assignee.length > 0;
-        else noAssignee
-      "
-    >
-      <span *ngFor="let assignee of checklist.assignee; let i = index">
-        <span *ngIf="i > 0">,</span>
-        <span style="margin-left: 5px;">{{
-          (assignee | doc | async)?.displayName
-        }}</span>
-      </span>
-    </ng-container>
-    <ng-template #noAssignee>
-      None
-    </ng-template>
+    <div class="prompt">Assignees</div>
+    <div>
+      <ng-container
+        *ngIf="
+          checklist.assignee && checklist.assignee.length > 0;
+          else noAssignee
+        "
+      >
+        <span *ngFor="let assignee of checklist.assignee; let i = index">
+          <span *ngIf="i > 0">,</span>
+          <span style="margin-left: 5px;">{{
+            (assignee | doc | async)?.displayName
+          }}</span>
+        </span>
+      </ng-container>
+      <ng-template #noAssignee>
+        None
+      </ng-template>
+    </div>
   </div>
   <br />
   <div class="checklistitem-frame">

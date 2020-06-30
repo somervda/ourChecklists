@@ -7,152 +7,178 @@
 
 <div class="page-container">
   <form class="standard-form" [formGroup]="checklistForm">
-    <ng-container *ngIf="!enhanced">
-      <div class="prompt">
-        Name
-      </div>
-      <div>
-        <a
-          [routerLink]="'/checklist/' + checklist.id"
-          matTooltip="View Checklist"
-          >{{ checklist?.name }}</a
-        >
-      </div>
-
-      <div class="prompt">Description</div>
-      <div>{{ checklist?.description }}</div>
-      <div class="prompt">Comments</div>
-      <div>
-        {{ checklist.comments }}
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="enhanced">
-      <div class="prompt">Name</div>
-      <div>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            formControlName="name"
-            (change)="onFieldUpdate('name')"
-            required
-          />
-          <mat-error
-            *ngIf="checklistForm.controls['name'].hasError('required')"
+    <div class="grid2wrapper">
+      <ng-container *ngIf="!enhanced">
+        <div class="prompt">
+          Name
+        </div>
+        <div>
+          <a
+            [routerLink]="'/checklist/' + checklist.id"
+            matTooltip="View Checklist"
+            >{{ checklist?.name }}</a
           >
-            Name is required.
-          </mat-error>
-          <mat-error
-            *ngIf="checklistForm.controls['name'].hasError('minlength')"
-          >
-            Name must be at least 3 characters long.
-          </mat-error>
-          <mat-error
-            *ngIf="checklistForm.controls['name'].hasError('maxlength')"
-          >
-            Name must be no more than 70 characters long.
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="prompt">Description</div>
+        </div>
 
-      <mat-form-field class="full-width">
-        <textarea
-          matInput
-          formControlName="description"
-          (change)="onFieldUpdate('description')"
-          matAutosizeMinRows="3"
-          matAutosizeMaxRows="10"
-          matTextareaAutosize
-        ></textarea>
-        <mat-error
-          *ngIf="checklistForm.controls['description'].hasError('required')"
-        >
-          Description is required.
-        </mat-error>
-        <mat-error
-          *ngIf="checklistForm.controls['description'].hasError('minlength')"
-        >
-          Description must be at least 10 characters long.
-        </mat-error>
-        <mat-error
-          *ngIf="checklistForm.controls['description'].hasError('maxlength')"
-        >
-          Description must be no more than 500 characters long.
-        </mat-error>
-      </mat-form-field>
+        <div class="prompt">Description</div>
+        <div>{{ checklist?.description }}</div>
+        <div class="prompt">Comments</div>
+        <div>
+          {{ checklist.comments }}
+        </div>
+      </ng-container>
 
-      <div class="prompt">Comments</div>
-      <div>
+      <ng-container *ngIf="enhanced">
+        <div class="prompt">Name</div>
+        <div>
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              formControlName="name"
+              (change)="onFieldUpdate('name')"
+              required
+            />
+            <mat-error
+              *ngIf="checklistForm.controls['name'].hasError('required')"
+            >
+              Name is required.
+            </mat-error>
+            <mat-error
+              *ngIf="checklistForm.controls['name'].hasError('minlength')"
+            >
+              Name must be at least 3 characters long.
+            </mat-error>
+            <mat-error
+              *ngIf="checklistForm.controls['name'].hasError('maxlength')"
+            >
+              Name must be no more than 70 characters long.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="prompt">Description</div>
+
         <mat-form-field class="full-width">
           <textarea
             matInput
-            formControlName="comments"
-            (change)="onFieldUpdate('comments')"
+            formControlName="description"
+            (change)="onFieldUpdate('description')"
             matAutosizeMinRows="3"
             matAutosizeMaxRows="10"
             matTextareaAutosize
           ></textarea>
           <mat-error
-            *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
+            *ngIf="checklistForm.controls['description'].hasError('required')"
           >
-            Comments can not be more than 5000 characters long.
+            Description is required.
+          </mat-error>
+          <mat-error
+            *ngIf="checklistForm.controls['description'].hasError('minlength')"
+          >
+            Description must be at least 10 characters long.
+          </mat-error>
+          <mat-error
+            *ngIf="checklistForm.controls['description'].hasError('maxlength')"
+          >
+            Description must be no more than 500 characters long.
           </mat-error>
         </mat-form-field>
+
+        <div class="prompt">Comments</div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea
+              matInput
+              formControlName="comments"
+              (change)="onFieldUpdate('comments')"
+              matAutosizeMinRows="3"
+              matAutosizeMaxRows="10"
+              matTextareaAutosize
+            ></textarea>
+            <mat-error
+              *ngIf="checklistForm.controls['comments'].hasError('maxlength')"
+            >
+              Comments can not be more than 5000 characters long.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <div class="prompt">Status</div>
+      <div>
+        <app-checkliststatus
+          [checklist]="checklist"
+          [showAction]="true"
+        ></app-checkliststatus>
       </div>
-    </ng-container>
 
-    <div class="prompt">Status</div>
-    <div>
-      <app-checkliststatus
-        [checklist]="checklist"
-        [showAction]="true"
-      ></app-checkliststatus>
-    </div>
-
-    <div class="prompt">
-      Resources
-    </div>
-    <div>
-      <app-resourcelistsimple
-        [resources]="checklist.resources"
-      ></app-resourcelistsimple>
+      <div class="prompt">
+        Resources
+      </div>
+      <div>
+        <app-resourcelistsimple
+          [resources]="checklist.resources"
+        ></app-resourcelistsimple>
+      </div>
     </div>
   </form>
 
   <ng-container *ngIf="enhanced">
-    <div class="prompt">Team</div>
-    <div>{{ (checklist.team | doc | async)?.name }}</div>
+    <div class="grid2wrapper">
+      <div class="prompt">Team</div>
+      <div>{{ (checklist.team | doc | async)?.name }}</div>
 
-    <div class="prompt">Category</div>
-    <div>{{ (checklist.category | doc | async)?.name }}</div>
-    <ng-container *ngIf="checklist.fromTemplate">
-      <div class="prompt">Based on Template</div>
-      <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
-    </ng-container>
-    <div class="prompt">Date Created</div>
-    <div *ngIf="checklist.dateCreated">
-      {{ checklist.dateCreated.toDate() }}
-    </div>
-
-    <div class="prompt">Assignees</div>
-    <div>
-      <ng-container
-        *ngIf="
-          checklist.assignee && checklist.assignee.length > 0;
-          else noAssignee
-        "
-      >
-        <span *ngFor="let assignee of checklist.assignee; let i = index">
-          <span *ngIf="i > 0">,</span>
-          <span style="margin-left: 5px;">{{
-            (assignee | doc | async)?.displayName
-          }}</span>
-        </span>
+      <div class="prompt">Category</div>
+      <div>{{ (checklist.category | doc | async)?.name }}</div>
+      <ng-container *ngIf="checklist.fromTemplate">
+        <div class="prompt">Based on Template</div>
+        <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
       </ng-container>
-      <ng-template #noAssignee>
-        None
-      </ng-template>
+      <div class="prompt">Date Created</div>
+      <div>
+        <div *ngIf="checklist.dateCreated">
+          {{ checklist.dateCreated.toDate() }}
+        </div>
+      </div>
+      <div class="prompt">Date Targeted</div>
+      <div>
+        <!-- {{ checklist.dateTargeted.toDate() }} -->
+        <mat-form-field appearance="standard" class="full-width">
+          <mat-label>Target Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="targetDate"
+            [attr.value]="
+              checklist.dateTargeted ? checklist.dateTargeted.toDate() : null
+            "
+            (dateChange)="targetDateChange($event.value)"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="targetDate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #targetDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="prompt">Assignees</div>
+      <div>
+        <ng-container
+          *ngIf="
+            checklist.assignee && checklist.assignee.length > 0;
+            else noAssignee
+          "
+        >
+          <span *ngFor="let assignee of checklist.assignee; let i = index">
+            <span *ngIf="i > 0">,</span>
+            <span style="margin-left: 5px;">{{
+              (assignee | doc | async)?.displayName
+            }}</span>
+          </span>
+        </ng-container>
+        <ng-template #noAssignee>
+          None
+        </ng-template>
+      </div>
     </div>
   </ng-container>
 
