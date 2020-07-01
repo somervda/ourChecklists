@@ -107,16 +107,45 @@
           Description must be no more than 500 characters long.
         </mat-error>
       </mat-form-field>
-
       <ng-container *ngIf="!checklist?.isTemplate">
-        <div class="prompt">
-          Status:
-        </div>
-        <div style="margin-bottom: 5px;">
-          <app-checkliststatus
-            [checklist]="checklist"
-            [showAction]="true"
-          ></app-checkliststatus>
+        <div class="grid50percent">
+          <div>
+            <div class="prompt">
+              Status:
+            </div>
+            <div style="margin-bottom: 5px;">
+              <app-checkliststatus
+                [checklist]="checklist"
+                [showAction]="true"
+              ></app-checkliststatus>
+            </div>
+          </div>
+          <div>
+            <div>
+              <mat-form-field
+                appearance="standard"
+                class="full-width"
+                style="max-width: 500px;"
+              >
+                <mat-label>Target Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="targetDate"
+                  [attr.value]="
+                    checklist.dateTargeted
+                      ? checklist.dateTargeted.toDate()
+                      : null
+                  "
+                  (dateChange)="targetDateChange($event.value)"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="targetDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #targetDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
       </ng-container>
 

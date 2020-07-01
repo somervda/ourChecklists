@@ -174,6 +174,11 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
   }
 
+  targetDateChange(value) {
+    console.log("targetDateChange:", value);
+    this.checklistService.fieldUpdate(this.checklist.id, "dateTargeted", value);
+  }
+
   onAssigneeChange(assignee: DocumentReference[]) {
     console.log("onAssigneeChange assignee:", assignee);
     this.checklist.assignee = assignee;

@@ -136,13 +136,16 @@
       <div class="prompt">Date Created</div>
       <div>
         <div *ngIf="checklist.dateCreated">
-          {{ checklist.dateCreated.toDate() }}
+          {{ toDate(checklist.dateCreated) | date: "medium" }}
         </div>
       </div>
       <div class="prompt">Date Targeted</div>
       <div>
-        <!-- {{ checklist.dateTargeted.toDate() }} -->
-        <mat-form-field appearance="standard" class="full-width">
+        <mat-form-field
+          appearance="standard"
+          class="full-width"
+          style="max-width: 500px;"
+        >
           <mat-label>Target Date</mat-label>
           <input
             matInput

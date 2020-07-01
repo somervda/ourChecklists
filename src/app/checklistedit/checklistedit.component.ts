@@ -67,6 +67,14 @@ export class ChecklisteditComponent implements OnInit {
     this.enhanced = checked;
   }
 
+  toDate(timestamp: any): Date {
+    if (timestamp) {
+      return (timestamp as firebase.firestore.Timestamp).toDate();
+    } else {
+      return null;
+    }
+  }
+
   targetDateChange(value) {
     console.log("targetDateChange:", value);
     this.checklistService.fieldUpdate(this.checklist.id, "dateTargeted", value);

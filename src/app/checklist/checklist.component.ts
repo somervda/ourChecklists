@@ -69,6 +69,14 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
+  toDate(timestamp: any): Date {
+    if (timestamp) {
+      return (timestamp as firebase.firestore.Timestamp).toDate();
+    } else {
+      return null;
+    }
+  }
+
   iconAction(value) {
     // console.log("iconAction:", value, ":");
     switch (value) {
