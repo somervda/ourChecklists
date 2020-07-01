@@ -1,0 +1,26 @@
+<mat-spinner *ngIf="showSpinner" class="spinner_container"></mat-spinner>
+<app-subheading
+  prompt="Administration Utilities"
+  matIcon="construction"
+></app-subheading>
+<div class="page-container">
+  <mat-card>
+    <mat-card-content>
+      <p>
+        Clean up deleted checklists and checklist items. Read through logically
+        deleted checklists, if one is found, then batch delete the checklist
+        items sub-collection and then the checklist.
+      </p>
+      <button mat-button-outline (click)="checklistCleanup()">Go</button>
+    </mat-card-content>
+  </mat-card>
+  <div *ngIf="deletedChecklists?.length > 0">
+    <hr />
+    Checklists deleted [{{ deletedChecklists.length }} rows]
+    <ol>
+      <li *ngFor="let checklist of deletedChecklists">
+        {{ checklist.id }} - {{ checklist.name }}
+      </li>
+    </ol>
+  </div>
+</div>

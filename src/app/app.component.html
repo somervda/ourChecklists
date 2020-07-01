@@ -89,6 +89,16 @@
           <mat-icon>how_to_reg</mat-icon>
           <span id="mainMenuUsers">&nbsp;User Management</span>
         </a>
+
+        <a
+          mat-list-item
+          *ngIf="(auth.user$ | async)?.isAdmin"
+          mat-list-item
+          routerLink="adminUtils"
+        >
+          <mat-icon>construction</mat-icon>
+          <span id="mainMenuAdminUtils">&nbsp;Admin. Utilities</span>
+        </a>
       </span>
       <mat-divider></mat-divider>
 

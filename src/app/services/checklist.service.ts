@@ -417,4 +417,21 @@ export class ChecklistService {
         return Promise.reject(err);
       });
   }
+
+  deleteChecklist(
+    checklist: Checklist,
+    checklistitems: Checklistitem[]
+  ): Promise<void> {
+    // console.log("deletechecklists batch", checklist, checklistitems);
+    let batch = this.afs.firestore.batch();
+    checklistitems.forEach((ci) =>
+      batch.delete(
+        this.helper.docRef(
+          `/checklists/${checklist.id}/checklistitems/${ci.id}`
+        )
+      )
+    );
+    batch.delete(this.helper.docRef(`/checklists/${checklist.id}`));
+    return batch.commit();
+  }
 }

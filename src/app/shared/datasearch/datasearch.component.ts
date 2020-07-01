@@ -264,6 +264,13 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       );
     }
 
+    // Don't include templates
+    this.checklists$ = this.checklists$.pipe(
+      map((cs) => {
+        return cs.filter((c) => !c.isTemplate);
+      })
+    );
+
     // For the extract I use a lot of awaits to resolve promises so the end result
     // is to have all the selected checklists ready to write as json to a file
     // and have denormalized most of the document references. Not all the properties

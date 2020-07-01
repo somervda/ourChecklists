@@ -102,6 +102,7 @@ import { TemplateselectordialogComponent } from "./dialogs/templateselectordialo
 import { DatasearchComponent } from "./shared/datasearch/datasearch.component";
 import { DatavisualizationComponent } from "./datavisualization/datavisualization.component";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { AdminutilsComponent } from './adminutils/adminutils.component';
 
 @NgModule({
   declarations: [
@@ -164,6 +165,7 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
     TemplateselectordialogComponent,
     DatasearchComponent,
     DatavisualizationComponent,
+    AdminutilsComponent,
   ],
   imports: [
     BrowserModule,

@@ -93,7 +93,7 @@ export class DatavisualizationComponent implements OnInit {
       this.groupProperty,
       this.valueProperty
     );
-
+    console.log("this.series", this.series);
     this.showChart = true;
   }
 

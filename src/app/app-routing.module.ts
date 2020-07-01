@@ -34,6 +34,7 @@ import { ChecklistStatus } from "./models/checklist.model";
 import { TemplatesComponent } from "./templates/templates.component";
 import { TemplateComponent } from "./template/template.component";
 import { DatavisualizationComponent } from "./datavisualization/datavisualization.component";
+import { AdminutilsComponent } from "./adminutils/adminutils.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -269,6 +270,14 @@ const routes: Routes = [
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },
     runGuardsAndResolvers: "always",
+  },
+
+  //  Admin Utilities
+  {
+    path: "adminUtils",
+    component: AdminutilsComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isAdmin"] },
   },
   // Other
   { path: "notfound", component: NotfoundComponent },
