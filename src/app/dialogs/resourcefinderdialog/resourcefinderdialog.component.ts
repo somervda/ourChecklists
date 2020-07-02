@@ -5,6 +5,8 @@ import { Resource, ResourceStatus } from "../../models/resource.model";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { DocumentReference } from "@angular/fire/firestore";
 import { HelperService } from "src/app/services/helper.service";
+import { CategoryService } from "src/app/services/category.service";
+import { Category } from "src/app/models/category.model";
 
 @Component({
   selector: "app-resourcefinderdialog",
@@ -22,11 +24,15 @@ export class ResourcefinderdialogComponent implements OnInit {
     private resourceService: ResourceService,
     private dialogRef: MatDialogRef<ResourcefinderdialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private helper: HelperService
+    private helper: HelperService,
+    private categoryService: CategoryService
   ) {}
   refHide: DocumentReference[];
   resources$: Observable<Resource[]>;
   selectedResource: Resource;
+  categories$: Observable<Category[]>;
+  selectedCategory = "All";
+  selectedName = "";
 
   ngOnInit(): void {
     if (this.data.refHide) {
@@ -35,13 +41,34 @@ export class ResourcefinderdialogComponent implements OnInit {
     console.log("resourcefinderdialog refHide:", this.refHide);
 
     this.resources$ = this.resourceService.findByPartialName("");
+    this.categories$ = this.categoryService.findAll(100);
   }
 
   onKey(event: any) {
     // console.log("searchName", event.target.value);
-    this.resources$ = this.resourceService.findByPartialName(
-      event.target.value
-    );
+    this.selectedName = event.target.value;
+    this.updateResources();
+  }
+
+  updateResources() {
+    if (this.selectedCategory == "All") {
+      this.resources$ = this.resourceService.findByPartialName(
+        this.selectedName
+      );
+    } else {
+      this.resources$ = this.resourceService.findAllFiltered(
+        this.selectedName,
+        "Category",
+        this.helper.docRef(`/categories/${this.selectedCategory}`),
+        100
+      );
+    }
+  }
+
+  onCategoryChange(value) {
+    console.log("onCategoryChange ", event);
+    this.selectedCategory = value;
+    this.updateResources();
   }
 
   isHidden(resource: Resource) {

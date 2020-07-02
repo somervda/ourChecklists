@@ -99,7 +99,9 @@ export class ResourcelisteditComponent implements OnInit {
       );
     } else {
       const dialogRef = this.dialog.open(ResourcefinderdialogComponent, {
-        width: "380px",
+        minWidth: "380px",
+        maxWidth: "500px",
+        width: "80%",
         data: { refHide: refHide },
       });
       dialogRef.afterClosed().subscribe((result) => {

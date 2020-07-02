@@ -1,15 +1,26 @@
-<mat-form-field class="full-width">
-  <input
-    matInput
-    (keyup)="onKey($event)"
-    placeholder="Search for Resource"
-    autocomplete="off"
-  />
-</mat-form-field>
+<div class="dialog-heading">Select Resource</div>
+<mat-card>
+  <mat-form-field class="full-width">
+    <mat-label>Filter by Name</mat-label>
+    <input matInput (keyup)="onKey($event)" autocomplete="off" />
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Filter by Category</mat-label>
+    <mat-select (selectionChange)="onCategoryChange($event.value)" value="All">
+      <mat-option value="All">All</mat-option>
+      <mat-option
+        *ngFor="let category of categories$ | async"
+        [value]="category.id"
+        >{{ category.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+</mat-card>
 
 <div class="resource-list">
   <div
     *ngFor="let resource of resources$ | async"
+    class="list-item"
     [style.backgroundColor]="
       resource.id == selectedResource?.id ? 'lightgrey' : 'white'
     "

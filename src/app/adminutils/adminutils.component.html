@@ -5,6 +5,9 @@
 ></app-subheading>
 <div class="page-container">
   <mat-card>
+    <mat-card-header>
+      <mat-card-title>Clean up Deleted Checklists</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <p>
         Clean up deleted checklists and checklist items. Read through logically
@@ -14,12 +17,35 @@
       <button mat-button-outline (click)="checklistCleanup()">Go</button>
     </mat-card-content>
   </mat-card>
+  <br />
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Clean up Orphaned Resources</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Clean up orphan resources on checklists. Read each checklist resource
+        and check the docref is valid, otherwise remove the resource.
+      </p>
+      <button mat-button-outline (click)="resourceCleanup()">Go</button>
+    </mat-card-content>
+  </mat-card>
   <div *ngIf="deletedChecklists?.length > 0">
     <hr />
     Checklists deleted [{{ deletedChecklists.length }} rows]
     <ol>
       <li *ngFor="let checklist of deletedChecklists">
         {{ checklist.id }} - {{ checklist.name }}
+      </li>
+    </ol>
+  </div>
+
+  <div *ngIf="removedResources?.length > 0">
+    <hr />
+    Resources cleaned up [{{ removedResources.length }} rows]
+    <ol>
+      <li *ngFor="let resource of removedResources">
+        {{ resource.path }}
       </li>
     </ol>
   </div>

@@ -5,6 +5,8 @@ import { ChecklistStatus, Checklist } from "../models/checklist.model";
 import { Observable, Subscription } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { first } from "rxjs/operators";
+import { DocumentReference } from "@angular/fire/firestore";
+import { coerceCssPixelValue } from "@angular/cdk/coercion";
 
 @Component({
   selector: "app-adminutils",
@@ -16,6 +18,9 @@ export class AdminutilsComponent implements OnInit, OnDestroy {
   deletedChecklists$: Observable<Checklist[]>;
   deletedChecklists$$: Subscription;
   deletedChecklists: Checklist[];
+
+  removedResources: DocumentReference[] = [];
+  checklists$$: Subscription;
 
   constructor(
     private checklistService: ChecklistService,
@@ -58,9 +63,44 @@ export class AdminutilsComponent implements OnInit, OnDestroy {
       });
   }
 
+  async resourceCleanup() {
+    this.showSpinner = true;
+    console.log("Cleaning up resources");
+    this.removedResources = [];
+    this.checklists$$ = await this.checklistService
+      .findAll(10000)
+      .pipe(first())
+      .subscribe((checklists) =>
+        checklists.map((checklist) => this.cleanUpChecklistResources(checklist))
+      );
+    this.showSpinner = false;
+  }
+
+  cleanUpChecklistResources(checklist: Checklist) {
+    if (checklist.resources) {
+      checklist.resources.map((resource) =>
+        this.cleanUpChecklistResource(checklist, resource)
+      );
+    }
+  }
+
+  cleanUpChecklistResource(checklist: Checklist, resource: DocumentReference) {
+    resource.get().then((doc) => {
+      if (!doc.exists) {
+        const resources = checklist.resources.filter((r) => r != resource);
+        console.log("remove:", checklist.id, checklist.resources, resources);
+        this.removedResources.push(resource);
+        this.checklistService.fieldUpdate(checklist.id, "resources", resources);
+      }
+    });
+  }
+
   ngOnDestroy() {
     if (this.deletedChecklists$$) {
       this.deletedChecklists$$.unsubscribe();
+    }
+    if (this.checklists$$) {
+      this.checklists$$.unsubscribe();
     }
   }
 }
