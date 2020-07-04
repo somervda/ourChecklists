@@ -56,7 +56,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   }
 
   initProcesses(user: User) {
-    console.log("initProcesses", user);
+    // console.log("initProcesses", user);
     if (user.isAdmin) {
       this.myteams$ = this.teamService.findAll(100);
     } else {
@@ -77,7 +77,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
 
     // console.log("category onInit", this.crudAction);
     if (this.crudAction == Crud.Create) {
-      console.log("Checklistdesign create");
+      // console.log("Checklistdesign create");
       this.checklist = {
         name: "",
         description: "",
@@ -96,11 +96,11 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         this.checklist?.isTemplate &&
         !(user.isAdmin || user.isTemplateManager)
       ) {
-        console.log("Redirect");
+        // console.log("Redirect");
         this.helper.redirect("/notAuthorized");
       }
 
-      console.log("update checklist:", this.checklist);
+      // console.log("update checklist:", this.checklist);
       this.checklistSubscription$$ = this.checklistService
         .findById(this.checklist.id)
         .subscribe((checklist) => {
@@ -111,7 +111,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     }
 
     // Create form group and initialize with probe values
-    console.log("this.checklist", this.checklist);
+    // console.log("this.checklist", this.checklist);
     this.checklistForm = this.fb.group({
       name: [
         this.checklist.name,
@@ -175,12 +175,12 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   }
 
   targetDateChange(value) {
-    console.log("targetDateChange:", value);
+    // console.log("targetDateChange:", value);
     this.checklistService.fieldUpdate(this.checklist.id, "dateTargeted", value);
   }
 
   onAssigneeChange(assignee: DocumentReference[]) {
-    console.log("onAssigneeChange assignee:", assignee);
+    // console.log("onAssigneeChange assignee:", assignee);
     this.checklist.assignee = assignee;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
@@ -192,7 +192,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   }
 
   onResourcesChange(resources: DocumentReference[]) {
-    console.log("onResourcesChange", resources);
+    // console.log("onResourcesChange", resources);
     this.checklist.resources = resources;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
@@ -213,7 +213,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   };
 
   onTeamChange(event) {
-    console.log("onTeamChange: ", event);
+    // console.log("onTeamChange: ", event);
     this.checklist.team = event.value;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
@@ -225,7 +225,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   }
 
   onCategoryChange(event) {
-    console.log("onCategoryChange: ", event);
+    // console.log("onCategoryChange: ", event);
     this.checklist.category = event.value;
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(

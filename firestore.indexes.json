@@ -104,6 +104,17 @@
           "queryScope": "COLLECTION_GROUP"
         }
       ]
+    },
+    {
+      "collectionGroup": "checklistitems",
+      "fieldPath": "id",
+      "": "** Only ascending index needed in this use case - see https://stackoverflow.com/questions/56428593/what-is-the-json-format-for-a-firestore-individual-field-index-within-a-collecti ",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
     }
   ]
 }

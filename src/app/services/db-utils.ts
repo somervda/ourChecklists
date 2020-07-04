@@ -9,15 +9,26 @@ export function convertSnaps<T>(snaps) {
       ...snap.payload.doc.data(),
     };
   });
-
-  // return <T[]>snaps.map((snap) => {
-  //   // console.log("snaps", snaps);
-  //   return {
-  //     id: snap.payload.doc.id,
-  //     ...snap.payload.doc.data(),
-  //   };
-  // });
 }
+
+export function convertSnapsGetParent<T>(snaps) {
+  return <T[]>snaps.map((snap) => {
+    // console.log("snaps", snaps);
+    return {
+      id: snap.payload.doc.id,
+      parent_id: snap.payload.doc.ref.parent?.parent?.id,
+      ...snap.payload.doc.data(),
+    };
+  });
+}
+
+// return <T[]>snaps.map((snap) => {
+//   // console.log("snaps", snaps);
+//   return {
+//     id: snap.payload.doc.id,
+//     ...snap.payload.doc.data(),
+//   };
+// });
 
 // Convert snap converts a single documentsnapshot into a single item of type T
 export function convertSnap<T>(snap) {

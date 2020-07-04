@@ -2,7 +2,12 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Checklistitem } from "../models/checklistitem.model";
-import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
+import {
+  convertSnap,
+  convertSnaps,
+  dbFieldUpdate,
+  convertSnapsGetParent,
+} from "./db-utils";
 import { map } from "rxjs/operators";
 import { Checklist } from "../models/checklist.model";
 import * as firebase from "firebase";
@@ -43,7 +48,19 @@ export class ChecklistitemService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
+          // console.log("findAll snaps:", snaps);
           return convertSnaps<Checklistitem>(snaps);
+        })
+      );
+  }
+
+  findAll2(pageSize: number): Observable<Checklistitem[]> {
+    return this.afs
+      .collectionGroup("checklistitems", (ref) => ref.limit(pageSize))
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return convertSnapsGetParent<Checklistitem>(snaps);
         })
       );
   }

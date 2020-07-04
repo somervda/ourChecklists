@@ -16,6 +16,7 @@ export interface Checklistitem {
   comment?: string;
   resources?: DocumentReference[];
   tagId?: string;
+  parent_id?: string;
 }
 
 export enum ChecklistitemResultType {

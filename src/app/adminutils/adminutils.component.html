@@ -24,10 +24,24 @@
     </mat-card-header>
     <mat-card-content>
       <p>
-        Clean up orphan resources on checklists. Read each checklist resource
-        and check the docref is valid, otherwise remove the resource.
+        Clean up orphan resources on checklists and checklistitems. Read each
+        checklist/checklistitem resource and check the docref is valid,
+        otherwise remove the resource.
       </p>
       <button mat-button-outline (click)="resourceCleanup()">Go</button>
+    </mat-card-content>
+  </mat-card>
+  <br />
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Category & Team Cleanup</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Go through checklists and resources and remove any category or team
+        document references that no longer exist.
+      </p>
+      <button mat-button-outline (click)="ctCleanup()">Go</button>
     </mat-card-content>
   </mat-card>
   <div *ngIf="deletedChecklists?.length > 0">
@@ -42,9 +56,18 @@
 
   <div *ngIf="removedResources?.length > 0">
     <hr />
-    Resources cleaned up [{{ removedResources.length }} rows]
+    Checklists Resources cleaned up [{{ removedResources.length }} rows]
     <ol>
       <li *ngFor="let resource of removedResources">
+        {{ resource.path }}
+      </li>
+    </ol>
+  </div>
+  <div *ngIf="removedItemResources?.length > 0">
+    <hr />
+    Checklist item Resources cleaned up [{{ removedItemResources.length }} rows]
+    <ol>
+      <li *ngFor="let resource of removedItemResources">
         {{ resource.path }}
       </li>
     </ol>
