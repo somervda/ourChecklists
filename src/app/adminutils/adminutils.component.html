@@ -72,4 +72,22 @@
       </li>
     </ol>
   </div>
+  <div *ngIf="categoryCleanup?.length > 0">
+    <hr />
+    Orphan categories removed [{{ categoryCleanup.length }} rows]
+    <ol>
+      <li *ngFor="let ref of categoryCleanup">
+        {{ ref.path }}
+      </li>
+    </ol>
+  </div>
+  <div *ngIf="teamCleanup?.length > 0">
+    <hr />
+    Orphan teams removed [{{ teamCleanup.length }} rows]
+    <ol>
+      <li *ngFor="let ref of teamCleanup">
+        {{ ref.path }}
+      </li>
+    </ol>
+  </div>
 </div>

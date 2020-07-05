@@ -6,8 +6,9 @@ import { Observable, Subscription } from "rxjs";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { first } from "rxjs/operators";
 import { DocumentReference } from "@angular/fire/firestore";
-import { coerceCssPixelValue } from "@angular/cdk/coercion";
 import { Checklistitem } from "../models/checklistitem.model";
+import { Resource } from "../models/resource.model";
+import { ResourceService } from "../services/resource.service";
 
 @Component({
   selector: "app-adminutils",
@@ -24,11 +25,15 @@ export class AdminutilsComponent implements OnInit, OnDestroy {
   checklists$$: Subscription;
   removedItemResources: DocumentReference[] = [];
   checklistitems$$: Subscription;
+  categoryCleanup: DocumentReference[] = [];
+  teamCleanup: DocumentReference[] = [];
+  resources$$: Subscription;
 
   constructor(
     private checklistService: ChecklistService,
     private checklistitemService: ChecklistitemService,
-    private helper: HelperService
+    private helper: HelperService,
+    private resourceService: ResourceService
   ) {}
 
   ngOnInit(): void {}
@@ -150,7 +155,77 @@ export class AdminutilsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ctCleanup() {}
+  // Category and Teams
+
+  async ctCleanup() {
+    this.showSpinner = true;
+    console.log("Category and Team cleanup - checklists");
+    this.removedResources = [];
+    // Clean up checklists
+    this.checklists$$ = await this.checklistService
+      .findAll(10000)
+      .pipe(first())
+      .subscribe((checklists) =>
+        checklists.map((checklist) => this.cleanUpChecklistCT(checklist))
+      );
+    // Clean up resources
+    this.resources$$ = await this.resourceService
+      .findAll(10000)
+      .pipe(first())
+      .subscribe((resources) =>
+        resources.map((resource) => this.cleanUpResourceCT(resource))
+      );
+
+    this.showSpinner = false;
+  }
+
+  cleanUpChecklistCT(checklist: Checklist) {
+    // Category
+    if (checklist.category) {
+      checklist.category.get().then((doc) => {
+        if (!doc.exists) {
+          console.log("Category remove:", checklist);
+          this.categoryCleanup.push(checklist.category);
+          this.checklistService.fieldUpdate(checklist.id, "category", null);
+        }
+      });
+    }
+    // Team
+    if (checklist.team) {
+      checklist.team.get().then((doc) => {
+        if (!doc.exists) {
+          console.log("Team remove:", checklist);
+          this.teamCleanup.push(checklist.team);
+          this.checklistService.fieldUpdate(checklist.id, "team", null);
+        }
+      });
+    }
+  }
+
+  cleanUpResourceCT(resource: Resource) {
+    this.categoryCleanup = [];
+    this.teamCleanup = [];
+    // Category
+    if (resource.category) {
+      resource.category.get().then((doc) => {
+        if (!doc.exists) {
+          console.log("Category remove:", resource);
+          this.categoryCleanup.push(resource.category);
+          this.resourceService.fieldUpdate(resource.id, "category", null);
+        }
+      });
+    }
+    // Team
+    if (resource.team) {
+      resource.team.get().then((doc) => {
+        if (!doc.exists) {
+          console.log("Team remove:", resource);
+          this.teamCleanup.push(resource.team);
+          this.resourceService.fieldUpdate(resource.id, "team", null);
+        }
+      });
+    }
+  }
 
   ngOnDestroy() {
     if (this.deletedChecklists$$) {
@@ -161,6 +236,9 @@ export class AdminutilsComponent implements OnInit, OnDestroy {
     }
     if (this.checklistitems$$) {
       this.checklistitems$$.unsubscribe();
+    }
+    if (this.resources$$) {
+      this.resources$$.unsubscribe();
     }
   }
 }

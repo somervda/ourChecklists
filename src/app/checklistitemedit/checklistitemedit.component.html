@@ -11,7 +11,7 @@
 ></app-subheading>
 <div class="page-container">
   <div class="prompt">Name</div>
-  <div>{{ checklistitem.name }}</div>
+  <div>{{ (checklistitem$ | async).name }}</div>
   <div class="prompt">Description</div>
   <div>{{ checklistitem.description }}</div>
   <div class="prompt">Resources</div>

@@ -7,6 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ResourceService } from "../services/resource.service";
 import { ChecklistitemService } from "../services/checklistitem.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-checklistitemedit",
@@ -15,6 +16,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 })
 export class ChecklistitemeditComponent implements OnInit {
   checklistitem: Checklistitem;
+  checklistitem$: Observable<Checklistitem>;
   resources$: Observable<Resource[]>;
   cid: string;
   checklistitemForm: FormGroup;
@@ -30,6 +32,12 @@ export class ChecklistitemeditComponent implements OnInit {
   ngOnInit(): void {
     this.checklistitem = this.route.snapshot.data["checklistitem"];
     this.cid = this.route.snapshot.paramMap.get("cid");
+    // Keep the checklistitem up to date in real time
+    // by using an observable and an async operation on the checklistitem$ name
+    // in the html template to force a subscription
+    this.checklistitem$ = this.checklistitemService
+      .findById(this.cid, this.checklistitem.id)
+      .pipe(map((ci) => (this.checklistitem = ci)));
     if (this.checklistitem.resources) {
       this.resources$ = this.resourceService.findAllIn(
         this.checklistitem.resources.map((r) => r.id)
