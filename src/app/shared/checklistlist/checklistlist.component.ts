@@ -86,6 +86,19 @@ export class ChecklistlistComponent implements OnInit {
     return linkAction;
   }
 
+  isOverdue(checklist): boolean {
+    // Check if we have a target date and if it is in the past
+    // and if status is not complete
+    if (checklist.dateTargeted) {
+      if (checklist.dateTargeted.toDate() < new Date()) {
+        if (checklist.status != ChecklistStatus.Complete) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   deleteChecklist(checklist: Checklist) {
     console.log("deleteChecklist", checklist);
 

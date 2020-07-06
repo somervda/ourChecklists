@@ -24,7 +24,12 @@
       <!-- Depending on checklists status and user's role then different links are shown -->
       <a
         [routerLink]="getChecklistLinkAction(checklist).link"
-        [matTooltip]="getChecklistLinkAction(checklist).tooltip"
+        [matTooltip]="
+          isOverdue(checklist)
+            ? 'Overdue! '
+            : getChecklistLinkAction(checklist).tooltip
+        "
+        [style.color]="isOverdue(checklist) ? 'red' : 'black'"
         >{{ checklist.name }}</a
       >
     </td>

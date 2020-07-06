@@ -85,6 +85,19 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     }
   }
 
+  isOverdue(): boolean {
+    // Check if we have a target date and if it is in the past
+    // and if status is not complete
+    if (this.checklist.dateTargeted) {
+      if (this.checklist.dateTargeted.toDate() < new Date()) {
+        if (this.checklist.status != ChecklistStatus.Complete) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   iconAction(value) {
     // console.log("iconAction:", value, ":");
     switch (value) {

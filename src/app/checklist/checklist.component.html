@@ -6,44 +6,44 @@
 ></app-subheading>
 
 <div class="page-container">
+  <div>
+    <div class="prompt">
+      Name
+    </div>
+    <div>
+      <ng-container
+        *ngIf="
+          checklist.status != ChecklistStatus.UnderConstruction &&
+          checklist.status != ChecklistStatus.Active
+        "
+      >
+        {{ checklist.name }}
+      </ng-container>
+      <ng-container
+        *ngIf="checklist.status == ChecklistStatus.UnderConstruction"
+      >
+        <a
+          [routerLink]="'/checklistdesign/' + checklist.id"
+          matTooltip="Design Checklist"
+          >{{ checklist?.name }}</a
+        ></ng-container
+      >
+      <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
+        <a
+          [routerLink]="'/checklistedit/' + checklist.id"
+          matTooltip="Edit Checklist"
+          >{{ checklist?.name }}</a
+        ></ng-container
+      >
+    </div>
+  </div>
+
+  <div>
+    <div class="prompt">Description</div>
+    <div>{{ checklist.description }}</div>
+  </div>
+
   <div class="grid50percent">
-    <div>
-      <div class="prompt">
-        Name
-      </div>
-      <div>
-        <ng-container
-          *ngIf="
-            checklist.status != ChecklistStatus.UnderConstruction &&
-            checklist.status != ChecklistStatus.Active
-          "
-        >
-          {{ checklist.name }}
-        </ng-container>
-        <ng-container
-          *ngIf="checklist.status == ChecklistStatus.UnderConstruction"
-        >
-          <a
-            [routerLink]="'/checklistdesign/' + checklist.id"
-            matTooltip="Design Checklist"
-            >{{ checklist?.name }}</a
-          ></ng-container
-        >
-        <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
-          <a
-            [routerLink]="'/checklistedit/' + checklist.id"
-            matTooltip="Edit Checklist"
-            >{{ checklist?.name }}</a
-          ></ng-container
-        >
-      </div>
-    </div>
-
-    <div>
-      <div class="prompt">Description</div>
-      <div>{{ checklist.description }}</div>
-    </div>
-
     <div>
       <div class="prompt">Status</div>
       <div>
@@ -109,25 +109,32 @@
       </div>
     </div>
     <div>
-      <div class="prompt">Created</div>
+      <div class="prompt">Date Created</div>
       <div>
         {{ toDate(checklist.dateCreated) | date: "medium" }}
       </div>
     </div>
     <div>
-      <div class="prompt">Targeted</div>
-      <div>
-        {{ toDate(checklist.dateTargeted) | date: "medium" }}
-      </div>
+      <div class="prompt">Date Targeted</div>
+      <ng-container *ngIf="isOverdue()">
+        <div style="color: red;">
+          {{ toDate(checklist.dateTargeted) | date: "medium" }} Overdue!
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isOverdue()">
+        <div>
+          {{ toDate(checklist.dateTargeted) | date: "medium" }}
+        </div>
+      </ng-container>
     </div>
     <div>
-      <div class="prompt">Completed</div>
+      <div class="prompt">Date Completed</div>
       <div>
         {{ toDate(checklist.dateCompleted) | date: "medium" }}
       </div>
     </div>
     <div>
-      <div class="prompt">Last Updated</div>
+      <div class="prompt">Date Last Updated</div>
       <div>
         {{ toDate(checklist.dateUpdated) | date: "medium" }}
       </div>
