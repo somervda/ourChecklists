@@ -76,7 +76,7 @@
         <mat-error
           *ngIf="checklistForm?.controls['name'].hasError('maxlength')"
         >
-          Name must be no more than 70 characters long.
+          Name must be no more than 80 characters long.
         </mat-error>
       </mat-form-field>
 
@@ -104,7 +104,7 @@
         <mat-error
           *ngIf="checklistForm?.controls['description'].hasError('maxlength')"
         >
-          Description must be no more than 500 characters long.
+          Description must be no more than 2000 characters long.
         </mat-error>
       </mat-form-field>
       <ng-container *ngIf="!checklist?.isTemplate">

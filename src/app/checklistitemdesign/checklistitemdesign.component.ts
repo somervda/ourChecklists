@@ -115,7 +115,7 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         [
           Validators.required,
           Validators.minLength(10),
-          Validators.maxLength(500),
+          Validators.maxLength(5000),
         ],
       ],
       sequence: [this.checklistitem.sequence, [Validators.required]],

@@ -43,7 +43,7 @@
           Name must be at least 3 characters long.
         </mat-error>
         <mat-error *ngIf="resourceForm.controls['name'].hasError('maxlength')">
-          Name must be no more than 35 characters long.
+          Name must be no more than 80 characters long.
         </mat-error>
       </mat-form-field>
 
@@ -282,29 +282,44 @@
       </ng-container>
 
       <ng-container *ngIf="resource.resourceType == ResourceType.markdown">
-        <mat-form-field class="full-width">
-          <textarea
-            matInput
-            matAutosizeMinRows="10"
-            matAutosizeMaxRows="15"
-            matTextareaAutosize
-            formControlName="content"
-            (change)="onFieldUpdate('content')"
-            placeholder="MarkDown"
-            required
-          ></textarea>
-          <mat-hint>Enter text using Markdown syntax</mat-hint>
-          <mat-error
-            *ngIf="resourceForm.controls['content'].hasError('required')"
-          >
-            Markdown text is required.
-          </mat-error>
-          <mat-error
-            *ngIf="resourceForm.controls['content'].hasError('maxlength')"
-          >
-            Markdown must be no more than 10,000 characters long.
-          </mat-error>
-        </mat-form-field>
+        <mat-tab-group mat-align-tabs="start">
+          <mat-tab label="Edit">
+            <mat-form-field class="full-width">
+              <textarea
+                matInput
+                matAutosizeMinRows="10"
+                matAutosizeMaxRows="15"
+                matTextareaAutosize
+                formControlName="content"
+                (change)="onFieldUpdate('content')"
+                required
+                #markdown
+              ></textarea>
+              <mat-error
+                *ngIf="resourceForm.controls['content'].hasError('required')"
+              >
+                Markdown text is required.
+              </mat-error>
+              <mat-error
+                *ngIf="resourceForm.controls['content'].hasError('maxlength')"
+              >
+                Markdown must be no more than 10,000 characters long.
+              </mat-error>
+            </mat-form-field>
+            <a
+              href="javascript:void(0);"
+              matTooltip="View a Markdown Guide"
+              onclick="window.open('https://www.seevividly.com/images/Markdown_Reference.png', 'MarkdownGuide','width=600,height=800')"
+              >Markdown Guide</a
+            >
+          </mat-tab>
+          <mat-tab label="View">
+            <div
+              [innerHTML]="markdown.value | marked"
+              class="content-container md-viewer"
+            ></div>
+          </mat-tab>
+        </mat-tab-group>
       </ng-container>
     </fieldset>
 

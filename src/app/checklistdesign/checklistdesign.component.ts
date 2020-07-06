@@ -118,7 +118,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(70),
+          Validators.maxLength(80),
         ],
       ],
       description: [
@@ -126,7 +126,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         [
           Validators.required,
           Validators.minLength(10),
-          Validators.maxLength(500),
+          Validators.maxLength(2000),
         ],
       ],
       comments: [this.checklist.comments, [Validators.maxLength(500)]],

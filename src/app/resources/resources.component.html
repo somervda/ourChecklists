@@ -210,12 +210,16 @@
           resource.status == ResourceStatus.superseded ? '0.5' : '1'
         "
       >
-        <img
-          src="./../../assets/icons/{{
-            getResourceTypeInfoItem(resource.resourceType).icon
-          }}"
-          matTooltip="{{ getResourceTypeInfoItem(resource.resourceType).name }}"
-        />
+        <button mat-button (click)="popupResource(resource)">
+          <img
+            src="./../../assets/icons/{{
+              getResourceTypeInfoItem(resource.resourceType).icon
+            }}"
+            matTooltip="{{
+              getResourceTypeInfoItem(resource.resourceType).name
+            }} - Click to view"
+          />
+        </button>
       </td>
     </ng-container>
 

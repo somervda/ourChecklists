@@ -102,7 +102,8 @@ import { TemplateselectordialogComponent } from "./dialogs/templateselectordialo
 import { DatasearchComponent } from "./shared/datasearch/datasearch.component";
 import { DatavisualizationComponent } from "./datavisualization/datavisualization.component";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
-import { AdminutilsComponent } from './adminutils/adminutils.component';
+import { AdminutilsComponent } from "./adminutils/adminutils.component";
+import { SafePipe } from "./pipes/safe.pipe";
 
 @NgModule({
   declarations: [
@@ -166,6 +167,7 @@ import { AdminutilsComponent } from './adminutils/adminutils.component';
     DatasearchComponent,
     DatavisualizationComponent,
     AdminutilsComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,8 @@ import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
 import { HelperService } from "../services/helper.service";
 import { DocumentReference } from "@angular/fire/firestore";
+import { MatDialog } from "@angular/material/dialog";
+import { ResourceviewdialogComponent } from "../dialogs/resourceviewdialog/resourceviewdialog.component";
 
 @Component({
   selector: "app-resources",
@@ -51,7 +53,8 @@ export class ResourcesComponent implements OnInit {
     private teamService: TeamService,
     private categoryService: CategoryService,
     private userService: UserService,
-    public helper: HelperService
+    public helper: HelperService,
+    public dialog: MatDialog
   ) {}
   ngOnInit() {
     this.teams$ = this.teamService.findAll(100);
@@ -110,6 +113,16 @@ export class ResourcesComponent implements OnInit {
         (this.showMarkdown && ri.resourceType == ResourceType.markdown) ||
         (this.showImage && ri.resourceType == ResourceType.image));
     return selector;
+  }
+
+  popupResource(resource: Resource) {
+    const dialogRef = this.dialog.open(ResourceviewdialogComponent, {
+      width: "95%",
+      maxWidth: "800px",
+      maxHeight: "90%",
+      data: { resource: this.helper.docRef(`resources/${resource.id}`) },
+      autoFocus: false,
+    });
   }
 
   onNameKey(event: any) {

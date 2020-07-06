@@ -123,7 +123,7 @@ export class ResourceComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(35),
+          Validators.maxLength(80),
         ],
       ],
       description: [

@@ -2,7 +2,7 @@
   <mat-icon>close</mat-icon>
 </div> -->
 <app-subheading
-  [prompt]="resource.name"
+  [prompt]="resource?.name"
   [iconActions]="[
     {
       icon: 'close',
@@ -14,20 +14,20 @@
 ></app-subheading>
 <br />
 
-<ng-container *ngIf="resource.resourceType == ResourceType.url">
+<ng-container *ngIf="resource?.resourceType == ResourceType.url">
   URL* :
-  <a [href]="resource.content" target="_blank">{{ resource.content }}</a>
+  <a [href]="resource?.content" target="_blank">{{ resource.content }}</a>
   <br /><br />
   <div>{{ resource.description }}</div>
   <br /><sup>* Click to go to URL.</sup>
 </ng-container>
 
-<ng-container *ngIf="resource.resourceType == ResourceType.youtubeId">
+<ng-container *ngIf="resource?.resourceType == ResourceType.youtubeId">
   <app-youtubeviewer [youtubeId]="resource.content"></app-youtubeviewer>
   <div>{{ resource.description }}</div>
 </ng-container>
 
-<ng-container *ngIf="resource.resourceType == ResourceType.file">
+<ng-container *ngIf="resource?.resourceType == ResourceType.file">
   File Name* :
   <a [href]="downloadUrl$ | async" target="_blank" title="Click to download">{{
     resource.content
@@ -37,11 +37,11 @@
   <div>{{ resource.description }}</div>
   <br /><sup>* Click to download file.</sup>
 </ng-container>
-<ng-container *ngIf="resource.resourceType == ResourceType.image">
+<ng-container *ngIf="resource?.resourceType == ResourceType.image">
   <div><img [src]="downloadUrl$ | async" class="image-type" /></div>
   <div>{{ resource.description }}</div>
 </ng-container>
 
-<ng-container *ngIf="resource.resourceType == ResourceType.markdown">
-  <div [innerHTML]="resource.content | marked"></div>
+<ng-container *ngIf="resource?.resourceType == ResourceType.markdown">
+  <div [innerHTML]="resource?.content | marked" class="content-container"></div>
 </ng-container>

@@ -71,6 +71,10 @@ mat-radio-button {
   font-weight: 400;
 }
 
+.md-viewer {
+  max-height: 400px;
+}
+
 // Create a 2 column layout when screen is more than 500px wide
 @media (min-width: 500px) {
   .gridwrapper {
