@@ -12,7 +12,6 @@ import {
   Checklistextract,
   Checklistitemextract,
   UserInfo,
-  Checklistscore,
   Checklistcsv,
   Checklistitemcsv,
 } from "src/app/models/checklistextract.model";
@@ -21,6 +20,7 @@ import {
   Checklist,
   ChecklistStatusInfo,
   ChecklistStatus,
+  ChecklistStatistics,
 } from "src/app/models/checklist.model";
 import { CategoryService } from "src/app/services/category.service";
 import { TeamService } from "src/app/services/team.service";
@@ -31,7 +31,7 @@ import { ChecklistitemService } from "src/app/services/checklistitem.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "src/app/services/user.service";
 import { MatDialog } from "@angular/material/dialog";
-import { map, first } from "rxjs/operators";
+import { map, first, take } from "rxjs/operators";
 import { TemplateselectordialogComponent } from "src/app/dialogs/templateselectordialog/templateselectordialog.component";
 import {
   Checklistitem,
@@ -275,12 +275,22 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     // is to have all the selected checklists ready to write as json to a file
     // and have denormalized most of the document references. Not all the properties
     // of the checklists or checklist items get extracted
-    let checklists = await (
-      await this.getChecklists(this.checklists$)
-    ).map((c) => this.denormalizeChecklist(c));
+    let checklistsPrime = await this.getChecklists(this.checklists$);
+    let checklistExtracts = await Promise.all(
+      checklistsPrime.map(async (c) => {
+        let f = await this.denormalizeChecklist(c);
+        return f;
+      })
+    );
+    // let checklists = await (await this.getChecklists(this.checklists$)).map(
+    //   async (c) => {
+    //      let f =  (await this.denormalizeChecklist(c));
+    //      return f;
+    //   }
+    // );
 
     const checklistsAndItems = await Promise.all(
-      checklists.map(async (c) => {
+      checklistExtracts.map(async (c) => {
         let checklistitems = await (
           await this.getChecklistitems(this.checklistitemService.findAll(c.id))
         ).map((cli) => this.denormalizeChecklistitem(cli));
@@ -290,7 +300,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     );
 
     // Update checklistscore
-    checklistsAndItems.forEach((c) => (c.score = this.calculateScores(c)));
+    // checklistsAndItems.forEach((c) => (c.score = this.calculateScores(c)));
 
     this.buildDownloads(checklistsAndItems);
 
@@ -388,8 +398,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         team_name: checklist.team.name,
         category_id: checklist.category.id,
         category_name: checklist.category.name,
-        score_overall: checklist.score.overall,
-        score_completeness: checklist.score.completeness,
+        score: checklist.score,
       };
       return checklistscsv;
     } catch (e) {
@@ -463,18 +472,23 @@ export class DatasearchComponent implements OnInit, OnDestroy {
 
   async getChecklists(checklists$: Observable<Checklist[]>) {
     // console.log("getChecklistitems");
-    let checklists = await checklists$.pipe(first()).toPromise();
+    let checklists = await checklists$;
     return checklists;
   }
 
   async getChecklistitems(checklistitems$: Observable<Checklistitem[]>) {
     // console.log("getChecklistitems");
-    let checklistitems = await checklistitems$.pipe(first()).toPromise();
+    let checklistitems = await checklistitems$;
     return checklistitems;
   }
 
-  denormalizeChecklist(checklist: Checklist): Checklistextract {
+  async denormalizeChecklist(checklist: Checklist): Promise<Checklistextract> {
     // console.log("denormalizeChecklist", checklist);
+    let s = await this.checklistService
+      .getStatistics(checklist.id)
+      .pipe(first())
+      .toPromise();
+
     let checklistextract: Checklistextract = {
       id: checklist.id,
       isTemplate: checklist.isTemplate,
@@ -511,6 +525,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         this.helper.getDocRefId(checklist.category),
         this.categoryInfo
       ),
+      score: s.scorePercentage,
     };
 
     return checklistextract;
@@ -554,84 +569,84 @@ export class DatasearchComponent implements OnInit, OnDestroy {
    * Report score and completeness as percentage
    * @param checklist
    */
-  calculateScores(checklist: Checklistextract): Checklistscore {
-    let checklistscore = {
-      overall: 0,
-      completeness: 0,
-    };
-    const currentDate = new Date();
-    const isAfterTargetDate = currentDate > checklist.dateTargeted;
-    // Calculate overall
-    let totalItems = checklist.checklistitems.reduce(
-      (total, ci) => total + 1,
-      0
-    );
-    let setItems = checklist.checklistitems.reduce(
-      (total, ci) => (ci.resultValue == undefined ? total : total + 1),
-      0
-    );
+  // calculateScores(checklist: Checklistextract): Checklistscore {
+  //   let checklistscore = {
+  //     overall: 0,
+  //     completeness: 0,
+  //   };
+  //   const currentDate = new Date();
+  //   const isAfterTargetDate = currentDate > checklist.dateTargeted;
+  //   // Calculate overall
+  //   let totalItems = checklist.checklistitems.reduce(
+  //     (total, ci) => total + 1,
+  //     0
+  //   );
+  //   let setItems = checklist.checklistitems.reduce(
+  //     (total, ci) => (ci.resultValue == undefined ? total : total + 1),
+  //     0
+  //   );
 
-    let totalItemsForScore = totalItems;
-    let score = checklist.checklistitems.reduce((total, ci) => {
-      let itemScore = 0;
-      switch (ci.resultValue) {
-        case ChecklistitemResultValue.false:
-          itemScore += 0;
-          break;
-        case ChecklistitemResultValue.true:
-          itemScore += 4;
-          break;
-        case ChecklistitemResultValue.low:
-          itemScore += 0;
-          break;
-        case ChecklistitemResultValue.mediumLow:
-          itemScore += 1;
-          break;
-        case ChecklistitemResultValue.medium:
-          itemScore += 2;
-          break;
-        case ChecklistitemResultValue.mediumHigh:
-          itemScore += 3;
-          break;
-        case ChecklistitemResultValue.high:
-          itemScore += 4;
-          break;
-        case ChecklistitemResultValue.NA:
-          // Treat NA as not existing items
-          totalItemsForScore -= 1;
-          break;
-        default:
-          // item not set is treated as a false if after
-          // target completion date or completed
-          if (
-            !isAfterTargetDate &&
-            checklist.status.id != ChecklistStatus.Complete.toString()
-          ) {
-            totalItemsForScore -= 1;
-          }
-      }
-      return total + itemScore;
-    }, 0);
+  //   let totalItemsForScore = totalItems;
+  //   let score = checklist.checklistitems.reduce((total, ci) => {
+  //     let itemScore = 0;
+  //     switch (ci.resultValue) {
+  //       case ChecklistitemResultValue.false:
+  //         itemScore += 0;
+  //         break;
+  //       case ChecklistitemResultValue.true:
+  //         itemScore += 4;
+  //         break;
+  //       case ChecklistitemResultValue.low:
+  //         itemScore += 0;
+  //         break;
+  //       case ChecklistitemResultValue.mediumLow:
+  //         itemScore += 1;
+  //         break;
+  //       case ChecklistitemResultValue.medium:
+  //         itemScore += 2;
+  //         break;
+  //       case ChecklistitemResultValue.mediumHigh:
+  //         itemScore += 3;
+  //         break;
+  //       case ChecklistitemResultValue.high:
+  //         itemScore += 4;
+  //         break;
+  //       case ChecklistitemResultValue.NA:
+  //         // Treat NA as not existing items
+  //         totalItemsForScore -= 1;
+  //         break;
+  //       default:
+  //         // item not set is treated as a false if after
+  //         // target completion date or completed
+  //         if (
+  //           !isAfterTargetDate &&
+  //           checklist.status.id != ChecklistStatus.Complete.toString()
+  //         ) {
+  //           totalItemsForScore -= 1;
+  //         }
+  //     }
+  //     return total + itemScore;
+  //   }, 0);
 
-    // console.log(
-    //   "reducer: ",
-    //   checklist,
-    //   totalItems,
-    //   setItems,
-    //   totalItemsForScore * 4,
-    //   score
-    // );
-    if (totalItems != 0) {
-      checklistscore.completeness = Math.round((setItems / totalItems) * 100);
-    }
-    if (totalItemsForScore > 0) {
-      checklistscore.overall = Math.round(
-        (score / (totalItemsForScore * 4)) * 100
-      );
-    }
-    // console.log("checklistscore: ", checklistscore);
-    return checklistscore;
-  }
+  //   // console.log(
+  //   //   "reducer: ",
+  //   //   checklist,
+  //   //   totalItems,
+  //   //   setItems,
+  //   //   totalItemsForScore * 4,
+  //   //   score
+  //   // );
+  //   if (totalItems != 0) {
+  //     checklistscore.completeness = Math.round((setItems / totalItems) * 100);
+  //   }
+  //   if (totalItemsForScore > 0) {
+  //     checklistscore.overall = Math.round(
+  //       (score / (totalItemsForScore * 4)) * 100
+  //     );
+  //   }
+  //   // console.log("checklistscore: ", checklistscore);
+  //   return checklistscore;
+  // }
 
   ngOnDestroy() {
     if (this.categoriesInfo$$) {

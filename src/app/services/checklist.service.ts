@@ -1,8 +1,12 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore, DocumentReference } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import { Checklist, ChecklistStatus } from "../models/checklist.model";
-import { map, first } from "rxjs/operators";
+import {
+  Checklist,
+  ChecklistStatus,
+  ChecklistStatistics,
+} from "../models/checklist.model";
+import { map, first, switchMap } from "rxjs/operators";
 import * as firebase from "firebase";
 import {
   convertSnap,
@@ -19,6 +23,7 @@ import {
 } from "../models/checklistitem.model";
 import { User } from "../models/user.model";
 import { HelperService } from "./helper.service";
+import { Timestamp } from "rxjs/internal/operators/timestamp";
 
 @Injectable({
   providedIn: "root",
@@ -433,5 +438,104 @@ export class ChecklistService {
     );
     batch.delete(this.helper.docRef(`/checklists/${checklist.id}`));
     return batch.commit();
+  }
+
+  getStatistics(checklistId: string): Observable<ChecklistStatistics> {
+    let s: ChecklistStatistics = {
+      itemCount: 0,
+      requiredNotSet: 0,
+      naSet: 0,
+      itemsSet: 0,
+      isOverdue: false,
+      scoreRaw: 0,
+      scorePercentage: 0,
+    };
+
+    return this.findById(checklistId).pipe(
+      switchMap((c) => {
+        s.isOverdue = this.overdueCheck(c);
+        return this.checklistitemService.findAll(checklistId).pipe(
+          map((cis) => {
+            s.itemCount = cis.length;
+            s.itemsSet = cis.reduce(
+              (a, ci) => (ci.resultValue == undefined ? (a += 0) : (a += 1)),
+              0
+            );
+            s.requiredNotSet = cis.reduce(
+              (a, ci) =>
+                ci.resultValue == undefined && ci.allowNA == false
+                  ? (a += 1)
+                  : (a += 0),
+              0
+            );
+            s.naSet = cis.reduce(
+              (a, ci) =>
+                ci.resultValue == ChecklistitemResultValue.NA
+                  ? (a += 1)
+                  : (a += 0),
+              0
+            );
+            s.scoreRaw = cis.reduce((a, ci) => a + this.getItemScore(c, ci), 0);
+            s.scorePercentage = Math.round(
+              (s.scoreRaw / ((s.itemsSet + s.requiredNotSet - s.naSet) * 4)) *
+                100
+            );
+
+            return s;
+          })
+        );
+      })
+    );
+  }
+
+  private overdueCheck(checklist: Checklist): boolean {
+    if (checklist.dateTargeted) {
+      if (checklist.dateTargeted.toDate() < new Date()) {
+        if (checklist.status != ChecklistStatus.Complete) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  getItemScore(c: Checklist, ci: Checklistitem): number {
+    let itemScore = 0;
+    switch (ci.resultValue) {
+      case ChecklistitemResultValue.false:
+        itemScore += 0;
+        break;
+      case ChecklistitemResultValue.true:
+        itemScore += 4;
+        break;
+      case ChecklistitemResultValue.low:
+        itemScore += 0;
+        break;
+      case ChecklistitemResultValue.mediumLow:
+        itemScore += 1;
+        break;
+      case ChecklistitemResultValue.medium:
+        itemScore += 2;
+        break;
+      case ChecklistitemResultValue.mediumHigh:
+        itemScore += 3;
+        break;
+      case ChecklistitemResultValue.high:
+        itemScore += 4;
+        break;
+      case ChecklistitemResultValue.NA:
+        // Treat NA as not existing items
+        itemScore += 0;
+        break;
+      default:
+        // item not set is treated as a false
+        itemScore += 0;
+    }
+    return itemScore;
+  }
+
+  totalScore(score, set, required, na) {
+    let total = (score / ((set + required - na) * 4)) * 100;
+    return Math.round(total);
   }
 }

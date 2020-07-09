@@ -69,3 +69,13 @@ export interface ChecklistStatusInfoItem {
   icon: string;
   description: string;
 }
+
+export interface ChecklistStatistics {
+  itemCount: number;
+  requiredNotSet: number;
+  naSet: number;
+  itemsSet: number;
+  isOverdue: boolean;
+  scoreRaw: number;
+  scorePercentage: number;
+}

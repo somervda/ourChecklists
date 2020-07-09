@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { Checklist, ChecklistStatus } from "../models/checklist.model";
+import {
+  Checklist,
+  ChecklistStatus,
+  ChecklistStatistics,
+} from "../models/checklist.model";
 import { Observable, Subscription } from "rxjs";
 import { Checklistitem } from "../models/checklistitem.model";
 import { ChecklistitemService } from "../services/checklistitem.service";
@@ -12,6 +16,7 @@ import { first } from "rxjs/operators";
 import { IconAction } from "../models/helper.model";
 import { TemplategeneratordialogComponent } from "../dialogs/templategeneratordialog/templategeneratordialog.component";
 import { ChecklistService } from "../services/checklist.service";
+import { MsgdialogComponent } from "../dialogs/msgdialog/msgdialog.component";
 
 @Component({
   selector: "app-checklist",
@@ -34,6 +39,8 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     },
   ];
 
+  checklistStatistics$: Observable<ChecklistStatistics>;
+
   constructor(
     private route: ActivatedRoute,
     private checklistService: ChecklistService,
@@ -50,6 +57,9 @@ export class ChecklistComponent implements OnInit, OnDestroy {
     this.checklist$$ = this.checklist$.subscribe(
       (checklist) => (this.checklist = checklist)
     );
+
+    this.checklistStatistics$ = this.checklistService.getStatistics(id);
+
     this.auth.user$
       .pipe(first())
       .toPromise()
@@ -108,6 +118,18 @@ export class ChecklistComponent implements OnInit, OnDestroy {
         this.createTemplate();
         break;
     }
+  }
+
+  scoreInfo() {
+    const prompt =
+      "Scores are based on the checklists item information. Items that are checked or have the highest ratings contribute to the maximum score of 100%. " +
+      "Unchecked, low or missing results are interpreted as low scoring items. Items marked as NA (when allowed) will not impact the scoring calculation. ";
+    this.dialog.open(MsgdialogComponent, {
+      minWidth: "380px",
+      maxWidth: "700px",
+      width: "80%",
+      data: { heading: "Score", prompt: prompt },
+    });
   }
 
   createTemplate() {

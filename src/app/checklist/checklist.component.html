@@ -139,6 +139,17 @@
         {{ toDate(checklist.dateUpdated) | date: "medium" }}
       </div>
     </div>
+    <div>
+      <div class="prompt">
+        Score
+        <span class="material-icons info" (click)="scoreInfo()">
+          info
+        </span>
+      </div>
+      <div *ngIf="checklistStatistics$ | async; let statistics">
+        {{ statistics.scorePercentage }}%
+      </div>
+    </div>
   </div>
   <br />
   <div class="checklistitem-frame">
