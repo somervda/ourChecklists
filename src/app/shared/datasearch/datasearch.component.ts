@@ -472,13 +472,13 @@ export class DatasearchComponent implements OnInit, OnDestroy {
 
   async getChecklists(checklists$: Observable<Checklist[]>) {
     // console.log("getChecklistitems");
-    let checklists = await checklists$;
+    let checklists = await checklists$.pipe(first()).toPromise();
     return checklists;
   }
 
   async getChecklistitems(checklistitems$: Observable<Checklistitem[]>) {
     // console.log("getChecklistitems");
-    let checklistitems = await checklistitems$;
+    let checklistitems = await checklistitems$.pipe(first()).toPromise();
     return checklistitems;
   }
 
@@ -559,94 +559,6 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     };
     return checklistitemextract;
   }
-
-  /**
-   * Calculates scores for a checklists by reading checklist items. Scoring is based on the checklist item values
-   * having a weighting of : false=0, true=4,low=0,mediumlow=1, medium=2, mediumhigh=3, and high=4,
-   * notset = 0 - same as false (if past the dateTargeted or complete) or don't include in scoring if not completed yet
-   * NA = don't include in scoring
-   * Completeness is just the number items that are set even if set to NA
-   * Report score and completeness as percentage
-   * @param checklist
-   */
-  // calculateScores(checklist: Checklistextract): Checklistscore {
-  //   let checklistscore = {
-  //     overall: 0,
-  //     completeness: 0,
-  //   };
-  //   const currentDate = new Date();
-  //   const isAfterTargetDate = currentDate > checklist.dateTargeted;
-  //   // Calculate overall
-  //   let totalItems = checklist.checklistitems.reduce(
-  //     (total, ci) => total + 1,
-  //     0
-  //   );
-  //   let setItems = checklist.checklistitems.reduce(
-  //     (total, ci) => (ci.resultValue == undefined ? total : total + 1),
-  //     0
-  //   );
-
-  //   let totalItemsForScore = totalItems;
-  //   let score = checklist.checklistitems.reduce((total, ci) => {
-  //     let itemScore = 0;
-  //     switch (ci.resultValue) {
-  //       case ChecklistitemResultValue.false:
-  //         itemScore += 0;
-  //         break;
-  //       case ChecklistitemResultValue.true:
-  //         itemScore += 4;
-  //         break;
-  //       case ChecklistitemResultValue.low:
-  //         itemScore += 0;
-  //         break;
-  //       case ChecklistitemResultValue.mediumLow:
-  //         itemScore += 1;
-  //         break;
-  //       case ChecklistitemResultValue.medium:
-  //         itemScore += 2;
-  //         break;
-  //       case ChecklistitemResultValue.mediumHigh:
-  //         itemScore += 3;
-  //         break;
-  //       case ChecklistitemResultValue.high:
-  //         itemScore += 4;
-  //         break;
-  //       case ChecklistitemResultValue.NA:
-  //         // Treat NA as not existing items
-  //         totalItemsForScore -= 1;
-  //         break;
-  //       default:
-  //         // item not set is treated as a false if after
-  //         // target completion date or completed
-  //         if (
-  //           !isAfterTargetDate &&
-  //           checklist.status.id != ChecklistStatus.Complete.toString()
-  //         ) {
-  //           totalItemsForScore -= 1;
-  //         }
-  //     }
-  //     return total + itemScore;
-  //   }, 0);
-
-  //   // console.log(
-  //   //   "reducer: ",
-  //   //   checklist,
-  //   //   totalItems,
-  //   //   setItems,
-  //   //   totalItemsForScore * 4,
-  //   //   score
-  //   // );
-  //   if (totalItems != 0) {
-  //     checklistscore.completeness = Math.round((setItems / totalItems) * 100);
-  //   }
-  //   if (totalItemsForScore > 0) {
-  //     checklistscore.overall = Math.round(
-  //       (score / (totalItemsForScore * 4)) * 100
-  //     );
-  //   }
-  //   // console.log("checklistscore: ", checklistscore);
-  //   return checklistscore;
-  // }
 
   ngOnDestroy() {
     if (this.categoriesInfo$$) {
