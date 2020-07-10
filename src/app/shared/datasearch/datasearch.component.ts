@@ -31,7 +31,7 @@ import { ChecklistitemService } from "src/app/services/checklistitem.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "src/app/services/user.service";
 import { MatDialog } from "@angular/material/dialog";
-import { map, first, take } from "rxjs/operators";
+import { map, first, take, flatMap } from "rxjs/operators";
 import { TemplateselectordialogComponent } from "src/app/dialogs/templateselectordialog/templateselectordialog.component";
 import {
   Checklistitem,
@@ -213,6 +213,73 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         this.selectedTemplate = choice;
       }
     });
+  }
+
+  test() {
+    this.checklistSpinner = true;
+    this.startExtract.emit(true);
+    const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
+    const team = this.helper.docRef(`/teams/${this.selectedTeam}`);
+    const template = this.helper.docRef(
+      `/checklists/${this.selectedTemplate.id}`
+    );
+    this.checklists$ = this.checklistService.search(
+      parseInt(this.selectedStatus),
+      category,
+      team,
+      template,
+      1000
+    );
+    // Date range filters are implemented as a client side pipe rather
+    // than as firestore queries that would require managements of a bunch of indexes
+    // until perform on the client is impacted this should be OK
+    if (this.selectedFromDate) {
+      this.checklists$ = this.checklists$.pipe(
+        map((cs) => {
+          return cs.filter(
+            (c) =>
+              c.dateCompleted &&
+              (c.dateCompleted as firebase.firestore.Timestamp).toDate() >=
+                this.selectedFromDate
+          );
+        })
+      );
+    }
+
+    if (this.selectedToDate) {
+      this.checklists$ = this.checklists$.pipe(
+        map((cs) => {
+          return cs.filter(
+            (c) =>
+              c.dateCompleted &&
+              (c.dateCompleted as firebase.firestore.Timestamp).toDate() <=
+                this.selectedToDate
+          );
+        })
+      );
+    }
+
+    // Don't include templates
+    this.checklists$.pipe(
+      map((cs) =>
+        cs.filter((c) => !c.isTemplate).map((c) => this.denormalizeChecklist(c)))
+        ,flatMap(ces => {
+          return ces.map(ce => { let s =  this.checklistService.getStatistics(ce.id);
+            ce.score = s.
+
+          return ce;})
+          });
+
+
+
+      )
+    );
+
+
+    // let s =  this.checklistService
+    // .getStatistics(checklist.id)
+    // .pipe(first())
+    // .toPromise();
   }
 
   async getSelectedData() {
@@ -482,12 +549,9 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     return checklistitems;
   }
 
-  async denormalizeChecklist(checklist: Checklist): Promise<Checklistextract> {
+  denormalizeChecklist(checklist: Checklist):Checklistextract {
     // console.log("denormalizeChecklist", checklist);
-    let s = await this.checklistService
-      .getStatistics(checklist.id)
-      .pipe(first())
-      .toPromise();
+
 
     let checklistextract: Checklistextract = {
       id: checklist.id,
