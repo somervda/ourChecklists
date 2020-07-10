@@ -24,6 +24,7 @@ export interface Checklistextract {
   assignee: UserInfo[];
   category: DocInfo;
   score: number;
+  isOverdue: boolean;
   checklistitems?: Checklistitemextract[];
 }
 
@@ -47,6 +48,7 @@ export interface Checklistcsv {
   category_id: string;
   category_name: string;
   score: number;
+  isOverdue: boolean;
 }
 
 // export interface Checklistscore {

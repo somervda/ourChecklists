@@ -1,6 +1,6 @@
 <app-subheading
   prompt="Checklist Viewer"
-  [matIcon]="helper.getChecklistStatusInfoItem(checklist.status).icon"
+  [matIcon]="helper.getChecklistStatusInfoItem(checklist?.status).icon"
   [iconActions]="iconActions"
   (iconAction)="iconAction($event)"
 ></app-subheading>

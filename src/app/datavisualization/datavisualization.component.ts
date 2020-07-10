@@ -11,7 +11,7 @@ export class DatavisualizationComponent implements OnInit {
   rows: number = 0;
   showChart = false;
   checklistsAndItems;
-  valueProperty = "score.overall";
+  valueProperty = "counts";
   groupProperty = "category.name";
 
   series = [];
@@ -40,13 +40,13 @@ export class DatavisualizationComponent implements OnInit {
   }
 
   groupChange(groupProperty: string) {
-    console.log("groupChange", groupProperty);
+    // console.log("groupChange", groupProperty);
     this.groupProperty = groupProperty;
     this.drawChart();
   }
 
   valueChange(valueProperty: string) {
-    console.log("valueChange", valueProperty);
+    // console.log("valueChange", valueProperty);
     this.valueProperty = valueProperty;
     this.drawChart();
   }
@@ -74,11 +74,8 @@ export class DatavisualizationComponent implements OnInit {
         break;
     }
     switch (this.valueProperty) {
-      case "score.overall":
+      case "score":
         this.xAxisLabel = "Checklist Score (Avg.) %";
-        break;
-      case "score.completeness":
-        this.xAxisLabel = "Checklist completeness (Avg.) %";
         break;
       case "counts":
         this.xAxisLabel = "Checklist Counts";
@@ -93,7 +90,7 @@ export class DatavisualizationComponent implements OnInit {
       this.groupProperty,
       this.valueProperty
     );
-    console.log("this.series", this.series);
+    // console.log("this.series", this.series);
     this.showChart = true;
   }
 

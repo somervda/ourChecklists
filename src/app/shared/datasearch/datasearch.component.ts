@@ -94,6 +94,8 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   extractNameChecklistitems = "checklistitems-extract.csv";
   downLoadReady = false;
 
+  dataExtract$$: Subscription;
+
   constructor(
     private categoryService: CategoryService,
     private teamService: TeamService,
@@ -215,79 +217,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  test() {
-    this.checklistSpinner = true;
-    this.startExtract.emit(true);
-    const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
-    const team = this.helper.docRef(`/teams/${this.selectedTeam}`);
-    const template = this.helper.docRef(
-      `/checklists/${this.selectedTemplate.id}`
-    );
-    this.checklists$ = this.checklistService.search(
-      parseInt(this.selectedStatus),
-      category,
-      team,
-      template,
-      1000
-    );
-    // Date range filters are implemented as a client side pipe rather
-    // than as firestore queries that would require managements of a bunch of indexes
-    // until perform on the client is impacted this should be OK
-    if (this.selectedFromDate) {
-      this.checklists$ = this.checklists$.pipe(
-        map((cs) => {
-          return cs.filter(
-            (c) =>
-              c.dateCompleted &&
-              (c.dateCompleted as firebase.firestore.Timestamp).toDate() >=
-                this.selectedFromDate
-          );
-        })
-      );
-    }
-
-    if (this.selectedToDate) {
-      this.checklists$ = this.checklists$.pipe(
-        map((cs) => {
-          return cs.filter(
-            (c) =>
-              c.dateCompleted &&
-              (c.dateCompleted as firebase.firestore.Timestamp).toDate() <=
-                this.selectedToDate
-          );
-        })
-      );
-    }
-
-    // Don't include templates
-    this.checklists$.pipe(
-      map((cs) =>
-        cs.filter((c) => !c.isTemplate).map((c) => this.denormalizeChecklist(c)))
-        ,flatMap(ces => {
-          return ces.map(ce => { let s =  this.checklistService.getStatistics(ce.id);
-            ce.score = s.
-
-          return ce;})
-          });
-
-
-
-      )
-    );
-
-
-    // let s =  this.checklistService
-    // .getStatistics(checklist.id)
-    // .pipe(first())
-    // .toPromise();
-  }
-
-  async getSelectedData() {
-    // console.log(
-    //   "selectedFromDate ${this.selectedFromDate}, selectedCategory ${this.selectedCategory} ," +
-    //     " selectedTeam ${this.selectedTeam}, selectedTemplate${this.selectedTemplate}," +
-    //     " selectedStatus ${this.selectedStatus}, selectedToDate ${this.selectedToDate}"
-    // );
+  getSelectedData() {
     this.checklistSpinner = true;
     this.startExtract.emit(true);
     const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
@@ -333,46 +263,41 @@ export class DatasearchComponent implements OnInit, OnDestroy {
 
     // Don't include templates
     this.checklists$ = this.checklists$.pipe(
-      map((cs) => {
-        return cs.filter((c) => !c.isTemplate);
-      })
+      map((cs) => cs.filter((c) => !c.isTemplate))
     );
 
-    // For the extract I use a lot of awaits to resolve promises so the end result
-    // is to have all the selected checklists ready to write as json to a file
-    // and have denormalized most of the document references. Not all the properties
-    // of the checklists or checklist items get extracted
-    let checklistsPrime = await this.getChecklists(this.checklists$);
-    let checklistExtracts = await Promise.all(
-      checklistsPrime.map(async (c) => {
-        let f = await this.denormalizeChecklist(c);
-        return f;
-      })
-    );
-    // let checklists = await (await this.getChecklists(this.checklists$)).map(
-    //   async (c) => {
-    //      let f =  (await this.denormalizeChecklist(c));
-    //      return f;
-    //   }
-    // );
+    this.dataExtract$$ = this.checklists$
+      // Convert to checjklistextracts
+      .pipe(map((cs) => cs.map((c) => this.denormalizeChecklist(c))))
+      // Subscribe and blow out the checklist items
+      .subscribe((cs) => {
+        // Add checklistitemExtracts to the checklists
+        cs.map((c, i) =>
+          this.checklistitemService.findAll(c.id).subscribe((cis) => {
+            cis.map((ci) => {
+              c.checklistitems.push(this.denormalizeChecklistitem(ci));
+              let s = this.checklistService.getStatisticsOverItems(
+                cis,
+                this.checklistService.overdueCheck(
+                  c.dateTargeted,
+                  parseInt(c.status.id)
+                )
+              );
+              c.score = s.scorePercentage;
+              c.isOverdue = s.isOverdue;
+            });
+            if (cs.length - 1 == i) {
+              // The last checklistextract has been processed so can show downloads
+              // and emit event containing the extracted data
+              console.log("cs and items:", cs);
+              this.buildDownloads(cs);
 
-    const checklistsAndItems = await Promise.all(
-      checklistExtracts.map(async (c) => {
-        let checklistitems = await (
-          await this.getChecklistitems(this.checklistitemService.findAll(c.id))
-        ).map((cli) => this.denormalizeChecklistitem(cli));
-        c["checklistitems"] = checklistitems;
-        return c;
-      })
-    );
-
-    // Update checklistscore
-    // checklistsAndItems.forEach((c) => (c.score = this.calculateScores(c)));
-
-    this.buildDownloads(checklistsAndItems);
-
-    this.checklistSpinner = false;
-    this.checklistExtract.emit(checklistsAndItems);
+              this.checklistSpinner = false;
+              this.checklistExtract.emit(cs);
+            }
+          })
+        );
+      });
   }
 
   /**
@@ -466,6 +391,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         category_id: checklist.category.id,
         category_name: checklist.category.name,
         score: checklist.score,
+        isOverdue: checklist.isOverdue,
       };
       return checklistscsv;
     } catch (e) {
@@ -537,21 +463,8 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     return csvContent;
   }
 
-  async getChecklists(checklists$: Observable<Checklist[]>) {
-    // console.log("getChecklistitems");
-    let checklists = await checklists$.pipe(first()).toPromise();
-    return checklists;
-  }
-
-  async getChecklistitems(checklistitems$: Observable<Checklistitem[]>) {
-    // console.log("getChecklistitems");
-    let checklistitems = await checklistitems$.pipe(first()).toPromise();
-    return checklistitems;
-  }
-
-  denormalizeChecklist(checklist: Checklist):Checklistextract {
+  denormalizeChecklist(checklist: Checklist): Checklistextract {
     // console.log("denormalizeChecklist", checklist);
-
 
     let checklistextract: Checklistextract = {
       id: checklist.id,
@@ -589,7 +502,8 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         this.helper.getDocRefId(checklist.category),
         this.categoryInfo
       ),
-      score: s.scorePercentage,
+      score: 0,
+      isOverdue: false,
     };
 
     return checklistextract;
@@ -633,6 +547,10 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     }
     if (this.activityInfo$$) {
       this.activityInfo$$.unsubscribe();
+    }
+
+    if (this.dataExtract$$) {
+      this.dataExtract$$.unsubscribe();
     }
   }
 }

@@ -37,12 +37,9 @@
           <mat-label>Value</mat-label>
           <mat-select
             (selectionChange)="valueChange($event.value)"
-            value="score.overall"
+            value="counts"
           >
-            <mat-option [value]="'score.overall'">Overall Score %</mat-option>
-            <mat-option [value]="'score.completeness'"
-              >Completeness %</mat-option
-            >
+            <mat-option [value]="'score'">Overall Score %</mat-option>
             <mat-option [value]="'counts'">Counts</mat-option>
           </mat-select>
         </mat-form-field>

@@ -441,6 +441,23 @@ export class ChecklistService {
   }
 
   getStatistics(checklistId: string): Observable<ChecklistStatistics> {
+    return this.findById(checklistId).pipe(
+      switchMap((c) => {
+        let isOverdue = this.overdueCheck(
+          c.dateTargeted ? c.dateTargeted.toDate() : undefined,
+          c.status
+        );
+        return this.checklistitemService
+          .findAll(checklistId)
+          .pipe(map((cis) => this.getStatisticsOverItems(cis, isOverdue)));
+      })
+    );
+  }
+
+  getStatisticsOverItems(
+    cis: Checklistitem[],
+    isOverdue: boolean
+  ): ChecklistStatistics {
     let s: ChecklistStatistics = {
       itemCount: 0,
       requiredNotSet: 0,
@@ -450,48 +467,36 @@ export class ChecklistService {
       scoreRaw: 0,
       scorePercentage: 0,
     };
-
-    return this.findById(checklistId).pipe(
-      switchMap((c) => {
-        s.isOverdue = this.overdueCheck(c);
-        return this.checklistitemService.findAll(checklistId).pipe(
-          map((cis) => {
-            s.itemCount = cis.length;
-            s.itemsSet = cis.reduce(
-              (a, ci) => (ci.resultValue == undefined ? (a += 0) : (a += 1)),
-              0
-            );
-            s.requiredNotSet = cis.reduce(
-              (a, ci) =>
-                ci.resultValue == undefined && ci.allowNA == false
-                  ? (a += 1)
-                  : (a += 0),
-              0
-            );
-            s.naSet = cis.reduce(
-              (a, ci) =>
-                ci.resultValue == ChecklistitemResultValue.NA
-                  ? (a += 1)
-                  : (a += 0),
-              0
-            );
-            s.scoreRaw = cis.reduce((a, ci) => a + this.getItemScore(c, ci), 0);
-            s.scorePercentage = Math.round(
-              (s.scoreRaw / ((s.itemsSet + s.requiredNotSet - s.naSet) * 4)) *
-                100
-            );
-
-            return s;
-          })
-        );
-      })
+    s.itemCount = cis.length;
+    s.isOverdue = isOverdue;
+    s.itemsSet = cis.reduce(
+      (a, ci) => (ci.resultValue == undefined ? (a += 0) : (a += 1)),
+      0
     );
+    s.requiredNotSet = cis.reduce(
+      (a, ci) =>
+        ci.resultValue == undefined && ci.allowNA == false
+          ? (a += 1)
+          : (a += 0),
+      0
+    );
+    s.naSet = cis.reduce(
+      (a, ci) =>
+        ci.resultValue == ChecklistitemResultValue.NA ? (a += 1) : (a += 0),
+      0
+    );
+    s.scoreRaw = cis.reduce((a, ci) => a + this.getItemScore(ci), 0);
+    s.scorePercentage = Math.round(
+      (s.scoreRaw / ((s.itemsSet + s.requiredNotSet - s.naSet) * 4)) * 100
+    );
+
+    return s;
   }
 
-  private overdueCheck(checklist: Checklist): boolean {
-    if (checklist.dateTargeted) {
-      if (checklist.dateTargeted.toDate() < new Date()) {
-        if (checklist.status != ChecklistStatus.Complete) {
+  overdueCheck(dateTargeted: Date, status: ChecklistStatus): boolean {
+    if (dateTargeted) {
+      if (dateTargeted < new Date()) {
+        if (status != ChecklistStatus.Complete) {
           return true;
         }
       }
@@ -499,7 +504,7 @@ export class ChecklistService {
     return false;
   }
 
-  getItemScore(c: Checklist, ci: Checklistitem): number {
+  getItemScore(ci: Checklistitem): number {
     let itemScore = 0;
     switch (ci.resultValue) {
       case ChecklistitemResultValue.false:
