@@ -121,6 +121,9 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       if (u.reviewerOfTeams && u.reviewerOfTeams.length > 0) {
         this.selectedTeam = u.reviewerOfTeams[0];
       }
+      if (u.memberOfTeams && u.memberOfTeams.length > 0) {
+        this.selectedTeam = u.memberOfTeams[0];
+      }
     }
 
     // Set up observables to get a copy of all categories and teams for use

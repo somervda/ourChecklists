@@ -229,6 +229,12 @@ export class ChecklistitemdesignComponent implements OnInit, OnDestroy {
         "resultType",
         this.checklistitem.resultType
       );
+      this.checklistitemService.fieldUpdate(
+        this.cid,
+        this.clid,
+        "resultValue",
+        firebase.firestore.FieldValue.delete()
+      );
     }
   }
 

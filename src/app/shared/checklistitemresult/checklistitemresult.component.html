@@ -79,7 +79,6 @@
       [ngModel]="checklistitem.resultValue"
       (selectionChange)="onChange($event, 'Rating')"
       [disabled]="disabled"
-      style="width: 100px;"
       [matTooltip]="
         'Select a rating' +
         (checklistitem.resultValue == undefined ? ' : No value set!' : '')
