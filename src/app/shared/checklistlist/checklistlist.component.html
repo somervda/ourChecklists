@@ -23,10 +23,18 @@
     <td mat-cell *matCellDef="let checklist">
       <!-- Depending on checklists status and user's role then different links are shown -->
       <a
-        [routerLink]="getChecklistLinkAction(checklist).link"
+        [routerLink]="
+          viewOnlyLink
+            ? '/checklist/' + checklist.id
+            : getChecklistLinkAction(checklist).link
+        "
         [matTooltip]="
           isOverdue(checklist)
-            ? 'Overdue! '
+            ? viewOnlyLink
+              ? 'Overdue! View Checklist'
+              : 'Overdue! ' + getChecklistLinkAction(checklist).tooltip
+            : viewOnlyLink
+            ? 'View Checklist'
             : getChecklistLinkAction(checklist).tooltip
         "
         [style.color]="isOverdue(checklist) ? 'red' : 'black'"

@@ -18,6 +18,7 @@ export class ChecklistlistComponent implements OnInit {
   @Input() hideCreate: boolean;
   @Input() showCompletedOption: boolean;
   @Input() showDelete = true;
+  @Input() viewOnlyLink = false;
   @Output() showCompletedChange = new EventEmitter();
   includeCompleted = false;
   displayedColumns: string[] = ["name", "status", "description", "delete"];

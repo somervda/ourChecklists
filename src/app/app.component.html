@@ -23,7 +23,8 @@
           *ngIf="
             (auth.user$ | async)?.isAdmin ||
             isTeamManager(auth.user$ | async) ||
-            isTeamReviewer(auth.user$ | async)
+            isTeamReviewer(auth.user$ | async) ||
+            isTeamMember(auth.user$ | async)
           "
         >
           <mat-icon>search</mat-icon>

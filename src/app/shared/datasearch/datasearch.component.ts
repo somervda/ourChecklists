@@ -38,6 +38,7 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class DatasearchComponent implements OnInit, OnDestroy {
   @Input() makeExtract = false;
+  @Input() includeTeamMembers = false;
   categoryInfo: DocInfo[];
   categoriesInfo$: Observable<DocInfo[]>;
   categoriesInfo$$: Subscription;
@@ -240,6 +241,11 @@ export class DatasearchComponent implements OnInit, OnDestroy {
             "No checklists match the selection parameters",
             5000
           );
+          if (this.makeExtract) {
+            this.checklistExtract.emit([]);
+          } else {
+            this.checklistObservable.emit();
+          }
         }
       });
   }

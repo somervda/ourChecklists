@@ -51,9 +51,12 @@ export class DatavisualizationComponent implements OnInit {
     this.drawChart();
   }
 
-  initializeVisualization(checklistsAndItems) {
+  initializeVisualization(checklistsAndItems: Checklistextract[]) {
+    this.showChart = false;
     this.checklistsAndItems = checklistsAndItems;
-    this.drawChart();
+    if (checklistsAndItems.length > 0) {
+      this.drawChart();
+    }
   }
 
   drawChart() {

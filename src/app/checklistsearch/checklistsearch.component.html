@@ -14,12 +14,14 @@
     <app-datasearch
       (checklistObservable)="showChecklists($event)"
       [makeExtract]="false"
+      [includeTeamMembers]="true"
     ></app-datasearch>
   </mat-expansion-panel>
   <br />
   <app-checklistlist
     [checklists$]="checklists$"
     [hideCreate]="true"
+    [viewOnlyLink]="true"
     [showDelete]="false"
   ></app-checklistlist>
 </div>

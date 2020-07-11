@@ -81,6 +81,13 @@ export class AppComponent implements OnInit, OnDestroy {
     if (user.reviewerOfTeams && user.reviewerOfTeams.length > 0) return true;
   }
 
+  isTeamMember(user: User) {
+    if (user === undefined || user === null) {
+      return false;
+    }
+    if (user.memberOfTeams && user.memberOfTeams.length > 0) return true;
+  }
+
   hasCrossTeamRole(user: User) {
     if (user === undefined || user === null) {
       return false;

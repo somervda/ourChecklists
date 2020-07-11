@@ -48,7 +48,8 @@
             *ngIf="
               user?.isAdmin ||
               user.managerOfTeams?.includes(team.id) ||
-              user.reviewerOfTeams?.includes(team.id)
+              user.reviewerOfTeams?.includes(team.id) ||
+              (includeTeamMembers && user.memberOfTeams?.includes(team.id))
             "
           >
             {{ team.name }}
