@@ -41,7 +41,15 @@
 
         <!-- DataAnalysis  -->
 
-        <a mat-list-item routerLink="dataVisualization">
+        <a
+          mat-list-item
+          routerLink="dataVisualization"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin ||
+            isTeamManager(auth.user$ | async) ||
+            isTeamReviewer(auth.user$ | async)
+          "
+        >
           <mat-icon>insert_chart_outlined</mat-icon>
           <span id="mainMenuDataVisualization"
             >&nbsp;Data&nbsp;Visualizations</span

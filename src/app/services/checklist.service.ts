@@ -108,7 +108,9 @@ export class ChecklistService {
       .snapshotChanges()
       .pipe(
         map((snaps) => {
-          return convertSnaps<Checklist>(snaps);
+          let cs = convertSnaps<Checklist>(snaps);
+          console.log("search:", cs);
+          return cs;
         })
       );
   }

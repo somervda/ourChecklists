@@ -1,42 +1,34 @@
 import {
   Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-  Output,
   EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
 } from "@angular/core";
-import {
-  DocInfo,
-  Checklistextract,
-  Checklistitemextract,
-  UserInfo,
-  Checklistcsv,
-  Checklistitemcsv,
-} from "src/app/models/checklistextract.model";
+import { MatDialog } from "@angular/material/dialog";
+import { DomSanitizer } from "@angular/platform-browser";
 import { Observable, Subscription } from "rxjs";
+import { map, first, take } from "rxjs/operators";
+import { TemplateselectordialogComponent } from "src/app/dialogs/templateselectordialog/templateselectordialog.component";
+import { Checklist, ChecklistStatusInfo } from "src/app/models/checklist.model";
 import {
-  Checklist,
-  ChecklistStatusInfo,
-  ChecklistStatus,
-  ChecklistStatistics,
-} from "src/app/models/checklist.model";
-import { CategoryService } from "src/app/services/category.service";
-import { TeamService } from "src/app/services/team.service";
+  Checklistcsv,
+  Checklistextract,
+  Checklistitemcsv,
+  Checklistitemextract,
+  DocInfo,
+  UserInfo,
+} from "src/app/models/checklistextract.model";
+import { Checklistitem } from "src/app/models/checklistitem.model";
 import { ActivityService } from "src/app/services/activity.service";
-import { HelperService } from "src/app/services/helper.service";
+import { CategoryService } from "src/app/services/category.service";
 import { ChecklistService } from "src/app/services/checklist.service";
 import { ChecklistitemService } from "src/app/services/checklistitem.service";
-import { DomSanitizer } from "@angular/platform-browser";
+import { HelperService } from "src/app/services/helper.service";
+import { TeamService } from "src/app/services/team.service";
 import { UserService } from "src/app/services/user.service";
-import { MatDialog } from "@angular/material/dialog";
-import { map, first, take, flatMap } from "rxjs/operators";
-import { TemplateselectordialogComponent } from "src/app/dialogs/templateselectordialog/templateselectordialog.component";
-import {
-  Checklistitem,
-  ChecklistitemResultValue,
-} from "src/app/models/checklistitem.model";
+import { User } from "src/app/models/user.model";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-datasearch",
@@ -68,10 +60,6 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
 
-  // rows: number;
-  // fileUrl;
-  // downLoadReady = false;
-  // extractName = "checklists-extract.json";
   @Output() checklistExtract = new EventEmitter();
   @Output() startExtract = new EventEmitter();
 
@@ -95,6 +83,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   downLoadReady = false;
 
   dataExtract$$: Subscription;
+  user: User;
 
   constructor(
     private categoryService: CategoryService,
@@ -105,10 +94,31 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     private checklistitemService: ChecklistitemService,
     private sanitizer: DomSanitizer,
     private userService: UserService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public auth: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.auth.user$
+      .pipe(take(1))
+      .toPromise()
+      .then((u) => this.initialization(u));
+  }
+
+  private initialization(u: User) {
+    this.user = u;
+    if (!u.isAdmin) {
+      // If user is not an admin then all teams are not a selection option
+      this.selectedTeam = "-1";
+      // select the first team the user is a manager of, or a reviewer of
+      if (u.managerOfTeams && u.managerOfTeams.length > 0) {
+        this.selectedTeam = u.managerOfTeams[0];
+      }
+      if (u.reviewerOfTeams && u.reviewerOfTeams.length > 0) {
+        this.selectedTeam = u.reviewerOfTeams[0];
+      }
+    }
+
     // Set up observables to get a copy of all categories and teams for use
     // in the extract data resolution
     // console.log("ngOnInit start");
@@ -175,51 +185,134 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDocInfo(id: string, collection: DocInfo[]): DocInfo {
-    let foundDoc = collection.find((d) => d.id == id);
-    if (foundDoc) {
-      return foundDoc;
-    } else {
-      return { id: id };
-    }
-  }
-
-  getUserInfo(uid: string): UserInfo {
-    let foundUser = this.userInfo.find((u) => u.uid == uid);
-    if (foundUser) {
-      return foundUser;
-    } else {
-      return { uid: uid };
-    }
-  }
-
-  /**
-   * This is a bit of a kludge , but the angular/firestore library seems
-   * to cache the documents from the first query on a document collection, so
-   * when I was getting a list of templates in the OnInit function then
-   * the search checklists would only use the checklist in that subcollection!
-   * I raised an observation with Google and then moved getting templates
-   * out to a separate dialog componenet :(
-   */
-  templateDialog() {
-    // console.log("templateDialog");
-    const dialogRef = this.dialog.open(TemplateselectordialogComponent, {
-      minWidth: "380px",
-      maxWidth: "500px",
-      width: "80%",
-      data: { selectedTemplate: this.selectedTemplate },
-      autoFocus: false,
-    });
-    dialogRef.afterClosed().subscribe((choice) => {
-      if (choice) {
-        this.selectedTemplate = choice;
-      }
-    });
-  }
-
   getSelectedData() {
     this.checklistSpinner = true;
     this.startExtract.emit(true);
+
+    // Create the checklist$ observable based on the selection parameters
+    this.makeChecklists$();
+
+    // Do the extract
+    this.dataExtract$$ = this.checklists$
+      // Convert to checklistextracts
+      .pipe(map((cs) => cs.map((c) => this.toChecklistExtract(c))))
+      // Subscribe and blow out the checklist items
+      .subscribe((cs) => {
+        // Add checklistitemExtracts to the checklists
+        if (cs.length > 0) {
+          cs.map((c, i) =>
+            this.checklistitemService.findAll(c.id).subscribe((cis) => {
+              cis.map((ci) => {
+                c.checklistitems.push(this.toChecklistitemExtract(ci));
+                let s = this.checklistService.getStatisticsOverItems(
+                  cis,
+                  this.checklistService.overdueCheck(
+                    c.dateTargeted,
+                    parseInt(c.status.id)
+                  )
+                );
+                c.score = s.scorePercentage;
+                c.isOverdue = s.isOverdue;
+              });
+              if (cs.length - 1 == i) {
+                // The last checklistextract has been processed so can show downloads
+                // and emit event containing the extracted data
+                console.log("cs and items:", cs);
+                this.buildDownloads(cs);
+                this.checklistSpinner = false;
+                this.checklistExtract.emit(cs);
+              }
+            })
+          );
+        } else {
+          // No checklist selected in extract
+          this.checklistSpinner = false;
+          this.downLoadReady = false;
+          // this.checklistExtract.emit(cs);
+          this.helper.snackbar(
+            "No checklists match the selection parameters",
+            5000
+          );
+        }
+      });
+  }
+
+  toChecklistExtract(checklist: Checklist): Checklistextract {
+    // console.log("denormalizeChecklist", checklist);
+
+    let checklistextract: Checklistextract = {
+      id: checklist.id,
+      isTemplate: checklist.isTemplate,
+      name: checklist.name,
+      description: checklist.description,
+      status: {
+        id: checklist.status.toString(),
+        name: ChecklistStatusInfo.find((s) => s.status == checklist.status)
+          .name,
+      },
+      dateCreated: checklist.dateCreated
+        ? (checklist.dateCreated as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateCompleted: checklist.dateCompleted
+        ? (checklist.dateCompleted as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateUpdated: checklist.dateUpdated
+        ? (checklist.dateUpdated as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateTargeted: checklist.dateTargeted
+        ? (checklist.dateTargeted as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      team: this.getDocInfo(
+        this.helper.getDocRefId(checklist.team),
+        this.teamInfo
+      ),
+      assignee: checklist.assignee
+        ? checklist.assignee.map((userref) => {
+            return this.getUserInfo(this.helper.getDocRefId(userref));
+          })
+        : [],
+      checklistitems: [],
+      category: this.getDocInfo(
+        this.helper.getDocRefId(checklist.category),
+        this.categoryInfo
+      ),
+      score: 0,
+      isOverdue: false,
+    };
+
+    return checklistextract;
+  }
+
+  toChecklistitemExtract(checklistitem: Checklistitem): Checklistitemextract {
+    let checklistitemextract: Checklistitemextract = {
+      id: checklistitem.id,
+      name: checklistitem.name,
+      description: checklistitem.description,
+      sequence: checklistitem.sequence,
+      allowNA: checklistitem.allowNA,
+      requireEvidence: checklistitem.requireEvidence,
+      resultType: checklistitem.resultType,
+      resultValue: checklistitem.resultValue,
+      tagId: checklistitem.tagId,
+      dateCreated: checklistitem.dateCreated
+        ? (checklistitem.dateCreated as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      dateResultSet: checklistitem.dateResultSet
+        ? (checklistitem.dateResultSet as firebase.firestore.Timestamp).toDate()
+        : undefined,
+      activities: checklistitem.activities
+        ? checklistitem.activities.map((docref) => {
+            return this.getDocInfo(
+              this.helper.getDocRefId(docref),
+              this.activityInfo
+            );
+          })
+        : [],
+    };
+    return checklistitemextract;
+  }
+
+  private makeChecklists$() {
     const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
     const team = this.helper.docRef(`/teams/${this.selectedTeam}`);
     const template = this.helper.docRef(
@@ -265,39 +358,30 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     this.checklists$ = this.checklists$.pipe(
       map((cs) => cs.filter((c) => !c.isTemplate))
     );
+  }
 
-    this.dataExtract$$ = this.checklists$
-      // Convert to checjklistextracts
-      .pipe(map((cs) => cs.map((c) => this.denormalizeChecklist(c))))
-      // Subscribe and blow out the checklist items
-      .subscribe((cs) => {
-        // Add checklistitemExtracts to the checklists
-        cs.map((c, i) =>
-          this.checklistitemService.findAll(c.id).subscribe((cis) => {
-            cis.map((ci) => {
-              c.checklistitems.push(this.denormalizeChecklistitem(ci));
-              let s = this.checklistService.getStatisticsOverItems(
-                cis,
-                this.checklistService.overdueCheck(
-                  c.dateTargeted,
-                  parseInt(c.status.id)
-                )
-              );
-              c.score = s.scorePercentage;
-              c.isOverdue = s.isOverdue;
-            });
-            if (cs.length - 1 == i) {
-              // The last checklistextract has been processed so can show downloads
-              // and emit event containing the extracted data
-              console.log("cs and items:", cs);
-              this.buildDownloads(cs);
-
-              this.checklistSpinner = false;
-              this.checklistExtract.emit(cs);
-            }
-          })
-        );
-      });
+  /**
+   * This is a bit of a kludge , but the angular/firestore library seems
+   * to cache the documents from the first query on a document collection, so
+   * when I was getting a list of templates in the OnInit function then
+   * the search checklists would only use the checklist in that subcollection!
+   * I raised an observation with Google and then moved getting templates
+   * out to a separate dialog componenet :(
+   */
+  templateDialog() {
+    // console.log("templateDialog");
+    const dialogRef = this.dialog.open(TemplateselectordialogComponent, {
+      minWidth: "380px",
+      maxWidth: "500px",
+      width: "80%",
+      data: { selectedTemplate: this.selectedTemplate },
+      autoFocus: false,
+    });
+    dialogRef.afterClosed().subscribe((choice) => {
+      if (choice) {
+        this.selectedTemplate = choice;
+      }
+    });
   }
 
   /**
@@ -307,7 +391,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
    * @param checklistsAndItems
    */
   buildDownloads(checklistsAndItems: Checklistextract[]) {
-    // console.log("createDownload:", checklistsAndItems);
+    console.log("createDownload:", checklistsAndItems);
 
     // Create JSON download
     this.checklistRows = checklistsAndItems.length;
@@ -324,7 +408,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     const checklists = checklistsAndItems.map((c) =>
       this.checklistExtractToCSV(c)
     );
-    const checklistscsv = this.toCsv(checklists);
+    const checklistscsv = this.helper.toCsv(checklists);
     const extractBlobCCSV = new Blob([checklistscsv], {
       type: "application/csv",
     });
@@ -342,7 +426,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       )
     );
     this.checklistitemRows = checklistitems.length;
-    const checklistitemscsv = this.toCsv(checklistitems);
+    const checklistitemscsv = this.helper.toCsv(checklistitems);
 
     const extractBlobCiCSV = new Blob([checklistitemscsv], {
       type: "application/csv",
@@ -434,108 +518,22 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  toCsv(rows: object[]) {
-    if (!rows || !rows.length) {
-      return;
+  getDocInfo(id: string, collection: DocInfo[]): DocInfo {
+    let foundDoc = collection.find((d) => d.id == id);
+    if (foundDoc) {
+      return foundDoc;
+    } else {
+      return { id: id };
     }
-    const separator = ",";
-    const keys = Object.keys(rows[0]);
-    const csvContent =
-      keys.join(separator) +
-      "\n" +
-      rows
-        .map((row) => {
-          return keys
-            .map((k) => {
-              let cell = row[k] === null || row[k] === undefined ? "" : row[k];
-              cell =
-                cell instanceof Date
-                  ? cell.toLocaleString()
-                  : cell.toString().replace(/"/g, '""');
-              if (cell.search(/("|,|\n)/g) >= 0) {
-                cell = `"${cell}"`;
-              }
-              return cell;
-            })
-            .join(separator);
-        })
-        .join("\n");
-    return csvContent;
   }
 
-  denormalizeChecklist(checklist: Checklist): Checklistextract {
-    // console.log("denormalizeChecklist", checklist);
-
-    let checklistextract: Checklistextract = {
-      id: checklist.id,
-      isTemplate: checklist.isTemplate,
-      name: checklist.name,
-      description: checklist.description,
-      status: {
-        id: checklist.status.toString(),
-        name: ChecklistStatusInfo.find((s) => s.status == checklist.status)
-          .name,
-      },
-      dateCreated: checklist.dateCreated
-        ? (checklist.dateCreated as firebase.firestore.Timestamp).toDate()
-        : undefined,
-      dateCompleted: checklist.dateCompleted
-        ? (checklist.dateCompleted as firebase.firestore.Timestamp).toDate()
-        : undefined,
-      dateUpdated: checklist.dateUpdated
-        ? (checklist.dateUpdated as firebase.firestore.Timestamp).toDate()
-        : undefined,
-      dateTargeted: checklist.dateTargeted
-        ? (checklist.dateTargeted as firebase.firestore.Timestamp).toDate()
-        : undefined,
-      team: this.getDocInfo(
-        this.helper.getDocRefId(checklist.team),
-        this.teamInfo
-      ),
-      assignee: checklist.assignee
-        ? checklist.assignee.map((userref) => {
-            return this.getUserInfo(this.helper.getDocRefId(userref));
-          })
-        : [],
-      checklistitems: [],
-      category: this.getDocInfo(
-        this.helper.getDocRefId(checklist.category),
-        this.categoryInfo
-      ),
-      score: 0,
-      isOverdue: false,
-    };
-
-    return checklistextract;
-  }
-
-  denormalizeChecklistitem(checklistitem: Checklistitem): Checklistitemextract {
-    let checklistitemextract: Checklistitemextract = {
-      id: checklistitem.id,
-      name: checklistitem.name,
-      description: checklistitem.description,
-      sequence: checklistitem.sequence,
-      allowNA: checklistitem.allowNA,
-      requireEvidence: checklistitem.requireEvidence,
-      resultType: checklistitem.resultType,
-      resultValue: checklistitem.resultValue,
-      tagId: checklistitem.tagId,
-      dateCreated: checklistitem.dateCreated
-        ? (checklistitem.dateCreated as firebase.firestore.Timestamp).toDate()
-        : undefined,
-      dateResultSet: checklistitem.dateResultSet
-        ? (checklistitem.dateResultSet as firebase.firestore.Timestamp).toDate()
-        : undefined,
-      activities: checklistitem.activities
-        ? checklistitem.activities.map((docref) => {
-            return this.getDocInfo(
-              this.helper.getDocRefId(docref),
-              this.activityInfo
-            );
-          })
-        : [],
-    };
-    return checklistitemextract;
+  getUserInfo(uid: string): UserInfo {
+    let foundUser = this.userInfo.find((u) => u.uid == uid);
+    if (foundUser) {
+      return foundUser;
+    } else {
+      return { uid: uid };
+    }
   }
 
   ngOnDestroy() {
