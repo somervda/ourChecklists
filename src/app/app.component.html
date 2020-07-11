@@ -16,6 +16,19 @@
           <mat-icon>playlist_add_check</mat-icon>
           <span id="mainMenuMyChecklists">&nbsp;My Checklists</span>
         </a>
+        <!-- Checklist Search -->
+        <a
+          mat-list-item
+          routerLink="checklistSearch"
+          *ngIf="
+            (auth.user$ | async)?.isAdmin ||
+            isTeamManager(auth.user$ | async) ||
+            isTeamReviewer(auth.user$ | async)
+          "
+        >
+          <mat-icon>search</mat-icon>
+          <span id="mainMenuChecklistSearch">&nbsp;Checklist&nbsp;Search</span>
+        </a>
 
         <!-- Teams  -->
         <ng-container>

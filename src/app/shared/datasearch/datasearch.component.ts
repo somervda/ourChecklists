@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Input,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -36,6 +37,7 @@ import { AuthService } from "src/app/services/auth.service";
   styleUrls: ["./datasearch.component.scss"],
 })
 export class DatasearchComponent implements OnInit, OnDestroy {
+  @Input() makeExtract = false;
   categoryInfo: DocInfo[];
   categoriesInfo$: Observable<DocInfo[]>;
   categoriesInfo$$: Subscription;
@@ -62,6 +64,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
 
   @Output() checklistExtract = new EventEmitter();
   @Output() startExtract = new EventEmitter();
+  @Output() checklistObservable = new EventEmitter();
 
   checklistStatusInfo = ChecklistStatusInfo;
 
@@ -218,9 +221,13 @@ export class DatasearchComponent implements OnInit, OnDestroy {
                 // The last checklistextract has been processed so can show downloads
                 // and emit event containing the extracted data
                 console.log("cs and items:", cs);
-                this.buildDownloads(cs);
                 this.checklistSpinner = false;
-                this.checklistExtract.emit(cs);
+                if (this.makeExtract) {
+                  this.buildDownloads(cs);
+                  this.checklistExtract.emit(cs);
+                } else {
+                  this.checklistObservable.emit(this.checklists$);
+                }
               }
             })
           );

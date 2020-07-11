@@ -35,6 +35,7 @@ import { TemplatesComponent } from "./templates/templates.component";
 import { TemplateComponent } from "./template/template.component";
 import { DatavisualizationComponent } from "./datavisualization/datavisualization.component";
 import { AdminutilsComponent } from "./adminutils/adminutils.component";
+import { ChecklistsearchComponent } from "./checklistsearch/checklistsearch.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -45,6 +46,12 @@ const routes: Routes = [
   {
     path: "dataVisualization",
     component: DatavisualizationComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: ["isActivated"] },
+  },
+  {
+    path: "checklistSearch",
+    component: ChecklistsearchComponent,
     canActivate: [permissionGuard],
     data: { permissions: ["isActivated"] },
   },

@@ -66,8 +66,8 @@
   </ng-container> -->
 
   <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let checklist">
+    <th mat-header-cell *matHeaderCellDef [hidden]="!showDelete"></th>
+    <td mat-cell *matCellDef="let checklist" [hidden]="!showDelete">
       <div
         (click)="deleteChecklist(checklist)"
         matTooltip="Delete Checklist"

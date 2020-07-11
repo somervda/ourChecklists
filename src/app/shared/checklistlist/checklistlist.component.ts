@@ -17,6 +17,7 @@ export class ChecklistlistComponent implements OnInit {
   @Input() checklists$: Observable<Checklist[]>;
   @Input() hideCreate: boolean;
   @Input() showCompletedOption: boolean;
+  @Input() showDelete = true;
   @Output() showCompletedChange = new EventEmitter();
   includeCompleted = false;
   displayedColumns: string[] = ["name", "status", "description", "delete"];

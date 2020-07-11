@@ -57,23 +57,20 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <div>
+    <div class="fake-label">Template</div>
+    <span
+      (click)="templateDialog()"
+      style="cursor: pointer; display: inline-block; width: 100%;"
+      matTooltip="Select Template"
+      >{{ selectedTemplate.name }}</span
+    >
+
+    <mat-divider></mat-divider>
+  </div>
 </div>
 
 <!-- Template -->
-<div>
-  <div class="fake-label">Template</div>
-  <span style="min-width: 50px; display: inline-block;">{{
-    selectedTemplate.name
-  }}</span>
-  <button
-    mat-button
-    (click)="templateDialog()"
-    matTooltip="Select Template"
-    onclick="this.blur()"
-  >
-    <mat-icon>launch</mat-icon>
-  </button>
-</div>
 
 <div class="grid50percent">
   <!-- From-date -->

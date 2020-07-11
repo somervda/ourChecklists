@@ -1,0 +1,25 @@
+<app-subheading
+  prompt="Checklist Search
+  "
+  matIcon="search"
+></app-subheading>
+
+<div class="page-container min-page">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Search
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-datasearch
+      (checklistObservable)="showChecklists($event)"
+      [makeExtract]="false"
+    ></app-datasearch>
+  </mat-expansion-panel>
+  <br />
+  <app-checklistlist
+    [checklists$]="checklists$"
+    [hideCreate]="true"
+    [showDelete]="false"
+  ></app-checklistlist>
+</div>

@@ -105,6 +105,7 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { AdminutilsComponent } from "./adminutils/adminutils.component";
 import { SafePipe } from "./pipes/safe.pipe";
 import { MsgdialogComponent } from "./dialogs/msgdialog/msgdialog.component";
+import { ChecklistsearchComponent } from './checklistsearch/checklistsearch.component';
 
 @NgModule({
   declarations: [
@@ -170,6 +171,7 @@ import { MsgdialogComponent } from "./dialogs/msgdialog/msgdialog.component";
     AdminutilsComponent,
     SafePipe,
     MsgdialogComponent,
+    ChecklistsearchComponent,
   ],
   imports: [
     BrowserModule,
