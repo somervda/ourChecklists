@@ -51,11 +51,12 @@ div.item-details {
 }
 
 .checklistitem-frame {
-  border: 2px solid lightgrey;
-  border-radius: 7px;
-  padding: 10px;
+  border: 1px solid rgb(240, 240, 240);
+  border-radius: 3px;
+  padding: 4px;
   border-style: solid;
-  background-color: lightgray;
+  background-color: rgb(240, 240, 240);
+  margin-top: 5px;
 }
 
 .info {
