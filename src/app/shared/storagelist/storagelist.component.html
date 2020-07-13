@@ -7,7 +7,7 @@
         target="_blank"
         [matTooltip]="'Open: ' + file.name"
         >{{
-          file.name.length < 40 ? file.name : file.name.substring(0, 40) + "..."
+          file.name.length < 60 ? file.name : file.name.substring(0, 60) + "..."
         }}</a
       ><mat-icon
         class="delete-icon"
@@ -21,12 +21,17 @@
   <div>
     <button
       class="add-button"
-      style="font-size: small; padding: 3px; margin-top: 7px;"
-      mat-button-raised
+      style="
+        font-size: small;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 7px;
+      "
+      mat-stroked-button
       (click)="fileUpload.click()"
       [hidden]="readOnly"
     >
-      Add&nbsp;Evidence&nbsp;File
+      Add&nbsp;New&nbsp;Evidence&nbsp;File
     </button>
 
     <input
