@@ -135,10 +135,11 @@ export class ChecklistService {
    * @param pageSize Maximum number of rows to retrieve
    */
   findMyChecklists(
+    uid: string,
     maxStatus: ChecklistStatus,
     pageSize: number
   ): Observable<Checklist[]> {
-    const myUserRef = this.helper.docRef(`users/${this.auth.currentUser.uid}`);
+    const myUserRef = this.helper.docRef(`users/${uid}`);
     // console.log( "checklist findByUid", myUserRef,  pageSize  );
     return this.afs
       .collection("checklists", (ref) =>

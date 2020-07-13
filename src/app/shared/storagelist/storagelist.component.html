@@ -1,25 +1,32 @@
 <mat-spinner *ngIf="showSpinner" class="spinner_container"></mat-spinner>
 <div class="colgrid2">
   <div>
-    <span class="file_item" *ngFor="let file of files">
-      <a [href]="file.url$ | async" target="_blank">{{ file.name }}</a
+    <div class="file_item" *ngFor="let file of files" style="font-size: small;">
+      <a
+        [href]="file.url$ | async"
+        target="_blank"
+        [matTooltip]="'Open: ' + file.name"
+        >{{
+          file.name.length < 40 ? file.name : file.name.substring(0, 40) + "..."
+        }}</a
       ><mat-icon
-        class="align-bottom delete-icon"
+        class="delete-icon"
         (click)="onDeleteFile(file.name)"
         [matTooltip]="'Delete: ' + file.name"
         [hidden]="readOnly"
         >clear</mat-icon
       >
-    </span>
+    </div>
   </div>
   <div>
     <button
       class="add-button"
+      style="font-size: small; padding: 3px; margin-top: 7px;"
       mat-button-raised
       (click)="fileUpload.click()"
       [hidden]="readOnly"
     >
-      <mat-icon class="align-bottom">add</mat-icon>Add&nbsp;File
+      Add&nbsp;Evidence&nbsp;File
     </button>
 
     <input

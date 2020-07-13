@@ -13,7 +13,7 @@
   <div>
     <mat-form-field class="full-width">
       <mat-label>Status</mat-label>
-      <mat-select [(ngModel)]="selectedStatus">
+      <mat-select [(ngModel)]="selectedStatus" class="full-width">
         <mat-option [value]="'0'">All</mat-option>
         <mat-option
           *ngFor="let statusInfo of checklistStatusInfo"
@@ -28,7 +28,7 @@
   <div>
     <mat-form-field class="full-width">
       <mat-label>Category</mat-label>
-      <mat-select [(ngModel)]="selectedCategory">
+      <mat-select [(ngModel)]="selectedCategory" class="full-width">
         <mat-option [value]="'0'">All</mat-option>
         <mat-option *ngFor="let category of categoryInfo" [value]="category.id">
           {{ category.name }}
@@ -40,7 +40,7 @@
   <div>
     <mat-form-field class="full-width">
       <mat-label>Team</mat-label>
-      <mat-select [(ngModel)]="selectedTeam">
+      <mat-select [(ngModel)]="selectedTeam" class="full-width">
         <mat-option [value]="'0'" *ngIf="user?.isAdmin">All</mat-option>
         <ng-container *ngFor="let team of teamInfo">
           <mat-option

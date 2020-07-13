@@ -10,81 +10,120 @@
   ]"
 ></app-subheading>
 <div class="page-container">
-  <div class="prompt">Name</div>
-  <div>{{ (checklistitem$ | async).name }}</div>
-  <div class="prompt">Description</div>
-  <div>{{ checklistitem.description }}</div>
-  <div class="prompt">Resources</div>
-  <app-resourcelistsimple
-    [resources]="checklistitem.resources"
-  ></app-resourcelistsimple>
-  <div class="prompt">Activities</div>
-  <div>
-    <ng-container
-      *ngIf="
-        checklistitem.activities && checklistitem.activities.length > 0;
-        else noActivities
-      "
-    >
-      <span *ngFor="let activity of checklistitem.activities; let i = index">
-        <span *ngIf="i > 0">,</span>
-        <span style="margin-left: 5px;">{{
-          (activity | doc | async)?.name
-        }}</span>
-      </span>
-    </ng-container>
-    <ng-template #noActivities>
-      None
-    </ng-template>
-  </div>
-  <form class="standard-form" [formGroup]="checklistitemForm">
-    <div class="prompt">Comment</div>
+  <div class="grid50percent">
     <div>
-      <mat-form-field class="full-width">
-        <textarea
-          matInput
-          formControlName="comment"
-          [(ngModel)]="checklistitem.comment"
-          (change)="updateComment()"
-          matAutosizeMinRows="3"
-          matAutosizeMaxRows="10"
-          matTextareaAutosize
-        ></textarea>
-        <mat-error
-          *ngIf="checklistitemForm.controls['comment'].hasError('maxlength')"
-        >
-          Comment can not be more than 5000 characters long.
-        </mat-error>
-      </mat-form-field>
+      <div class="prompt">Name</div>
+      <div>{{ (checklistitem$ | async).name }}</div>
     </div>
-    <div class="prompt">Evidence</div>
+
     <div>
-      <mat-form-field class="full-width">
-        <textarea
-          matInput
-          formControlName="evidence"
-          [(ngModel)]="checklistitem.evidence"
-          (change)="updateEvidence()"
-          matAutosizeMinRows="3"
-          matAutosizeMaxRows="10"
-          matTextareaAutosize
-        ></textarea>
-        <mat-error
-          *ngIf="checklistitemForm.controls['evidence'].hasError('maxlength')"
+      <div class="prompt">Description</div>
+      <div>{{ checklistitem.description }}</div>
+    </div>
+
+    <div>
+      <div class="prompt">Sequence</div>
+      <div>
+        {{ checklistitem.sequence }}
+      </div>
+    </div>
+
+    <div>
+      <div class="prompt">Resources</div>
+      <app-resourcelistsimple
+        [resources]="checklistitem.resources"
+      ></app-resourcelistsimple>
+    </div>
+
+    <div>
+      <div class="prompt">Activities</div>
+      <div>
+        <ng-container
+          *ngIf="
+            checklistitem.activities && checklistitem.activities.length > 0;
+            else noActivities
+          "
         >
-          Evidence can not be more than 5000 characters long.
-        </mat-error>
-      </mat-form-field>
+          <span
+            *ngFor="let activity of checklistitem.activities; let i = index"
+          >
+            <span *ngIf="i > 0">,</span>
+            <span style="margin-left: 5px;">{{
+              (activity | doc | async)?.name
+            }}</span>
+          </span>
+        </ng-container>
+        <ng-template #noActivities>
+          None
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <form class="standard-form" [formGroup]="checklistitemForm">
+    <div class="grid50percent">
+      <div>
+        <div class="prompt">Comment</div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea
+              matInput
+              formControlName="comment"
+              [(ngModel)]="checklistitem.comment"
+              (change)="updateComment()"
+              matAutosizeMinRows="3"
+              matAutosizeMaxRows="10"
+              matTextareaAutosize
+            ></textarea>
+            <mat-hint>Users' comments about this item</mat-hint>
+            <mat-error
+              *ngIf="
+                checklistitemForm.controls['comment'].hasError('maxlength')
+              "
+            >
+              Comment can not be more than 5000 characters long.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div>
+        <div class="prompt">Evidence</div>
+        <div>
+          <mat-form-field class="full-width">
+            <textarea
+              matInput
+              formControlName="evidence"
+              [(ngModel)]="checklistitem.evidence"
+              (change)="updateEvidence()"
+              matAutosizeMinRows="3"
+              matAutosizeMaxRows="10"
+              matTextareaAutosize
+            ></textarea>
+            <mat-hint>Notes and references to evidence</mat-hint>
+            <mat-error
+              *ngIf="
+                checklistitemForm.controls['evidence'].hasError('maxlength')
+              "
+            >
+              Evidence can not be more than 5000 characters long.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div>
+        <div class="prompt">Evidence Files</div>
+        <div>
+          <app-storagelist
+            [docId]="checklistitem.id"
+            [readOnly]="false"
+            docType="evidence"
+          ></app-storagelist>
+        </div>
+        <mat-divider style="margin-top: 8px;"></mat-divider>
+      </div>
     </div>
   </form>
-  <div class="prompt">Evidence Files</div>
-  <div>
-    <app-storagelist
-      [docId]="checklistitem.id"
-      [readOnly]="false"
-      docType="evidence"
-    ></app-storagelist>
-  </div>
+  <br />
 
   <div class="prompt">Result</div>
   <div class="result">
@@ -107,9 +146,5 @@
     "
   >
     Evidence must be filled in before the result can be entered.
-  </div>
-  <div class="prompt">Sequence</div>
-  <div>
-    {{ checklistitem.sequence }}
   </div>
 </div>

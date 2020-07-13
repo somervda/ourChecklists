@@ -45,6 +45,12 @@ service cloud.firestore {
           get( /databases/$(database)/documents/users/$(request.auth.uid)).data.isResourceManager == true;
      }
 
+    // function isAssignee(cid) {
+    //  *** Problems with this as there is no array.contains type operator for firestore rules
+    //    return isAuthenticated() &&
+    //        get(/databases/$(database)/documents/checklists/$(cid)).data.assignee.contains(/databases/$(database)/documents/users/$(request.auth.uid));
+    //  }
+
     function updatingField(field) {
       // Check to see if named field is being updated
       return (field in request.resource.data) && resource.data[field] != request.resource.data[field];
@@ -126,13 +132,14 @@ service cloud.firestore {
     }
 
     match /{path=**}/checklists/{id} {
-      allow read:  if isActivated();
-      allow write:  if isAdmin() ;
+      allow read, write:  if isAdmin() || isActivated();
     }
 
+    // Problem writting a write rule for this. This is not right !!!!
+    // need to change checklist.assignee to a map
+    
     match /{path=**}/checklists/{cid}/checklistitems/{clid} {
-      allow read:  if isActivated();
-      allow write:  if isAdmin() ;
+      allow read, write:  if isAdmin() || isActivated();
     }
 
       match /{path=**}/checklistitems/{clid} {

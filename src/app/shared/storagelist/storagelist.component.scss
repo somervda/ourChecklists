@@ -1,23 +1,13 @@
 .delete-icon {
   cursor: pointer;
+  transform: scale(0.7);
+  vertical-align: bottom;
+  padding: 0px;
+  margin-left: 10px;
 }
 
 .file_item {
   margin-right: 10px;
-}
-
-.colgrid2 {
-  display: grid;
-  grid-template-columns: 9fr 1fr;
-}
-
-.align-bottom {
-  vertical-align: bottom;
-}
-
-.add-button {
-  float: right;
-  white-space: nowrap;
 }
 
 .spinner_container {
