@@ -87,6 +87,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   downLoadReady = false;
 
   dataExtract$$: Subscription;
+  checklistitems$$: Subscription;
   user: User;
 
   constructor(
@@ -207,33 +208,36 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       .subscribe((cs) => {
         // Add checklistitemExtracts to the checklists
         if (cs.length > 0) {
-          cs.map((c, i) =>
-            this.checklistitemService.findAll(c.id).subscribe((cis) => {
-              cis.map((ci) => {
-                c.checklistitems.push(this.toChecklistitemExtract(ci));
-                let s = this.checklistService.getStatisticsOverItems(
-                  cis,
-                  this.checklistService.overdueCheck(
-                    c.dateTargeted,
-                    parseInt(c.status.id)
-                  )
-                );
-                c.score = s.scorePercentage;
-                c.isOverdue = s.isOverdue;
-              });
-              if (cs.length - 1 == i) {
-                // The last checklistextract has been processed so can show downloads
-                // and emit event containing the extracted data
-                console.log("cs and items:", cs);
-                this.checklistSpinner = false;
-                if (this.makeExtract) {
-                  this.buildDownloads(cs);
-                  this.checklistExtract.emit(cs);
-                } else {
-                  this.checklistObservable.emit(this.checklists$);
-                }
-              }
-            })
+          cs.map(
+            (c, i) =>
+              (this.checklistitems$$ = this.checklistitemService
+                .findAll(c.id)
+                .subscribe((cis) => {
+                  cis.map((ci) => {
+                    c.checklistitems.push(this.toChecklistitemExtract(ci));
+                    let s = this.checklistService.getStatisticsOverItems(
+                      cis,
+                      this.checklistService.overdueCheck(
+                        c.dateTargeted,
+                        parseInt(c.status.id)
+                      )
+                    );
+                    c.score = s.scorePercentage;
+                    c.isOverdue = s.isOverdue;
+                  });
+                  if (cs.length - 1 == i) {
+                    // The last checklistextract has been processed so can show downloads
+                    // and emit event containing the extracted data
+                    console.log("cs and items:", cs);
+                    this.checklistSpinner = false;
+                    if (this.makeExtract) {
+                      this.buildDownloads(cs);
+                      this.checklistExtract.emit(cs);
+                    } else {
+                      this.checklistObservable.emit(this.checklists$);
+                    }
+                  }
+                }))
           );
         } else {
           // No checklist selected in extract
@@ -565,6 +569,10 @@ export class DatasearchComponent implements OnInit, OnDestroy {
 
     if (this.dataExtract$$) {
       this.dataExtract$$.unsubscribe();
+    }
+
+    if (this.checklistitems$$) {
+      this.checklistitems$$.unsubscribe();
     }
   }
 }

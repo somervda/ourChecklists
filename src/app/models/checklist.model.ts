@@ -14,6 +14,9 @@ export interface Checklist {
   dateCompleted?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   team: DocumentReference;
   assignee: DocumentReference[];
+  // assigneeMap is for future use. It is updated from a document update trigger, when the assignee array
+  // changes the map is updated to match the array (The map is used for firestore.rules, the array is used in a composite index)
+  assigneeMap?: {};
   category: DocumentReference;
   resources?: DocumentReference[];
 }

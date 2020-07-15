@@ -150,9 +150,7 @@
           <input
             matInput
             [matDatepicker]="targetDate"
-            [attr.value]="
-              checklist.dateTargeted ? checklist.dateTargeted.toDate() : null
-            "
+            [attr.value]="toDate(checklist.dateTargeted)"
             (dateChange)="targetDateChange($event.value)"
           />
           <mat-datepicker-toggle

@@ -1,243 +1,250 @@
 <app-subheading
   prompt="Checklist Viewer"
-  [matIcon]="helper.getChecklistStatusInfoItem(checklist?.status).icon"
+  [matIcon]="helper.getChecklistStatusInfoItem(checklist?.status)?.icon"
   [iconActions]="iconActions"
   (iconAction)="iconAction($event)"
 ></app-subheading>
 
 <div class="page-container">
-  <div>
-    <div class="prompt">
-      Name
-    </div>
-    <div>
-      <ng-container
-        *ngIf="
-          checklist.status != ChecklistStatus.UnderConstruction &&
-          checklist.status != ChecklistStatus.Active
-        "
-      >
-        {{ checklist.name }}
-      </ng-container>
-      <ng-container
-        *ngIf="checklist.status == ChecklistStatus.UnderConstruction"
-      >
-        <a
-          [routerLink]="'/checklistdesign/' + checklist.id"
-          matTooltip="Design Checklist"
-          >{{ checklist?.name }}</a
-        ></ng-container
-      >
-      <ng-container *ngIf="checklist.status == ChecklistStatus.Active">
-        <a
-          [routerLink]="'/checklistedit/' + checklist.id"
-          matTooltip="Edit Checklist"
-          >{{ checklist?.name }}</a
-        ></ng-container
-      >
-    </div>
-  </div>
-
-  <div>
-    <div class="prompt">Description</div>
-    <div>{{ checklist.description }}</div>
-  </div>
-
-  <div class="grid50percent">
-    <div>
-      <div class="prompt">Status</div>
-      <div>
-        <app-checkliststatus
-          [checklist]="checklist"
-          [showAction]="isTeamManagerOrAdmin"
-        ></app-checkliststatus>
-      </div>
-    </div>
-
+  <ng-container *ngIf="checklist">
     <div>
       <div class="prompt">
-        Resources
+        Name
       </div>
-      <div>
-        <app-resourcelistsimple
-          [resources]="checklist.resources"
-        ></app-resourcelistsimple>
-      </div>
-    </div>
-
-    <div>
-      <div class="prompt">Comments</div>
-      <div>
-        {{ checklist.comments }}
-      </div>
-    </div>
-
-    <div>
-      <div class="prompt">Team</div>
-      <div>{{ (checklist.team | doc | async)?.name }}</div>
-    </div>
-
-    <div>
-      <div class="prompt">Category</div>
-      <div>{{ (checklist.category | doc | async)?.name }}</div>
-    </div>
-    <ng-container *ngIf="checklist.fromTemplate">
-      <div>
-        <div class="prompt">Based on Template</div>
-        <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
-      </div>
-    </ng-container>
-    <div>
-      <div class="prompt">Assignees</div>
       <div>
         <ng-container
           *ngIf="
-            checklist.assignee && checklist.assignee.length > 0;
-            else noAssignee
+            checklist?.status != ChecklistStatus.UnderConstruction &&
+            checklist?.status != ChecklistStatus.Active
           "
         >
-          <span *ngFor="let assignee of checklist.assignee; let i = index">
-            <span *ngIf="i > 0">,</span>
-            <span style="margin-left: 5px;">{{
-              (assignee | doc | async)?.displayName
-            }}</span>
-          </span>
+          {{ checklist.name }}
         </ng-container>
-        <ng-template #noAssignee>
-          None
-        </ng-template>
-      </div>
-    </div>
-    <div>
-      <div class="prompt">Date Created</div>
-      <div>
-        {{ toDate(checklist.dateCreated) | date: "medium" }}
-      </div>
-    </div>
-    <div>
-      <div class="prompt">Date Targeted</div>
-      <ng-container *ngIf="isOverdue()">
-        <div style="color: red;">
-          {{ toDate(checklist.dateTargeted) | date: "medium" }} Overdue!
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!isOverdue()">
-        <div>
-          {{ toDate(checklist.dateTargeted) | date: "medium" }}
-        </div>
-      </ng-container>
-    </div>
-    <div>
-      <div class="prompt">Date Completed</div>
-      <div>
-        {{ toDate(checklist.dateCompleted) | date: "medium" }}
-      </div>
-    </div>
-    <div>
-      <div class="prompt">Date Last Updated</div>
-      <div>
-        {{ toDate(checklist.dateUpdated) | date: "medium" }}
-      </div>
-    </div>
-    <div>
-      <div class="prompt">
-        Score
-        <span class="material-icons info" (click)="scoreInfo()">
-          info
-        </span>
-      </div>
-      <div *ngIf="checklistStatistics$ | async; let statistics">
-        {{ statistics.scorePercentage }}%
-      </div>
-    </div>
-  </div>
-  <br />
-  <div class="checklistitem-frame">
-    <div>
-      <span class="prompt">Checklist Items</span>
-      <mat-slide-toggle class="checklistitem-slide" #itemdetails color="primary"
-        >Show Details</mat-slide-toggle
-      >
-    </div>
-
-    <table
-      mat-table
-      [dataSource]="checklistitems$ | async"
-      class="mat-elevation-z8"
-    >
-      <ng-container matColumnDef="name" sticky>
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let checklistitem; let i = index">
-          <div>{{ i + 1 }}. {{ checklistitem.name }}</div>
-
-          <div class="item-details" *ngIf="itemdetails.checked">
-            <div>
-              <span class="item-prompt">Description </span>
-              <span class="item-detail">{{ checklistitem.description }}</span>
-            </div>
-
-            <div
-              *ngIf="checklistitem.comment && checklistitem.comment.length > 0"
-            >
-              <span class="item-prompt">Comment </span>
-              <span class="item-detail">{{ checklistitem.comment }}</span>
-            </div>
-            <div
-              *ngIf="
-                checklistitem.evidence && checklistitem.evidence.length > 0
-              "
-            >
-              <span class="item-prompt">Evidence </span>
-              <span class="item-detail">{{ checklistitem.evidence }}</span>
-            </div>
-            <span class="item-detail">
-              <app-storagelist
-                [docId]="checklistitem.id"
-                docType="evidence"
-                [readOnly]="true"
-              ></app-storagelist>
-            </span>
-            <div>
-              <span class="item-prompt">Sequence Number </span>
-              <span class="item-detail">{{ checklistitem.sequence }}</span>
-            </div>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="resultType" sticky>
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td
-          mat-cell
-          *matCellDef="let checklistitem"
-          [matTooltip]="
-            helper.getResultValueInfo(checklistitem.resultValue).description
-          "
+        <ng-container
+          *ngIf="checklist?.status == ChecklistStatus.UnderConstruction"
         >
-          <img
-            [src]="
-              '../../assets/images/' +
-              helper.getResultValueInfo(checklistitem.resultValue).image
-            "
-            [style.width]="
-              (helper.getResultValueInfo(checklistitem.resultValue).relSize *
-                30) /
-                100 +
-              'px'
-            "
-          />
-          <ng-container *ngIf="itemdetails.checked"
-            ><span class="item-detail">
-              <br />{{
-                helper.getResultValueInfo(checklistitem.resultValue).name
-              }}</span
-            ></ng-container
-          >
-        </td>
-      </ng-container>
+          <a
+            [routerLink]="'/checklistdesign/' + checklist.id"
+            matTooltip="Design Checklist"
+            >{{ checklist?.name }}</a
+          ></ng-container
+        >
+        <ng-container *ngIf="checklist?.status == ChecklistStatus.Active">
+          <a
+            [routerLink]="'/checklistedit/' + checklist.id"
+            matTooltip="Edit Checklist"
+            >{{ checklist?.name }}</a
+          ></ng-container
+        >
+      </div>
+    </div>
 
-      <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </div>
+    <div>
+      <div class="prompt">Description</div>
+      <div>{{ checklist.description }}</div>
+    </div>
+
+    <div class="grid50percent">
+      <div>
+        <div class="prompt">Status</div>
+        <div>
+          <app-checkliststatus
+            [checklist]="checklist"
+            [showAction]="isTeamManagerOrAdmin"
+          ></app-checkliststatus>
+        </div>
+      </div>
+
+      <div>
+        <div class="prompt">
+          Resources
+        </div>
+        <div>
+          <app-resourcelistsimple
+            [resources]="checklist.resources"
+          ></app-resourcelistsimple>
+        </div>
+      </div>
+
+      <div>
+        <div class="prompt">Comments</div>
+        <div>
+          {{ checklist.comments }}
+        </div>
+      </div>
+
+      <div>
+        <div class="prompt">Team</div>
+        <div>{{ (checklist.team | doc | async)?.name }}</div>
+      </div>
+
+      <div>
+        <div class="prompt">Category</div>
+        <div>{{ (checklist.category | doc | async)?.name }}</div>
+      </div>
+      <ng-container *ngIf="checklist.fromTemplate">
+        <div>
+          <div class="prompt">Based on Template</div>
+          <div>{{ (checklist.fromTemplate | doc | async)?.name }}</div>
+        </div>
+      </ng-container>
+      <div>
+        <div class="prompt">Assignees</div>
+        <div>
+          <ng-container
+            *ngIf="
+              checklist.assignee && checklist.assignee.length > 0;
+              else noAssignee
+            "
+          >
+            <span *ngFor="let assignee of checklist.assignee; let i = index">
+              <span *ngIf="i > 0">,</span>
+              <span style="margin-left: 5px;">{{
+                (assignee | doc | async)?.displayName
+              }}</span>
+            </span>
+          </ng-container>
+          <ng-template #noAssignee>
+            None
+          </ng-template>
+        </div>
+      </div>
+      <div>
+        <div class="prompt">Date Created</div>
+        <div>
+          {{ toDate(checklist.dateCreated) | date: "medium" }}
+        </div>
+      </div>
+      <div>
+        <div class="prompt">Date Targeted</div>
+        <ng-container *ngIf="isOverdue()">
+          <div style="color: red;">
+            {{ toDate(checklist.dateTargeted) | date: "medium" }} Overdue!
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!isOverdue()">
+          <div>
+            {{ toDate(checklist.dateTargeted) | date: "medium" }}
+          </div>
+        </ng-container>
+      </div>
+      <div>
+        <div class="prompt">Date Completed</div>
+        <div>
+          {{ toDate(checklist.dateCompleted) | date: "medium" }}
+        </div>
+      </div>
+      <div>
+        <div class="prompt">Date Last Updated</div>
+        <div>
+          {{ toDate(checklist.dateUpdated) | date: "medium" }}
+        </div>
+      </div>
+      <div>
+        <div class="prompt">
+          Score
+          <span class="material-icons info" (click)="scoreInfo()">
+            info
+          </span>
+        </div>
+        <div *ngIf="checklistStatistics$ | async; let statistics">
+          {{ statistics.scorePercentage }}%
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="checklistitem-frame">
+      <div>
+        <span class="prompt">Checklist Items</span>
+        <mat-slide-toggle
+          class="checklistitem-slide"
+          #itemdetails
+          color="primary"
+          >Show Details</mat-slide-toggle
+        >
+      </div>
+
+      <table
+        mat-table
+        [dataSource]="checklistitems$ | async"
+        class="mat-elevation-z8"
+      >
+        <ng-container matColumnDef="name" sticky>
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let checklistitem; let i = index">
+            <div>{{ i + 1 }}. {{ checklistitem.name }}</div>
+
+            <div class="item-details" *ngIf="itemdetails.checked">
+              <div>
+                <span class="item-prompt">Description </span>
+                <span class="item-detail">{{ checklistitem.description }}</span>
+              </div>
+
+              <div
+                *ngIf="
+                  checklistitem.comment && checklistitem.comment.length > 0
+                "
+              >
+                <span class="item-prompt">Comment </span>
+                <span class="item-detail">{{ checklistitem.comment }}</span>
+              </div>
+              <div
+                *ngIf="
+                  checklistitem.evidence && checklistitem.evidence.length > 0
+                "
+              >
+                <span class="item-prompt">Evidence </span>
+                <span class="item-detail">{{ checklistitem.evidence }}</span>
+              </div>
+              <span class="item-detail">
+                <app-storagelist
+                  [docId]="checklistitem.id"
+                  docType="evidence"
+                  [readOnly]="true"
+                ></app-storagelist>
+              </span>
+              <div>
+                <span class="item-prompt">Sequence Number </span>
+                <span class="item-detail">{{ checklistitem.sequence }}</span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="resultType" sticky>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let checklistitem"
+            [matTooltip]="
+              helper.getResultValueInfo(checklistitem.resultValue).description
+            "
+          >
+            <img
+              [src]="
+                '../../assets/images/' +
+                helper.getResultValueInfo(checklistitem.resultValue).image
+              "
+              [style.width]="
+                (helper.getResultValueInfo(checklistitem.resultValue).relSize *
+                  30) /
+                  100 +
+                'px'
+              "
+            />
+            <ng-container *ngIf="itemdetails.checked"
+              ><span class="item-detail">
+                <br />{{
+                  helper.getResultValueInfo(checklistitem.resultValue).name
+                }}</span
+              ></ng-container
+            >
+          </td>
+        </ng-container>
+
+        <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </ng-container>
 </div>

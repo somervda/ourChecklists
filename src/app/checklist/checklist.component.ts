@@ -52,6 +52,7 @@ export class ChecklistComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const id = this.route.snapshot.data["checklist"].id;
+    console.log("checklist", this.route.snapshot.data["checklist"]);
     this.checklist$ = this.checklistService.findById(id);
     this.checklistitems$ = this.checklistitemService.findAll(id);
     this.checklist$$ = this.checklist$.subscribe(
