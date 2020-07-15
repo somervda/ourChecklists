@@ -271,6 +271,15 @@ export class ChecklistService {
         checklist.status = ChecklistStatus.Active;
         checklist.isTemplate = true;
         checklist.comments = "";
+        if (checklist.dateCompleted) {
+          delete checklist.dateCompleted;
+        }
+        if (checklist.dateTargeted) {
+          delete checklist.dateTargeted;
+        }
+        if (checklist.dateUpdated) {
+          delete checklist.dateUpdated;
+        }
         checklist.dateCreated = firebase.firestore.FieldValue.serverTimestamp();
         checklist.assignee = [];
         // Clean up checklistitems for use in the template

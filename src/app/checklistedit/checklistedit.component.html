@@ -119,14 +119,38 @@
           [resources]="checklist.resources"
         ></app-resourcelistsimple>
       </div>
+
+      <ng-container *ngIf="enhanced">
+        <div class="prompt">Team</div>
+        <div
+          *ngIf="!(auth.user$ | async)?.isAdmin"
+          matTooltip="Note: Only an administrator can change the team assignment."
+        >
+          {{ (checklist.team | doc | async)?.name }}
+        </div>
+        <div *ngIf="(auth.user$ | async)?.isAdmin">
+          <mat-form-field class="full-width">
+            <mat-select
+              [value]="checklist.team"
+              (selectionChange)="onTeamChange($event)"
+              [compareWith]="objectComparisonFunction"
+              class="full-width"
+            >
+              <mat-option
+                *ngFor="let team of myteams$ | async"
+                [value]="helper.docRef('/teams/' + team.id)"
+              >
+                {{ team.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
     </div>
   </form>
 
   <ng-container *ngIf="enhanced">
     <div class="grid2wrapper">
-      <div class="prompt">Team</div>
-      <div>{{ (checklist.team | doc | async)?.name }}</div>
-
       <div class="prompt">Category</div>
       <div>{{ (checklist.category | doc | async)?.name }}</div>
       <ng-container *ngIf="checklist.fromTemplate">

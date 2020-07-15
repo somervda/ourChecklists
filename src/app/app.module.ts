@@ -106,6 +106,7 @@ import { AdminutilsComponent } from "./adminutils/adminutils.component";
 import { SafePipe } from "./pipes/safe.pipe";
 import { MsgdialogComponent } from "./dialogs/msgdialog/msgdialog.component";
 import { ChecklistsearchComponent } from './checklistsearch/checklistsearch.component';
+import { ChecklistfromtemplatedialogComponent } from './dialogs/checklistfromtemplatedialog/checklistfromtemplatedialog.component';
 
 @NgModule({
   declarations: [
@@ -172,6 +173,7 @@ import { ChecklistsearchComponent } from './checklistsearch/checklistsearch.comp
     SafePipe,
     MsgdialogComponent,
     ChecklistsearchComponent,
+    ChecklistfromtemplatedialogComponent,
   ],
   imports: [
     BrowserModule,

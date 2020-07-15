@@ -1,0 +1,66 @@
+<app-subheading
+  prompt="Create Checklist from Template"
+  [iconActions]="[
+    {
+      icon: 'close',
+      toolTip: 'Close',
+      emitValue: 'close'
+    }
+  ]"
+  (iconAction)="iconAction($event)"
+></app-subheading>
+<br />
+<form class="standard-form" [formGroup]="checklistForm">
+  <fieldset>
+    <mat-form-field class="full-width">
+      <input matInput formControlName="name" placeholder="Name" required />
+      <mat-error *ngIf="checklistForm.controls['name'].hasError('required')">
+        Name is required.
+      </mat-error>
+      <mat-error *ngIf="checklistForm.controls['name'].hasError('minlength')">
+        Name must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="checklistForm.controls['name'].hasError('maxlength')">
+        Name must be no more than 70 characters long.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <textarea
+        matInput
+        formControlName="description"
+        matAutosizeMinRows="3"
+        matAutosizeMaxRows="10"
+        matTextareaAutosize
+        placeholder="Description"
+        required
+      ></textarea>
+      <mat-error
+        *ngIf="checklistForm.controls['description'].hasError('required')"
+      >
+        Description is required.
+      </mat-error>
+      <mat-error
+        *ngIf="checklistForm.controls['description'].hasError('minlength')"
+      >
+        Description must be at least 10 characters long.
+      </mat-error>
+      <mat-error
+        *ngIf="checklistForm.controls['description'].hasError('maxlength')"
+      >
+        Description must be no more than 500 characters long.
+      </mat-error>
+    </mat-form-field>
+  </fieldset>
+</form>
+
+<br />
+<button
+  mat-raised-button
+  matTooltip="Create Template"
+  (click)="ok()"
+  class="create-button"
+  [disabled]="!checklistForm.valid"
+>
+  <mat-icon>check</mat-icon>Create Template
+</button>

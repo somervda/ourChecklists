@@ -9,6 +9,8 @@ import { ChecklistitemService } from "../services/checklistitem.service";
 import { HelperService } from "../services/helper.service";
 import { IconAction } from "../models/helper.model";
 import { DomSanitizer } from "@angular/platform-browser";
+import { ChecklistfromtemplatedialogComponent } from "../dialogs/checklistfromtemplatedialog/checklistfromtemplatedialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-template",
@@ -45,7 +47,8 @@ export class TemplateComponent implements OnInit, OnDestroy {
     private helper: HelperService,
     private checklistService: ChecklistService,
     private auth: AuthService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -75,14 +78,21 @@ export class TemplateComponent implements OnInit, OnDestroy {
 
   createChecklist() {
     console.log("createChecklist");
-    this.checklistService
-      .createFromTemplate(this.checklist, this.auth.currentUser)
-      .then((checklistId) => {
-        console.log("checklistId", checklistId);
-        this.helper.snackbar("Checklist created from template", 3000);
-        this.helper.redirect(`/checklist/${checklistId}`);
-      })
-      .catch((err) => console.error("createFromTemplate failed:", err));
+    // this.checklistService
+    //   .createFromTemplate(this.checklist, this.auth.currentUser)
+    //   .then((checklistId) => {
+    //     console.log("checklistId", checklistId);
+    //     this.helper.snackbar("Checklist created from template", 3000);
+    //     this.helper.redirect(`/checklist/${checklistId}`);
+    //   })
+    //   .catch((err) => console.error("createFromTemplate failed:", err));
+    const dialogRef = this.dialog.open(ChecklistfromtemplatedialogComponent, {
+      minWidth: "380px",
+      maxWidth: "700px",
+      width: "80%",
+      data: { checklist: this.checklist },
+      autoFocus: false,
+    });
   }
 
   createDownload(template: Checklist, templateitems: Checklistitem[]) {

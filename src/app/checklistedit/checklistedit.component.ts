@@ -12,6 +12,11 @@ import { Observable } from "rxjs";
 import { Resource } from "../models/resource.model";
 import { MatDialog } from "@angular/material/dialog";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { AuthService } from "../services/auth.service";
+import { first } from "rxjs/operators";
+import { TeamService } from "../services/team.service";
+import { Team } from "../models/team.model";
+import { DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-checklistedit",
@@ -23,13 +28,16 @@ export class ChecklisteditComponent implements OnInit {
   enhanced = false;
   showResources = false;
   checklistForm: FormGroup;
+  myteams$: Observable<Team[]>;
 
   constructor(
     private route: ActivatedRoute,
     private checklistService: ChecklistService,
     public dialog: MatDialog,
     public helper: HelperService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private teamService: TeamService
   ) {}
 
   ngOnInit() {
@@ -60,11 +68,45 @@ export class ChecklisteditComponent implements OnInit {
       ],
       comments: [this.checklist?.comments, [Validators.maxLength(5000)]],
     });
+    this.auth.user$
+      .pipe(first())
+      .toPromise()
+      .then((u) => {
+        if (u.isAdmin) {
+          this.myteams$ = this.teamService.findAll(100);
+        } else {
+          // Can assign to a team the user is a manager or member but not a reviewer
+          this.myteams$ = this.teamService.findMyMemberManagerReviewerOfTeams(
+            true,
+            true,
+            false
+          );
+        }
+      });
   }
 
   onEnhanced(checked) {
     // console.log("onshowallchange", checked);
     this.enhanced = checked;
+  }
+
+  objectComparisonFunction = function (
+    option: DocumentReference,
+    value: DocumentReference
+  ): boolean {
+    // Needed to compare objects in select drop downs
+    // console.log("compare", option, value);
+    return option?.path == value?.path;
+  };
+
+  onTeamChange(event) {
+    // console.log("onTeamChange: ", event);
+    this.checklist.team = event.value;
+    this.checklistService.fieldUpdate(
+      this.checklist.id,
+      "team",
+      this.checklist.team
+    );
   }
 
   toDate(timestamp: any): Date {
