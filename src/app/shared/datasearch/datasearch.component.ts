@@ -8,8 +8,8 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from "@angular/platform-browser";
-import { Observable, Subscription } from "rxjs";
-import { map, first, take } from "rxjs/operators";
+import { Observable, Subscription, Subject } from "rxjs";
+import { map, first, take, takeUntil } from "rxjs/operators";
 import { TemplateselectordialogComponent } from "src/app/dialogs/templateselectordialog/templateselectordialog.component";
 import { Checklist, ChecklistStatusInfo } from "src/app/models/checklist.model";
 import {
@@ -39,34 +39,29 @@ import { AuthService } from "src/app/services/auth.service";
 export class DatasearchComponent implements OnInit, OnDestroy {
   @Input() makeExtract = false;
   @Input() includeTeamMembers = false;
+  @Output() checklistExtract = new EventEmitter();
+  @Output() startExtract = new EventEmitter();
+  @Output() checklistObservable = new EventEmitter();
+
   categoryInfo: DocInfo[];
   categoriesInfo$: Observable<DocInfo[]>;
-  categoriesInfo$$: Subscription;
   categorySpinner = false;
 
   teamInfo: DocInfo[];
   teamInfo$: Observable<DocInfo[]>;
-  teamInfo$$: Subscription;
   teamSpinner = false;
 
   activityInfo: DocInfo[];
   activityInfo$: Observable<DocInfo[]>;
-  activityInfo$$: Subscription;
   activitySpinner = false;
 
   userInfo: UserInfo[];
   userInfo$: Observable<UserInfo[]>;
-  userInfo$$: Subscription;
   userSpinner = false;
 
   checklistSpinner = false;
   checklists$: Observable<Checklist[]>;
   checklistsExtract: Checklistextract[];
-
-  @Output() checklistExtract = new EventEmitter();
-  @Output() startExtract = new EventEmitter();
-  @Output() checklistObservable = new EventEmitter();
-
   checklistStatusInfo = ChecklistStatusInfo;
 
   selectedStatus = "0";
@@ -85,10 +80,10 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   fileUrlChecklistitems;
   extractNameChecklistitems = "checklistitems-extract.csv";
   downLoadReady = false;
-
-  dataExtract$$: Subscription;
-  checklistitems$$: Subscription;
   user: User;
+
+  // https://medium.com/@sub.metu/angular-how-to-avoid-memory-leaks-from-subscriptions-8fa925003aa9
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
     private categoryService: CategoryService,
@@ -141,7 +136,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
           }))
       )
     );
-    this.categoriesInfo$$ = this.categoriesInfo$.subscribe(() => {
+    this.categoriesInfo$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.categorySpinner = false;
     });
 
@@ -155,7 +150,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
           }))
       )
     );
-    this.teamInfo$$ = this.teamInfo$.subscribe(() => {
+    this.teamInfo$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.teamSpinner = false;
     });
 
@@ -173,7 +168,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
           }))
       )
     );
-    this.userInfo$$ = this.userInfo$.subscribe(() => {
+    this.userInfo$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.userSpinner = false;
     });
 
@@ -187,7 +182,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
           }))
       )
     );
-    this.activityInfo$$ = this.activityInfo$.subscribe(() => {
+    this.activityInfo$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.activitySpinner = false;
       // console.log("activityInfo:", this.activityInfo);
     });
@@ -201,43 +196,46 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     this.makeChecklists$();
 
     // Do the extract
-    this.dataExtract$$ = this.checklists$
+    this.checklists$
       // Convert to checklistextracts
-      .pipe(map((cs) => cs.map((c) => this.toChecklistExtract(c))))
+      .pipe(
+        map((cs) => cs.map((c) => this.toChecklistExtract(c))),
+        takeUntil(this.ngUnsubscribe)
+      )
       // Subscribe and blow out the checklist items
       .subscribe((cs) => {
         // Add checklistitemExtracts to the checklists
         if (cs.length > 0) {
-          cs.map(
-            (c, i) =>
-              (this.checklistitems$$ = this.checklistitemService
-                .findAll(c.id)
-                .subscribe((cis) => {
-                  cis.map((ci) => {
-                    c.checklistitems.push(this.toChecklistitemExtract(ci));
-                    let s = this.checklistService.getStatisticsOverItems(
-                      cis,
-                      this.checklistService.overdueCheck(
-                        c.dateTargeted,
-                        parseInt(c.status.id)
-                      )
-                    );
-                    c.score = s.scorePercentage;
-                    c.isOverdue = s.isOverdue;
-                  });
-                  if (cs.length - 1 == i) {
-                    // The last checklistextract has been processed so can show downloads
-                    // and emit event containing the extracted data
-                    console.log("cs and items:", cs);
-                    this.checklistSpinner = false;
-                    if (this.makeExtract) {
-                      this.buildDownloads(cs);
-                      this.checklistExtract.emit(cs);
-                    } else {
-                      this.checklistObservable.emit(this.checklists$);
-                    }
+          cs.map((c, i) =>
+            this.checklistitemService
+              .findAll(c.id)
+              .pipe(takeUntil(this.ngUnsubscribe))
+              .subscribe((cis) => {
+                cis.map((ci) => {
+                  c.checklistitems.push(this.toChecklistitemExtract(ci));
+                  let s = this.checklistService.getStatisticsOverItems(
+                    cis,
+                    this.checklistService.overdueCheck(
+                      c.dateTargeted,
+                      parseInt(c.status.id)
+                    )
+                  );
+                  c.score = s.scorePercentage;
+                  c.isOverdue = s.isOverdue;
+                });
+                if (cs.length - 1 == i) {
+                  // The last checklistextract has been processed so can show downloads
+                  // and emit event containing the extracted data
+                  console.log("cs and items:", cs);
+                  this.checklistSpinner = false;
+                  if (this.makeExtract) {
+                    this.buildDownloads(cs);
+                    this.checklistExtract.emit(cs);
+                  } else {
+                    this.checklistObservable.emit(this.checklists$);
                   }
-                }))
+                }
+              })
           );
         } else {
           // No checklist selected in extract
@@ -397,11 +395,14 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       data: { selectedTemplate: this.selectedTemplate },
       autoFocus: false,
     });
-    dialogRef.afterClosed().subscribe((choice) => {
-      if (choice) {
-        this.selectedTemplate = choice;
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((choice) => {
+        if (choice) {
+          this.selectedTemplate = choice;
+        }
+      });
   }
 
   /**
@@ -563,22 +564,8 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.categoriesInfo$$) {
-      this.categoriesInfo$$.unsubscribe();
-    }
-    if (this.teamInfo$$) {
-      this.teamInfo$$.unsubscribe();
-    }
-    if (this.activityInfo$$) {
-      this.activityInfo$$.unsubscribe();
-    }
-
-    if (this.dataExtract$$) {
-      this.dataExtract$$.unsubscribe();
-    }
-
-    if (this.checklistitems$$) {
-      this.checklistitems$$.unsubscribe();
-    }
+    // Close down subscriptions
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
