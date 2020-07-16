@@ -187,22 +187,39 @@
 
       <div class="prompt">Assignees</div>
       <div>
-        <ng-container
-          *ngIf="
-            checklist.assignee && checklist.assignee.length > 0;
-            else noAssignee
-          "
-        >
-          <span *ngFor="let assignee of checklist.assignee; let i = index">
-            <span *ngIf="i > 0">,</span>
-            <span style="margin-left: 5px;">{{
-              (assignee | doc | async)?.displayName
-            }}</span>
-          </span>
-        </ng-container>
-        <ng-template #noAssignee>
-          None
-        </ng-template>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Assignees:
+              <ng-container
+                *ngIf="
+                  checklist?.assignee && checklist?.assignee.length > 0;
+                  else noAssignee
+                "
+              >
+                <span
+                  *ngFor="let assignee of checklist.assignee; let i = index"
+                >
+                  <span *ngIf="i > 0">,</span>
+                  <span style="margin-left: 5px;">{{
+                    (assignee | doc | async)?.displayName
+                  }}</span>
+                </span>
+              </ng-container>
+              <ng-template #noAssignee>
+                None
+              </ng-template>
+            </mat-panel-title>
+            <mat-icon style="margin-left: auto;">edit</mat-icon>
+          </mat-expansion-panel-header>
+
+          <ng-template matExpansionPanelContent>
+            <app-userlistedit
+              [users]="checklist.assignee"
+              (change)="onAssigneeChange($event)"
+            ></app-userlistedit>
+          </ng-template>
+        </mat-expansion-panel>
       </div>
     </div>
   </ng-container>

@@ -109,6 +109,16 @@ export class ChecklisteditComponent implements OnInit {
     );
   }
 
+  onAssigneeChange(assignee: DocumentReference[]) {
+    console.log("onAssigneeChange assignee:", assignee);
+    this.checklist.assignee = assignee;
+    this.checklistService.fieldUpdate(
+      this.checklist.id,
+      "assignee",
+      this.checklist.assignee
+    );
+  }
+
   toDate(timestamp: any): Date {
     if (timestamp) {
       return (timestamp as firebase.firestore.Timestamp).toDate();

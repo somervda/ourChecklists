@@ -72,6 +72,7 @@ export interface Checklistitemextract {
   resultType: ChecklistitemResultType;
   comment?: string;
   tagId?: string;
+  score: number;
 }
 
 export interface Checklistitemcsv {
@@ -91,6 +92,7 @@ export interface Checklistitemcsv {
   resultType: ChecklistitemResultType;
   comment?: string;
   tagId?: string;
+  score: number;
 }
 
 export interface DocInfo {

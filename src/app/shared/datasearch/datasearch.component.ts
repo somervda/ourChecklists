@@ -326,6 +326,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
             );
           })
         : [],
+      score: this.checklistService.getItemScore(checklistitem) * 25,
     };
     return checklistitemextract;
   }
@@ -537,6 +538,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
         resultType: ci.resultType,
         comment: ci.comment,
         tagId: ci.tagId,
+        score: ci.score,
       };
       return checklistitemcsv;
     } catch (e) {

@@ -26,6 +26,7 @@
           <mat-select
             (selectionChange)="groupChange($event.value)"
             value="category.name"
+            class="full-width"
           >
             <mat-option [value]="'category.name'">Category</mat-option>
             <mat-option [value]="'team.name'">Team</mat-option>
@@ -39,6 +40,7 @@
           <mat-select
             (selectionChange)="valueChange($event.value)"
             value="counts"
+            class="full-width"
           >
             <mat-option [value]="'score'">Overall Score %</mat-option>
             <mat-option [value]="'counts'">Counts</mat-option>
