@@ -51,8 +51,30 @@
         Description must be no more than 500 characters long.
       </mat-error>
     </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Team</mat-label>
+      <mat-select
+        [value]="checklist.team"
+        (selectionChange)="onTeamChange($event)"
+        [compareWith]="objectComparisonFunction"
+        class="full-width"
+      >
+        <mat-option
+          *ngFor="let team of myteams$ | async"
+          [value]="helper.docRef('/teams/' + team.id)"
+        >
+          {{ team.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </fieldset>
 </form>
+<i
+  >Note: The name should be updated before creating a new checklist from this
+  template, also check that the correct team is selected. Incorrect team
+  assignments can only be updated by an administrator after the checklist has
+  been created.</i
+><br />
 
 <br />
 <button

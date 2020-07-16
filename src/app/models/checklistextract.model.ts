@@ -81,6 +81,7 @@ export interface Checklistitemcsv {
   sequence: number;
   description: string;
   activities?: string;
+  activitiesName?: string;
   dateCreated?: Date;
   dateResultSet?: Date;
   evidence?: string;

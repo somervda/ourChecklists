@@ -90,7 +90,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       minWidth: "380px",
       maxWidth: "700px",
       width: "80%",
-      data: { checklist: this.checklist },
+      data: { checklist: { ...this.checklist } },
       autoFocus: false,
     });
   }

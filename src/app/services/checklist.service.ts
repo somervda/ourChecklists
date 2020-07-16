@@ -366,8 +366,6 @@ export class ChecklistService {
         // Modify the checklist , remove the fields not needed for a template
         template.fromTemplate = this.helper.docRef(`checklists/${template.id}`);
         const dateNow = new Date();
-        template.name += `: ${dateNow.valueOf()}`;
-        template.description += `Created from template: ${dateNow.toISOString()}`;
         delete template.id;
         template.status = ChecklistStatus.Active;
         template.isTemplate = false;

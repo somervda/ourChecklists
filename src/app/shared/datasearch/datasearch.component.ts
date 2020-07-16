@@ -521,6 +521,12 @@ export class DatasearchComponent implements OnInit, OnDestroy {
               ""
             )
           : "",
+        activitiesName: ci.activities
+          ? ci.activities.reduce(
+              (activityList, a) => activityList + a.name + " ",
+              ""
+            )
+          : "",
         dateCreated: ci.dateCreated,
         dateResultSet: ci.dateResultSet,
         evidence: ci.evidence,
