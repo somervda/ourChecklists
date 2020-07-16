@@ -10,6 +10,7 @@ import { Observable } from "rxjs";
 import { ChecklistService } from "../services/checklist.service";
 import { ChecklistStatus } from "../models/checklist.model";
 import { map } from "rxjs/operators";
+import { AuthService } from "../services/auth.service";
 
 @Injectable({
   providedIn: "root",
@@ -22,7 +23,8 @@ import { map } from "rxjs/operators";
 export class CheckliststatusGuard implements CanActivate {
   constructor(
     private checklistService: ChecklistService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {}
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -34,14 +36,23 @@ export class CheckliststatusGuard implements CanActivate {
     | UrlTree {
     const validStatuses = next.data["validStatuses"] as Array<ChecklistStatus>;
     const id = next.paramMap.get("id");
-    // console.log(
-    //   "CheckliststatusGuard",
-    //   validStatuses,
-    //   id,
-    //   this.checklistService
-    // );
+    console.log(
+      "CheckliststatusGuard",
+      validStatuses,
+      next,
+      id,
+      this.checklistService
+    );
     return this.checklistService.findById(id).pipe(
       map((c) => {
+        if (
+          c.isTemplate &&
+          next.routeConfig.path == "checklistdesign/:id" &&
+          (this.auth.currentUser?.isAdmin ||
+            this.auth.currentUser?.isTemplateManager)
+        ) {
+          return true;
+        }
         if (!validStatuses.includes(c.status)) {
           this.router.navigateByUrl("notAuthorized");
         }

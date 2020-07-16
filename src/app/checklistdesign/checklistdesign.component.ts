@@ -56,7 +56,7 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
   }
 
   initProcesses(user: User) {
-    // console.log("initProcesses", user);
+    console.log("initProcesses", user);
     if (user.isAdmin) {
       this.myteams$ = this.teamService.findAll(100);
     } else {

@@ -48,8 +48,10 @@ export class UserComponent implements OnInit {
   }
 
   updateField(name: string, value: any) {
-    console.log("updateField", name, value);
-    this.userService.dbFieldUpdate(this.uid, name, value);
+    console.log("updateField", name, value, this.fullAccess);
+    if (this.fullAccess) {
+      this.userService.dbFieldUpdate(this.uid, name, value);
+    }
   }
 
   getStorageUrl(filename: string): Observable<any> {

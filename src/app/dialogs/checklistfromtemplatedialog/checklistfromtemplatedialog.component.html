@@ -58,6 +58,7 @@
         (selectionChange)="onTeamChange($event)"
         [compareWith]="objectComparisonFunction"
         class="full-width"
+        #team
       >
         <mat-option
           *ngFor="let team of myteams$ | async"
@@ -70,10 +71,10 @@
   </fieldset>
 </form>
 <i
-  >Note: The name should be updated before creating a new checklist from this
-  template, also check that the correct team is selected. Incorrect team
-  assignments can only be updated by an administrator after the checklist has
-  been created.</i
+  >Note: The name should be updated before creating a new checklist, otherwise
+  checklists with the same name could be created. Also check that the correct
+  team is selected. Incorrect team assignments can only be updated by an
+  administrator after the checklist has been created.</i
 ><br />
 
 <br />
@@ -82,7 +83,7 @@
   matTooltip="Create Template"
   (click)="ok()"
   class="create-button"
-  [disabled]="!checklistForm.valid"
+  [disabled]="!checklistForm.valid || team.empty"
 >
   <mat-icon>check</mat-icon>Create Template
 </button>
