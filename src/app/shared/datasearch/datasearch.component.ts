@@ -122,6 +122,28 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (sessionStorage.getItem("searchSelectedStatus")) {
+      this.selectedStatus = sessionStorage.getItem("searchSelectedStatus");
+    }
+
+    if (sessionStorage.getItem("searchSelectedTemplate")) {
+      this.selectedTemplate = JSON.parse(
+        sessionStorage.getItem("searchSelectedTemplate")
+      );
+    }
+
+    if (sessionStorage.getItem("searchSelectedFromDate")) {
+      this.selectedFromDate = new Date(
+        JSON.parse(sessionStorage.getItem("searchSelectedFromDate"))
+      );
+    }
+
+    if (sessionStorage.getItem("searchSelectedToDate")) {
+      this.selectedToDate = new Date(
+        JSON.parse(sessionStorage.getItem("searchSelectedToDate"))
+      );
+    }
+
     // Set up observables to get a copy of all categories and teams for use
     // in the extract data resolution
     // console.log("ngOnInit start");
@@ -138,6 +160,11 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     );
     this.categoriesInfo$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.categorySpinner = false;
+      if (sessionStorage.getItem("searchSelectedCategory")) {
+        this.selectedCategory = sessionStorage.getItem(
+          "searchSelectedCategory"
+        );
+      }
     });
 
     // Get teamInfo
@@ -152,6 +179,9 @@ export class DatasearchComponent implements OnInit, OnDestroy {
     );
     this.teamInfo$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
       this.teamSpinner = false;
+      if (sessionStorage.getItem("searchSelectedTeam")) {
+        this.selectedTeam = sessionStorage.getItem("searchSelectedTeam");
+      }
     });
 
     // Get userInfo
@@ -191,6 +221,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   getSelectedData() {
     this.checklistSpinner = true;
     this.startExtract.emit(true);
+    this.saveSearch();
 
     // Create the checklist$ observable based on the selection parameters
     this.makeChecklists$();
@@ -329,6 +360,50 @@ export class DatasearchComponent implements OnInit, OnDestroy {
       score: this.checklistService.getItemScore(checklistitem) * 25,
     };
     return checklistitemextract;
+  }
+
+  private saveSearch() {
+    if (this.selectedCategory && this.selectedCategory != "0") {
+      sessionStorage.setItem("searchSelectedCategory", this.selectedCategory);
+    } else {
+      sessionStorage.removeItem("searchSelectedCategory");
+    }
+    if (this.selectedTeam && this.selectedTeam != "0") {
+      sessionStorage.setItem("searchSelectedTeam", this.selectedTeam);
+    } else {
+      sessionStorage.removeItem("selectedTeam");
+    }
+    if (this.selectedStatus && this.selectedStatus != "0") {
+      sessionStorage.setItem("searchSelectedStatus", this.selectedStatus);
+    } else {
+      sessionStorage.removeItem("searchSelectedStatus");
+    }
+    if (this.selectedTemplate && this.selectedTemplate.id != "0") {
+      sessionStorage.setItem(
+        "searchSelectedTemplate",
+        JSON.stringify(this.selectedTemplate)
+      );
+    } else {
+      sessionStorage.removeItem("searchSelectedTemplate");
+    }
+
+    if (this.selectedFromDate) {
+      sessionStorage.setItem(
+        "searchSelectedFromDate",
+        JSON.stringify(this.selectedFromDate)
+      );
+    } else {
+      sessionStorage.removeItem("searchSelectedFromDate");
+    }
+
+    if (this.selectedToDate) {
+      sessionStorage.setItem(
+        "searchSelectedToDate",
+        JSON.stringify(this.selectedToDate)
+      );
+    } else {
+      sessionStorage.removeItem("searchSelectedToDate");
+    }
   }
 
   private makeChecklists$() {

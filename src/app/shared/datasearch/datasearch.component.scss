@@ -10,19 +10,19 @@
   opacity: 0.5;
 }
 
-// Create a 2 column layout when screen is more than 500px wide
-@media (min-width: 500px) {
-  .grid2wrapper {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    grid-gap: 10px;
-  }
-  .grid50percent {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 10px;
-  }
-}
+// // Create a 2 column layout when screen is more than 500px wide
+// @media (min-width: 500px) {
+//   .grid2wrapper {
+//     display: grid;
+//     grid-template-columns: 1fr 3fr;
+//     grid-gap: 10px;
+//   }
+//   .grid50percent {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr;
+//     grid-gap: 10px;
+//   }
+// }
 
 .full-width {
   width: 100%;
@@ -42,4 +42,8 @@
 .fake-label {
   font-size: 11px;
   color: rgb(177, 175, 175);
+}
+
+.search-button {
+  float: right;
 }

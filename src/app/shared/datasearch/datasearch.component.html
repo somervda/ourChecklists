@@ -17,7 +17,7 @@
         <mat-option [value]="'0'">All</mat-option>
         <mat-option
           *ngFor="let statusInfo of checklistStatusInfo"
-          [value]="statusInfo.status"
+          [value]="statusInfo.status.toString()"
         >
           {{ statusInfo.name }}
         </mat-option>
@@ -94,13 +94,6 @@
   </div>
 </div>
 <div>
-  <button
-    mat-button-outline
-    (click)="getSelectedData()"
-    class="social-distancing"
-  >
-    Search
-  </button>
   <ng-container *ngIf="downLoadReady">
     <a
       [href]="fileUrlJSON"
@@ -130,4 +123,7 @@
       >[Checklistitems]
     </a>
   </ng-container>
+  <button mat-button-outline (click)="getSelectedData()" class="search-button">
+    Search
+  </button>
 </div>
