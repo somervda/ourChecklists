@@ -85,7 +85,11 @@ export class ChecklistfromtemplatedialogComponent implements OnInit {
 
   onTeamChange(event) {
     // console.log("onTeamChange: ", event);
-    this.checklist.team = event.value;
+    if (event.value == -1) {
+      this.checklist.team = null;
+    } else {
+      this.checklist.team = event.value;
+    }
   }
 
   ok() {

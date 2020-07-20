@@ -152,10 +152,13 @@
       <mat-form-field class="half-width">
         <mat-label>Team</mat-label>
         <mat-select
-          formControlName="team"
+          [value]="checklist.team == null ? -1 : checklist.team"
           (selectionChange)="onTeamChange($event)"
           [compareWith]="objectComparisonFunction"
         >
+          <mat-option [value]="-1">
+            None
+          </mat-option>
           <mat-option
             *ngFor="let team of myteams$ | async"
             [value]="helper.docRef('/teams/' + team.id)"

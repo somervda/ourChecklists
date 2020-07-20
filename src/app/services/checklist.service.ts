@@ -94,7 +94,7 @@ export class ChecklistService {
           retVal = retVal.where("category", "==", category);
         }
 
-        if (team.path != "teams/0") {
+        if (team.path != "teams/0" && team.path != "teams/-1") {
           retVal = retVal.where("team", "==", team);
         }
 

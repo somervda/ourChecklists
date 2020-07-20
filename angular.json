@@ -23,6 +23,19 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "firebase/app",
+              "firebase",
+              "@firebase/app",
+              "marked",
+              "@firebase/remote-config",
+              "@firebase/performance",
+              "@firebase/database",
+              "@firebase/functions",
+              "@firebase/firestore",
+              "dialog-polyfill"
+            ],
             "assets": [
               "src/favicon.png",
               "src/assets",

@@ -42,6 +42,7 @@
       <mat-label>Team</mat-label>
       <mat-select [(ngModel)]="selectedTeam" class="full-width">
         <mat-option [value]="'0'" *ngIf="user?.isAdmin">All</mat-option>
+        <mat-option [value]="'-1'">None</mat-option>
         <ng-container *ngFor="let team of teamInfo">
           <mat-option
             [value]="team.id"

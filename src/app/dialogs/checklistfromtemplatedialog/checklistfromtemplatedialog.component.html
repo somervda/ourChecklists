@@ -60,6 +60,9 @@
         class="full-width"
         #team
       >
+        <mat-option [value]="-1">
+          None
+        </mat-option>
         <mat-option
           *ngFor="let team of myteams$ | async"
           [value]="helper.docRef('/teams/' + team.id)"

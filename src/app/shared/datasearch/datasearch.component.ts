@@ -409,6 +409,7 @@ export class DatasearchComponent implements OnInit, OnDestroy {
   private makeChecklists$() {
     const category = this.helper.docRef(`/categories/${this.selectedCategory}`);
     const team = this.helper.docRef(`/teams/${this.selectedTeam}`);
+    console.log("team:", team);
     const template = this.helper.docRef(
       `/checklists/${this.selectedTemplate.id}`
     );
@@ -444,6 +445,15 @@ export class DatasearchComponent implements OnInit, OnDestroy {
               (c.dateCompleted as firebase.firestore.Timestamp).toDate() <=
                 this.selectedToDate
           );
+        })
+      );
+    }
+
+    if (team.path == this.helper.docRef("/teams/-1").path) {
+      console.log("None");
+      this.checklists$ = this.checklists$.pipe(
+        map((cs) => {
+          return cs.filter((c) => c.team == null);
         })
       );
     }

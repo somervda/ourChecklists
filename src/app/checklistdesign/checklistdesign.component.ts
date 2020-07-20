@@ -130,7 +130,6 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
         ],
       ],
       comments: [this.checklist.comments, [Validators.maxLength(500)]],
-      team: [this.checklist.team],
       category: [this.checklist.category],
     });
 
@@ -208,13 +207,21 @@ export class ChecklistdesignComponent implements OnInit, OnDestroy {
     value: DocumentReference
   ): boolean {
     // Needed to compare objects in select drop downs
-    // console.log("compare", option, value);
+    console.log("compare", option, value);
+    if (option == null && value == null) {
+      return true;
+    }
     return option?.path == value?.path;
   };
 
   onTeamChange(event) {
-    // console.log("onTeamChange: ", event);
-    this.checklist.team = event.value;
+    console.log("onTeamChange: ", event);
+    if (event.value == -1) {
+      this.checklist.team = null;
+    } else {
+      this.checklist.team = event.value;
+    }
+    console.log("onTeamChange checklist:", this.checklist);
     if (this.crudAction == Crud.Update) {
       this.checklistService.fieldUpdate(
         this.checklist.id,

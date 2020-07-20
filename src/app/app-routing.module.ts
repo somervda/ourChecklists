@@ -127,7 +127,7 @@ const routes: Routes = [
     path: "checklist/:id",
     component: ChecklistComponent,
     resolve: { checklist: ChecklistResolver },
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard, CheckliststatusGuard],
     data: {
       permissions: ["isAdmin", "isActivated"],
     },
