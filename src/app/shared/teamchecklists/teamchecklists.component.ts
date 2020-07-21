@@ -4,6 +4,7 @@ import { Checklist, ChecklistStatus } from "../../models/checklist.model";
 import { ChecklistService } from "../../services/checklist.service";
 import { Team } from "../../models/team.model";
 import { HelperService } from "src/app/services/helper.service";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-teamchecklists",
@@ -17,7 +18,8 @@ export class TeamchecklistsComponent implements OnInit {
 
   constructor(
     private checklistService: ChecklistService,
-    private helper: HelperService
+    private helper: HelperService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -26,6 +28,19 @@ export class TeamchecklistsComponent implements OnInit {
       ChecklistStatus.Done,
       100
     );
+  }
+
+  showDelete(): boolean {
+    if (this.auth.currentUser.isAdmin) {
+      return true;
+    }
+    if (
+      this.auth.currentUser.managerOfTeams &&
+      this.auth.currentUser.managerOfTeams.includes(this.team.id)
+    ) {
+      return true;
+    }
+    return false;
   }
 
   showCompletedChange(event) {
