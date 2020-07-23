@@ -93,6 +93,9 @@ Cypress.Commands.add("verifyResourcesComponent", () => {
 
 Cypress.Commands.add("verifyAdminComponent", () => {
   cy.get("#mainMenu").click();
+  cy.get("#mainMenuTeams").should("exist");
+  cy.get("#mainMenuCategories").should("exist");
+  cy.get("#mainMenuResources").should("exist");
   cy.get("#mainMenuUsers").click();
   cy.get("app-subheading > .mat-toolbar").contains("Users");
   cy.contains(Cypress.env("memberUser").toLowerCase()).click();
@@ -117,9 +120,6 @@ Cypress.Commands.add("verifyNotAdministrator", () => {
 Cypress.Commands.add("verifyAllNonAdminRoles", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuHome").should("exist");
-  cy.get("#mainMenuTeams").should("exist");
-  cy.get("#mainMenuCategories").should("exist");
-  cy.get("#mainMenuResources").should("exist");
   cy.get(".mat-drawer-backdrop").click();
 });
 
@@ -142,4 +142,5 @@ Cypress.Commands.add("logonEmail", (usercode, password) => {
   cy.get(".firebaseui-id-submit").click();
   cy.get(":nth-child(3) > .mdl-textfield__input").type(password);
   cy.get(".firebaseui-id-submit").click();
+  cy.wait(2000);
 });

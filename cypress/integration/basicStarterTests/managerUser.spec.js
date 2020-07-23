@@ -26,7 +26,7 @@ context("Manager user login", () => {
   });
   it("Verify My Teams", () => {
     cy.openMyTeamsComponent();
-    cy.get(".cdk-column-name > a").should("contain", "Angular");
+    cy.get(".cdk-column-name > a").should("contain", "Sales");
     cy.get(".cdk-column-name > a").should("contain", "e2eTeam");
     cy.get("app-subheading > .mat-toolbar").contains("My Teams");
   });

@@ -11,5 +11,5 @@
     "inactivePassword": "password"
   },
   "requestTimeout": 10000,
-  "defaultCommandTimeout": 8000
+  "defaultCommandTimeout": 10000
 }

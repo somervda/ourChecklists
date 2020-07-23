@@ -26,12 +26,12 @@ context("Member user login", () => {
   });
   it("Verify My Teams", () => {
     cy.openMyTeamsComponent();
-    cy.get(".cdk-column-name > a").should("contain", "Angular");
+    cy.get(".cdk-column-name > a").should("contain", "Sales");
     cy.get(".cdk-column-name > a").should("not.contain", "Java Developers");
     cy.get(".mat-button-wrapper > span").should("not.contain", "New Team");
   });
   it("Verify My Team", () => {
-    cy.get(".cdk-column-name > a").contains("Angular").click();
+    cy.get(".cdk-column-name > a").contains("Sales").click();
     cy.get("app-subheading > .mat-toolbar").contains("Team - Update");
     // cy.wait(1000);
     // cy.get("tbody > :nth-child(1) > .cdk-column-displayName").should(
