@@ -142,5 +142,6 @@ Cypress.Commands.add("logonEmail", (usercode, password) => {
   cy.get(".firebaseui-id-submit").click();
   cy.get(":nth-child(3) > .mdl-textfield__input").type(password);
   cy.get(".firebaseui-id-submit").click();
-  cy.wait(2000);
+  cy.get("#mainMenuLogout").should("exist");
+  // cy.wait(2000);
 });

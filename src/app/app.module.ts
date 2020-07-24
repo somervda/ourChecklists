@@ -105,8 +105,8 @@ import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { AdminutilsComponent } from "./adminutils/adminutils.component";
 import { SafePipe } from "./pipes/safe.pipe";
 import { MsgdialogComponent } from "./dialogs/msgdialog/msgdialog.component";
-import { ChecklistsearchComponent } from './checklistsearch/checklistsearch.component';
-import { ChecklistfromtemplatedialogComponent } from './dialogs/checklistfromtemplatedialog/checklistfromtemplatedialog.component';
+import { ChecklistsearchComponent } from "./checklistsearch/checklistsearch.component";
+import { ChecklistfromtemplatedialogComponent } from "./dialogs/checklistfromtemplatedialog/checklistfromtemplatedialog.component";
 
 @NgModule({
   declarations: [
@@ -217,8 +217,8 @@ import { ChecklistfromtemplatedialogComponent } from './dialogs/checklistfromtem
     // however messes things up when testing (May not find uncached data)
     // https://firebase.google.com/docs/firestore/manage-data/enable-offline
     // https://firebase.google.com/docs/reference/js/firebase.firestore.PersistenceSettings
-    // AngularFirestoreModule,
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
+    // AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
