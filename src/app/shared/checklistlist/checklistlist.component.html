@@ -80,6 +80,7 @@
         (click)="deleteChecklist(checklist)"
         matTooltip="Delete Checklist"
         class="delete_checklist"
+        [id]="'D' + checklist.name"
       >
         <mat-icon>clear</mat-icon>
       </div>

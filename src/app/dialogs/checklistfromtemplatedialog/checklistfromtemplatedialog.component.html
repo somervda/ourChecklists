@@ -13,7 +13,13 @@
 <form class="standard-form" [formGroup]="checklistForm">
   <fieldset>
     <mat-form-field class="full-width">
-      <input matInput formControlName="name" placeholder="Name" required />
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Name"
+        required
+        id="checklistName"
+      />
       <mat-error *ngIf="checklistForm.controls['name'].hasError('required')">
         Name is required.
       </mat-error>
@@ -33,6 +39,7 @@
         matAutosizeMaxRows="10"
         matTextareaAutosize
         placeholder="Description"
+        id="checklistDescription"
         required
       ></textarea>
       <mat-error
@@ -58,6 +65,7 @@
         (selectionChange)="onTeamChange($event)"
         [compareWith]="objectComparisonFunction"
         class="full-width"
+        id="checklistTeam"
         #team
       >
         <mat-option [value]="-1">
@@ -83,10 +91,11 @@
 <br />
 <button
   mat-raised-button
-  matTooltip="Create Template"
+  matTooltip="Create Checklist"
   (click)="ok()"
   class="create-button"
+  id="createChecklist"
   [disabled]="!checklistForm.valid || team.empty"
 >
-  <mat-icon>check</mat-icon>Create Template
+  <mat-icon>check</mat-icon>Create Checklist
 </button>

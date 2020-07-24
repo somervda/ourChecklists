@@ -13,6 +13,7 @@
     *ngFor="let iconAction of iconActions"
     [routerLink]="iconAction.routerLink"
     (click)="iconActionClick(iconAction.emitValue)"
+    [id]="iconAction.icon"
     [matTooltip]="iconAction.toolTip"
   >
     <mat-icon>{{ iconAction.icon }}</mat-icon>

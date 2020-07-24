@@ -14,6 +14,7 @@ context("Admin user login", () => {
   });
   it("Login", () => {
     cy.logonEmail(Cypress.env("adminUser"), Cypress.env("adminPassword"));
+    cy.get("#mainToolBarIsActivated").should("exist");
   });
   it("Navigate to About Page", () => {
     cy.verifyAboutComponent();

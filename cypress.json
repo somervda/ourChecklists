@@ -11,5 +11,7 @@
     "inactivePassword": "password"
   },
   "requestTimeout": 10000,
-  "defaultCommandTimeout": 10000
+  "defaultCommandTimeout": 10000,
+  "viewportHeight": 850,
+  "viewportWidth": 1000
 }

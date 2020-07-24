@@ -51,6 +51,27 @@ Cypress.Commands.add("verifyMyProfileComponent", () => {
   cy.get("app-subheading > .mat-toolbar").contains("User Profile");
 });
 
+Cypress.Commands.add("verifyMyChecklistsComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuMyChecklists").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("My Checklists");
+});
+
+Cypress.Commands.add("verifyTemplatesComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuTemplates").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("Templates");
+});
+
+Cypress.Commands.add("verifyAdminUtilComponent", () => {
+  cy.get("#mainMenu").click();
+  cy.get("#mainMenuAdminUtils").click();
+  // Verify component was rendered
+  cy.get("app-subheading > .mat-toolbar").contains("Administration Utilities");
+});
+
 Cypress.Commands.add("openMyTeamsComponent", () => {
   cy.get("#mainMenu").click();
   cy.get("#mainMenuTeams").click();
@@ -143,5 +164,5 @@ Cypress.Commands.add("logonEmail", (usercode, password) => {
   cy.get(":nth-child(3) > .mdl-textfield__input").type(password);
   cy.get(".firebaseui-id-submit").click();
   cy.get("#mainMenuLogout").should("exist");
-  // cy.wait(2000);
+  cy.wait(1000);
 });

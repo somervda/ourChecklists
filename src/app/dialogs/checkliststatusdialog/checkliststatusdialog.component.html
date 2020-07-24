@@ -26,7 +26,10 @@
         checklist.status == ChecklistStatus.Active && !checklist.fromTemplate
       "
     >
-      <mat-radio-button [value]="ChecklistStatus.UnderConstruction">
+      <mat-radio-button
+        [value]="ChecklistStatus.UnderConstruction"
+        [id]="'rbstatus' + ChecklistStatus.UnderConstruction"
+      >
         Under Construction
       </mat-radio-button>
       <div class="status-description current-status">
@@ -47,7 +50,10 @@
         checklist.status == ChecklistStatus.Done
       "
     >
-      <mat-radio-button [value]="ChecklistStatus.Active">
+      <mat-radio-button
+        [value]="ChecklistStatus.Active"
+        [id]="'rbstatus' + ChecklistStatus.Active"
+      >
         Active
       </mat-radio-button>
       <div class="status-description current-status">
@@ -64,7 +70,10 @@
         checklist.status == ChecklistStatus.Complete
       "
     >
-      <mat-radio-button [value]="ChecklistStatus.Done">
+      <mat-radio-button
+        [value]="ChecklistStatus.Done"
+        [id]="'rbstatus' + ChecklistStatus.Done"
+      >
         Done
       </mat-radio-button>
       <div class="status-description current-status">
@@ -76,7 +85,10 @@
     </ng-container>
 
     <ng-container *ngIf="checklist.status == ChecklistStatus.Done">
-      <mat-radio-button [value]="ChecklistStatus.Complete">
+      <mat-radio-button
+        [value]="ChecklistStatus.Complete"
+        [id]="'rbstatus' + ChecklistStatus.Complete"
+      >
         Complete
       </mat-radio-button>
       <div class="status-description current-status">
@@ -96,6 +108,7 @@
   (click)="updateStatus()"
   class="update-button"
   [disabled]="!newStatus"
+  id="ok"
 >
   <mat-icon>check</mat-icon>OK
 </button>

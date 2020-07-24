@@ -63,6 +63,7 @@
     <div class="fake-label">Template</div>
     <span
       (click)="templateDialog()"
+      id="templateDialog"
       style="cursor: pointer; display: inline-block; width: 100%;"
       matTooltip="Select Template"
       >{{ selectedTemplate.name }}</span
@@ -124,7 +125,12 @@
       >[Checklistitems]
     </a>
   </ng-container>
-  <button mat-button-outline (click)="getSelectedData()" class="search-button">
+  <button
+    mat-button-outline
+    (click)="getSelectedData()"
+    class="search-button"
+    id="search"
+  >
     Search
   </button>
 </div>

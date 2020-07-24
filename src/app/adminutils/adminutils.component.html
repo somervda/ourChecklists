@@ -14,7 +14,13 @@
         deleted checklists, if one is found, then batch delete the checklist
         items sub-collection and then the checklist.
       </p>
-      <button mat-button-outline (click)="checklistCleanup()">Go</button>
+      <button
+        mat-button-outline
+        (click)="checklistCleanup()"
+        id="checklistCleanup"
+      >
+        Go
+      </button>
     </mat-card-content>
   </mat-card>
   <br />
@@ -28,7 +34,13 @@
         checklist/checklistitem resource and check the docref is valid,
         otherwise remove the resource.
       </p>
-      <button mat-button-outline (click)="resourceCleanup()">Go</button>
+      <button
+        mat-button-outline
+        (click)="resourceCleanup()"
+        id="resourceCleanup"
+      >
+        Go
+      </button>
     </mat-card-content>
   </mat-card>
   <br />
@@ -41,7 +53,9 @@
         Go through checklists and resources and remove any category or team
         document references that no longer exist.
       </p>
-      <button mat-button-outline (click)="ctCleanup()">Go</button>
+      <button mat-button-outline (click)="ctCleanup()" id="ctCleanup">
+        Go
+      </button>
     </mat-card-content>
   </mat-card>
   <div *ngIf="deletedChecklists?.length > 0">
