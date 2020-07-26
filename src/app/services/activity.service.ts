@@ -11,6 +11,11 @@ import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 export class ActivityService {
   constructor(private afs: AngularFirestore) {}
 
+  /**
+   * Find a specific activity document based on the category id and activity id parameters
+   * @param cid Category ID
+   * @param aid Activity ID
+   */
   findById(cid: string, aid: string): Observable<Activity> {
     return this.afs
       .doc("/categories/" + cid + "/activities/" + aid)
@@ -23,6 +28,10 @@ export class ActivityService {
       );
   }
 
+  /**
+   * Find all activity documents (Limited by the pageSize parameter)
+   * @param pageSize The maximum number of activities to return
+   */
   findAll(pageSize: number): Observable<Activity[]> {
     return this.afs
       .collectionGroup("activities", (ref) => ref.limit(pageSize))
