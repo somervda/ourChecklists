@@ -11,6 +11,10 @@ import { convertSnap, convertSnaps, dbFieldUpdate } from "./db-utils";
 export class CategoryService {
   constructor(private afs: AngularFirestore) {}
 
+  /**
+   * Find a category doc by category id
+   * @param id Category Id
+   */
   findById(id: string): Observable<Category> {
     return this.afs
       .doc("/categories/" + id)
@@ -23,6 +27,10 @@ export class CategoryService {
       );
   }
 
+  /**
+   * Find all categories
+   * @param pageSize The maximum number of categories to return
+   */
   findAll(pageSize: number): Observable<Category[]> {
     // console.log( "team findAll",  pageSize  );
     return this.afs
@@ -37,9 +45,9 @@ export class CategoryService {
   }
 
   /**
-   *
-   * @param name
-   * @param pageSize
+   *Find categories my matching on first letters of the name
+   * @param name Partial name used for matching, will match on initial letters
+   * @param pageSize The maximum number of categories to return
    */
   findByPartialName(
     name: string,
