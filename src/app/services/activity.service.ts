@@ -43,6 +43,11 @@ export class ActivityService {
       );
   }
 
+  /**
+   * Find all the activities in a category
+   * @param cid Category Id
+   * @param pageSize The maximum number of activities to return
+   */
   findAllByCategory(cid: string, pageSize: number): Observable<Activity[]> {
     // console.log( "team findAll",  pageSize  );
     return this.afs

@@ -36,6 +36,10 @@ export class ChecklistService {
     private helper: HelperService
   ) {}
 
+  /**
+   * Get an observable to a specific checklist document
+   * @param id ChecklistId
+   */
   findById(id: string): Observable<Checklist> {
     return this.afs
       .doc("/checklists/" + id)
@@ -47,10 +51,14 @@ export class ChecklistService {
       );
   }
 
+  /**
+   * Get an observable to an array of checklists , ordered by the checklist name
+   * @param pageSize Maximum number of checklists to retrieve
+   */
   findAll(pageSize: number): Observable<Checklist[]> {
     // console.log( "checklist findAll",  pageSize  );
     return this.afs
-      .collection("checklists", (ref) => ref.limit(pageSize))
+      .collection("checklists", (ref) => ref.orderBy("name").limit(pageSize))
       .snapshotChanges()
       .pipe(
         map((snaps) => {
@@ -62,9 +70,12 @@ export class ChecklistService {
 
   /**
    * Special version of find to do more complicated searches with multiple
-   * filters, uses a special case to find all
-   * @param category
-   * @param pageSize
+   * filters,
+   * @param status ChecklistStatus Value or 0 for no status filter
+   * @param category A document reference to a category to filter or categories/0 for no filter
+   * @param team A document reference to a team to filter or teams/0 for no filter
+   * @param template A document reference to a template checklist or checklists/0 for no filter
+   * @param pageSize Maximum number of checklists to retrieve
    */
   search(
     status: number,
@@ -115,6 +126,10 @@ export class ChecklistService {
       );
   }
 
+  /**
+   * Get all checklists that are templates
+   * @param pageSize Maximum number of template checklists to retrieve
+   */
   findAllTemplates(pageSize: number): Observable<Checklist[]> {
     // console.log( "checklist findAll",  pageSize  );
     return this.afs
@@ -131,6 +146,7 @@ export class ChecklistService {
 
   /**
    * Get checklists for which the user is an assignee
+   * @param uid The UID of the user for which to retrieve thier checklists
    * @param maxStatus The maximum status to display , for filtering Deleted or Completed status
    * @param pageSize Maximum number of rows to retrieve
    */
