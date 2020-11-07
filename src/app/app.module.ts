@@ -217,8 +217,8 @@ import { ChecklistfromtemplatedialogComponent } from "./dialogs/checklistfromtem
     // however messes things up when testing (May not find uncached data)
     // https://firebase.google.com/docs/firestore/manage-data/enable-offline
     // https://firebase.google.com/docs/reference/js/firebase.firestore.PersistenceSettings
-    AngularFirestoreModule,
-    // AngularFirestoreModule.enablePersistence(),
+    // AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
