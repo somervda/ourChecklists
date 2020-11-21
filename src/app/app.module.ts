@@ -41,7 +41,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { NgbCarouselModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbCarouselModule, NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { HomeComponent } from "./home/home.component";
 import { NotfoundComponent } from "./notfound/notfound.component";
 import { AboutComponent } from "./about/about.component";
@@ -223,6 +223,7 @@ import { ChecklistfromtemplatedialogComponent } from "./dialogs/checklistfromtem
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
     }),
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

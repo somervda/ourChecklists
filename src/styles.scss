@@ -23,8 +23,13 @@ $theme: mat-light-theme($primary, $accent);
 // Include all theme styles for the components.
 @include angular-material-theme($theme);
 
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
 body {
   background-color: rgb(166, 185, 181);
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
 }
 
 .page-container {
