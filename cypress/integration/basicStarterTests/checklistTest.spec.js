@@ -27,6 +27,7 @@ context("Checklist", () => {
 
   it("Create checklist from Templates", () => {
     cy.verifyTemplatesComponent();
+    cy.get(".page-container").contains("e2eTemplate");
     cy.get(".page-container").contains("e2eTemplate").click();
     cy.get("app-subheading > .mat-toolbar").contains("Template");
     cy.get("#file_copy").click();

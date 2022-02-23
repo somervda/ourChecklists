@@ -119,6 +119,7 @@ Cypress.Commands.add("verifyAdminComponent", () => {
   cy.get("#mainMenuResources").should("exist");
   cy.get("#mainMenuUsers").click();
   cy.get("app-subheading > .mat-toolbar").contains("Users");
+  cy.contains(Cypress.env("memberUser").toLowerCase());
   cy.contains(Cypress.env("memberUser").toLowerCase()).click();
   cy.url().should("include", "user/");
   cy.get("app-subheading > .mat-toolbar").contains("User Profile");
