@@ -39,7 +39,7 @@
     "firebase": "^7.14.2",
     "firebaseui": "^4.1.0",
     "marked": "^0.8.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "rxjs": "~6.5.2",
     "tslib": "^1.10.0",
     "zone.js": "~0.11.4"
